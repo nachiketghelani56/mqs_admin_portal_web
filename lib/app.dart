@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
+import 'package:mqs_admin_portal_web/main.dart';
 import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 
 class MQSAdminPortalWeb extends StatelessWidget {
@@ -9,6 +10,7 @@ class MQSAdminPortalWeb extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      navigatorKey: navigatorKey,
       title: StringConfig.mqsAdminPortalWeb,
       defaultTransition: Transition.fadeIn,
       theme: ThemeData.light(useMaterial3: true).copyWith(
@@ -19,7 +21,7 @@ class MQSAdminPortalWeb extends StatelessWidget {
         colorScheme: const ColorScheme.light(
           primary: ColorConfig.primaryColor,
           surfaceTint: ColorConfig.whiteColor,
-          error: ColorConfig.errorCodeColor,
+          error: ColorConfig.errorColor,
         ),
       ),
       debugShowCheckedModeBanner: false,
