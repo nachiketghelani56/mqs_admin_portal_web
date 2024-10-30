@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
-import 'package:mqs_admin_portal_web/config/font_textstyle_config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
 
 class CustomTextField extends StatelessWidget {

@@ -44,10 +44,102 @@ class FontTextstyleConfig {
     fontSize: FontSizeConfig.fontSize18,
   );
 
+  static const TextStyle tableTextStyle = TextStyle(
+    fontFamily: FontFamilyConfig.figtree,
+    color: ColorConfig.textfieldTextColor,
+    fontWeight: FontWeight.w500,
+    fontSize: FontSizeConfig.fontSize16,
+  );
+
+  static const TextStyle tableBottomTextStyle = TextStyle(
+    fontFamily: FontFamilyConfig.figtree,
+    color: ColorConfig.textfieldTextColor,
+    fontWeight: FontWeight.w600,
+    fontSize: FontSizeConfig.fontSize16,
+  );
+
+  static const TextStyle titleTextStyle = TextStyle(
+    fontFamily: FontFamilyConfig.figtree,
+    color: ColorConfig.primaryColor,
+    fontWeight: FontWeight.w600,
+    fontSize: FontSizeConfig.fontSize18,
+  );
+
   static OutlineInputBorder borderDecoration = OutlineInputBorder(
     borderSide: const BorderSide(
       color: ColorConfig.textfieldBorderColor,
     ),
     borderRadius: BorderRadius.circular(SizeConfig.size6),
+  );
+
+  static BoxDecoration tableTitleDecoration = BoxDecoration(
+    color: ColorConfig.bg2Color,
+    border: Border.all(
+      color: ColorConfig.labelColor.withOpacity(SizeConfig.size0point4),
+    ),
+    borderRadius: const BorderRadius.vertical(
+      top: Radius.circular(SizeConfig.size12),
+    ),
+  );
+
+  static BoxDecoration tableRowDecoration = BoxDecoration(
+    border: Border(
+      left: BorderSide(
+        color: ColorConfig.labelColor.withOpacity(SizeConfig.size0point4),
+      ),
+      right: BorderSide(
+        color: ColorConfig.labelColor.withOpacity(SizeConfig.size0point4),
+      ),
+      bottom: BorderSide(
+        color: ColorConfig.labelColor.withOpacity(SizeConfig.size0point4),
+      ),
+    ),
+  );
+
+  static BoxDecoration tableBottomDecoration = BoxDecoration(
+    color: ColorConfig.bg2Color,
+    border: Border.all(
+      color: ColorConfig.labelColor.withOpacity(SizeConfig.size0point4),
+    ),
+    borderRadius: const BorderRadius.vertical(
+      bottom: Radius.circular(SizeConfig.size12),
+    ),
+  );
+
+  static BoxDecoration detailMainDecoration = BoxDecoration(
+    border: Border.all(
+      color: ColorConfig.labelColor.withOpacity(SizeConfig.size0point2),
+    ),
+    borderRadius: BorderRadius.circular(SizeConfig.size12),
+  );
+
+  static BoxDecoration detailDecoration = BoxDecoration(
+    border: Border(
+      top: BorderSide(
+        color:
+            ColorConfig.textfieldTextColor.withOpacity(SizeConfig.size0point14),
+      ),
+      bottom: BorderSide(
+        color:
+            ColorConfig.textfieldTextColor.withOpacity(SizeConfig.size0point14),
+      ),
+    ),
+  );
+
+  static BoxDecoration detailBottomDecoration = BoxDecoration(
+    border: Border(
+      bottom: BorderSide(
+        color:
+            ColorConfig.textfieldTextColor.withOpacity(SizeConfig.size0point14),
+      ),
+    ),
+  );
+
+  static BoxDecoration detailLeftDecoration = BoxDecoration(
+    border: Border(
+      left: BorderSide(
+        color: ColorConfig.textfieldTextColor.withOpacity(.14),
+      ),
+    ),
   );
 }

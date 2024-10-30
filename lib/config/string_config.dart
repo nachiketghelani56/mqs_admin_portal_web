@@ -22,7 +22,12 @@ class Dashboard {
   final String userIAM = "User-IAM";
   final String filter = "Filter";
   final String export = "Export";
-  final String searchUserIdNameEmail = "Search User ID, Name, Email etc.";
+  final String addEnterprise = "Add Enterprice";
+  final String searchUserIdNameEmail = "Search User ID, Name etc.";
+  final String id = "_id";
+  final String mqsEnterPriseCode = "mqsEnterPriseCode";
+  final String rowsPerPage = "Rows per page:";
+  final String of = "of";
 }
 
 class RefExp {

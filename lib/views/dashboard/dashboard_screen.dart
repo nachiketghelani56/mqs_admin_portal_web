@@ -52,16 +52,21 @@ class DashboardScreen extends StatelessWidget {
               child: Obx(
                 () {
                   if (_dashboardController.selectedTabIndex.value == 0) {
-                    return enterpriseWidget();
+                    return enterpriseWidget(
+                        dashboardController: _dashboardController);
                   } else {
-                    return userIAMWidget();
+                    return userIAMWidget(
+                        dashboardController: _dashboardController);
                   }
                 },
               ),
             )
           ],
-        ).paddingSymmetric(
-            horizontal: SizeConfig.size40, vertical: SizeConfig.size25),
+        ).paddingOnly(
+          left: SizeConfig.size40,
+          right: SizeConfig.size40,
+          top: SizeConfig.size25,
+        ),
       ),
     );
   }

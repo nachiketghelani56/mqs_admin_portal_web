@@ -9,4 +9,7 @@ class ImageConfig {
   static const String export = "assets/icons/export.png";
   static const String filter = "assets/icons/filter.png";
   static const String search = "assets/icons/search.png";
+  static const String add = "assets/icons/add.png";
+  static const String edit = "assets/icons/edit.png";
+  static const String delete = "assets/icons/delete.png";
 }

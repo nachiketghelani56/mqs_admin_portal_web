@@ -7,6 +7,7 @@ class DashboardController extends GetxController {
     StringConfig.dashboard.enterprise,
     StringConfig.dashboard.userIAM,
   ].obs;
-  RxInt selectedTabIndex = 1.obs;
+  RxInt selectedTabIndex = 0.obs;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
+  final TextEditingController searchController = TextEditingController();
 }

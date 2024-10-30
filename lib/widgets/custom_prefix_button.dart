@@ -16,12 +16,12 @@ class CustomPrefixButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: SizeConfig.size46,
       decoration: BoxDecoration(
         border: Border.all(color: ColorConfig.primaryColor),
         borderRadius: BorderRadius.circular(SizeConfig.size2),
       ),
-      padding: const EdgeInsets.symmetric(
-          horizontal: SizeConfig.size34, vertical: SizeConfig.size10),
+      padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size34),
       child: Row(
         children: [
           Image.asset(
