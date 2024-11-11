@@ -12,4 +12,5 @@ class ImageConfig {
   static const String add = "assets/icons/add.png";
   static const String edit = "assets/icons/edit.png";
   static const String delete = "assets/icons/delete.png";
+  static const String calendar = "assets/icons/calendar.png";
 }

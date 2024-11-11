@@ -4,14 +4,18 @@ import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
 
 class CustomTextField extends StatelessWidget {
-  const CustomTextField(
-      {super.key,
-      required this.controller,
-      required this.label,
-      this.isObscure = false,
-      this.suffixIcon,
-      this.onSuffixIconTap,
-      this.validator});
+  const CustomTextField({
+    super.key,
+    required this.controller,
+    required this.label,
+    this.isObscure = false,
+    this.suffixIcon,
+    this.onSuffixIconTap,
+    this.validator,
+    this.hintText,
+    this.readOnly = false,
+    this.onTap,
+  });
 
   final TextEditingController controller;
   final String label;
@@ -19,20 +23,26 @@ class CustomTextField extends StatelessWidget {
   final String? suffixIcon;
   final Function? onSuffixIconTap;
   final String? Function(String?)? validator;
+  final String? hintText;
+  final bool readOnly;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      readOnly: readOnly,
+      onTap: onTap,
       obscureText: isObscure,
       obscuringCharacter: '•',
       style: FontTextstyleConfig.textfieldTextStyle,
       validator: validator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
+        hintText: hintText,
         isDense: true,
         labelText: label,
-        // floatingLabelBehavior: FloatingLabelBehavior.always,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
         labelStyle: FontTextstyleConfig.labelTextStyle,
         border: FontTextstyleConfig.borderDecoration,
         focusedBorder: FontTextstyleConfig.borderDecoration,

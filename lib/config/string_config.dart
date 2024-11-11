@@ -28,6 +28,37 @@ class Dashboard {
   final String mqsEnterPriseCode = "mqsEnterPriseCode";
   final String rowsPerPage = "Rows per page:";
   final String of = "of";
+  final String add = "Add";
+  final String cancel = "Cancel";
+  final String subscription = "Subscription";
+  final String enterSubscription = "Enter subscription";
+  final String enterId = "Enter id";
+  final String enterCode = "Enter code";
+  final String mqsEnterPriseName = "mqsEnterPriseName";
+  final String enterName = "Enter name";
+  final String mqsSubscriptionExpiryDate = "mqsSubscriptionExpiryDate";
+  final String enterExpiryDate = "Enter expiry date";
+  final String mqsEmployeeEmailList = "mqsEmployeeEmailList";
+  final String emailAddress = "Email address";
+  final String enterEmailAddress = "Enter email address";
+  final String mqsCommonLogin = "mqsCommonLogin";
+  final String isSignedUp = "isSignedUp";
+  final String trueText = "True";
+  final String falseText = "False";
+  final String firstName = "First Name";
+  final String lastName = "Last Name";
+  final String email = "Email";
+  final String mqsEnterpriseLocationDetails = "mqsEnterpriseLocationDetails";
+  final String address = "Address";
+  final String enterAddress = "Enter address";
+  final String pinCode = "Pincode";
+  final String enterPinCode = "Enter pin code";
+  final String mqsEnterprisePOCs = "mqsEnterprisePOCs";
+  final String name = "Name";
+  final String phoneNumber = "Phone Number";
+  final String enterPhoneNumber = "Enter phone number";
+  final String edit = "Edit";
+  final String delete = "Delete";
 }
 
 class RefExp {

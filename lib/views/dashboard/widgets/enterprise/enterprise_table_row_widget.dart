@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 
-Widget enterpriseTableRowWidget() {
+Widget enterpriseTableRowWidget(
+    {required DashboardController dashboardController,
+    required bool isSelected}) {
   return Container(
     height: SizeConfig.size76,
-    decoration: FontTextstyleConfig.tableRowDecoration,
+    decoration: FontTextstyleConfig.tableRowDecoration.copyWith(
+      color: isSelected ? ColorConfig.bg2Color : null,
+    ),
     padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size26),
     child: Row(
       children: [
@@ -39,7 +44,9 @@ Widget enterpriseTableRowWidget() {
               Image.asset(
                 ImageConfig.edit,
                 height: SizeConfig.size24,
-              ).tap(() {}),
+              ).tap(() {
+                dashboardController.isAddEnterprise.value = true;
+              }),
               SizeConfig.size32.width,
               Image.asset(
                 ImageConfig.delete,

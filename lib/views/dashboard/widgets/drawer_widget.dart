@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
-import 'package:mqs_admin_portal_web/views/dashboard/dashboard_controller.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/widgets/logo_widget.dart';
 
 Widget drawerWidget({required DashboardController dashboardController}) {

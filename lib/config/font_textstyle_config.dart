@@ -65,6 +65,13 @@ class FontTextstyleConfig {
     fontSize: FontSizeConfig.fontSize18,
   );
 
+  static const TextStyle tableContentTextStyle = TextStyle(
+    fontFamily: FontFamilyConfig.figtree,
+    color: ColorConfig.textfieldTextColor,
+    fontWeight: FontWeight.w400,
+    fontSize: FontSizeConfig.fontSize16,
+  );
+
   static OutlineInputBorder borderDecoration = OutlineInputBorder(
     borderSide: const BorderSide(
       color: ColorConfig.textfieldBorderColor,
@@ -139,6 +146,30 @@ class FontTextstyleConfig {
     border: Border(
       left: BorderSide(
         color: ColorConfig.textfieldTextColor.withOpacity(.14),
+      ),
+    ),
+  );
+
+  static BoxDecoration headerDecoration = BoxDecoration(
+    color: ColorConfig.bg2Color.withOpacity(SizeConfig.size0point3),
+    border: Border.all(
+      color: ColorConfig.labelColor.withOpacity(SizeConfig.size0point2),
+    ),
+    borderRadius: const BorderRadius.vertical(
+      top: Radius.circular(SizeConfig.size12),
+    ),
+  );
+  static BoxDecoration contentDecoration = BoxDecoration(
+    color: ColorConfig.bg2Color.withOpacity(SizeConfig.size0point3),
+    border: Border(
+      left: BorderSide(
+        color: ColorConfig.labelColor.withOpacity(SizeConfig.size0point2),
+      ),
+      bottom: BorderSide(
+        color: ColorConfig.labelColor.withOpacity(SizeConfig.size0point2),
+      ),
+      right: BorderSide(
+        color: ColorConfig.labelColor.withOpacity(SizeConfig.size0point2),
       ),
     ),
   );
