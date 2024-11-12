@@ -5,18 +5,18 @@ import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/widgets/title_widget.dart';
 
-Widget mqsEnterprisePOCsWidget(
+Widget userDemographicWidget(
     {required DashboardController dashboardController}) {
   return Column(
     children: [
       titleWidget(
-        title: StringConfig.dashboard.mqsEnterprisePOCs,
-        isShowContent: dashboardController.showMqsEnterprisePOCs.value,
+        title: StringConfig.dashboard.demoGraphicValue,
+        isShowContent: dashboardController.showDemographic.value,
       ).tap(() {
-        dashboardController.showMqsEnterprisePOCs.value =
-            !dashboardController.showMqsEnterprisePOCs.value;
+        dashboardController.showDemographic.value =
+            !dashboardController.showDemographic.value;
       }),
-      if (dashboardController.showMqsEnterprisePOCs.value) ...[
+      if (dashboardController.showDemographic.value) ...[
         SizeConfig.size10.height,
         Container(
           height: SizeConfig.size55,
@@ -25,74 +25,42 @@ Widget mqsEnterprisePOCsWidget(
           child: Row(
             children: [
               Expanded(
-                flex: SizeConfig.size3.toInt(),
                 child: Text(
-                  StringConfig.dashboard.address,
+                  StringConfig.dashboard.currentSelectedAnswer,
                   style: FontTextstyleConfig.tableBottomTextStyle,
                 ),
               ),
               Expanded(
-                flex: SizeConfig.size3.toInt(),
                 child: Text(
-                  StringConfig.dashboard.email,
-                  style: FontTextstyleConfig.tableBottomTextStyle,
-                ),
-              ),
-              Expanded(
-                flex: SizeConfig.size2.toInt(),
-                child: Text(
-                  StringConfig.dashboard.name,
-                  style: FontTextstyleConfig.tableBottomTextStyle,
-                ),
-              ),
-              Expanded(
-                flex: SizeConfig.size2.toInt(),
-                child: Text(
-                  StringConfig.dashboard.phoneNumber,
+                  StringConfig.dashboard.selectedIndex,
                   style: FontTextstyleConfig.tableBottomTextStyle,
                 ),
               ),
             ],
           ),
         ),
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 2; i++)
           Container(
             height: SizeConfig.size55,
             padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
-            decoration: i == 3
+            decoration: i == 1
                 ? FontTextstyleConfig.contentDecoration.copyWith(
                     borderRadius: const BorderRadius.vertical(
                       bottom: Radius.circular(SizeConfig.size12),
                     ),
                   )
                 : FontTextstyleConfig.contentDecoration,
-            child: Row(
+            child: const Row(
               children: [
                 Expanded(
-                  flex: SizeConfig.size3.toInt(),
-                  child: const Text(
-                    'Test',
+                  child: Text(
+                    'All I do is work',
                     style: FontTextstyleConfig.tableContentTextStyle,
                   ),
                 ),
                 Expanded(
-                  flex: SizeConfig.size3.toInt(),
-                  child: const Text(
-                    'testuser546@gmail.com',
-                    style: FontTextstyleConfig.tableContentTextStyle,
-                  ),
-                ),
-                Expanded(
-                  flex: SizeConfig.size2.toInt(),
-                  child: const Text(
-                    'Test User',
-                    style: FontTextstyleConfig.tableContentTextStyle,
-                  ),
-                ),
-                Expanded(
-                  flex: SizeConfig.size2.toInt(),
-                  child: const Text(
-                    '6584536243',
+                  child: Text(
+                    '134',
                     style: FontTextstyleConfig.tableContentTextStyle,
                   ),
                 ),

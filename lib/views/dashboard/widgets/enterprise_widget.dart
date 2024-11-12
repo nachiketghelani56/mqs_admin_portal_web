@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
@@ -9,7 +10,9 @@ import 'package:mqs_admin_portal_web/views/dashboard/widgets/enterprise/enterpri
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/enterprise/enterprise_table_title_widget.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/enterprise/enterprise_top_buttons_widget.dart';
 
-Widget enterpriseWidget({required DashboardController dashboardController}) {
+Widget enterpriseWidget(
+    {required DashboardController dashboardController,
+    required BuildContext context}) {
   return Row(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -29,6 +32,7 @@ Widget enterpriseWidget({required DashboardController dashboardController}) {
                       enterpriseTableRowWidget(
                         isSelected: i == 2,
                         dashboardController: dashboardController,
+                        context: context,
                       ),
                     enterpriseTableBottomWidget(),
                   ],
@@ -41,7 +45,8 @@ Widget enterpriseWidget({required DashboardController dashboardController}) {
       SizeConfig.size20.width,
       Expanded(
         child: dashboardController.isAddEnterprise.value
-            ? addEnterpriseWidget(dashboardController: dashboardController)
+            ? addEnterpriseWidget(
+                dashboardController: dashboardController, context: context)
             : enterpriseDetailWidget(dashboardController: dashboardController),
       ),
     ],

@@ -142,35 +142,35 @@ Widget addMqsEmpEmailListWidget(
         child: Row(
           children: [
             Expanded(
-              flex: 4,
+              flex: SizeConfig.size4.toInt(),
               child: Text(
                 StringConfig.dashboard.email,
                 style: FontTextstyleConfig.tableBottomTextStyle,
               ),
             ),
             Expanded(
-              flex: 3,
+              flex: SizeConfig.size3.toInt(),
               child: Text(
                 StringConfig.dashboard.mqsCommonLogin,
                 style: FontTextstyleConfig.tableBottomTextStyle,
               ),
             ),
             Expanded(
-              flex: 2,
+              flex: SizeConfig.size2.toInt(),
               child: Text(
                 StringConfig.dashboard.firstName,
                 style: FontTextstyleConfig.tableBottomTextStyle,
               ),
             ),
             Expanded(
-              flex: 2,
+              flex: SizeConfig.size2.toInt(),
               child: Text(
                 StringConfig.dashboard.isSignedUp,
                 style: FontTextstyleConfig.tableBottomTextStyle,
               ),
             ),
             Expanded(
-              flex: 2,
+              flex: SizeConfig.size2.toInt(),
               child: Text(
                 StringConfig.dashboard.lastName,
                 style: FontTextstyleConfig.tableBottomTextStyle,
@@ -193,37 +193,37 @@ Widget addMqsEmpEmailListWidget(
               : FontTextstyleConfig.contentDecoration,
           child: Row(
             children: [
-              const Expanded(
-                flex: 4,
-                child: Text(
+              Expanded(
+                flex: SizeConfig.size4.toInt(),
+                child: const Text(
                   'testuser546@gmail.com',
                   style: FontTextstyleConfig.tableContentTextStyle,
                 ),
               ),
-              const Expanded(
-                flex: 3,
-                child: Text(
+              Expanded(
+                flex: SizeConfig.size3.toInt(),
+                child: const Text(
                   'True',
                   style: FontTextstyleConfig.tableContentTextStyle,
                 ),
               ),
-              const Expanded(
-                flex: 2,
-                child: Text(
+              Expanded(
+                flex: SizeConfig.size2.toInt(),
+                child: const Text(
                   'Team',
                   style: FontTextstyleConfig.tableContentTextStyle,
                 ),
               ),
-              const Expanded(
-                flex: 2,
-                child: Text(
+              Expanded(
+                flex: SizeConfig.size2.toInt(),
+                child: const Text(
                   'True',
                   style: FontTextstyleConfig.tableContentTextStyle,
                 ),
               ),
-              const Expanded(
-                flex: 2,
-                child: Text(
+              Expanded(
+                flex: SizeConfig.size2.toInt(),
+                child: const Text(
                   'Board',
                   style: FontTextstyleConfig.tableContentTextStyle,
                 ),

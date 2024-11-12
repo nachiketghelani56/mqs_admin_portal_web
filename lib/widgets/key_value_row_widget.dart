@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 
 Widget keyValueRowWidget(
-    {required String key, required String value, bool topBorder = false}) {
+    {required String key,
+    required String value,
+    bool topBorder = false,
+    bool bottomBorder = true}) {
   return Container(
     decoration: topBorder
         ? FontTextstyleConfig.detailDecoration
-        : FontTextstyleConfig.detailBottomDecoration,
+        : bottomBorder
+            ? FontTextstyleConfig.detailBottomDecoration
+            : null,
     child: Row(
       children: [
         Expanded(

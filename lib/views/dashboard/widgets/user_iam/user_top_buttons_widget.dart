@@ -5,7 +5,7 @@ import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_contro
 import 'package:mqs_admin_portal_web/widgets/custom_prefix_button.dart';
 import 'package:mqs_admin_portal_web/widgets/search_text_field.dart';
 
-Widget enterpriseTopButtonsWidget(
+Widget userTopButtonsWidget(
     {required DashboardController dashboardController}) {
   return Row(
     children: [
@@ -24,14 +24,6 @@ Widget enterpriseTopButtonsWidget(
         prefixIcon: ImageConfig.export,
         btnText: StringConfig.dashboard.export,
         onTap: () {},
-      ),
-      SizeConfig.size12.width,
-      CustomPrefixButton(
-        prefixIcon: ImageConfig.add,
-        btnText: StringConfig.dashboard.addEnterprise,
-        onTap: () {
-          dashboardController.isAddEnterprise.value = true;
-        },
       ),
     ],
   );

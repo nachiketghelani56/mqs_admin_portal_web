@@ -1,11 +1,15 @@
 class SizeConfig {
+  static const double size640 = 640;
   static const double size600 = 600;
   static const double size574 = 574;
   static const double size500 = 500;
+  static const double size406 = 406;
   static const double size271 = 271;
   static const double size162 = 162;
+  static const double size156 = 156;
   static const double size140 = 140;
   static const double size76 = 76;
+  static const double size74 = 74;
   static const double size70 = 70;
   static const double size60 = 60;
   static const double size56 = 56;
@@ -18,6 +22,7 @@ class SizeConfig {
   static const double size34 = 34;
   static const double size32 = 32;
   static const double size30 = 30;
+  static const double size28 = 28;
   static const double size26 = 26;
   static const double size24 = 24;
   static const double size25 = 25;
@@ -32,6 +37,7 @@ class SizeConfig {
   static const double size8 = 8;
   static const double size5 = 5;
   static const double size6 = 6;
+  static const double size3 = 3;
   static const double size4 = 4;
   static const double size2 = 2;
   static const double size0point06 = 0.06;

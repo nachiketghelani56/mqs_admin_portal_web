@@ -97,28 +97,28 @@ Widget addMqsEnterprisePOCsWidget(
         child: Row(
           children: [
             Expanded(
-              flex: 3,
+              flex: SizeConfig.size3.toInt(),
               child: Text(
                 StringConfig.dashboard.address,
                 style: FontTextstyleConfig.tableBottomTextStyle,
               ),
             ),
             Expanded(
-              flex: 3,
+              flex: SizeConfig.size3.toInt(),
               child: Text(
                 StringConfig.dashboard.email,
                 style: FontTextstyleConfig.tableBottomTextStyle,
               ),
             ),
             Expanded(
-              flex: 2,
+              flex: SizeConfig.size2.toInt(),
               child: Text(
                 StringConfig.dashboard.name,
                 style: FontTextstyleConfig.tableBottomTextStyle,
               ),
             ),
             Expanded(
-              flex: 2,
+              flex: SizeConfig.size2.toInt(),
               child: Text(
                 StringConfig.dashboard.phoneNumber,
                 style: FontTextstyleConfig.tableBottomTextStyle,
@@ -141,30 +141,30 @@ Widget addMqsEnterprisePOCsWidget(
               : FontTextstyleConfig.contentDecoration,
           child: Row(
             children: [
-              const Expanded(
-                flex: 3,
-                child: Text(
+              Expanded(
+                flex: SizeConfig.size3.toInt(),
+                child: const Text(
                   'Test',
                   style: FontTextstyleConfig.tableContentTextStyle,
                 ),
               ),
-              const Expanded(
-                flex: 3,
-                child: Text(
+              Expanded(
+                flex: SizeConfig.size3.toInt(),
+                child: const Text(
                   'testuser546@gmail.com',
                   style: FontTextstyleConfig.tableContentTextStyle,
                 ),
               ),
-              const Expanded(
-                flex: 2,
-                child: Text(
+              Expanded(
+                flex: SizeConfig.size2.toInt(),
+                child: const Text(
                   'Test User',
                   style: FontTextstyleConfig.tableContentTextStyle,
                 ),
               ),
-              const Expanded(
-                flex: 2,
-                child: Text(
+              Expanded(
+                flex: SizeConfig.size2.toInt(),
+                child: const Text(
                   '6584536243',
                   style: FontTextstyleConfig.tableContentTextStyle,
                 ),

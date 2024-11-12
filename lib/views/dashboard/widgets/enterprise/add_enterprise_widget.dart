@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
-import 'package:mqs_admin_portal_web/main.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/enterprise/add_mqs_emp_email_list_widget.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/enterprise/add_mqs_enterprise_location_detail_widget.dart';
@@ -10,7 +9,9 @@ import 'package:mqs_admin_portal_web/views/dashboard/widgets/enterprise/add_mqs_
 import 'package:mqs_admin_portal_web/widgets/custom_button.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_text_field.dart';
 
-Widget addEnterpriseWidget({required DashboardController dashboardController}) {
+Widget addEnterpriseWidget(
+    {required DashboardController dashboardController,
+    required BuildContext context}) {
   return SingleChildScrollView(
     padding: const EdgeInsets.only(bottom: SizeConfig.size24),
     child: Container(
@@ -76,17 +77,15 @@ Widget addEnterpriseWidget({required DashboardController dashboardController}) {
                   suffixIcon: ImageConfig.calendar,
                   readOnly: true,
                   onTap: () async {
-                    if (navigatorKey.currentState?.context != null) {
-                      DateTime? date = await showDatePicker(
-                        context: navigatorKey.currentState!.context,
-                        firstDate: DateTime(0),
-                        lastDate: DateTime(3000),
-                        initialDate: DateTime.now(),
-                      );
-                      if (date != null) {
-                        dashboardController.mqsSubscriptionExpiryDateController
-                            .text = DateFormat('dd/MM/yyyy').format(date);
-                      }
+                    DateTime? date = await showDatePicker(
+                      context: context,
+                      firstDate: DateTime(0),
+                      lastDate: DateTime(3000),
+                      initialDate: DateTime.now(),
+                    );
+                    if (date != null) {
+                      dashboardController.mqsSubscriptionExpiryDateController
+                          .text = DateFormat('dd/MM/yyyy').format(date);
                     }
                   },
                 ),

@@ -159,6 +159,7 @@ class FontTextstyleConfig {
       top: Radius.circular(SizeConfig.size12),
     ),
   );
+
   static BoxDecoration contentDecoration = BoxDecoration(
     color: ColorConfig.bg2Color.withOpacity(SizeConfig.size0point3),
     border: Border(
@@ -172,5 +173,22 @@ class FontTextstyleConfig {
         color: ColorConfig.labelColor.withOpacity(SizeConfig.size0point2),
       ),
     ),
+  );
+
+  static BoxDecoration filterDecoration = BoxDecoration(
+    border: Border.all(
+      color: ColorConfig.textfieldTextColor.withOpacity(SizeConfig.size0point1),
+    ),
+    borderRadius: BorderRadius.circular(SizeConfig.size6),
+  );
+
+  static BoxDecoration optionDecoration = BoxDecoration(
+    color: ColorConfig.primaryColor,
+    borderRadius: BorderRadius.circular(SizeConfig.size2),
+  );
+
+  static BoxDecoration subOptionDecoration = BoxDecoration(
+    color: ColorConfig.textfieldTextColor.withOpacity(SizeConfig.size0point06),
+    borderRadius: BorderRadius.circular(SizeConfig.size4),
   );
 }

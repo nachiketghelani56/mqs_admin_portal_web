@@ -1,27 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
+import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
-import 'package:mqs_admin_portal_web/widgets/custom_prefix_button.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/widgets/user_iam/user_detail_widget.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/widgets/user_iam/user_table_bottom_widget.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/widgets/user_iam/user_table_row_widget.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/widgets/user_iam/user_table_title_widget.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/widgets/user_iam/user_top_buttons_widget.dart';
 
-Widget userIAMWidget({required DashboardController dashboardController}) {
+Widget userIAMWidget(
+    {required DashboardController dashboardController,
+    required BuildContext context}) {
   return Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Expanded(
         child: Column(
           children: [
-            Row(
-              children: [
-                CustomPrefixButton(
-                  prefixIcon: ImageConfig.filter,
-                  btnText: StringConfig.dashboard.filter,
-                  onTap: () {},
+            userTopButtonsWidget(dashboardController: dashboardController),
+            SizeConfig.size26.height,
+            userTableTitleWidget(),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.only(bottom: SizeConfig.size25),
+                child: Column(
+                  children: [
+                    for (int i = 0; i < 10; i++)
+                      userTableRowWidget(
+                        isSelected: i == 2,
+                        dashboardController: dashboardController,
+                        context: context,
+                      ),
+                    userTableBottomWidget(),
+                  ],
                 ),
-              ],
+              ),
             ),
           ],
         ),
       ),
-      Expanded(child: Container()),
+      SizeConfig.size20.width,
+      Expanded(
+        child: userDetailWidget(dashboardController: dashboardController),
+      ),
     ],
   );
 }

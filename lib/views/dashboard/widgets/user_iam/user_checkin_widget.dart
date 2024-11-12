@@ -5,18 +5,17 @@ import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/widgets/title_widget.dart';
 
-Widget mqsEmployeeEmailListWidget(
-    {required DashboardController dashboardController}) {
+Widget userCheckInWidget({required DashboardController dashboardController}) {
   return Column(
     children: [
       titleWidget(
-        title: StringConfig.dashboard.mqsEmployeeEmailList,
-        isShowContent: dashboardController.showMqsEmpEmailList.value,
+        title: StringConfig.dashboard.checkINValue,
+        isShowContent: dashboardController.showCheckIn.value,
       ).tap(() {
-        dashboardController.showMqsEmpEmailList.value =
-            !dashboardController.showMqsEmpEmailList.value;
+        dashboardController.showCheckIn.value =
+            !dashboardController.showCheckIn.value;
       }),
-      if (dashboardController.showMqsEmpEmailList.value) ...[
+      if (dashboardController.showCheckIn.value) ...[
         SizeConfig.size10.height,
         Container(
           height: SizeConfig.size55,
@@ -25,37 +24,26 @@ Widget mqsEmployeeEmailListWidget(
           child: Row(
             children: [
               Expanded(
-                flex: SizeConfig.size4.toInt(),
                 child: Text(
-                  StringConfig.dashboard.email,
+                  StringConfig.dashboard.checkInScore,
                   style: FontTextstyleConfig.tableBottomTextStyle,
                 ),
               ),
               Expanded(
-                flex: SizeConfig.size3.toInt(),
                 child: Text(
-                  StringConfig.dashboard.mqsCommonLogin,
+                  StringConfig.dashboard.id,
                   style: FontTextstyleConfig.tableBottomTextStyle,
                 ),
               ),
               Expanded(
-                flex: SizeConfig.size2.toInt(),
                 child: Text(
-                  StringConfig.dashboard.firstName,
+                  StringConfig.dashboard.mqsCINValue,
                   style: FontTextstyleConfig.tableBottomTextStyle,
                 ),
               ),
               Expanded(
-                flex: SizeConfig.size2.toInt(),
                 child: Text(
-                  StringConfig.dashboard.isSignedUp,
-                  style: FontTextstyleConfig.tableBottomTextStyle,
-                ),
-              ),
-              Expanded(
-                flex: SizeConfig.size2.toInt(),
-                child: Text(
-                  StringConfig.dashboard.lastName,
+                  StringConfig.dashboard.mqsTimeStamp,
                   style: FontTextstyleConfig.tableBottomTextStyle,
                 ),
               ),
@@ -73,40 +61,29 @@ Widget mqsEmployeeEmailListWidget(
                     ),
                   )
                 : FontTextstyleConfig.contentDecoration,
-            child: Row(
+            child: const Row(
               children: [
                 Expanded(
-                  flex: SizeConfig.size4.toInt(),
-                  child: const Text(
-                    'testuser546@gmail.com',
+                  child: Text(
+                    '0.54897R979R99',
                     style: FontTextstyleConfig.tableContentTextStyle,
                   ),
                 ),
                 Expanded(
-                  flex: SizeConfig.size3.toInt(),
-                  child: const Text(
-                    'True',
+                  child: Text(
+                    'CIN0005',
                     style: FontTextstyleConfig.tableContentTextStyle,
                   ),
                 ),
                 Expanded(
-                  flex: SizeConfig.size2.toInt(),
-                  child: const Text(
-                    'Team',
+                  child: Text(
+                    '0.54897R979R99',
                     style: FontTextstyleConfig.tableContentTextStyle,
                   ),
                 ),
                 Expanded(
-                  flex: SizeConfig.size2.toInt(),
-                  child: const Text(
-                    'True',
-                    style: FontTextstyleConfig.tableContentTextStyle,
-                  ),
-                ),
-                Expanded(
-                  flex: SizeConfig.size2.toInt(),
-                  child: const Text(
-                    'Board',
+                  child: Text(
+                    '2024-11-10',
                     style: FontTextstyleConfig.tableContentTextStyle,
                   ),
                 ),
