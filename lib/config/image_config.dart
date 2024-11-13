@@ -1,6 +1,6 @@
 class ImageConfig {
   // Images
-  static const String qstudioLogo = "assets/images/qstudio_logo.png";
+  static const String qStudioLogo = "assets/images/q_studio_logo.png";
 
   //Icons
   static const String eyeClosed = "assets/icons/eye_closed.png";

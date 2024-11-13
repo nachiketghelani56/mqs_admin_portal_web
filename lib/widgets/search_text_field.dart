@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
+import 'package:mqs_admin_portal_web/extensions/ext_on_context.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 
 class SearchTextField extends StatelessWidget {
@@ -13,11 +14,11 @@ class SearchTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: SizeConfig.size271,
+      width: context.width > 600 ? SizeConfig.size271 : 220,
       height: SizeConfig.size46,
       decoration: BoxDecoration(
         color:
-            ColorConfig.textfieldTextColor.withOpacity(SizeConfig.size0point1),
+            ColorConfig.textFieldTextColor.withOpacity(SizeConfig.size0point1),
       ),
       padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size12),
       child: Row(
@@ -31,12 +32,12 @@ class SearchTextField extends StatelessWidget {
           Expanded(
             child: TextFormField(
               controller: controller,
-              style: FontTextstyleConfig.labelTextStyle,
+              style: FontTextStyleConfig.labelTextStyle,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               decoration: InputDecoration(
                 isDense: true,
                 hintText: StringConfig.dashboard.searchUserIdNameEmail,
-                hintStyle: FontTextstyleConfig.labelTextStyle,
+                hintStyle: FontTextStyleConfig.labelTextStyle,
                 border: InputBorder.none,
                 focusedBorder: InputBorder.none,
                 enabledBorder: InputBorder.none,

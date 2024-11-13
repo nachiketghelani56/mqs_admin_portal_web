@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
-import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
+import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/enterprise/enterprise_delete_dialog_widget.dart';
 
@@ -12,45 +13,51 @@ Widget enterpriseTableRowWidget({
 }) {
   return Container(
     height: SizeConfig.size76,
-    decoration: FontTextstyleConfig.tableRowDecoration.copyWith(
+    decoration: FontTextStyleConfig.tableRowDecoration.copyWith(
       color: isSelected ? ColorConfig.bg2Color : null,
     ),
     padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size26),
     child: Row(
       children: [
-        Expanded(
-          flex: SizeConfig.size4.toInt(),
-          child: const Text(
-            "Ukscyu564HDG646733989GYGbgg",
-            overflow: TextOverflow.ellipsis,
-            style: FontTextstyleConfig.tableTextStyle,
+        if (context.width > SizeConfig.size900)
+          Expanded(
+            flex: SizeConfig.size2.toInt(),
+            child: const Text(
+              "Ukscyu564HDG646733989GYGbgg",
+              overflow: TextOverflow.ellipsis,
+              style: FontTextStyleConfig.tableTextStyle,
+            ),
           ),
-        ),
         Expanded(
-          flex: SizeConfig.size4.toInt(),
+          flex: SizeConfig.size2.toInt(),
           child: const Text(
             "1234",
             overflow: TextOverflow.ellipsis,
-            style: FontTextstyleConfig.tableTextStyle,
+            style: FontTextStyleConfig.tableTextStyle,
           ),
         ),
         Expanded(
-          flex: SizeConfig.size2.toInt(),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Image.asset(
                 ImageConfig.eyeOpened,
                 height: SizeConfig.size24,
-              ).tap(() {}),
-              SizeConfig.size32.width,
+              ).tap(() {
+                if (context.width < SizeConfig.size1500) {
+                  Get.toNamed(AppRoutes.enterpriseDetail);
+                }
+              }),
               Image.asset(
                 ImageConfig.edit,
                 height: SizeConfig.size24,
               ).tap(() {
-                dashboardController.isAddEnterprise.value = true;
+                dashboardController.isAddEnterprise.value = false;
+                dashboardController.isEditEnterprise.value = true;
+                if (context.width < SizeConfig.size1500) {
+                  Get.toNamed(AppRoutes.addEnterprise);
+                }
               }),
-              SizeConfig.size32.width,
               Image.asset(
                 ImageConfig.delete,
                 height: SizeConfig.size24,

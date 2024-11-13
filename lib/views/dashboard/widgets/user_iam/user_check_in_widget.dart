@@ -20,31 +20,31 @@ Widget userCheckInWidget({required DashboardController dashboardController}) {
         Container(
           height: SizeConfig.size55,
           padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
-          decoration: FontTextstyleConfig.headerDecoration,
+          decoration: FontTextStyleConfig.headerDecoration,
           child: Row(
             children: [
               Expanded(
                 child: Text(
                   StringConfig.dashboard.checkInScore,
-                  style: FontTextstyleConfig.tableBottomTextStyle,
+                  style: FontTextStyleConfig.tableBottomTextStyle,
                 ),
               ),
               Expanded(
                 child: Text(
                   StringConfig.dashboard.id,
-                  style: FontTextstyleConfig.tableBottomTextStyle,
+                  style: FontTextStyleConfig.tableBottomTextStyle,
                 ),
               ),
               Expanded(
                 child: Text(
                   StringConfig.dashboard.mqsCINValue,
-                  style: FontTextstyleConfig.tableBottomTextStyle,
+                  style: FontTextStyleConfig.tableBottomTextStyle,
                 ),
               ),
               Expanded(
                 child: Text(
                   StringConfig.dashboard.mqsTimeStamp,
-                  style: FontTextstyleConfig.tableBottomTextStyle,
+                  style: FontTextStyleConfig.tableBottomTextStyle,
                 ),
               ),
             ],
@@ -55,36 +55,36 @@ Widget userCheckInWidget({required DashboardController dashboardController}) {
             height: SizeConfig.size55,
             padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
             decoration: i == 3
-                ? FontTextstyleConfig.contentDecoration.copyWith(
+                ? FontTextStyleConfig.contentDecoration.copyWith(
                     borderRadius: const BorderRadius.vertical(
                       bottom: Radius.circular(SizeConfig.size12),
                     ),
                   )
-                : FontTextstyleConfig.contentDecoration,
+                : FontTextStyleConfig.contentDecoration,
             child: const Row(
               children: [
                 Expanded(
                   child: Text(
                     '0.54897R979R99',
-                    style: FontTextstyleConfig.tableContentTextStyle,
+                    style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
                 Expanded(
                   child: Text(
                     'CIN0005',
-                    style: FontTextstyleConfig.tableContentTextStyle,
+                    style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
                 Expanded(
                   child: Text(
                     '0.54897R979R99',
-                    style: FontTextstyleConfig.tableContentTextStyle,
+                    style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
                 Expanded(
                   child: Text(
                     '2024-11-10',
-                    style: FontTextstyleConfig.tableContentTextStyle,
+                    style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
               ],

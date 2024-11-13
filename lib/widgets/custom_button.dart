@@ -24,7 +24,7 @@ class CustomButton extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         btnText,
-        style: FontTextstyleConfig.buttonTextStyle
+        style: FontTextStyleConfig.buttonTextStyle
             .copyWith(color: isSelected ? null : ColorConfig.primaryColor),
       ),
     ).tap(onTap);

@@ -8,37 +8,42 @@ Widget keyValueRowWidget(
     bool bottomBorder = true}) {
   return Container(
     decoration: topBorder
-        ? FontTextstyleConfig.detailDecoration
+        ? FontTextStyleConfig.detailDecoration
         : bottomBorder
-            ? FontTextstyleConfig.detailBottomDecoration
+            ? FontTextStyleConfig.detailBottomDecoration
             : null,
-    child: Row(
-      children: [
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: SizeConfig.size12),
-            child: Text(
-              key,
-              style: FontTextstyleConfig.tableTextStyle,
+    child: IntrinsicHeight(
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: SizeConfig.size12),
+              child: Text(
+                key,
+                style: FontTextStyleConfig.tableTextStyle,
+              ),
             ),
           ),
-        ),
-        Expanded(
-          flex: SizeConfig.size2.toInt(),
-          child: Container(
-            padding: const EdgeInsets.only(
-              top: SizeConfig.size12,
-              bottom: SizeConfig.size12,
-              left: SizeConfig.size20,
-            ),
-            decoration: FontTextstyleConfig.detailLeftDecoration,
-            child: Text(
-              value,
-              style: FontTextstyleConfig.tableTextStyle,
+          Container(
+            width: SizeConfig.size1,
+            color: ColorConfig.textFieldTextColor.withOpacity(.14),
+          ),
+          Expanded(
+            flex: SizeConfig.size2.toInt(),
+            child: Container(
+              padding: const EdgeInsets.only(
+                top: SizeConfig.size12,
+                bottom: SizeConfig.size12,
+                left: SizeConfig.size20,
+              ),
+              child: Text(
+                value,
+                style: FontTextStyleConfig.tableTextStyle,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     ),
   );
 }

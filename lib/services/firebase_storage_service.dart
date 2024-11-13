@@ -5,6 +5,6 @@ class FirebaseStorageService {
   FirebaseStorageService._();
   static final i = FirebaseStorageService._();
   final FirebaseFirestore _instance = FirebaseFirestore.instance;
-  CollectionReference get enterprise => _instance.collection('enterprise_demo');
+  CollectionReference get enterprise => _instance.collection(Env.fbEnterprise);
   CollectionReference get user => _instance.collection(Env.fbUser);
 }

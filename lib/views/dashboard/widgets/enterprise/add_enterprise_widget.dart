@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
+import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/enterprise/add_mqs_emp_email_list_widget.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/enterprise/add_mqs_enterprise_location_detail_widget.dart';
@@ -16,13 +18,15 @@ Widget addEnterpriseWidget(
     padding: const EdgeInsets.only(bottom: SizeConfig.size24),
     child: Container(
       padding: const EdgeInsets.all(SizeConfig.size26),
-      decoration: FontTextstyleConfig.detailMainDecoration,
+      decoration: FontTextStyleConfig.detailMainDecoration,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            StringConfig.dashboard.addEnterprise,
-            style: FontTextstyleConfig.textfieldTextStyle
+            dashboardController.isEditEnterprise.value
+                ? StringConfig.dashboard.editEnterprise
+                : StringConfig.dashboard.addEnterprise,
+            style: FontTextStyleConfig.textFieldTextStyle
                 .copyWith(fontWeight: FontWeight.w600),
           ),
           SizeConfig.size24.height,
@@ -108,6 +112,10 @@ Widget addEnterpriseWidget(
                   btnText: StringConfig.dashboard.cancel,
                   onTap: () {
                     dashboardController.isAddEnterprise.value = false;
+                    dashboardController.isEditEnterprise.value = false;
+                    if (Get.currentRoute == AppRoutes.addEnterprise) {
+                      Get.back();
+                    }
                   },
                   isSelected: false,
                 ),
@@ -115,9 +123,15 @@ Widget addEnterpriseWidget(
               SizeConfig.size24.width,
               Expanded(
                 child: CustomButton(
-                  btnText: StringConfig.dashboard.add,
+                  btnText: dashboardController.isEditEnterprise.value
+                      ? StringConfig.dashboard.edit
+                      : StringConfig.dashboard.add,
                   onTap: () {
                     dashboardController.isAddEnterprise.value = false;
+                    dashboardController.isEditEnterprise.value = false;
+                    if (Get.currentRoute == AppRoutes.addEnterprise) {
+                      Get.back();
+                    }
                   },
                 ),
               ),

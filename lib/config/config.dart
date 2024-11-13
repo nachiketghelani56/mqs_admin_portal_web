@@ -6,4 +6,4 @@ export 'env.dart';
 export 'font_family_config.dart';
 export 'font_size_config.dart';
 export 'validator.dart';
-export 'font_textstyle_config.dart';
+export 'font_text_style_config.dart';

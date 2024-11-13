@@ -11,14 +11,14 @@ Widget titleWidget(
     padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size16),
     decoration: BoxDecoration(
       color:
-          ColorConfig.textfieldTextColor.withOpacity(SizeConfig.size0point06),
+          ColorConfig.textFieldTextColor.withOpacity(SizeConfig.size0point06),
     ),
     child: Row(
       children: [
         Expanded(
           child: Text(
             title,
-            style: FontTextstyleConfig.titleTextStyle,
+            style: FontTextStyleConfig.titleTextStyle,
           ),
         ),
         if (showAddIcon)

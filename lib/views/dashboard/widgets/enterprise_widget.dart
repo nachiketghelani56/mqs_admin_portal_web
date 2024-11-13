@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
+import 'package:mqs_admin_portal_web/extensions/ext_on_context.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/enterprise/add_enterprise_widget.dart';
@@ -20,14 +21,16 @@ Widget enterpriseWidget(
         child: Column(
           children: [
             enterpriseTopButtonsWidget(
-                dashboardController: dashboardController),
+              dashboardController: dashboardController,
+              context: context,
+            ),
             SizeConfig.size26.height,
-            enterpriseTableTitleWidget(),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.only(bottom: SizeConfig.size25),
                 child: Column(
                   children: [
+                    enterpriseTableTitleWidget(context: context),
                     for (int i = 0; i < 10; i++)
                       enterpriseTableRowWidget(
                         isSelected: i == 2,
@@ -42,13 +45,17 @@ Widget enterpriseWidget(
           ],
         ),
       ),
-      SizeConfig.size20.width,
-      Expanded(
-        child: dashboardController.isAddEnterprise.value
-            ? addEnterpriseWidget(
-                dashboardController: dashboardController, context: context)
-            : enterpriseDetailWidget(dashboardController: dashboardController),
-      ),
+      if (context.width > SizeConfig.size1500) ...[
+        SizeConfig.size20.width,
+        Expanded(
+          child: dashboardController.isAddEnterprise.value ||
+                  dashboardController.isEditEnterprise.value
+              ? addEnterpriseWidget(
+                  dashboardController: dashboardController, context: context)
+              : enterpriseDetailWidget(
+                  dashboardController: dashboardController),
+        ),
+      ],
     ],
   );
 }

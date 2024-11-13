@@ -10,13 +10,13 @@ Widget userDetailWidget({required DashboardController dashboardController}) {
     padding: const EdgeInsets.only(bottom: SizeConfig.size24),
     child: Container(
       padding: const EdgeInsets.all(SizeConfig.size26),
-      decoration: FontTextstyleConfig.detailMainDecoration,
+      decoration: FontTextStyleConfig.detailMainDecoration,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             "OF9AA3ZAGFY635nBF6739FGb",
-            style: FontTextstyleConfig.textfieldTextStyle
+            style: FontTextStyleConfig.textFieldTextStyle
                 .copyWith(fontWeight: FontWeight.w600),
           ),
           SizeConfig.size24.height,

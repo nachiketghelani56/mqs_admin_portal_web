@@ -93,35 +93,35 @@ Widget addMqsEnterprisePOCsWidget(
       Container(
         height: SizeConfig.size55,
         padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
-        decoration: FontTextstyleConfig.headerDecoration,
+        decoration: FontTextStyleConfig.headerDecoration,
         child: Row(
           children: [
             Expanded(
               flex: SizeConfig.size3.toInt(),
               child: Text(
                 StringConfig.dashboard.address,
-                style: FontTextstyleConfig.tableBottomTextStyle,
+                style: FontTextStyleConfig.tableBottomTextStyle,
               ),
             ),
             Expanded(
               flex: SizeConfig.size3.toInt(),
               child: Text(
                 StringConfig.dashboard.email,
-                style: FontTextstyleConfig.tableBottomTextStyle,
+                style: FontTextStyleConfig.tableBottomTextStyle,
               ),
             ),
             Expanded(
               flex: SizeConfig.size2.toInt(),
               child: Text(
                 StringConfig.dashboard.name,
-                style: FontTextstyleConfig.tableBottomTextStyle,
+                style: FontTextStyleConfig.tableBottomTextStyle,
               ),
             ),
             Expanded(
               flex: SizeConfig.size2.toInt(),
               child: Text(
                 StringConfig.dashboard.phoneNumber,
-                style: FontTextstyleConfig.tableBottomTextStyle,
+                style: FontTextStyleConfig.tableBottomTextStyle,
               ),
             ),
             const Expanded(child: SizedBox()),
@@ -133,47 +133,47 @@ Widget addMqsEnterprisePOCsWidget(
           height: SizeConfig.size55,
           padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
           decoration: i == 3
-              ? FontTextstyleConfig.contentDecoration.copyWith(
+              ? FontTextStyleConfig.contentDecoration.copyWith(
                   borderRadius: const BorderRadius.vertical(
                     bottom: Radius.circular(SizeConfig.size12),
                   ),
                 )
-              : FontTextstyleConfig.contentDecoration,
+              : FontTextStyleConfig.contentDecoration,
           child: Row(
             children: [
               Expanded(
                 flex: SizeConfig.size3.toInt(),
                 child: const Text(
                   'Test',
-                  style: FontTextstyleConfig.tableContentTextStyle,
+                  style: FontTextStyleConfig.tableContentTextStyle,
                 ),
               ),
               Expanded(
                 flex: SizeConfig.size3.toInt(),
                 child: const Text(
                   'testuser546@gmail.com',
-                  style: FontTextstyleConfig.tableContentTextStyle,
+                  style: FontTextStyleConfig.tableContentTextStyle,
                 ),
               ),
               Expanded(
                 flex: SizeConfig.size2.toInt(),
                 child: const Text(
                   'Test User',
-                  style: FontTextstyleConfig.tableContentTextStyle,
+                  style: FontTextStyleConfig.tableContentTextStyle,
                 ),
               ),
               Expanded(
                 flex: SizeConfig.size2.toInt(),
                 child: const Text(
                   '6584536243',
-                  style: FontTextstyleConfig.tableContentTextStyle,
+                  style: FontTextStyleConfig.tableContentTextStyle,
                 ),
               ),
               Expanded(
                 child: PopupMenuButton<int>(
                   icon: const Icon(
                     Icons.more_vert,
-                    color: ColorConfig.textfieldBorderColor,
+                    color: ColorConfig.textFieldBorderColor,
                   ),
                   iconSize: SizeConfig.size22,
                   onSelected: (value) {},
@@ -198,7 +198,7 @@ Widget addMqsEnterprisePOCsWidget(
                                 Expanded(
                                   child: Text(
                                     dashboardController.options[i].title,
-                                    style: FontTextstyleConfig.tableTextStyle
+                                    style: FontTextStyleConfig.tableTextStyle
                                         .copyWith(
                                             color: dashboardController
                                                 .options[i].color),

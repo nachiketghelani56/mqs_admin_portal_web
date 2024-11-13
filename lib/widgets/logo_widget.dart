@@ -6,7 +6,7 @@ Widget logoWidget({MainAxisSize mainAxisSize = MainAxisSize.max}) {
     mainAxisSize: mainAxisSize,
     children: [
       Image.asset(
-        ImageConfig.qstudioLogo,
+        ImageConfig.qStudioLogo,
         width: SizeConfig.size140,
       ),
     ],

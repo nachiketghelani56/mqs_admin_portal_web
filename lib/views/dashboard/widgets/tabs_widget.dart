@@ -28,7 +28,7 @@ Widget tabsWidget({required DashboardController dashboardController}) {
               ),
               child: Text(
                 dashboardController.tabs[i],
-                style: FontTextstyleConfig.tabTextStyle.copyWith(
+                style: FontTextStyleConfig.tabTextStyle.copyWith(
                   color: dashboardController.selectedTabIndex.value == i
                       ? ColorConfig.whiteColor
                       : null,

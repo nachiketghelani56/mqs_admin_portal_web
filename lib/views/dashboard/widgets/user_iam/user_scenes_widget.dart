@@ -22,7 +22,7 @@ Widget userScenesWidget({required DashboardController dashboardController}) {
           Container(
             padding: const EdgeInsets.symmetric(
                 vertical: SizeConfig.size12, horizontal: SizeConfig.size12),
-            decoration: FontTextstyleConfig.detailBottomDecoration,
+            decoration: FontTextStyleConfig.detailBottomDecoration,
             child: Column(
               children: [
                 Row(
@@ -30,7 +30,7 @@ Widget userScenesWidget({required DashboardController dashboardController}) {
                     Expanded(
                       child: Text(
                         'SC000$i',
-                        style: FontTextstyleConfig.tableBottomTextStyle
+                        style: FontTextStyleConfig.tableBottomTextStyle
                             .copyWith(fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -55,7 +55,7 @@ Widget userScenesWidget({required DashboardController dashboardController}) {
                   keyValueRowWidget(
                     key: StringConfig.dashboard.mqsSceneOptionText,
                     value:
-                        'The Drift-Away Dinner: You taste the meal but throughts and phone notifications keep pulling your focus away.',
+                        'The Drift-Away Dinner: You taste the meal but and phone notifications keep pulling your focus away.',
                   ),
                   keyValueRowWidget(
                     key: StringConfig.dashboard.mqsSceneOptionWeight,
@@ -68,7 +68,7 @@ Widget userScenesWidget({required DashboardController dashboardController}) {
                   keyValueRowWidget(
                     key: StringConfig.dashboard.mqsSceneStmt,
                     value:
-                        'You are eating your favorite meal. How Present are you with the experiance?',
+                        'You are eating your favorite meal. How Present are you with the ?',
                   ),
                   keyValueRowWidget(
                     key: StringConfig.dashboard.mqsTimeStamp,

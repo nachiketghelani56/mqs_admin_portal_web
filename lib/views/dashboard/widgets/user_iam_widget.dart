@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
@@ -17,14 +18,17 @@ Widget userIAMWidget(
       Expanded(
         child: Column(
           children: [
-            userTopButtonsWidget(dashboardController: dashboardController),
+            userTopButtonsWidget(
+              dashboardController: dashboardController,
+              context: context,
+            ),
             SizeConfig.size26.height,
-            userTableTitleWidget(),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.only(bottom: SizeConfig.size25),
                 child: Column(
                   children: [
+                    userTableTitleWidget(context: context),
                     for (int i = 0; i < 10; i++)
                       userTableRowWidget(
                         isSelected: i == 2,
@@ -39,10 +43,12 @@ Widget userIAMWidget(
           ],
         ),
       ),
-      SizeConfig.size20.width,
-      Expanded(
-        child: userDetailWidget(dashboardController: dashboardController),
-      ),
+      if (context.width > SizeConfig.size1500) ...[
+        SizeConfig.size20.width,
+        Expanded(
+          child: userDetailWidget(dashboardController: dashboardController),
+        ),
+      ],
     ],
   );
 }

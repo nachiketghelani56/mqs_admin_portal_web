@@ -21,19 +21,19 @@ Widget userDemographicWidget(
         Container(
           height: SizeConfig.size55,
           padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
-          decoration: FontTextstyleConfig.headerDecoration,
+          decoration: FontTextStyleConfig.headerDecoration,
           child: Row(
             children: [
               Expanded(
                 child: Text(
                   StringConfig.dashboard.currentSelectedAnswer,
-                  style: FontTextstyleConfig.tableBottomTextStyle,
+                  style: FontTextStyleConfig.tableBottomTextStyle,
                 ),
               ),
               Expanded(
                 child: Text(
                   StringConfig.dashboard.selectedIndex,
-                  style: FontTextstyleConfig.tableBottomTextStyle,
+                  style: FontTextStyleConfig.tableBottomTextStyle,
                 ),
               ),
             ],
@@ -44,24 +44,24 @@ Widget userDemographicWidget(
             height: SizeConfig.size55,
             padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
             decoration: i == 1
-                ? FontTextstyleConfig.contentDecoration.copyWith(
+                ? FontTextStyleConfig.contentDecoration.copyWith(
                     borderRadius: const BorderRadius.vertical(
                       bottom: Radius.circular(SizeConfig.size12),
                     ),
                   )
-                : FontTextstyleConfig.contentDecoration,
+                : FontTextStyleConfig.contentDecoration,
             child: const Row(
               children: [
                 Expanded(
                   child: Text(
                     'All I do is work',
-                    style: FontTextstyleConfig.tableContentTextStyle,
+                    style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
                 Expanded(
                   child: Text(
                     '134',
-                    style: FontTextstyleConfig.tableContentTextStyle,
+                    style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
               ],

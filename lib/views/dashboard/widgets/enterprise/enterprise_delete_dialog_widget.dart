@@ -14,51 +14,53 @@ enterpriseDeleteDialogWidget({required BuildContext context}) {
         child: Container(
           width: SizeConfig.size406,
           padding: const EdgeInsets.all(SizeConfig.size22),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(
-                ImageConfig.delete,
-                height: SizeConfig.size74,
-              ),
-              SizeConfig.size8.height,
-              Text(
-                StringConfig.dashboard.areYouSureYouWantToDeleteThis,
-                style: FontTextstyleConfig.tableTextStyle,
-              ),
-              Text(
-                '“Ukscyu564HDG646733989GYGbgg”',
-                style: FontTextstyleConfig.textfieldTextStyle
-                    .copyWith(fontWeight: FontWeight.w600),
-              ),
-              Text(
-                '${StringConfig.dashboard.enterprise}?',
-                style: FontTextstyleConfig.tableTextStyle,
-              ),
-              SizeConfig.size32.height,
-              Row(
-                children: [
-                  Expanded(
-                    child: CustomButton(
-                      isSelected: false,
-                      btnText: StringConfig.dashboard.cancel,
-                      onTap: () {
-                        Get.back();
-                      },
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(
+                  ImageConfig.delete,
+                  height: SizeConfig.size74,
+                ),
+                SizeConfig.size8.height,
+                Text(
+                  StringConfig.dashboard.areYouSureYouWantToDeleteThis,
+                  style: FontTextStyleConfig.tableTextStyle,
+                ),
+                Text(
+                  '“Ukscyu564HDG646733989GYGbgg”',
+                  style: FontTextStyleConfig.textFieldTextStyle
+                      .copyWith(fontWeight: FontWeight.w600),
+                ),
+                Text(
+                  '${StringConfig.dashboard.enterprise}?',
+                  style: FontTextStyleConfig.tableTextStyle,
+                ),
+                SizeConfig.size32.height,
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustomButton(
+                        isSelected: false,
+                        btnText: StringConfig.dashboard.cancel,
+                        onTap: () {
+                          Get.back();
+                        },
+                      ),
                     ),
-                  ),
-                  SizeConfig.size12.width,
-                  Expanded(
-                    child: CustomButton(
-                      btnText: StringConfig.dashboard.yesDelete,
-                      onTap: () {
-                        Get.back();
-                      },
+                    SizeConfig.size12.width,
+                    Expanded(
+                      child: CustomButton(
+                        btnText: StringConfig.dashboard.yesDelete,
+                        onTap: () {
+                          Get.back();
+                        },
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       );

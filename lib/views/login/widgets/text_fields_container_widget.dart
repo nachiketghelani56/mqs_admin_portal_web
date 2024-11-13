@@ -6,12 +6,12 @@ import 'package:mqs_admin_portal_web/views/login/controller/login_controller.dar
 import 'package:mqs_admin_portal_web/widgets/custom_button.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_text_field.dart';
 
-Widget textfieldsContainerWidget({required LoginController loginController}) {
+Widget textFieldsContainerWidget({required LoginController loginController}) {
   return Container(
     width: SizeConfig.size574,
     decoration: BoxDecoration(
       color: ColorConfig.bgColor,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(SizeConfig.size12),
     ),
     padding: const EdgeInsets.symmetric(
         horizontal: SizeConfig.size37, vertical: SizeConfig.size40),

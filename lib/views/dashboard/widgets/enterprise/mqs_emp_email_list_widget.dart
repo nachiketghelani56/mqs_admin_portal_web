@@ -21,42 +21,42 @@ Widget mqsEmployeeEmailListWidget(
         Container(
           height: SizeConfig.size55,
           padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
-          decoration: FontTextstyleConfig.headerDecoration,
+          decoration: FontTextStyleConfig.headerDecoration,
           child: Row(
             children: [
               Expanded(
                 flex: SizeConfig.size4.toInt(),
                 child: Text(
                   StringConfig.dashboard.email,
-                  style: FontTextstyleConfig.tableBottomTextStyle,
+                  style: FontTextStyleConfig.tableBottomTextStyle,
                 ),
               ),
               Expanded(
                 flex: SizeConfig.size3.toInt(),
                 child: Text(
                   StringConfig.dashboard.mqsCommonLogin,
-                  style: FontTextstyleConfig.tableBottomTextStyle,
+                  style: FontTextStyleConfig.tableBottomTextStyle,
                 ),
               ),
               Expanded(
                 flex: SizeConfig.size2.toInt(),
                 child: Text(
                   StringConfig.dashboard.firstName,
-                  style: FontTextstyleConfig.tableBottomTextStyle,
+                  style: FontTextStyleConfig.tableBottomTextStyle,
                 ),
               ),
               Expanded(
                 flex: SizeConfig.size2.toInt(),
                 child: Text(
                   StringConfig.dashboard.isSignedUp,
-                  style: FontTextstyleConfig.tableBottomTextStyle,
+                  style: FontTextStyleConfig.tableBottomTextStyle,
                 ),
               ),
               Expanded(
                 flex: SizeConfig.size2.toInt(),
                 child: Text(
                   StringConfig.dashboard.lastName,
-                  style: FontTextstyleConfig.tableBottomTextStyle,
+                  style: FontTextStyleConfig.tableBottomTextStyle,
                 ),
               ),
             ],
@@ -67,47 +67,47 @@ Widget mqsEmployeeEmailListWidget(
             height: SizeConfig.size55,
             padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
             decoration: i == 3
-                ? FontTextstyleConfig.contentDecoration.copyWith(
+                ? FontTextStyleConfig.contentDecoration.copyWith(
                     borderRadius: const BorderRadius.vertical(
                       bottom: Radius.circular(SizeConfig.size12),
                     ),
                   )
-                : FontTextstyleConfig.contentDecoration,
+                : FontTextStyleConfig.contentDecoration,
             child: Row(
               children: [
                 Expanded(
                   flex: SizeConfig.size4.toInt(),
                   child: const Text(
                     'testuser546@gmail.com',
-                    style: FontTextstyleConfig.tableContentTextStyle,
+                    style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
                 Expanded(
                   flex: SizeConfig.size3.toInt(),
                   child: const Text(
                     'True',
-                    style: FontTextstyleConfig.tableContentTextStyle,
+                    style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
                 Expanded(
                   flex: SizeConfig.size2.toInt(),
                   child: const Text(
                     'Team',
-                    style: FontTextstyleConfig.tableContentTextStyle,
+                    style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
                 Expanded(
                   flex: SizeConfig.size2.toInt(),
                   child: const Text(
                     'True',
-                    style: FontTextstyleConfig.tableContentTextStyle,
+                    style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
                 Expanded(
                   flex: SizeConfig.size2.toInt(),
                   child: const Text(
                     'Board',
-                    style: FontTextstyleConfig.tableContentTextStyle,
+                    style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
               ],

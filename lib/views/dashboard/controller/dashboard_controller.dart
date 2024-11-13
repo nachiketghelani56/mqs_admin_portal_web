@@ -34,7 +34,8 @@ class DashboardController extends GetxController {
   RxBool showMqsEmpEmailList = false.obs,
       showMqsEnterpriseLocationDetails = false.obs,
       showMqsEnterprisePOCs = false.obs,
-      isAddEnterprise = false.obs;
+      isAddEnterprise = false.obs,
+      isEditEnterprise = false.obs;
   RxList<MenuOptionModel> options = [
     MenuOptionModel(
       icon: ImageConfig.edit,
@@ -47,24 +48,24 @@ class DashboardController extends GetxController {
     ),
   ].obs;
   RxList<String> filterFields = [
-    'About',
-    'AboutValue',
-    'Country',
-    'CountryValue',
-    'Email',
-    'FirstName',
-    'LastName',
-    'Pronouns',
-    'PronounsValue',
-    'UserImage'
+    StringConfig.dashboard.about,
+    StringConfig.dashboard.aboutValue,
+    StringConfig.dashboard.country,
+    StringConfig.dashboard.countryValue,
+    StringConfig.dashboard.email,
+    StringConfig.dashboard.firstName,
+    StringConfig.dashboard.lastName,
+    StringConfig.dashboard.pronouns,
+    StringConfig.dashboard.pronounsValue,
+    StringConfig.dashboard.userImage,
   ].obs;
   RxList<String> filterConditions = [
-    '(==) equal to',
-    '(!=) not equal to',
-    '(>) greater than',
-    '(>=) greater than or equal to',
-    '(<) less than',
-    '(<=) less than or equal to ',
+    StringConfig.dashboard.equalTo,
+    StringConfig.dashboard.notEqualTo,
+    StringConfig.dashboard.greaterThan,
+    StringConfig.dashboard.greaterThanEqualTo,
+    StringConfig.dashboard.lessThan,
+    StringConfig.dashboard.lessThanEqualTo,
   ].obs;
   RxInt selectedConditionIndex = RxInt(-1);
   RxBool showFilterByField = false.obs,

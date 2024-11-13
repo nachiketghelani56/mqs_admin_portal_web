@@ -24,7 +24,7 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                 Expanded(
                   child: Text(
                     StringConfig.dashboard.filter,
-                    style: FontTextstyleConfig.tableBottomTextStyle
+                    style: FontTextStyleConfig.tableBottomTextStyle
                         .copyWith(fontSize: SizeConfig.size26),
                   ),
                 ),
@@ -49,11 +49,11 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                 SizeConfig.size14.height,
                 Container(
                   padding: const EdgeInsets.all(SizeConfig.size10),
-                  decoration: FontTextstyleConfig.filterDecoration,
+                  decoration: FontTextStyleConfig.filterDecoration,
                   child: Row(
                     children: [
                       Container(
-                        decoration: FontTextstyleConfig.optionDecoration,
+                        decoration: FontTextStyleConfig.optionDecoration,
                         padding: const EdgeInsets.all(SizeConfig.size10),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -62,7 +62,7 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                               dashboardController.filterFields[
                                   dashboardController
                                       .selectedFilterFieldIndex.value],
-                              style: FontTextstyleConfig.labelTextStyle
+                              style: FontTextStyleConfig.labelTextStyle
                                   .copyWith(color: ColorConfig.whiteColor),
                             ),
                             SizeConfig.size10.width,
@@ -93,10 +93,10 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                       padding: const EdgeInsets.symmetric(
                           horizontal: SizeConfig.size18,
                           vertical: SizeConfig.size6),
-                      decoration: FontTextstyleConfig.subOptionDecoration,
+                      decoration: FontTextStyleConfig.subOptionDecoration,
                       child: Text(
                         dashboardController.filterFields[i],
-                        style: FontTextstyleConfig.tableContentTextStyle,
+                        style: FontTextStyleConfig.tableContentTextStyle,
                       ),
                     ).tap(() {
                       dashboardController.selectedFilterFieldIndex.value = i;

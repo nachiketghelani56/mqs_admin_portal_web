@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
+import 'package:mqs_admin_portal_web/extensions/ext_on_context.dart';
 
-Widget enterpriseTableTitleWidget() {
+Widget enterpriseTableTitleWidget({required BuildContext context}) {
   return Container(
     height: SizeConfig.size76,
-    decoration: FontTextstyleConfig.tableTitleDecoration,
+    decoration: FontTextStyleConfig.tableTitleDecoration,
     padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size26),
     child: Row(
       children: [
-        Expanded(
-          flex: SizeConfig.size4.toInt(),
-          child: Text(
-            StringConfig.dashboard.id,
-            style: FontTextstyleConfig.textfieldTextStyle,
+        if (context.width > SizeConfig.size900)
+          Expanded(
+            flex: SizeConfig.size4.toInt(),
+            child: Text(
+              StringConfig.dashboard.id,
+              style: FontTextStyleConfig.textFieldTextStyle,
+            ),
           ),
-        ),
         Expanded(
           flex: SizeConfig.size4.toInt(),
           child: Text(
             StringConfig.dashboard.mqsEnterPriseCode,
-            style: FontTextstyleConfig.textfieldTextStyle,
+            style: FontTextStyleConfig.textFieldTextStyle,
           ),
         ),
         Expanded(

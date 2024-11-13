@@ -5,20 +5,20 @@ import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 Widget enterpriseTableBottomWidget() {
   return Container(
     height: SizeConfig.size76,
-    decoration: FontTextstyleConfig.tableBottomDecoration,
+    decoration: FontTextStyleConfig.tableBottomDecoration,
     padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size26),
     child: Row(
       children: [
         Text(
           '${StringConfig.dashboard.rowsPerPage} 10',
-          style: FontTextstyleConfig.tableBottomTextStyle,
+          style: FontTextStyleConfig.tableBottomTextStyle,
         ),
         SizeConfig.size5.width,
         const Icon(Icons.arrow_drop_down),
         const Spacer(),
         Text(
           '1-10 ${StringConfig.dashboard.of} 276',
-          style: FontTextstyleConfig.tableBottomTextStyle,
+          style: FontTextStyleConfig.tableBottomTextStyle,
         ),
         SizeConfig.size20.width,
         IconButton(
@@ -26,7 +26,7 @@ Widget enterpriseTableBottomWidget() {
           icon: const Icon(
             Icons.arrow_back_ios,
             size: SizeConfig.size15,
-            color: ColorConfig.textfieldTextColor,
+            color: ColorConfig.textFieldTextColor,
           ),
         ),
         IconButton(
@@ -34,10 +34,9 @@ Widget enterpriseTableBottomWidget() {
           icon: const Icon(
             Icons.arrow_forward_ios,
             size: SizeConfig.size15,
-            color: ColorConfig.textfieldTextColor,
+            color: ColorConfig.textFieldTextColor,
           ),
         ),
-        SizeConfig.size20.width,
       ],
     ),
   );

@@ -23,7 +23,7 @@ class CustomDropDown extends StatelessWidget {
       onChanged: (value) {
         onChanged(value);
       },
-      style: FontTextstyleConfig.textfieldTextStyle,
+      style: FontTextStyleConfig.textFieldTextStyle,
       icon: const Icon(Icons.keyboard_arrow_down),
       focusColor: ColorConfig.whiteColor,
       dropdownColor: ColorConfig.whiteColor,
@@ -34,12 +34,12 @@ class CustomDropDown extends StatelessWidget {
         fillColor: ColorConfig.whiteColor,
         focusColor: ColorConfig.whiteColor,
         hoverColor: ColorConfig.whiteColor,
-        labelStyle: FontTextstyleConfig.labelTextStyle,
-        border: FontTextstyleConfig.borderDecoration,
-        focusedBorder: FontTextstyleConfig.borderDecoration,
-        enabledBorder: FontTextstyleConfig.borderDecoration,
-        focusedErrorBorder: FontTextstyleConfig.borderDecoration,
-        errorBorder: FontTextstyleConfig.borderDecoration,
+        labelStyle: FontTextStyleConfig.labelTextStyle,
+        border: FontTextStyleConfig.borderDecoration,
+        focusedBorder: FontTextStyleConfig.borderDecoration,
+        enabledBorder: FontTextStyleConfig.borderDecoration,
+        focusedErrorBorder: FontTextStyleConfig.borderDecoration,
+        errorBorder: FontTextStyleConfig.borderDecoration,
         contentPadding: const EdgeInsets.symmetric(
             vertical: SizeConfig.size22, horizontal: SizeConfig.size20),
       ),

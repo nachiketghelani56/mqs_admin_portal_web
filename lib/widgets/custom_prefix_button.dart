@@ -31,7 +31,7 @@ class CustomPrefixButton extends StatelessWidget {
           10.width,
           Text(
             btnText,
-            style: FontTextstyleConfig.tabTextStyle,
+            style: FontTextStyleConfig.tabTextStyle,
           ),
         ],
       ),

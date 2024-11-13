@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
-import 'package:mqs_admin_portal_web/views/dashboard/widgets/user_iam/user_checkin_widget.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/widgets/user_iam/user_check_in_widget.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/user_iam/user_demographic_widget.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/user_iam/user_scenes_widget.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/user_iam/user_wol_widget.dart';
@@ -14,7 +14,7 @@ Widget userOnboardingDataWidget(
     children: [
       Text(
         StringConfig.dashboard.onboardingData,
-        style: FontTextstyleConfig.textfieldTextStyle
+        style: FontTextStyleConfig.textFieldTextStyle
             .copyWith(fontWeight: FontWeight.w600),
       ),
       SizeConfig.size24.height,

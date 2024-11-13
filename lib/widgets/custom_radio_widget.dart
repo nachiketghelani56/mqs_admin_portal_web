@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mqs_admin_portal_web/config/color_config.dart';
-import 'package:mqs_admin_portal_web/config/font_textstyle_config.dart';
+import 'package:mqs_admin_portal_web/config/font_text_style_config.dart';
 import 'package:mqs_admin_portal_web/config/size_config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
@@ -43,7 +43,7 @@ class CustomRadioWidget extends StatelessWidget {
         SizeConfig.size6.width,
         Text(
           title,
-          style: FontTextstyleConfig.tableContentTextStyle,
+          style: FontTextStyleConfig.tableContentTextStyle,
         ),
       ],
     );

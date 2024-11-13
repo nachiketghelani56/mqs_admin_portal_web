@@ -35,7 +35,7 @@ class CustomTextField extends StatelessWidget {
       onTap: onTap,
       obscureText: isObscure,
       obscuringCharacter: '•',
-      style: FontTextstyleConfig.textfieldTextStyle,
+      style: FontTextStyleConfig.textFieldTextStyle,
       validator: validator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
@@ -43,12 +43,12 @@ class CustomTextField extends StatelessWidget {
         isDense: true,
         labelText: label,
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        labelStyle: FontTextstyleConfig.labelTextStyle,
-        border: FontTextstyleConfig.borderDecoration,
-        focusedBorder: FontTextstyleConfig.borderDecoration,
-        enabledBorder: FontTextstyleConfig.borderDecoration,
-        focusedErrorBorder: FontTextstyleConfig.borderDecoration,
-        errorBorder: FontTextstyleConfig.borderDecoration,
+        labelStyle: FontTextStyleConfig.labelTextStyle,
+        border: FontTextStyleConfig.borderDecoration,
+        focusedBorder: FontTextStyleConfig.borderDecoration,
+        enabledBorder: FontTextStyleConfig.borderDecoration,
+        focusedErrorBorder: FontTextStyleConfig.borderDecoration,
+        errorBorder: FontTextStyleConfig.borderDecoration,
         suffixIcon: suffixIcon != null
             ? Container(
                 height: SizeConfig.size25,

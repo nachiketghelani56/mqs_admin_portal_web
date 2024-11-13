@@ -22,7 +22,8 @@ class Dashboard {
   final String userIAM = "User-IAM";
   final String filter = "Filter";
   final String export = "Export";
-  final String addEnterprise = "Add Enterprice";
+  final String addEnterprise = "Add Enterprise";
+  final String editEnterprise = "Edit Enterprise";
   final String searchUserIdNameEmail = "Search User ID, Name etc.";
   final String id = "_id";
   final String mqsEnterPriseCode = "mqsEnterPriseCode";
@@ -51,7 +52,7 @@ class Dashboard {
   final String mqsEnterpriseLocationDetails = "mqsEnterpriseLocationDetails";
   final String address = "Address";
   final String enterAddress = "Enter address";
-  final String pinCode = "Pincode";
+  final String pinCode = "Pin code";
   final String enterPinCode = "Enter pin code";
   final String mqsEnterprisePOCs = "mqsEnterprisePOCs";
   final String name = "Name";
@@ -116,6 +117,12 @@ class Dashboard {
   final String mqsSceneStmt = "mqsSceneStmt";
   final String mqsUserOBRegDate = "mqsUserOBRegDate";
   final String mqsUserOBSceneScore = "mqsUserOBSceneScore";
+  final String equalTo = "(==) equal to";
+  final String notEqualTo = "(!=) not equal to";
+  final String greaterThan = "(>) greater than";
+  final String greaterThanEqualTo = "(>=) greater than or equal to";
+  final String lessThan = "(<) less than";
+  final String lessThanEqualTo = "(<=) less than or equal to";
 }
 
 class RefExp {

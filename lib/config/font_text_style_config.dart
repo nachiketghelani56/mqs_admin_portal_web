@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 
-class FontTextstyleConfig {
+class FontTextStyleConfig {
   static const TextStyle titleStyle = TextStyle(
     fontFamily: FontFamilyConfig.figtree,
     color: ColorConfig.titleColor,
@@ -23,9 +23,9 @@ class FontTextstyleConfig {
     fontSize: FontSizeConfig.fontSize18,
   );
 
-  static const TextStyle textfieldTextStyle = TextStyle(
+  static const TextStyle textFieldTextStyle = TextStyle(
     fontFamily: FontFamilyConfig.figtree,
-    color: ColorConfig.textfieldTextColor,
+    color: ColorConfig.textFieldTextColor,
     fontWeight: FontWeight.w500,
     fontSize: FontSizeConfig.fontSize20,
   );
@@ -46,14 +46,14 @@ class FontTextstyleConfig {
 
   static const TextStyle tableTextStyle = TextStyle(
     fontFamily: FontFamilyConfig.figtree,
-    color: ColorConfig.textfieldTextColor,
+    color: ColorConfig.textFieldTextColor,
     fontWeight: FontWeight.w500,
     fontSize: FontSizeConfig.fontSize16,
   );
 
   static const TextStyle tableBottomTextStyle = TextStyle(
     fontFamily: FontFamilyConfig.figtree,
-    color: ColorConfig.textfieldTextColor,
+    color: ColorConfig.textFieldTextColor,
     fontWeight: FontWeight.w600,
     fontSize: FontSizeConfig.fontSize16,
   );
@@ -67,14 +67,14 @@ class FontTextstyleConfig {
 
   static const TextStyle tableContentTextStyle = TextStyle(
     fontFamily: FontFamilyConfig.figtree,
-    color: ColorConfig.textfieldTextColor,
+    color: ColorConfig.textFieldTextColor,
     fontWeight: FontWeight.w400,
     fontSize: FontSizeConfig.fontSize16,
   );
 
   static OutlineInputBorder borderDecoration = OutlineInputBorder(
     borderSide: const BorderSide(
-      color: ColorConfig.textfieldBorderColor,
+      color: ColorConfig.textFieldBorderColor,
     ),
     borderRadius: BorderRadius.circular(SizeConfig.size6),
   );
@@ -124,11 +124,11 @@ class FontTextstyleConfig {
     border: Border(
       top: BorderSide(
         color:
-            ColorConfig.textfieldTextColor.withOpacity(SizeConfig.size0point14),
+            ColorConfig.textFieldTextColor.withOpacity(SizeConfig.size0point14),
       ),
       bottom: BorderSide(
         color:
-            ColorConfig.textfieldTextColor.withOpacity(SizeConfig.size0point14),
+            ColorConfig.textFieldTextColor.withOpacity(SizeConfig.size0point14),
       ),
     ),
   );
@@ -137,15 +137,7 @@ class FontTextstyleConfig {
     border: Border(
       bottom: BorderSide(
         color:
-            ColorConfig.textfieldTextColor.withOpacity(SizeConfig.size0point14),
-      ),
-    ),
-  );
-
-  static BoxDecoration detailLeftDecoration = BoxDecoration(
-    border: Border(
-      left: BorderSide(
-        color: ColorConfig.textfieldTextColor.withOpacity(.14),
+            ColorConfig.textFieldTextColor.withOpacity(SizeConfig.size0point14),
       ),
     ),
   );
@@ -177,7 +169,7 @@ class FontTextstyleConfig {
 
   static BoxDecoration filterDecoration = BoxDecoration(
     border: Border.all(
-      color: ColorConfig.textfieldTextColor.withOpacity(SizeConfig.size0point1),
+      color: ColorConfig.textFieldTextColor.withOpacity(SizeConfig.size0point1),
     ),
     borderRadius: BorderRadius.circular(SizeConfig.size6),
   );
@@ -188,7 +180,12 @@ class FontTextstyleConfig {
   );
 
   static BoxDecoration subOptionDecoration = BoxDecoration(
-    color: ColorConfig.textfieldTextColor.withOpacity(SizeConfig.size0point06),
+    color: ColorConfig.textFieldTextColor.withOpacity(SizeConfig.size0point06),
     borderRadius: BorderRadius.circular(SizeConfig.size4),
+  );
+
+  static BoxDecoration topOptionDecoration = BoxDecoration(
+    border: Border.all(color: ColorConfig.primaryColor),
+    borderRadius: BorderRadius.circular(SizeConfig.size2),
   );
 }
