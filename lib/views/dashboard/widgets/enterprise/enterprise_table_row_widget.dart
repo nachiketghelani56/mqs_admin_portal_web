@@ -10,6 +10,7 @@ Widget enterpriseTableRowWidget({
   required DashboardController dashboardController,
   required bool isSelected,
   required BuildContext context,
+  required int index,
 }) {
   return Container(
     height: SizeConfig.size76,
@@ -22,16 +23,16 @@ Widget enterpriseTableRowWidget({
         if (context.width > SizeConfig.size900)
           Expanded(
             flex: SizeConfig.size2.toInt(),
-            child: const Text(
-              "Ukscyu564HDG646733989GYGbgg",
+            child: Text(
+              dashboardController.enterprises[index].id,
               overflow: TextOverflow.ellipsis,
               style: FontTextStyleConfig.tableTextStyle,
             ),
           ),
         Expanded(
           flex: SizeConfig.size2.toInt(),
-          child: const Text(
-            "1234",
+          child: Text(
+            dashboardController.enterprises[index].mqsEnterpriseCode,
             overflow: TextOverflow.ellipsis,
             style: FontTextStyleConfig.tableTextStyle,
           ),
@@ -44,6 +45,9 @@ Widget enterpriseTableRowWidget({
                 ImageConfig.eyeOpened,
                 height: SizeConfig.size24,
               ).tap(() {
+                dashboardController.isAddEnterprise.value = false;
+                dashboardController.isEditEnterprise.value = false;
+                dashboardController.viewIndex.value = index;
                 if (context.width < SizeConfig.size1500) {
                   Get.toNamed(AppRoutes.enterpriseDetail);
                 }
@@ -54,6 +58,8 @@ Widget enterpriseTableRowWidget({
               ).tap(() {
                 dashboardController.isAddEnterprise.value = false;
                 dashboardController.isEditEnterprise.value = true;
+                dashboardController.viewIndex.value = index;
+                dashboardController.setEnterpriseForm(index: index);
                 if (context.width < SizeConfig.size1500) {
                   Get.toNamed(AppRoutes.addEnterprise);
                 }
@@ -62,7 +68,11 @@ Widget enterpriseTableRowWidget({
                 ImageConfig.delete,
                 height: SizeConfig.size24,
               ).tap(() {
-                enterpriseDeleteDialogWidget(context: context);
+                enterpriseDeleteDialogWidget(
+                  context: context,
+                  dashboardController: dashboardController,
+                  docId: dashboardController.enterprises[index].id,
+                );
               }),
             ],
           ),

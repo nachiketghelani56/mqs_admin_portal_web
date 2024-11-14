@@ -18,19 +18,26 @@ Widget enterpriseDetailWidget(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Ukscyu564HDG646733989GYGbgg",
+            dashboardController.enterpriseDetail.id,
             style: FontTextStyleConfig.textFieldTextStyle
                 .copyWith(fontWeight: FontWeight.w600),
           ),
           SizeConfig.size24.height,
-          enterpriseDetailRowWidget(),
-          SizeConfig.size34.height,
-          mqsEmployeeEmailListWidget(dashboardController: dashboardController),
+          enterpriseDetailRowWidget(dashboardController: dashboardController),
+          if (dashboardController
+              .enterpriseDetail.mqsEmployeeEmailList.isNotEmpty) ...[
+            SizeConfig.size34.height,
+            mqsEmployeeEmailListWidget(
+                dashboardController: dashboardController),
+          ],
           SizeConfig.size34.height,
           mqsEnterpriseLocationDetailWidget(
               dashboardController: dashboardController),
-          SizeConfig.size34.height,
-          mqsEnterprisePOCsWidget(dashboardController: dashboardController),
+          if (dashboardController
+              .enterpriseDetail.mqsEnterprisePOCs.isNotEmpty) ...[
+            SizeConfig.size34.height,
+            mqsEnterprisePOCsWidget(dashboardController: dashboardController),
+          ],
         ],
       ),
     ),

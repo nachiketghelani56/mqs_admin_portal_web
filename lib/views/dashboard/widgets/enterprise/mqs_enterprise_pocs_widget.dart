@@ -55,11 +55,16 @@ Widget mqsEnterprisePOCsWidget(
             ],
           ),
         ),
-        for (int i = 0; i < 4; i++)
+        for (int i = 0;
+            i < dashboardController.enterpriseDetail.mqsEnterprisePOCs.length;
+            i++)
           Container(
             height: SizeConfig.size55,
             padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
-            decoration: i == 3
+            decoration: i ==
+                    dashboardController
+                            .enterpriseDetail.mqsEnterprisePOCs.length -
+                        1
                 ? FontTextStyleConfig.contentDecoration.copyWith(
                     borderRadius: const BorderRadius.vertical(
                       bottom: Radius.circular(SizeConfig.size12),
@@ -70,29 +75,33 @@ Widget mqsEnterprisePOCsWidget(
               children: [
                 Expanded(
                   flex: SizeConfig.size3.toInt(),
-                  child: const Text(
-                    'Test',
+                  child: Text(
+                    dashboardController
+                        .enterpriseDetail.mqsEnterprisePOCs[i].address,
                     style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
                 Expanded(
                   flex: SizeConfig.size3.toInt(),
-                  child: const Text(
-                    'testuser546@gmail.com',
+                  child: Text(
+                    dashboardController
+                        .enterpriseDetail.mqsEnterprisePOCs[i].email,
                     style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
                 Expanded(
                   flex: SizeConfig.size2.toInt(),
-                  child: const Text(
-                    'Test User',
+                  child: Text(
+                    dashboardController
+                        .enterpriseDetail.mqsEnterprisePOCs[i].name,
                     style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
                 Expanded(
                   flex: SizeConfig.size2.toInt(),
-                  child: const Text(
-                    '6584536243',
+                  child: Text(
+                    dashboardController
+                        .enterpriseDetail.mqsEnterprisePOCs[i].phoneNumber,
                     style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),

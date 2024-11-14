@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
@@ -21,6 +22,8 @@ Widget addMqsEnterpriseLocationDetailWidget(
               controller: dashboardController.addressController,
               label: StringConfig.dashboard.address,
               hintText: StringConfig.dashboard.enterAddress,
+              validator: (p0) => Validator.emptyValidator(
+                  p0 ?? "", StringConfig.dashboard.address),
             ),
           ),
         ],
@@ -33,6 +36,12 @@ Widget addMqsEnterpriseLocationDetailWidget(
               controller: dashboardController.pinCodeController,
               label: StringConfig.dashboard.pinCode,
               hintText: StringConfig.dashboard.enterPinCode,
+              validator: (p0) => Validator.emptyValidator(
+                  p0 ?? "", StringConfig.dashboard.pinCode),
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(6),
+              ],
             ),
           ),
         ],

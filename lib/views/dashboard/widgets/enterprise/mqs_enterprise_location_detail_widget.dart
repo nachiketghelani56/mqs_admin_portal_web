@@ -22,13 +22,14 @@ Widget mqsEnterpriseLocationDetailWidget(
         SizeConfig.size10.height,
         keyValueRowWidget(
           key: StringConfig.dashboard.address,
-          value: 'Test Address',
+          value: dashboardController
+              .enterpriseDetail.mqsEnterpriseLocationDetails.address,
           topBorder: true,
         ),
         keyValueRowWidget(
-          key: StringConfig.dashboard.pinCode,
-          value: '53537',
-        ),
+            key: StringConfig.dashboard.pinCode,
+            value: dashboardController
+                .enterpriseDetail.mqsEnterpriseLocationDetails.pinCode),
       ],
     ],
   );

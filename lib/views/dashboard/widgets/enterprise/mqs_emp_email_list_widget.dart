@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
@@ -62,11 +63,18 @@ Widget mqsEmployeeEmailListWidget(
             ],
           ),
         ),
-        for (int i = 0; i < 4; i++)
+        for (int i = 0;
+            i <
+                dashboardController
+                    .enterpriseDetail.mqsEmployeeEmailList.length;
+            i++)
           Container(
             height: SizeConfig.size55,
             padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
-            decoration: i == 3
+            decoration: i ==
+                    dashboardController
+                            .enterpriseDetail.mqsEmployeeEmailList.length -
+                        1
                 ? FontTextStyleConfig.contentDecoration.copyWith(
                     borderRadius: const BorderRadius.vertical(
                       bottom: Radius.circular(SizeConfig.size12),
@@ -77,37 +85,45 @@ Widget mqsEmployeeEmailListWidget(
               children: [
                 Expanded(
                   flex: SizeConfig.size4.toInt(),
-                  child: const Text(
-                    'testuser546@gmail.com',
+                  child: Text(
+                    dashboardController
+                        .enterpriseDetail.mqsEmployeeEmailList[i].email,
                     style: FontTextStyleConfig.tableContentTextStyle,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Expanded(
                   flex: SizeConfig.size3.toInt(),
-                  child: const Text(
-                    'True',
+                  child: Text(
+                    "${dashboardController.enterpriseDetail.mqsEmployeeEmailList[i].mqsCommonLogin.toString().capitalize}",
                     style: FontTextStyleConfig.tableContentTextStyle,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Expanded(
                   flex: SizeConfig.size2.toInt(),
-                  child: const Text(
-                    'Team',
+                  child: Text(
+                    dashboardController
+                        .enterpriseDetail.mqsEmployeeEmailList[i].firstname,
                     style: FontTextStyleConfig.tableContentTextStyle,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Expanded(
                   flex: SizeConfig.size2.toInt(),
-                  child: const Text(
-                    'True',
+                  child: Text(
+                    "${dashboardController.enterpriseDetail.mqsEmployeeEmailList[i].isSignedUp.toString().capitalize}",
                     style: FontTextStyleConfig.tableContentTextStyle,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Expanded(
                   flex: SizeConfig.size2.toInt(),
-                  child: const Text(
-                    'Board',
+                  child: Text(
+                    dashboardController
+                        .enterpriseDetail.mqsEmployeeEmailList[i].lastname,
                     style: FontTextStyleConfig.tableContentTextStyle,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],

@@ -1,30 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/widgets/key_value_row_widget.dart';
 
-Widget enterpriseDetailRowWidget() {
+Widget enterpriseDetailRowWidget(
+    {required DashboardController dashboardController}) {
   return Column(
     children: [
       keyValueRowWidget(
         key: StringConfig.dashboard.subscription,
-        value: 'Enterprise',
+        value: dashboardController.enterpriseDetail.subscription,
         topBorder: true,
       ),
       keyValueRowWidget(
         key: StringConfig.dashboard.id,
-        value: 'Ukscyu564HDG646733989GYGbgg',
+        value: dashboardController.enterpriseDetail.id,
       ),
       keyValueRowWidget(
         key: StringConfig.dashboard.mqsEnterPriseCode,
-        value: '1234',
+        value: dashboardController.enterpriseDetail.mqsEnterpriseCode,
       ),
       keyValueRowWidget(
         key: StringConfig.dashboard.mqsEnterPriseName,
-        value: 'Enterprise 1',
+        value: dashboardController.enterpriseDetail.mqsEnterpriseName,
       ),
       keyValueRowWidget(
         key: StringConfig.dashboard.mqsSubscriptionExpiryDate,
-        value: '2024-11-10T18:21:52.914990',
+        value: dashboardController.enterpriseDetail.mqsSubscriptionExpiryDate,
       ),
     ],
   );

@@ -16,4 +16,11 @@ class Validator {
     }
     return null;
   }
+
+  static String? emptyValidator(String text, String field) {
+    if (text.isEmpty) {
+      return StringConfig.validation.plsEnter + field;
+    }
+    return null;
+  }
 }

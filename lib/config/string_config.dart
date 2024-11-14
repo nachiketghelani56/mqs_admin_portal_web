@@ -25,7 +25,7 @@ class Dashboard {
   final String addEnterprise = "Add Enterprise";
   final String editEnterprise = "Edit Enterprise";
   final String searchUserIdNameEmail = "Search User ID, Name etc.";
-  final String id = "_id";
+  final String id = "id";
   final String mqsEnterPriseCode = "mqsEnterPriseCode";
   final String rowsPerPage = "Rows per page:";
   final String of = "of";
@@ -123,6 +123,7 @@ class Dashboard {
   final String greaterThanEqualTo = "(>=) greater than or equal to";
   final String lessThan = "(<) less than";
   final String lessThanEqualTo = "(<=) less than or equal to";
+  final String noDataFound = "No data found";
 }
 
 class RefExp {
@@ -134,6 +135,7 @@ class Validation {
   final String plsEnterEmail = "Please enter email address";
   final String plsEnterValidEmail = "Please enter valid email address";
   final String plsEnterPassword = "Please enter password";
+  final String plsEnter = "Please enter ";
 }
 
 class Firebase {

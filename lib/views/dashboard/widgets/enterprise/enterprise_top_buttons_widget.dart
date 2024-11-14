@@ -38,6 +38,7 @@ Widget enterpriseTopButtonsWidget(
               onTap: () {
                 dashboardController.isEditEnterprise.value = false;
                 dashboardController.isAddEnterprise.value = true;
+                dashboardController.clearAllFields();
                 if (context.width < SizeConfig.size1500) {
                   Get.toNamed(AppRoutes.addEnterprise);
                 }
@@ -86,6 +87,7 @@ Widget enterpriseTopButtonsWidget(
             ).tap(() {
               dashboardController.isEditEnterprise.value = false;
               dashboardController.isAddEnterprise.value = true;
+              dashboardController.clearAllFields();
               if (context.width < SizeConfig.size1500) {
                 Get.toNamed(AppRoutes.addEnterprise);
               }

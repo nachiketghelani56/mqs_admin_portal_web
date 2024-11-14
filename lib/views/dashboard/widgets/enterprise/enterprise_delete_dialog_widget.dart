@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_button.dart';
 
-enterpriseDeleteDialogWidget({required BuildContext context}) {
+enterpriseDeleteDialogWidget(
+    {required BuildContext context,
+    required DashboardController dashboardController,
+    required String docId}) {
   showDialog(
     context: context,
     builder: (context) {
@@ -28,7 +32,7 @@ enterpriseDeleteDialogWidget({required BuildContext context}) {
                   style: FontTextStyleConfig.tableTextStyle,
                 ),
                 Text(
-                  '“Ukscyu564HDG646733989GYGbgg”',
+                  docId,
                   style: FontTextStyleConfig.textFieldTextStyle
                       .copyWith(fontWeight: FontWeight.w600),
                 ),
@@ -54,6 +58,7 @@ enterpriseDeleteDialogWidget({required BuildContext context}) {
                         btnText: StringConfig.dashboard.yesDelete,
                         onTap: () {
                           Get.back();
+                          dashboardController.deleteEnterprise(docId: docId);
                         },
                       ),
                     ),

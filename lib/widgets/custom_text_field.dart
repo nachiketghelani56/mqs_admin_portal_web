@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
@@ -15,6 +16,7 @@ class CustomTextField extends StatelessWidget {
     this.hintText,
     this.readOnly = false,
     this.onTap,
+    this.inputFormatters,
   });
 
   final TextEditingController controller;
@@ -26,6 +28,7 @@ class CustomTextField extends StatelessWidget {
   final String? hintText;
   final bool readOnly;
   final Function()? onTap;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +41,7 @@ class CustomTextField extends StatelessWidget {
       style: FontTextStyleConfig.textFieldTextStyle,
       validator: validator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
+      inputFormatters: inputFormatters,
       decoration: InputDecoration(
         hintText: hintText,
         isDense: true,
