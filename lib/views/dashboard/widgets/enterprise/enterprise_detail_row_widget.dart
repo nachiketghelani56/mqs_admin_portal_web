@@ -12,10 +12,10 @@ Widget enterpriseDetailRowWidget(
         value: dashboardController.enterpriseDetail.subscription,
         topBorder: true,
       ),
-      keyValueRowWidget(
-        key: StringConfig.dashboard.id,
-        value: dashboardController.enterpriseDetail.id,
-      ),
+      // keyValueRowWidget(
+      //   key: StringConfig.dashboard.id,
+      //   value: dashboardController.enterpriseDetail.id,
+      // ),
       keyValueRowWidget(
         key: StringConfig.dashboard.mqsEnterPriseCode,
         value: dashboardController.enterpriseDetail.mqsEnterpriseCode,

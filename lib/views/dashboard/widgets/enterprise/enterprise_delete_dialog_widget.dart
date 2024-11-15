@@ -8,7 +8,8 @@ import 'package:mqs_admin_portal_web/widgets/custom_button.dart';
 enterpriseDeleteDialogWidget(
     {required BuildContext context,
     required DashboardController dashboardController,
-    required String docId}) {
+    required String docId,
+    required String mqsEnterpriseName}) {
   showDialog(
     context: context,
     builder: (context) {
@@ -32,7 +33,7 @@ enterpriseDeleteDialogWidget(
                   style: FontTextStyleConfig.tableTextStyle,
                 ),
                 Text(
-                  docId,
+                  mqsEnterpriseName,
                   style: FontTextStyleConfig.textFieldTextStyle
                       .copyWith(fontWeight: FontWeight.w600),
                 ),

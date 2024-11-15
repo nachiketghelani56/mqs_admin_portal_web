@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/models/enterprise_model.dart';
+import 'package:mqs_admin_portal_web/models/user_iam_model.dart';
 
 class FirebaseStorageService {
   FirebaseStorageService._();
@@ -33,5 +34,16 @@ class FirebaseStorageService {
 
   Future deleteEnterprises({required String docId}) async {
     await enterprise.doc(docId).delete();
+  }
+
+  Future<List<UserIAMModel>> getUsers() async {
+    QuerySnapshot<Object?> ent = await user.get();
+    List<UserIAMModel> userList =
+        ent.docs.map((e) => UserIAMModel.fromJson(e.data() as Map)).toList();
+    return userList;
+  }
+
+  listenToUserChange(Function(QuerySnapshot<Object?>)? onData) {
+    user.snapshots().listen((onData));
   }
 }

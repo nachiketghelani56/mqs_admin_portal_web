@@ -24,7 +24,7 @@ Widget enterpriseTableRowWidget({
           Expanded(
             flex: SizeConfig.size2.toInt(),
             child: Text(
-              dashboardController.enterprises[index].id,
+              dashboardController.enterprises[index].mqsEnterpriseName,
               overflow: TextOverflow.ellipsis,
               style: FontTextStyleConfig.tableTextStyle,
             ),
@@ -72,6 +72,8 @@ Widget enterpriseTableRowWidget({
                   context: context,
                   dashboardController: dashboardController,
                   docId: dashboardController.enterprises[index].id,
+                  mqsEnterpriseName:
+                      dashboardController.enterprises[index].mqsEnterpriseName,
                 );
               }),
             ],

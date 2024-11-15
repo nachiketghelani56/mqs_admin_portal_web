@@ -14,7 +14,7 @@ Widget enterpriseTableTitleWidget({required BuildContext context}) {
           Expanded(
             flex: SizeConfig.size4.toInt(),
             child: Text(
-              StringConfig.dashboard.id,
+              StringConfig.dashboard.mqsEnterPriseName,
               style: FontTextStyleConfig.textFieldTextStyle,
             ),
           ),

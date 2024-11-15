@@ -7,6 +7,7 @@ class StringConfig {
   static final firebase = Firebase();
   static final validation = Validation();
   static final dashboard = Dashboard();
+  static final csv = CSV();
 }
 
 class Login {
@@ -26,7 +27,7 @@ class Dashboard {
   final String editEnterprise = "Edit Enterprise";
   final String searchUserIdNameEmail = "Search User ID, Name etc.";
   final String id = "id";
-  final String mqsEnterPriseCode = "mqsEnterPriseCode";
+  final String mqsEnterPriseCode = "Enterprise Code";
   final String rowsPerPage = "Rows per page:";
   final String of = "of";
   final String add = "Add";
@@ -35,26 +36,26 @@ class Dashboard {
   final String enterSubscription = "Enter subscription";
   final String enterId = "Enter id";
   final String enterCode = "Enter code";
-  final String mqsEnterPriseName = "mqsEnterPriseName";
+  final String mqsEnterPriseName = "Enterprise Name";
   final String enterName = "Enter name";
-  final String mqsSubscriptionExpiryDate = "mqsSubscriptionExpiryDate";
+  final String mqsSubscriptionExpiryDate = "Subscription Expiry Date";
   final String enterExpiryDate = "Enter expiry date";
-  final String mqsEmployeeEmailList = "mqsEmployeeEmailList";
+  final String mqsEmployeeEmailList = "Employee Email List";
   final String emailAddress = "Email address";
   final String enterEmailAddress = "Enter email address";
-  final String mqsCommonLogin = "mqsCommonLogin";
-  final String isSignedUp = "isSignedUp";
+  final String mqsCommonLogin = "Common Login";
+  final String isSignedUp = "Is Signed Up";
   final String trueText = "True";
   final String falseText = "False";
   final String firstName = "First Name";
   final String lastName = "Last Name";
   final String email = "Email";
-  final String mqsEnterpriseLocationDetails = "mqsEnterpriseLocationDetails";
+  final String mqsEnterpriseLocationDetails = "Enterprise Location Details";
   final String address = "Address";
   final String enterAddress = "Enter address";
   final String pinCode = "Pin code";
   final String enterPinCode = "Enter pin code";
-  final String mqsEnterprisePOCs = "mqsEnterprisePOCs";
+  final String mqsEnterprisePOCs = "Enterprise POCs";
   final String name = "Name";
   final String phoneNumber = "Phone Number";
   final String enterPhoneNumber = "Enter phone number";
@@ -124,6 +125,8 @@ class Dashboard {
   final String lessThan = "(<) less than";
   final String lessThanEqualTo = "(<=) less than or equal to";
   final String noDataFound = "No data found";
+  final String enterpriseCollection = "enterprise_collection";
+  final String invalidCSVFile = "Invalid CSV file";
 }
 
 class RefExp {
@@ -152,4 +155,27 @@ class Firebase {
   final String code = "code";
   final String enterPriseID = "enterPriseID";
   final String mqsCreatedTimestamp = "mqsCreatedTimestamp";
+}
+
+class CSV {
+  final String subscription = "Subscription";
+  final String mqsEmployeeEmailListEmail = "mqsEmployeeEmailList__email";
+  final String mqsEmployeeEmailListFirstName =
+      "mqsEmployeeEmailList__firstName";
+  final String mqsEmployeeEmailListIsSignedUp =
+      "mqsEmployeeEmailList__isSignedUp";
+  final String mqsEmployeeEmailListLastName = "mqsEmployeeEmailList__lastName";
+  final String mqsEmployeeEmailListMqsCommonLogin =
+      "mqsEmployeeEmailList__mqsCommonLogin";
+  final String mqsEnterpriseCode = "mqsEnterpriseCode";
+  final String mqsEnterpriseLocationDetailsAddress =
+      "mqsEnterpriseLocationDetails__address";
+  final String mqsEnterpriseLocationDetailsPinCode =
+      "mqsEnterpriseLocationDetails__pinCode";
+  final String mqsEnterpriseName = "mqsEnterpriseName";
+  final String mqsEnterprisePOCsAddress = "mqsEnterprisePOCs__address";
+  final String mqsEnterprisePOCsEmail = "mqsEnterprisePOCs__email";
+  final String mqsEnterprisePOCsName = "mqsEnterprisePOCs__name";
+  final String mqsEnterprisePOCsPhoneNumber = "mqsEnterprisePOCs__phoneNumber";
+  final String mqsSubscriptionExpiryDat = "mqsSubscriptionExpiryDate";
 }

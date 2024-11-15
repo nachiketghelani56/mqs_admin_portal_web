@@ -15,12 +15,12 @@ Widget userDetailWidget({required DashboardController dashboardController}) {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "OF9AA3ZAGFY635nBF6739FGb",
+            dashboardController.userDetail.isFirebaseUserId,
             style: FontTextStyleConfig.textFieldTextStyle
                 .copyWith(fontWeight: FontWeight.w600),
           ),
           SizeConfig.size24.height,
-          userDetailRowWidget(),
+          userDetailRowWidget(dashboardController: dashboardController),
           SizeConfig.size34.height,
           userOnboardingDataWidget(dashboardController: dashboardController),
         ],

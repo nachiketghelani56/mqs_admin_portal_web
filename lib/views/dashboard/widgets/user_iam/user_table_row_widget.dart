@@ -9,6 +9,7 @@ Widget userTableRowWidget({
   required DashboardController dashboardController,
   required bool isSelected,
   required BuildContext context,
+  required int index,
 }) {
   return Container(
     height: SizeConfig.size76,
@@ -21,15 +22,15 @@ Widget userTableRowWidget({
         if (context.width > SizeConfig.size900)
           Expanded(
             flex: SizeConfig.size3.toInt(),
-            child: const Text(
-              "OF9AA3ZAGFY635nBF6739FGb",
+            child: Text(
+              dashboardController.users[index].isFirebaseUserId,
               overflow: TextOverflow.ellipsis,
               style: FontTextStyleConfig.tableTextStyle,
             ),
           ),
-        const Expanded(
+        Expanded(
           child: Text(
-            "Test Board",
+            dashboardController.users[index].userName,
             overflow: TextOverflow.ellipsis,
             style: FontTextStyleConfig.tableTextStyle,
           ),
@@ -42,6 +43,7 @@ Widget userTableRowWidget({
                 ImageConfig.eyeOpened,
                 height: SizeConfig.size24,
               ).tap(() {
+                dashboardController.viewIndex.value = index;
                 if (context.width < SizeConfig.size1500) {
                   Get.toNamed(AppRoutes.userIAMDetail);
                 }

@@ -26,11 +26,36 @@ Widget enterpriseTopButtonsWidget(
             SearchTextField(controller: dashboardController.searchController),
             const Spacer(),
             SizeConfig.size12.width,
-            CustomPrefixButton(
-              prefixIcon: ImageConfig.export,
-              btnText: StringConfig.dashboard.export,
-              onTap: () {},
-            ),
+            // CustomPrefixButton(
+            //   prefixIcon: ImageConfig.export,
+            //   btnText: StringConfig.dashboard.export,
+            //   onTap: () {},
+            // ),
+            Container(
+              height: SizeConfig.size46,
+              decoration: FontTextStyleConfig.topOptionDecoration,
+              padding:
+                  const EdgeInsets.symmetric(horizontal: SizeConfig.size15),
+              child: Image.asset(
+                ImageConfig.import,
+                width: SizeConfig.size22,
+              ),
+            ).tap(() {
+              dashboardController.importEnterprise();
+            }),
+            SizeConfig.size12.width,
+            Container(
+              height: SizeConfig.size46,
+              decoration: FontTextStyleConfig.topOptionDecoration,
+              padding:
+                  const EdgeInsets.symmetric(horizontal: SizeConfig.size15),
+              child: Image.asset(
+                ImageConfig.export,
+                width: SizeConfig.size22,
+              ),
+            ).tap(() {
+              dashboardController.exportEnterprise();
+            }),
             SizeConfig.size12.width,
             CustomPrefixButton(
               prefixIcon: ImageConfig.add,
@@ -70,10 +95,25 @@ Widget enterpriseTopButtonsWidget(
               padding:
                   const EdgeInsets.symmetric(horizontal: SizeConfig.size15),
               child: Image.asset(
+                ImageConfig.import,
+                width: SizeConfig.size22,
+              ),
+            ).tap(() {
+              dashboardController.importEnterprise();
+            }),
+            SizeConfig.size12.width,
+            Container(
+              height: SizeConfig.size46,
+              decoration: FontTextStyleConfig.topOptionDecoration,
+              padding:
+                  const EdgeInsets.symmetric(horizontal: SizeConfig.size15),
+              child: Image.asset(
                 ImageConfig.export,
                 width: SizeConfig.size22,
               ),
-            ).tap(() {}),
+            ).tap(() {
+              dashboardController.exportEnterprise();
+            }),
             SizeConfig.size12.width,
             Container(
               height: SizeConfig.size46,

@@ -1,8 +1,15 @@
+import 'dart:convert';
+import 'dart:math';
+import 'dart:typed_data';
+import 'package:csv/csv.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/models/enterprise_model.dart';
 import 'package:mqs_admin_portal_web/models/menu_option_model.dart';
+import 'package:mqs_admin_portal_web/models/user_iam_model.dart';
 import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/services/firebase_storage_service.dart';
 import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
@@ -92,10 +99,13 @@ class DashboardController extends GetxController {
   final GlobalKey<FormState> entPOCFormKey = GlobalKey<FormState>();
   EnterpriseModel get enterpriseDetail => enterprises[viewIndex.value];
   RxInt editMqsEmpEmailIndex = RxInt(-1), editMqsEntPOCIndex = RxInt(-1);
+  RxList<UserIAMModel> users = <UserIAMModel>[].obs;
+  UserIAMModel get userDetail => users[viewIndex.value];
 
   @override
   onInit() {
     getEnterprises();
+    getUsers();
     super.onInit();
   }
 
@@ -142,6 +152,19 @@ class DashboardController extends GetxController {
       FirebaseStorageService.i.listenToEnterpriseChange((data) {
         enterprises.value = data.docs
             .map((e) => EnterpriseModel.fromJson(e.data() as Map))
+            .toList();
+      });
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    } finally {}
+  }
+
+  getUsers() async {
+    try {
+      users.value = await FirebaseStorageService.i.getUsers();
+      FirebaseStorageService.i.listenToUserChange((data) {
+        users.value = data.docs
+            .map((e) => UserIAMModel.fromJson(e.data() as Map))
             .toList();
       });
     } catch (e) {
@@ -294,6 +317,156 @@ class DashboardController extends GetxController {
       hideLoader();
     } catch (e) {
       hideLoader();
+      errorDialogWidget(msg: e.toString());
+    } finally {}
+  }
+
+  importEnterprise() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+          allowMultiple: false,
+          type: FileType.custom,
+          allowedExtensions: ['csv']);
+      if (result != null) {
+        Uint8List? bytes = result.files.single.bytes;
+        if (bytes != null) {
+          String csvData = utf8.decode(bytes);
+          List<List<dynamic>> rowsAsListOfValues =
+              const CsvToListConverter().convert(csvData);
+          rowsAsListOfValues.removeAt(0);
+          if (rowsAsListOfValues.isEmpty) {
+            errorDialogWidget(msg: StringConfig.dashboard.invalidCSVFile);
+          } else {
+            showLoader();
+            for (var e in rowsAsListOfValues) {
+              if (e.length >= 5) {
+                EnterpriseModel model = EnterpriseModel(
+                  subscription: e[0].toString(),
+                  id: '',
+                  mqsEmployeeEmailList: [],
+                  mqsEnterpriseCode: e[1].toString(),
+                  mqsEnterpriseLocationDetails: MqsEnterpriseLocationDetails(
+                    address: e[2].toString(),
+                    pinCode: e[3].toString(),
+                  ),
+                  mqsEnterpriseName: e[4].toString(),
+                  mqsEnterprisePOCs: [],
+                  mqsSubscriptionExpiryDate: e[5].toString(),
+                );
+                await FirebaseStorageService.i.addEnterprises(model: model);
+              } else {
+                throw Exception(StringConfig.dashboard.invalidCSVFile);
+              }
+            }
+            hideLoader();
+          }
+        }
+      }
+    } catch (e) {
+      hideLoader();
+      errorDialogWidget(msg: e.toString());
+    } finally {}
+  }
+
+  exportEnterprise() async {
+    try {
+      final List<String> rowHeader = [
+        StringConfig.csv.subscription,
+        StringConfig.csv.mqsEmployeeEmailListEmail,
+        StringConfig.csv.mqsEmployeeEmailListFirstName,
+        StringConfig.csv.mqsEmployeeEmailListIsSignedUp,
+        StringConfig.csv.mqsEmployeeEmailListLastName,
+        StringConfig.csv.mqsEmployeeEmailListMqsCommonLogin,
+        StringConfig.csv.mqsEnterpriseCode,
+        StringConfig.csv.mqsEnterpriseLocationDetailsAddress,
+        StringConfig.csv.mqsEnterpriseLocationDetailsPinCode,
+        StringConfig.csv.mqsEnterpriseName,
+        StringConfig.csv.mqsEnterprisePOCsAddress,
+        StringConfig.csv.mqsEnterprisePOCsEmail,
+        StringConfig.csv.mqsEnterprisePOCsName,
+        StringConfig.csv.mqsEnterprisePOCsPhoneNumber,
+        StringConfig.csv.mqsSubscriptionExpiryDat,
+      ];
+      List<List<dynamic>> rows = [];
+      rows.add(rowHeader);
+      for (int i = 0; i < enterprises.length; i++) {
+        if (enterprises[i].mqsEmployeeEmailList.isEmpty &&
+            enterprises[i].mqsEnterprisePOCs.isEmpty) {
+          rows.add([
+            '"${enterprises[i].subscription}"',
+            "",
+            "",
+            "",
+            "",
+            "",
+            '"${enterprises[i].mqsEnterpriseCode}"',
+            '"${enterprises[i].mqsEnterpriseLocationDetails.address}"',
+            '"${enterprises[i].mqsEnterpriseLocationDetails.pinCode}"',
+            '"${enterprises[i].mqsEnterpriseName}"',
+            "",
+            "",
+            "",
+            "",
+            '"${enterprises[i].mqsSubscriptionExpiryDate}"'
+          ]);
+        } else {
+          int maxLen = max(enterprises[i].mqsEmployeeEmailList.length,
+              enterprises[i].mqsEnterprisePOCs.length);
+          for (int j = 0; j < maxLen; j++) {
+            bool isMqsEmpEmailExist =
+                j < enterprises[i].mqsEmployeeEmailList.length;
+            bool isMqsEntPOCExist = j < enterprises[i].mqsEnterprisePOCs.length;
+            rows.add([
+              j == 0 ? '"${enterprises[i].subscription}"' : "",
+              isMqsEmpEmailExist
+                  ? '"${enterprises[i].mqsEmployeeEmailList[j].email}"'
+                  : "",
+              isMqsEmpEmailExist
+                  ? '"${enterprises[i].mqsEmployeeEmailList[j].firstname}"'
+                  : "",
+              isMqsEmpEmailExist
+                  ? enterprises[i].mqsEmployeeEmailList[j].isSignedUp
+                  : "",
+              isMqsEmpEmailExist
+                  ? '"${enterprises[i].mqsEmployeeEmailList[j].lastname}"'
+                  : "",
+              isMqsEmpEmailExist
+                  ? enterprises[i].mqsEmployeeEmailList[j].mqsCommonLogin
+                  : "",
+              j == 0 ? '"${enterprises[i].mqsEnterpriseCode}"' : "",
+              j == 0
+                  ? '"${enterprises[i].mqsEnterpriseLocationDetails.address}"'
+                  : "",
+              j == 0
+                  ? '"${enterprises[i].mqsEnterpriseLocationDetails.pinCode}"'
+                  : "",
+              j == 0 ? '"${enterprises[i].mqsEnterpriseName}"' : "",
+              isMqsEntPOCExist
+                  ? '"${enterprises[i].mqsEnterprisePOCs[j].address}"'
+                  : "",
+              isMqsEntPOCExist
+                  ? '"${enterprises[i].mqsEnterprisePOCs[j].email}"'
+                  : "",
+              isMqsEntPOCExist
+                  ? '"${enterprises[i].mqsEnterprisePOCs[j].name}"'
+                  : "",
+              isMqsEntPOCExist
+                  ? '"${enterprises[i].mqsEnterprisePOCs[j].phoneNumber}"'
+                  : "",
+              j == 0 ? '"${enterprises[i].mqsSubscriptionExpiryDate}"' : ""
+            ]);
+          }
+        }
+      }
+      String csv = const ListToCsvConverter().convert(rows);
+      Uint8List bytes = Uint8List.fromList(utf8.encode(csv));
+      await FileSaver.instance.saveFile(
+        name: StringConfig.dashboard.enterpriseCollection,
+        bytes: bytes,
+        ext: 'csv',
+        mimeType: MimeType.csv,
+      );
+    } catch (e) {
       errorDialogWidget(msg: e.toString());
     } finally {}
   }

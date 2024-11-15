@@ -14,7 +14,9 @@ class SearchTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: context.width > 600 ? SizeConfig.size271 : 220,
+      width: context.width > SizeConfig.size700
+          ? SizeConfig.size271
+          : SizeConfig.size150,
       height: SizeConfig.size46,
       decoration: BoxDecoration(
         color:

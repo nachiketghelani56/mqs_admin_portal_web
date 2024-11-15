@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
@@ -50,41 +51,55 @@ Widget userCheckInWidget({required DashboardController dashboardController}) {
             ],
           ),
         ),
-        for (int i = 0; i < 4; i++)
+        for (int i = 0;
+            i <
+                dashboardController
+                    .userDetail.onboardingModel.checkInValue.length;
+            i++)
           Container(
             height: SizeConfig.size55,
             padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
-            decoration: i == 3
+            decoration: i ==
+                    dashboardController
+                            .userDetail.onboardingModel.checkInValue.length -
+                        1
                 ? FontTextStyleConfig.contentDecoration.copyWith(
                     borderRadius: const BorderRadius.vertical(
                       bottom: Radius.circular(SizeConfig.size12),
                     ),
                   )
                 : FontTextStyleConfig.contentDecoration,
-            child: const Row(
+            child: Row(
               children: [
                 Expanded(
                   child: Text(
-                    '0.54897R979R99',
+                    "${dashboardController.userDetail.onboardingModel.checkInValue[i].checkInScore}",
                     style: FontTextStyleConfig.tableContentTextStyle,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Expanded(
                   child: Text(
-                    'CIN0005',
+                    dashboardController
+                        .userDetail.onboardingModel.checkInValue[i].id,
                     style: FontTextStyleConfig.tableContentTextStyle,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Expanded(
                   child: Text(
-                    '0.54897R979R99',
+                    "${dashboardController.userDetail.onboardingModel.checkInValue[i].mqsCINValue}",
                     style: FontTextStyleConfig.tableContentTextStyle,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Expanded(
                   child: Text(
-                    '2024-11-10',
+                    DateFormat('dd-MM-yyyy').format(DateTime.parse(
+                        dashboardController.userDetail.onboardingModel
+                            .checkInValue[i].mqsTimestamp)),
                     style: FontTextStyleConfig.tableContentTextStyle,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],

@@ -18,7 +18,7 @@ Widget enterpriseDetailWidget(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            dashboardController.enterpriseDetail.id,
+            dashboardController.enterpriseDetail.mqsEnterpriseName,
             style: FontTextStyleConfig.textFieldTextStyle
                 .copyWith(fontWeight: FontWeight.w600),
           ),

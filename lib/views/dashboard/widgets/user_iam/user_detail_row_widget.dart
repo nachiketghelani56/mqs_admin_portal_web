@@ -1,90 +1,92 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/widgets/key_value_row_widget.dart';
 
-Widget userDetailRowWidget() {
+Widget userDetailRowWidget({required DashboardController dashboardController}) {
   return Column(
     children: [
       keyValueRowWidget(
         key: StringConfig.dashboard.about,
-        value: 'About',
+        value: dashboardController.userDetail.about,
         topBorder: true,
       ),
       keyValueRowWidget(
         key: StringConfig.dashboard.aboutValue,
-        value: 'False',
+        value:
+            "${dashboardController.userDetail.aboutValue.toString().capitalize}",
       ),
       keyValueRowWidget(
         key: StringConfig.dashboard.country,
-        value: '-',
-      ),
-      keyValueRowWidget(
-        key: StringConfig.dashboard.mqsEnterPriseName,
-        value: 'Enterprise 1',
+        value: dashboardController.userDetail.country,
       ),
       keyValueRowWidget(
         key: StringConfig.dashboard.countryValue,
-        value: 'False',
+        value:
+            "${dashboardController.userDetail.countryValue.toString().capitalize}",
       ),
       keyValueRowWidget(
         key: StringConfig.dashboard.email,
-        value: 'testdevboard@gmail.com',
+        value: dashboardController.userDetail.email,
       ),
       keyValueRowWidget(
         key: StringConfig.dashboard.firstName,
-        value: 'Test',
+        value: dashboardController.userDetail.firstName,
       ),
       keyValueRowWidget(
         key: StringConfig.dashboard.lastName,
-        value: 'Board',
+        value: dashboardController.userDetail.lastName,
       ),
       keyValueRowWidget(
         key: StringConfig.dashboard.pronouns,
-        value: '-',
+        value: dashboardController.userDetail.pronouns,
       ),
       keyValueRowWidget(
         key: StringConfig.dashboard.pronounsValue,
-        value: 'False',
+        value:
+            "${dashboardController.userDetail.pronounsValue.toString().capitalize}",
       ),
       keyValueRowWidget(
         key: StringConfig.dashboard.userImage,
-        value: '-',
+        value: dashboardController.userDetail.userImage,
       ),
       keyValueRowWidget(
         key: StringConfig.dashboard.isEnterPriseUser,
-        value: 'False',
+        value:
+            "${dashboardController.userDetail.isEnterpriseUser.toString().capitalize}",
       ),
       keyValueRowWidget(
         key: StringConfig.dashboard.isFirebaseUserId,
-        value: 'OF9AA3ZAGFY635nBF6739FGb',
+        value: dashboardController.userDetail.isFirebaseUserId,
       ),
       keyValueRowWidget(
         key: StringConfig.dashboard.isMongoDBUserId,
-        value: 'OF9AA3ZAGFY635nBF6739FGb',
+        value: dashboardController.userDetail.isMongoDBUserId,
       ),
       keyValueRowWidget(
         key: StringConfig.dashboard.isRegister,
-        value: 'IsRegisterUserDone',
+        value: dashboardController.userDetail.isRegister,
       ),
       keyValueRowWidget(
         key: StringConfig.dashboard.loginWith,
-        value: 'Email',
+        value: dashboardController.userDetail.loginWith,
       ),
       keyValueRowWidget(
         key: StringConfig.dashboard.mqsExpiryDate,
-        value: '2024-11-10T18:21:52.914990',
+        value: dashboardController.userDetail.mqsExpiryDate,
       ),
       keyValueRowWidget(
         key: StringConfig.dashboard.mqsSubscriptionActivePlan,
-        value: 'mqsmyqstudiosub1.subscription_202409_dev',
+        value: dashboardController.userDetail.mqsSubscriptionActivePlan,
       ),
       keyValueRowWidget(
         key: StringConfig.dashboard.mqsSubscriptionPlatform,
-        value: 'IOS',
+        value: dashboardController.userDetail.mqsSubscriptionPlatform,
       ),
       keyValueRowWidget(
         key: StringConfig.dashboard.mqsSubscriptionStatus,
-        value: 'Active',
+        value: dashboardController.userDetail.mqsUserSubscriptionStatus,
       ),
     ],
   );

@@ -17,12 +17,21 @@ Widget userOnboardingDataWidget(
         style: FontTextStyleConfig.textFieldTextStyle
             .copyWith(fontWeight: FontWeight.w600),
       ),
-      SizeConfig.size24.height,
-      userCheckInWidget(dashboardController: dashboardController),
-      SizeConfig.size34.height,
-      userDemographicWidget(dashboardController: dashboardController),
-      SizeConfig.size34.height,
-      userScenesWidget(dashboardController: dashboardController),
+      if (dashboardController
+          .userDetail.onboardingModel.checkInValue.isNotEmpty) ...[
+        SizeConfig.size24.height,
+        userCheckInWidget(dashboardController: dashboardController),
+      ],
+      if (dashboardController
+          .userDetail.onboardingModel.demoGraphicValue.isNotEmpty) ...[
+        SizeConfig.size34.height,
+        userDemographicWidget(dashboardController: dashboardController),
+      ],
+      if (dashboardController
+          .userDetail.onboardingModel.scenesValue.isNotEmpty) ...[
+        SizeConfig.size34.height,
+        userScenesWidget(dashboardController: dashboardController),
+      ],
       SizeConfig.size34.height,
       userWOLWidget(dashboardController: dashboardController),
     ],

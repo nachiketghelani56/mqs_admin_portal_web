@@ -105,8 +105,8 @@ class OnboardingModel {
       required this.wOLValue});
 
   OnboardingModel.fromJson(Map json)
-      : checkInValue = json['checkInValue'] != null
-            ? List<CheckInModel>.from((json['checkInValue'] as List)
+      : checkInValue = json['checkINValue'] != null
+            ? List<CheckInModel>.from((json['checkINValue'] as List)
                 .map((model) => CheckInModel.fromJson(model)))
             : [],
         demoGraphicValue = json['demoGraphicValue'] != null
