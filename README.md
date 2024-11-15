@@ -38,5 +38,4 @@ firebase logout
 firebase login
 firebase init
 flutter build web
-firebase use mqs-mvp-devapp-1-0-0
-firebase deploy
+firebase deploy --only hosting:mqs-mvp-devapp-admin-portal
