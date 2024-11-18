@@ -35,8 +35,7 @@ Widget tabsWidget({required DashboardController dashboardController}) {
                 ),
               ),
             ).tap(() {
-              dashboardController.viewIndex.value = 0;
-              dashboardController.selectedTabIndex.value = i;
+              dashboardController.setTabIndex(index: i);
             }),
         ],
       ),

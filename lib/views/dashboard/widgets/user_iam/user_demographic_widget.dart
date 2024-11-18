@@ -39,28 +39,36 @@ Widget userDemographicWidget(
             ],
           ),
         ),
-        for (int i = 0; i < 2; i++)
+        for (int i = 0;
+            i <
+                dashboardController
+                    .userDetail.onboardingModel.demoGraphicValue.length;
+            i++)
           Container(
             height: SizeConfig.size55,
             padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
-            decoration: i == 1
+            decoration: i ==
+                    dashboardController.userDetail.onboardingModel
+                            .demoGraphicValue.length -
+                        1
                 ? FontTextStyleConfig.contentDecoration.copyWith(
                     borderRadius: const BorderRadius.vertical(
                       bottom: Radius.circular(SizeConfig.size12),
                     ),
                   )
                 : FontTextStyleConfig.contentDecoration,
-            child: const Row(
+            child: Row(
               children: [
                 Expanded(
                   child: Text(
-                    'All I do is work',
+                    dashboardController.userDetail.onboardingModel
+                        .demoGraphicValue[i].currentSelectedAnswer,
                     style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
                 Expanded(
                   child: Text(
-                    '134',
+                    "${dashboardController.userDetail.onboardingModel.demoGraphicValue[i].selectedIndex}",
                     style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),

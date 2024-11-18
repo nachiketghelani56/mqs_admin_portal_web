@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 
-Widget enterpriseTableBottomWidget() {
+Widget enterpriseTableBottomWidget(
+    {required DashboardController dashboardController}) {
   return Container(
     height: SizeConfig.size76,
     decoration: FontTextStyleConfig.tableBottomDecoration,
@@ -10,19 +12,20 @@ Widget enterpriseTableBottomWidget() {
     child: Row(
       children: [
         Text(
-          '${StringConfig.dashboard.rowsPerPage} 10',
+          '${StringConfig.dashboard.rowsPerPage} ${dashboardController.pageLimit}',
           style: FontTextStyleConfig.tableBottomTextStyle,
         ),
         SizeConfig.size5.width,
-        const Icon(Icons.arrow_drop_down),
         const Spacer(),
         Text(
-          '1-10 ${StringConfig.dashboard.of} 276',
+          '${dashboardController.offset.value + 1}-${dashboardController.getMaxOffset()} ${StringConfig.dashboard.of} ${dashboardController.searchedEnterprises.length}',
           style: FontTextStyleConfig.tableBottomTextStyle,
         ),
         SizeConfig.size20.width,
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            dashboardController.prevPage();
+          },
           icon: const Icon(
             Icons.arrow_back_ios,
             size: SizeConfig.size15,
@@ -30,7 +33,9 @@ Widget enterpriseTableBottomWidget() {
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            dashboardController.nextPage();
+          },
           icon: const Icon(
             Icons.arrow_forward_ios,
             size: SizeConfig.size15,

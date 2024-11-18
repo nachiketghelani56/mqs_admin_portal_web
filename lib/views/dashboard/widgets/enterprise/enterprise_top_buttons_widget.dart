@@ -23,7 +23,12 @@ Widget enterpriseTopButtonsWidget(
               },
             ),
             SizeConfig.size12.width,
-            SearchTextField(controller: dashboardController.searchController),
+            SearchTextField(
+              controller: dashboardController.searchController,
+              onChanged: (p0) {
+                dashboardController.searchEnterprise();
+              },
+            ),
             const Spacer(),
             SizeConfig.size12.width,
             // CustomPrefixButton(

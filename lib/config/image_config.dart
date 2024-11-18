@@ -1,6 +1,7 @@
 class ImageConfig {
   // Images
   static const String qStudioLogo = "assets/images/q_studio_logo.png";
+  static const String logo = "assets/images/logo.png";
 
   //Icons
   static const String eyeClosed = "assets/icons/eye_closed.png";
@@ -14,4 +15,13 @@ class ImageConfig {
   static const String delete = "assets/icons/delete.png";
   static const String calendar = "assets/icons/calendar.png";
   static const String import = "assets/icons/import.png";
+  static const String arrowDown = "assets/icons/arrow_down.png";
+  static const String arrowLeft = "assets/icons/arrow_left.png";
+  static const String chat = "assets/icons/chat.png";
+  static const String documents = "assets/icons/documents.png";
+  static const String filterNew = "assets/icons/filter_new.png";
+  static const String home = "assets/icons/home.png";
+  static const String notification = "assets/icons/notification.png";
+  static const String profile = "assets/icons/profile.png";
+  static const String settings = "assets/icons/settings.png";
 }

@@ -24,7 +24,7 @@ Widget enterpriseTableRowWidget({
           Expanded(
             flex: SizeConfig.size2.toInt(),
             child: Text(
-              dashboardController.enterprises[index].mqsEnterpriseName,
+              dashboardController.searchedEnterprises[index].mqsEnterpriseName,
               overflow: TextOverflow.ellipsis,
               style: FontTextStyleConfig.tableTextStyle,
             ),
@@ -32,7 +32,7 @@ Widget enterpriseTableRowWidget({
         Expanded(
           flex: SizeConfig.size2.toInt(),
           child: Text(
-            dashboardController.enterprises[index].mqsEnterpriseCode,
+            dashboardController.searchedEnterprises[index].mqsEnterpriseCode,
             overflow: TextOverflow.ellipsis,
             style: FontTextStyleConfig.tableTextStyle,
           ),
@@ -71,9 +71,9 @@ Widget enterpriseTableRowWidget({
                 enterpriseDeleteDialogWidget(
                   context: context,
                   dashboardController: dashboardController,
-                  docId: dashboardController.enterprises[index].id,
-                  mqsEnterpriseName:
-                      dashboardController.enterprises[index].mqsEnterpriseName,
+                  docId: dashboardController.searchedEnterprises[index].id,
+                  mqsEnterpriseName: dashboardController
+                      .searchedEnterprises[index].mqsEnterpriseName,
                 );
               }),
             ],

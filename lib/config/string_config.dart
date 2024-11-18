@@ -8,6 +8,7 @@ class StringConfig {
   static final validation = Validation();
   static final dashboard = Dashboard();
   static final csv = CSV();
+  static final mqsDashboard = MQSDashboard();
 }
 
 class Login {
@@ -92,15 +93,15 @@ class Dashboard {
   final String mqsSubscriptionPlatform = "mqsSubscriptionPlatform";
   final String mqsSubscriptionStatus = "mqsSubscriptionStatus";
   final String onboardingData = "onboardingData";
-  final String checkINValue = "checkINValue";
+  final String checkINValue = "Check IN Value";
   final String checkInScore = "checkInScore";
   final String mqsCINValue = "mqsCINValue";
   final String mqsTimestamp = "mqsTimestamp";
-  final String demoGraphicValue = "demoGraphicValue";
+  final String demoGraphicValue = "Demographic Value";
   final String currentSelectedAnswer = "currentSelectedAnswer";
   final String selectedIndex = "selectedIndex";
-  final String scenesValue = "scenesValue";
-  final String wOLValue = "wOLValue";
+  final String scenesValue = "Scenes Value";
+  final String wOLValue = "WOL Value";
   final String family = "family";
   final String finance = "finance";
   final String fun = "fun";
@@ -178,4 +179,40 @@ class CSV {
   final String mqsEnterprisePOCsName = "mqsEnterprisePOCs__name";
   final String mqsEnterprisePOCsPhoneNumber = "mqsEnterprisePOCs__phoneNumber";
   final String mqsSubscriptionExpiryDat = "mqsSubscriptionExpiryDate";
+}
+
+class MQSDashboard {
+  final String lastUpdate = "Last update: 26 Dec 2023, 03:34 pm";
+  final String home = "Home";
+  final String onboarding = "Onboarding";
+  final String communication = "Communication";
+  final String training = "Training";
+  final String survey = "Survey";
+  final String space = "Space";
+  final String reporting = "Reporting";
+  final String documents = "Documents";
+  final String chat = "Chat";
+  final String profile = "Profile";
+  final String settings = "Settings";
+  final String entity = "Entity";
+  final String unit = "Unit";
+  final String function = "Function";
+  final String wellAboveScore = "WellAbove Score";
+  final String strategy = "Strategy";
+  final String execution = "Execution";
+  final String outcome = "Outcome";
+  final String wellAboveIndicators = "WellAbove Indicators";
+  final String leadership = "Leadership";
+  final String management = "Management";
+  final String team = "Team";
+  final String employees = "Employees";
+  final String advocacy = "Advocacy";
+  final String awareness = "Awareness";
+  final String acceptance = "Acceptance";
+  final String aptitude = "Aptitude";
+  final String adoption = "Adoption";
+  final String wellAboveDrivers = "WellAbove Drivers";
+  final String trainingProgram = "Training Program";
+  final String leadershipSupport = "Leadership Support";
+  final String recognitionProgram = "Recognition Program";
 }

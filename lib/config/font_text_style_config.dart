@@ -72,6 +72,64 @@ class FontTextStyleConfig {
     fontSize: FontSizeConfig.fontSize16,
   );
 
+  static const TextStyle menuTextStyle = TextStyle(
+    fontFamily: FontFamilyConfig.figtree,
+    color: ColorConfig.whiteColor,
+    fontWeight: FontWeight.w400,
+    fontSize: FontSizeConfig.fontSize16,
+  );
+
+  static TextStyle subMenuTextStyle = TextStyle(
+    fontFamily: FontFamilyConfig.figtree,
+    color: ColorConfig.whiteColor.withOpacity(SizeConfig.size0point7),
+    fontWeight: FontWeight.w300,
+    fontSize: FontSizeConfig.fontSize14,
+  );
+
+  static const TextStyle dateTextStyle = TextStyle(
+    fontFamily: FontFamilyConfig.figtree,
+    color: ColorConfig.primaryColor,
+    fontWeight: FontWeight.w300,
+    fontSize: FontSizeConfig.fontSize16,
+  );
+
+  static const TextStyle headerTextStyle = TextStyle(
+    fontFamily: FontFamilyConfig.figtree,
+    color: ColorConfig.primaryColor,
+    fontWeight: FontWeight.w400,
+    fontSize: FontSizeConfig.fontSize24,
+  );
+
+  static const TextStyle cardTitleTextStyle = TextStyle(
+    fontFamily: FontFamilyConfig.figtree,
+    color: ColorConfig.cardTitleColor,
+    fontWeight: FontWeight.w300,
+    fontSize: FontSizeConfig.fontSize20,
+  );
+
+  static const TextStyle fieldTextStyle = TextStyle(
+    fontFamily: FontFamilyConfig.figtree,
+    color: ColorConfig.primaryColor,
+    fontWeight: FontWeight.w400,
+    fontSize: FontSizeConfig.fontSize16,
+  );
+
+  static const TextStyle cardMainTextStyle = TextStyle(
+    fontSize: FontSizeConfig.fontSize64,
+    color: ColorConfig.card1TextColor,
+    fontFamily: FontFamilyConfig.figtree,
+    fontWeight: FontWeight.w600,
+    height: SizeConfig.size1,
+  );
+
+  static const TextStyle cardSubTextStyle = TextStyle(
+    fontFamily: FontFamilyConfig.figtree,
+    color: ColorConfig.cardTitleColor,
+    fontSize: FontSizeConfig.fontSize24,
+    fontWeight: FontWeight.w300,
+    height: SizeConfig.size1,
+  );
+
   static OutlineInputBorder borderDecoration = OutlineInputBorder(
     borderSide: const BorderSide(
       color: ColorConfig.textFieldBorderColor,
@@ -187,5 +245,17 @@ class FontTextStyleConfig {
   static BoxDecoration topOptionDecoration = BoxDecoration(
     border: Border.all(color: ColorConfig.primaryColor),
     borderRadius: BorderRadius.circular(SizeConfig.size2),
+  );
+
+  static BoxDecoration cardDecoration = BoxDecoration(
+    color: ColorConfig.whiteColor,
+    borderRadius: BorderRadius.circular(SizeConfig.size12),
+    boxShadow: [
+      BoxShadow(
+        color: ColorConfig.whiteColor.withOpacity(SizeConfig.size0point06),
+        offset: const Offset(SizeConfig.size0, SizeConfig.size4),
+        blurRadius: SizeConfig.size38point3,
+      )
+    ],
   );
 }

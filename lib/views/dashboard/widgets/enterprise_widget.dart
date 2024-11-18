@@ -27,7 +27,7 @@ Widget enterpriseWidget(
             ),
             SizeConfig.size26.height,
             Expanded(
-              child: dashboardController.enterprises.isEmpty
+              child: dashboardController.searchedEnterprises.isEmpty
                   ? Text(
                       StringConfig.dashboard.noDataFound,
                       style: FontTextStyleConfig.subtitleStyle,
@@ -37,8 +37,8 @@ Widget enterpriseWidget(
                       child: Column(
                         children: [
                           enterpriseTableTitleWidget(context: context),
-                          for (int i = 0;
-                              i < dashboardController.enterprises.length;
+                          for (int i = dashboardController.offset.value;
+                              i < dashboardController.getMaxOffset();
                               i++)
                             enterpriseTableRowWidget(
                               isSelected: i ==
@@ -48,7 +48,8 @@ Widget enterpriseWidget(
                               context: context,
                               index: i,
                             ),
-                          enterpriseTableBottomWidget(),
+                          enterpriseTableBottomWidget(
+                              dashboardController: dashboardController),
                         ],
                       ),
                     ),
@@ -57,7 +58,7 @@ Widget enterpriseWidget(
         ),
       ),
       if (context.width > SizeConfig.size1500 &&
-          (dashboardController.enterprises.isNotEmpty ||
+          (dashboardController.searchedEnterprises.isNotEmpty ||
               dashboardController.isAddEnterprise.value)) ...[
         SizeConfig.size20.width,
         Expanded(

@@ -35,8 +35,8 @@ Widget userIAMWidget(
                       child: Column(
                         children: [
                           userTableTitleWidget(context: context),
-                          for (int i = 0;
-                              i < dashboardController.users.length;
+                          for (int i = dashboardController.offset.value;
+                              i < dashboardController.getMaxOffset();
                               i++)
                             userTableRowWidget(
                               isSelected:
@@ -45,7 +45,8 @@ Widget userIAMWidget(
                               context: context,
                               index: i,
                             ),
-                          userTableBottomWidget(),
+                          userTableBottomWidget(
+                              dashboardController: dashboardController),
                         ],
                       ),
                     ),

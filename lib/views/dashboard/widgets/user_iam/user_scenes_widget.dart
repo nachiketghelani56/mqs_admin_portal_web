@@ -18,7 +18,11 @@ Widget userScenesWidget({required DashboardController dashboardController}) {
       }),
       if (dashboardController.showScenes.value) ...[
         SizeConfig.size10.height,
-        for (int i = 0; i < 4; i++)
+        for (int i = 0;
+            i <
+                dashboardController
+                    .userDetail.onboardingModel.scenesValue.length;
+            i++)
           Container(
             padding: const EdgeInsets.symmetric(
                 vertical: SizeConfig.size12, horizontal: SizeConfig.size12),
@@ -29,7 +33,8 @@ Widget userScenesWidget({required DashboardController dashboardController}) {
                   children: [
                     Expanded(
                       child: Text(
-                        'SC000$i',
+                        dashboardController.userDetail.onboardingModel
+                            .scenesValue[i].mqsSceneID,
                         style: FontTextStyleConfig.tableBottomTextStyle
                             .copyWith(fontWeight: FontWeight.bold),
                       ),
@@ -46,41 +51,44 @@ Widget userScenesWidget({required DashboardController dashboardController}) {
                   SizeConfig.size12.height,
                   keyValueRowWidget(
                     key: StringConfig.dashboard.mqsSceneID,
-                    value: 'SC000$i',
+                    value: dashboardController
+                        .userDetail.onboardingModel.scenesValue[i].mqsSceneID,
                   ),
                   keyValueRowWidget(
                     key: StringConfig.dashboard.mqsSceneOptionGrScore,
-                    value: '1',
+                    value:
+                        "${dashboardController.userDetail.onboardingModel.scenesValue[i].mqsSceneOptionGrScore}",
                   ),
                   keyValueRowWidget(
                     key: StringConfig.dashboard.mqsSceneOptionText,
-                    value:
-                        'The Drift-Away Dinner: You taste the meal but and phone notifications keep pulling your focus away.',
+                    value: dashboardController.userDetail.onboardingModel
+                        .scenesValue[i].mqsSceneOptionText,
                   ),
                   keyValueRowWidget(
                     key: StringConfig.dashboard.mqsSceneOptionWeight,
-                    value: '2',
-                  ),
-                  keyValueRowWidget(
-                    key: StringConfig.dashboard.mqsSceneStScore,
-                    value: '1',
-                  ),
-                  keyValueRowWidget(
-                    key: StringConfig.dashboard.mqsSceneStmt,
                     value:
-                        'You are eating your favorite meal. How Present are you with the ?',
+                        "${dashboardController.userDetail.onboardingModel.scenesValue[i].mqsSceneOptionWeight}",
                   ),
                   keyValueRowWidget(
-                    key: StringConfig.dashboard.mqsTimeStamp,
-                    value: '2024-10-10T18:18:00.972307',
-                  ),
+                      key: StringConfig.dashboard.mqsSceneStScore,
+                      value:
+                          "${dashboardController.userDetail.onboardingModel.scenesValue[i].mqsSceneStScore}"),
                   keyValueRowWidget(
-                    key: StringConfig.dashboard.mqsUserOBRegDate,
-                    value: '2024-10-10T18:18:00.972307',
-                  ),
+                      key: StringConfig.dashboard.mqsSceneStmt,
+                      value: dashboardController.userDetail.onboardingModel
+                          .scenesValue[i].mqsSceneStmt),
+                  keyValueRowWidget(
+                      key: StringConfig.dashboard.mqsTimeStamp,
+                      value: dashboardController.userDetail.onboardingModel
+                          .scenesValue[i].mqsTimeStamp),
+                  keyValueRowWidget(
+                      key: StringConfig.dashboard.mqsUserOBRegDate,
+                      value: dashboardController.userDetail.onboardingModel
+                          .scenesValue[i].mqsUserOBRegDate),
                   keyValueRowWidget(
                     key: StringConfig.dashboard.mqsUserOBSceneScore,
-                    value: '2',
+                    value:
+                        "${dashboardController.userDetail.onboardingModel.scenesValue[i].mqsUserOBScenesScore}",
                     bottomBorder: false,
                   ),
                 ],

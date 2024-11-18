@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
@@ -26,9 +25,10 @@ class MQSAdminPortalWeb extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      initialRoute: FirebaseAuth.instance.currentUser != null
-          ? AppRoutes.dashboard
-          : AppRoutes.login,
+      // initialRoute: FirebaseAuth.instance.currentUser != null
+      //     ? AppRoutes.dashboard
+      //     : AppRoutes.login,
+      initialRoute: AppRoutes.mqsDashboard,
       getPages: AppRoutes.pages,
     );
   }

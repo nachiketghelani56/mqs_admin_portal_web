@@ -89,7 +89,8 @@ class DashboardController extends GetxController {
       showScenes = false.obs,
       showWOL = false.obs;
   RxList<int> sceneIndexes = <int>[].obs;
-  RxList<EnterpriseModel> enterprises = <EnterpriseModel>[].obs;
+  RxList<EnterpriseModel> searchedEnterprises = <EnterpriseModel>[].obs,
+      enterprises = <EnterpriseModel>[].obs;
   RxList<MqsEmployeeEmailModel> mqsEmployeeEmailList =
       <MqsEmployeeEmailModel>[].obs;
   RxList<MqsEnterprisePOC> mqsEnterprisePOCs = <MqsEnterprisePOC>[].obs;
@@ -97,10 +98,15 @@ class DashboardController extends GetxController {
   final GlobalKey<FormState> enterpriseFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> entEmpEmailFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> entPOCFormKey = GlobalKey<FormState>();
-  EnterpriseModel get enterpriseDetail => enterprises[viewIndex.value];
+  EnterpriseModel get enterpriseDetail => searchedEnterprises[viewIndex.value];
   RxInt editMqsEmpEmailIndex = RxInt(-1), editMqsEntPOCIndex = RxInt(-1);
   RxList<UserIAMModel> users = <UserIAMModel>[].obs;
   UserIAMModel get userDetail => users[viewIndex.value];
+  RxInt pageLimit = 10.obs;
+  RxInt offset = 0.obs, currentPage = 1.obs;
+  int get totalEnterprisePage =>
+      (searchedEnterprises.length / pageLimit.value).ceil();
+  int get totalUserPage => (users.length / pageLimit.value).ceil();
 
   @override
   onInit() {
@@ -148,11 +154,16 @@ class DashboardController extends GetxController {
 
   getEnterprises() async {
     try {
-      enterprises.value = await FirebaseStorageService.i.getEnterprises();
+      List<EnterpriseModel> ent =
+          await FirebaseStorageService.i.getEnterprises();
+      searchedEnterprises.value = ent;
+      enterprises.value = ent;
       FirebaseStorageService.i.listenToEnterpriseChange((data) {
-        enterprises.value = data.docs
+        List<EnterpriseModel> ent = data.docs
             .map((e) => EnterpriseModel.fromJson(e.data() as Map))
             .toList();
+        searchedEnterprises.value = ent;
+        enterprises.value = ent;
       });
     } catch (e) {
       errorDialogWidget(msg: e.toString());
@@ -389,71 +400,76 @@ class DashboardController extends GetxController {
       ];
       List<List<dynamic>> rows = [];
       rows.add(rowHeader);
-      for (int i = 0; i < enterprises.length; i++) {
-        if (enterprises[i].mqsEmployeeEmailList.isEmpty &&
-            enterprises[i].mqsEnterprisePOCs.isEmpty) {
+      for (int i = 0; i < searchedEnterprises.length; i++) {
+        if (searchedEnterprises[i].mqsEmployeeEmailList.isEmpty &&
+            searchedEnterprises[i].mqsEnterprisePOCs.isEmpty) {
           rows.add([
-            '"${enterprises[i].subscription}"',
+            '"${searchedEnterprises[i].subscription}"',
             "",
             "",
             "",
             "",
             "",
-            '"${enterprises[i].mqsEnterpriseCode}"',
-            '"${enterprises[i].mqsEnterpriseLocationDetails.address}"',
-            '"${enterprises[i].mqsEnterpriseLocationDetails.pinCode}"',
-            '"${enterprises[i].mqsEnterpriseName}"',
+            '"${searchedEnterprises[i].mqsEnterpriseCode}"',
+            '"${searchedEnterprises[i].mqsEnterpriseLocationDetails.address}"',
+            '"${searchedEnterprises[i].mqsEnterpriseLocationDetails.pinCode}"',
+            '"${searchedEnterprises[i].mqsEnterpriseName}"',
             "",
             "",
             "",
             "",
-            '"${enterprises[i].mqsSubscriptionExpiryDate}"'
+            '"${searchedEnterprises[i].mqsSubscriptionExpiryDate}"'
           ]);
         } else {
-          int maxLen = max(enterprises[i].mqsEmployeeEmailList.length,
-              enterprises[i].mqsEnterprisePOCs.length);
+          int maxLen = max(searchedEnterprises[i].mqsEmployeeEmailList.length,
+              searchedEnterprises[i].mqsEnterprisePOCs.length);
           for (int j = 0; j < maxLen; j++) {
             bool isMqsEmpEmailExist =
-                j < enterprises[i].mqsEmployeeEmailList.length;
-            bool isMqsEntPOCExist = j < enterprises[i].mqsEnterprisePOCs.length;
+                j < searchedEnterprises[i].mqsEmployeeEmailList.length;
+            bool isMqsEntPOCExist =
+                j < searchedEnterprises[i].mqsEnterprisePOCs.length;
             rows.add([
-              j == 0 ? '"${enterprises[i].subscription}"' : "",
+              j == 0 ? '"${searchedEnterprises[i].subscription}"' : "",
               isMqsEmpEmailExist
-                  ? '"${enterprises[i].mqsEmployeeEmailList[j].email}"'
+                  ? '"${searchedEnterprises[i].mqsEmployeeEmailList[j].email}"'
                   : "",
               isMqsEmpEmailExist
-                  ? '"${enterprises[i].mqsEmployeeEmailList[j].firstname}"'
+                  ? '"${searchedEnterprises[i].mqsEmployeeEmailList[j].firstname}"'
                   : "",
               isMqsEmpEmailExist
-                  ? enterprises[i].mqsEmployeeEmailList[j].isSignedUp
+                  ? searchedEnterprises[i].mqsEmployeeEmailList[j].isSignedUp
                   : "",
               isMqsEmpEmailExist
-                  ? '"${enterprises[i].mqsEmployeeEmailList[j].lastname}"'
+                  ? '"${searchedEnterprises[i].mqsEmployeeEmailList[j].lastname}"'
                   : "",
               isMqsEmpEmailExist
-                  ? enterprises[i].mqsEmployeeEmailList[j].mqsCommonLogin
+                  ? searchedEnterprises[i]
+                      .mqsEmployeeEmailList[j]
+                      .mqsCommonLogin
                   : "",
-              j == 0 ? '"${enterprises[i].mqsEnterpriseCode}"' : "",
+              j == 0 ? '"${searchedEnterprises[i].mqsEnterpriseCode}"' : "",
               j == 0
-                  ? '"${enterprises[i].mqsEnterpriseLocationDetails.address}"'
+                  ? '"${searchedEnterprises[i].mqsEnterpriseLocationDetails.address}"'
                   : "",
               j == 0
-                  ? '"${enterprises[i].mqsEnterpriseLocationDetails.pinCode}"'
+                  ? '"${searchedEnterprises[i].mqsEnterpriseLocationDetails.pinCode}"'
                   : "",
-              j == 0 ? '"${enterprises[i].mqsEnterpriseName}"' : "",
+              j == 0 ? '"${searchedEnterprises[i].mqsEnterpriseName}"' : "",
               isMqsEntPOCExist
-                  ? '"${enterprises[i].mqsEnterprisePOCs[j].address}"'
-                  : "",
-              isMqsEntPOCExist
-                  ? '"${enterprises[i].mqsEnterprisePOCs[j].email}"'
+                  ? '"${searchedEnterprises[i].mqsEnterprisePOCs[j].address}"'
                   : "",
               isMqsEntPOCExist
-                  ? '"${enterprises[i].mqsEnterprisePOCs[j].name}"'
+                  ? '"${searchedEnterprises[i].mqsEnterprisePOCs[j].email}"'
                   : "",
               isMqsEntPOCExist
-                  ? '"${enterprises[i].mqsEnterprisePOCs[j].phoneNumber}"'
+                  ? '"${searchedEnterprises[i].mqsEnterprisePOCs[j].name}"'
                   : "",
-              j == 0 ? '"${enterprises[i].mqsSubscriptionExpiryDate}"' : ""
+              isMqsEntPOCExist
+                  ? '"${searchedEnterprises[i].mqsEnterprisePOCs[j].phoneNumber}"'
+                  : "",
+              j == 0
+                  ? '"${searchedEnterprises[i].mqsSubscriptionExpiryDate}"'
+                  : ""
             ]);
           }
         }
@@ -466,6 +482,69 @@ class DashboardController extends GetxController {
         ext: 'csv',
         mimeType: MimeType.csv,
       );
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    } finally {}
+  }
+
+  setTabIndex({required int index}) {
+    viewIndex.value = 0;
+    selectedTabIndex.value = index;
+    offset.value = 0;
+    currentPage.value = 1;
+  }
+
+  getMaxOffset() {
+    int rem = (selectedTabIndex.value == 0
+            ? searchedEnterprises.length
+            : users.length) %
+        pageLimit.value;
+    if (rem != 0 &&
+        currentPage.value ==
+            (selectedTabIndex.value == 0
+                ? totalEnterprisePage
+                : totalUserPage)) {
+      return offset.value + rem;
+    }
+    return offset.value + pageLimit.value;
+  }
+
+  prevPage() {
+    try {
+      if (currentPage > 1) {
+        offset.value = offset.value - pageLimit.value;
+        currentPage.value--;
+      }
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    } finally {}
+  }
+
+  nextPage() {
+    try {
+      if (currentPage.value <
+          (selectedTabIndex.value == 0 ? totalEnterprisePage : totalUserPage)) {
+        offset.value = offset.value + pageLimit.value;
+        currentPage.value++;
+      }
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    } finally {}
+  }
+
+  searchEnterprise() {
+    try {
+      String query = searchController.text.trim().toLowerCase();
+      if (query.isEmpty) {
+        searchedEnterprises.value = enterprises;
+      } else {
+        searchedEnterprises.value = enterprises
+            .where((e) =>
+                e.subscription.toLowerCase().contains(query) ||
+                e.mqsEnterpriseCode.toLowerCase().contains(query) ||
+                e.mqsEnterpriseName.toLowerCase().contains(query))
+            .toList();
+      }
     } catch (e) {
       errorDialogWidget(msg: e.toString());
     } finally {}

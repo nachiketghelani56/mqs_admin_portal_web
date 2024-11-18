@@ -19,40 +19,44 @@ Widget userWOLWidget({required DashboardController dashboardController}) {
         SizeConfig.size10.height,
         keyValueRowWidget(
           key: StringConfig.dashboard.family,
-          value: '2.5',
+          value:
+              "${dashboardController.userDetail.onboardingModel.wOLValue.family}",
           topBorder: true,
         ),
         keyValueRowWidget(
           key: StringConfig.dashboard.finance,
-          value: '2.5',
+          value:
+              "${dashboardController.userDetail.onboardingModel.wOLValue.finances}",
         ),
         keyValueRowWidget(
           key: StringConfig.dashboard.fun,
-          value: '2.5',
+          value:
+              "${dashboardController.userDetail.onboardingModel.wOLValue.fun}",
         ),
         keyValueRowWidget(
           key: StringConfig.dashboard.health,
-          value: '2.5',
-        ),
-        keyValueRowWidget(
-          key: StringConfig.dashboard.mqsTimeStamp,
-          value: '2024-10-10T18:18:00.972307',
+          value:
+              "${dashboardController.userDetail.onboardingModel.wOLValue.health}",
         ),
         keyValueRowWidget(
           key: StringConfig.dashboard.purpose,
-          value: '2.5',
+          value:
+              "${dashboardController.userDetail.onboardingModel.wOLValue.purpose}",
         ),
         keyValueRowWidget(
           key: StringConfig.dashboard.relationship,
-          value: '2.5',
+          value:
+              "${dashboardController.userDetail.onboardingModel.wOLValue.relationship}",
         ),
         keyValueRowWidget(
           key: StringConfig.dashboard.social,
-          value: '2.5',
+          value:
+              "${dashboardController.userDetail.onboardingModel.wOLValue.social}",
         ),
         keyValueRowWidget(
           key: StringConfig.dashboard.work,
-          value: '2.5',
+          value:
+              "${dashboardController.userDetail.onboardingModel.wOLValue.work}",
         ),
       ],
     ],
