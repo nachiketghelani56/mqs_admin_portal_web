@@ -179,6 +179,9 @@ class CSV {
   final String mqsEnterprisePOCsName = "mqsEnterprisePOCs__name";
   final String mqsEnterprisePOCsPhoneNumber = "mqsEnterprisePOCs__phoneNumber";
   final String mqsSubscriptionExpiryDat = "mqsSubscriptionExpiryDate";
+  final String employeeEmails = "Employee Emails";
+  final String enterpriseLocation = "Enterprise Location";
+  final String pocs = "POCs";
 }
 
 class MQSDashboard {

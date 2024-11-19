@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 import 'dart:typed_data';
 import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
@@ -339,38 +338,31 @@ class DashboardController extends GetxController {
           type: FileType.custom,
           allowedExtensions: ['csv']);
       if (result != null) {
-        Uint8List? bytes = result.files.single.bytes;
-        if (bytes != null) {
-          String csvData = utf8.decode(bytes);
-          List<List<dynamic>> rowsAsListOfValues =
-              const CsvToListConverter().convert(csvData);
-          rowsAsListOfValues.removeAt(0);
-          if (rowsAsListOfValues.isEmpty) {
-            errorDialogWidget(msg: StringConfig.dashboard.invalidCSVFile);
-          } else {
-            showLoader();
-            for (var e in rowsAsListOfValues) {
-              if (e.length >= 5) {
-                EnterpriseModel model = EnterpriseModel(
-                  subscription: e[0].toString(),
-                  id: '',
-                  mqsEmployeeEmailList: [],
-                  mqsEnterpriseCode: e[1].toString(),
-                  mqsEnterpriseLocationDetails: MqsEnterpriseLocationDetails(
-                    address: e[2].toString(),
-                    pinCode: e[3].toString(),
-                  ),
-                  mqsEnterpriseName: e[4].toString(),
-                  mqsEnterprisePOCs: [],
-                  mqsSubscriptionExpiryDate: e[5].toString(),
-                );
-                await FirebaseStorageService.i.addEnterprises(model: model);
-              } else {
-                throw Exception(StringConfig.dashboard.invalidCSVFile);
-              }
-            }
-            hideLoader();
-          }
+        String csvData = utf8.decode(result.files.single.bytes ?? []);
+        List<List<dynamic>> rows = const CsvToListConverter().convert(csvData);
+        List<EnterpriseModel> importedModels = [];
+        for (var i = 1; i < rows.length; i++) {
+          var row = rows[i];
+          EnterpriseModel model = EnterpriseModel(
+            id: '',
+            subscription: row[0],
+            mqsEnterpriseName: row[1],
+            mqsEnterpriseCode: row[2].toString(),
+            mqsSubscriptionExpiryDate: row[3],
+            mqsEmployeeEmailList: (jsonDecode(row[4]) as List)
+                .map((e) => MqsEmployeeEmailModel.fromJson(e))
+                .toList(),
+            mqsEnterpriseLocationDetails: MqsEnterpriseLocationDetails.fromJson(
+              jsonDecode(row[5]),
+            ),
+            mqsEnterprisePOCs: (jsonDecode(row[6]) as List)
+                .map((e) => MqsEnterprisePOC.fromJson(e))
+                .toList(),
+          );
+          importedModels.add(model);
+        }
+        for (final enterprise in importedModels) {
+          await FirebaseStorageService.i.addEnterprises(model: enterprise);
         }
       }
     } catch (e) {
@@ -381,106 +373,39 @@ class DashboardController extends GetxController {
 
   exportEnterprise() async {
     try {
-      final List<String> rowHeader = [
-        StringConfig.csv.subscription,
-        StringConfig.csv.mqsEmployeeEmailListEmail,
-        StringConfig.csv.mqsEmployeeEmailListFirstName,
-        StringConfig.csv.mqsEmployeeEmailListIsSignedUp,
-        StringConfig.csv.mqsEmployeeEmailListLastName,
-        StringConfig.csv.mqsEmployeeEmailListMqsCommonLogin,
-        StringConfig.csv.mqsEnterpriseCode,
-        StringConfig.csv.mqsEnterpriseLocationDetailsAddress,
-        StringConfig.csv.mqsEnterpriseLocationDetailsPinCode,
-        StringConfig.csv.mqsEnterpriseName,
-        StringConfig.csv.mqsEnterprisePOCsAddress,
-        StringConfig.csv.mqsEnterprisePOCsEmail,
-        StringConfig.csv.mqsEnterprisePOCsName,
-        StringConfig.csv.mqsEnterprisePOCsPhoneNumber,
-        StringConfig.csv.mqsSubscriptionExpiryDat,
+      List<List<String>> rows = [
+        [
+          // 'ID',
+          StringConfig.csv.subscription,
+          StringConfig.dashboard.mqsEnterPriseName,
+          StringConfig.dashboard.mqsEnterPriseCode,
+          StringConfig.dashboard.mqsSubscriptionExpiryDate,
+          StringConfig.csv.employeeEmails,
+          StringConfig.csv.enterpriseLocation,
+          StringConfig.csv.pocs
+        ],
+        // Data Rows
+        ...enterprises.map((model) {
+          return [
+            // model.id,
+            model.subscription,
+            model.mqsEnterpriseName,
+            model.mqsEnterpriseCode,
+            model.mqsSubscriptionExpiryDate,
+            jsonEncode(
+                model.mqsEmployeeEmailList.map((e) => e.toJson()).toList()),
+            jsonEncode(model.mqsEnterpriseLocationDetails.toJson()),
+            jsonEncode(model.mqsEnterprisePOCs.map((p) => p.toJson()).toList()),
+          ];
+        }),
       ];
-      List<List<dynamic>> rows = [];
-      rows.add(rowHeader);
-      for (int i = 0; i < searchedEnterprises.length; i++) {
-        if (searchedEnterprises[i].mqsEmployeeEmailList.isEmpty &&
-            searchedEnterprises[i].mqsEnterprisePOCs.isEmpty) {
-          rows.add([
-            '"${searchedEnterprises[i].subscription}"',
-            "",
-            "",
-            "",
-            "",
-            "",
-            '"${searchedEnterprises[i].mqsEnterpriseCode}"',
-            '"${searchedEnterprises[i].mqsEnterpriseLocationDetails.address}"',
-            '"${searchedEnterprises[i].mqsEnterpriseLocationDetails.pinCode}"',
-            '"${searchedEnterprises[i].mqsEnterpriseName}"',
-            "",
-            "",
-            "",
-            "",
-            '"${searchedEnterprises[i].mqsSubscriptionExpiryDate}"'
-          ]);
-        } else {
-          int maxLen = max(searchedEnterprises[i].mqsEmployeeEmailList.length,
-              searchedEnterprises[i].mqsEnterprisePOCs.length);
-          for (int j = 0; j < maxLen; j++) {
-            bool isMqsEmpEmailExist =
-                j < searchedEnterprises[i].mqsEmployeeEmailList.length;
-            bool isMqsEntPOCExist =
-                j < searchedEnterprises[i].mqsEnterprisePOCs.length;
-            rows.add([
-              j == 0 ? '"${searchedEnterprises[i].subscription}"' : "",
-              isMqsEmpEmailExist
-                  ? '"${searchedEnterprises[i].mqsEmployeeEmailList[j].email}"'
-                  : "",
-              isMqsEmpEmailExist
-                  ? '"${searchedEnterprises[i].mqsEmployeeEmailList[j].firstname}"'
-                  : "",
-              isMqsEmpEmailExist
-                  ? searchedEnterprises[i].mqsEmployeeEmailList[j].isSignedUp
-                  : "",
-              isMqsEmpEmailExist
-                  ? '"${searchedEnterprises[i].mqsEmployeeEmailList[j].lastname}"'
-                  : "",
-              isMqsEmpEmailExist
-                  ? searchedEnterprises[i]
-                      .mqsEmployeeEmailList[j]
-                      .mqsCommonLogin
-                  : "",
-              j == 0 ? '"${searchedEnterprises[i].mqsEnterpriseCode}"' : "",
-              j == 0
-                  ? '"${searchedEnterprises[i].mqsEnterpriseLocationDetails.address}"'
-                  : "",
-              j == 0
-                  ? '"${searchedEnterprises[i].mqsEnterpriseLocationDetails.pinCode}"'
-                  : "",
-              j == 0 ? '"${searchedEnterprises[i].mqsEnterpriseName}"' : "",
-              isMqsEntPOCExist
-                  ? '"${searchedEnterprises[i].mqsEnterprisePOCs[j].address}"'
-                  : "",
-              isMqsEntPOCExist
-                  ? '"${searchedEnterprises[i].mqsEnterprisePOCs[j].email}"'
-                  : "",
-              isMqsEntPOCExist
-                  ? '"${searchedEnterprises[i].mqsEnterprisePOCs[j].name}"'
-                  : "",
-              isMqsEntPOCExist
-                  ? '"${searchedEnterprises[i].mqsEnterprisePOCs[j].phoneNumber}"'
-                  : "",
-              j == 0
-                  ? '"${searchedEnterprises[i].mqsSubscriptionExpiryDate}"'
-                  : ""
-            ]);
-          }
-        }
-      }
-      String csv = const ListToCsvConverter().convert(rows);
-      Uint8List bytes = Uint8List.fromList(utf8.encode(csv));
+      String csvData = const ListToCsvConverter().convert(rows);
+      Uint8List bytes = Uint8List.fromList(utf8.encode(csvData));
       await FileSaver.instance.saveFile(
-        name: StringConfig.dashboard.enterpriseCollection,
         bytes: bytes,
-        ext: 'csv',
+        ext: "csv",
         mimeType: MimeType.csv,
+        name: StringConfig.dashboard.enterpriseCollection,
       );
     } catch (e) {
       errorDialogWidget(msg: e.toString());
