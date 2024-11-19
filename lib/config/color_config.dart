@@ -21,4 +21,12 @@ class ColorConfig {
   static const Color card1TextColor = Color(0xFF00B2FF);
   static const Color card2TextColor = Color(0xFFF1416C);
   static const Color card3TextColor = Color(0xFFFFC700);
+  static const Color bullet1Color = Color(0xFF32BDB4);
+  static const Color bullet2Color = Color(0xFFA55FFF);
+  static const Color bullet3Color = Color(0xFF03F590);
+  static const Color bullet4Color = Color(0xFFFFEB9D);
+  static const Color bullet5Color = Color(0xFFB8543D);
+  static const Color bullet6Color = Color(0xFFFBB040);
+  static const Color dividerColor = Color(0xFF959B9A);
+  static const Color highlightColor = Color(0xFFF5E9A5);
 }

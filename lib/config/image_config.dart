@@ -2,6 +2,7 @@ class ImageConfig {
   // Images
   static const String qStudioLogo = "assets/images/q_studio_logo.png";
   static const String logo = "assets/images/logo.png";
+  static const String connect = "assets/images/connect.png";
 
   //Icons
   static const String eyeClosed = "assets/icons/eye_closed.png";
@@ -24,4 +25,11 @@ class ImageConfig {
   static const String notification = "assets/icons/notification.png";
   static const String profile = "assets/icons/profile.png";
   static const String settings = "assets/icons/settings.png";
+  static const String communication = "assets/icons/communication.png";
+  static const String help = "assets/icons/help.png";
+  static const String onboarding = "assets/icons/onboarding.png";
+  static const String reporting = "assets/icons/reporting.png";
+  static const String survey = "assets/icons/survey.png";
+  static const String training = "assets/icons/training.png";
+  static const String searchNew = "assets/icons/search_new.png";
 }

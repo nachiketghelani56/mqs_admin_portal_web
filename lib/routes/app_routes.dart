@@ -4,6 +4,7 @@ import 'package:mqs_admin_portal_web/views/dashboard/dashboard_screen.dart';
 import 'package:mqs_admin_portal_web/views/enterprise_detail/enterprise_detail_screen.dart';
 import 'package:mqs_admin_portal_web/views/login/login_screen.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/mqs_dashboard_screen.dart';
+import 'package:mqs_admin_portal_web/views/team_chart/team_chart_screen.dart';
 import 'package:mqs_admin_portal_web/views/user_iam_detail/user_iam_detail_screen.dart';
 
 class AppRoutes {
@@ -13,6 +14,7 @@ class AppRoutes {
   static const String addEnterprise = "/add_enterprise";
   static const String userIAMDetail = "/user_iam_detail";
   static const String mqsDashboard = "/mqs_dashboard";
+  static const String teamChart = "/team_chart";
 
   static List<GetPage> get pages => [
         GetPage(name: AppRoutes.login, page: () => LoginScreen()),
@@ -25,5 +27,6 @@ class AppRoutes {
         GetPage(
             name: AppRoutes.userIAMDetail, page: () => UserIAMDetailScreen()),
         GetPage(name: AppRoutes.mqsDashboard, page: () => MqsDashboardScreen()),
+        GetPage(name: AppRoutes.teamChart, page: () => TeamChartScreen()),
       ];
 }

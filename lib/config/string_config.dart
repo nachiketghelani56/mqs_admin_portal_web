@@ -9,6 +9,9 @@ class StringConfig {
   static final dashboard = Dashboard();
   static final csv = CSV();
   static final mqsDashboard = MQSDashboard();
+  static final reporting = Reporting();
+  static final home = Home();
+  static final teamChart = TeamChart();
 }
 
 class Login {
@@ -185,7 +188,6 @@ class CSV {
 }
 
 class MQSDashboard {
-  final String lastUpdate = "Last update: 26 Dec 2023, 03:34 pm";
   final String home = "Home";
   final String onboarding = "Onboarding";
   final String communication = "Communication";
@@ -197,6 +199,10 @@ class MQSDashboard {
   final String chat = "Chat";
   final String profile = "Profile";
   final String settings = "Settings";
+}
+
+class Reporting {
+  final String lastUpdate = "Last update: 26 Dec 2023, 03:34 pm";
   final String entity = "Entity";
   final String unit = "Unit";
   final String function = "Function";
@@ -218,4 +224,33 @@ class MQSDashboard {
   final String trainingProgram = "Training Program";
   final String leadershipSupport = "Leadership Support";
   final String recognitionProgram = "Recognition Program";
+  final String may = "May";
+  final String june = "June";
+  final String july = "July";
+}
+
+class Home {
+  final String wellAbove = "WELLABOVE";
+  final String tm = "TM";
+  final String search = "Search...";
+}
+
+class TeamChart {
+  final String teamChart = "Team Chart";
+  final String lastUpdate = "Last update: 26 Dec 2023, 03:34 pm";
+  final String teamMyQEngagement = "Team MyQ Engagement";
+  final String teamMyQEngagementDesc =
+      "Through consistent usage of MyQ the team has been building mind skills and applying them to the team’s ways of working. The team hit an all time high of MyQ log in of 25 days in a row!";
+  final String dailyLogIn = "Daily log-in";
+  final String teamDevelopment = "Team Development";
+  final String learn = "Learn";
+  final String practice = "Practice";
+  final String reflect = "Reflect";
+  final String teamConnection = "Team Connection";
+  final String teamGoals = "Team Goals";
+  final String teamGoalsDesc =
+      "Team exceeded the goals set for July in recording Moments That Matter, Bravo ...";
+  final String ofPathways = "# of Pathways";
+  final String ofMomentsThatMatter = "# of Moments That Matter";
+  final String showMore = "Show more";
 }

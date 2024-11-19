@@ -32,11 +32,10 @@ class MqsDashboardController extends GetxController {
       icon: ImageConfig.settings,
       title: StringConfig.mqsDashboard.settings,
     ),
+    MenuModel(
+      icon: ImageConfig.settings,
+      title: StringConfig.teamChart.teamChart,
+    ),
   ].obs;
-  RxList<String> options = [
-    StringConfig.mqsDashboard.entity,
-    StringConfig.mqsDashboard.unit,
-    StringConfig.mqsDashboard.function,
-  ].obs;
-  RxInt menuIndex = 0.obs, subMenuIndex = 5.obs, optionIndex = 0.obs;
+  RxInt menuIndex = 0.obs, subMenuIndex = RxInt(5);
 }

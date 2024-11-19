@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
+import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 
 Widget sideMenuWidget(
@@ -72,7 +73,11 @@ Widget sideMenuWidget(
                       ),
                     ).tap(() {
                       mqsDashboardController.menuIndex.value = index;
-                      mqsDashboardController.subMenuIndex.value = 0;
+                      mqsDashboardController.subMenuIndex.value = -1;
+                      if (mqsDashboardController.menuIndex.value ==
+                          mqsDashboardController.menuItems.length - 1) {
+                        Get.toNamed(AppRoutes.teamChart);
+                      }
                     }),
                     if (index == mqsDashboardController.menuIndex.value &&
                         mqsDashboardController

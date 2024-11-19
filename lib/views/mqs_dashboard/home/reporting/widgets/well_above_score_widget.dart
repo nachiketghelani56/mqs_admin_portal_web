@@ -10,7 +10,7 @@ Widget wellAboveScoreWidget() {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          StringConfig.mqsDashboard.wellAboveScore,
+          StringConfig.reporting.wellAboveScore,
           style: FontTextStyleConfig.cardTitleTextStyle,
         ),
         SizeConfig.size24.height,
@@ -32,7 +32,7 @@ Widget wellAboveScoreWidget() {
                     ),
                     SizeConfig.size12.height,
                     Text(
-                      StringConfig.mqsDashboard.strategy,
+                      StringConfig.reporting.strategy,
                       style: FontTextStyleConfig.cardSubTextStyle,
                     ),
                   ],
@@ -57,7 +57,7 @@ Widget wellAboveScoreWidget() {
                     ),
                     SizeConfig.size12.height,
                     Text(
-                      StringConfig.mqsDashboard.execution,
+                      StringConfig.reporting.execution,
                       style: FontTextStyleConfig.cardSubTextStyle,
                     ),
                   ],
@@ -82,7 +82,7 @@ Widget wellAboveScoreWidget() {
                     ),
                     SizeConfig.size12.height,
                     Text(
-                      StringConfig.mqsDashboard.outcome,
+                      StringConfig.reporting.outcome,
                       style: FontTextStyleConfig.cardSubTextStyle,
                     ),
                   ],

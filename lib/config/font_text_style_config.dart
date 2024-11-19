@@ -130,6 +130,43 @@ class FontTextStyleConfig {
     height: SizeConfig.size1,
   );
 
+  static const TextStyle homeTitleTextStyle = TextStyle(
+    fontFamily: FontFamilyConfig.figtree,
+    color: ColorConfig.primaryColor,
+    fontSize: FontSizeConfig.fontSize28,
+    fontWeight: FontWeight.w300,
+    height: SizeConfig.size1,
+  );
+
+  static const TextStyle homeTitleUpTextStyle = TextStyle(
+    fontFamily: FontFamilyConfig.figtree,
+    color: ColorConfig.cardTitleColor,
+    fontSize: FontSizeConfig.fontSize8,
+    fontWeight: FontWeight.w300,
+    height: SizeConfig.size1,
+  );
+
+  static const TextStyle searchTextStyle = TextStyle(
+    fontFamily: FontFamilyConfig.figtree,
+    fontSize: FontSizeConfig.fontSize16,
+    fontWeight: FontWeight.w300,
+    color: ColorConfig.primaryColor,
+  );
+
+  static const TextStyle chartTitleTextStyle = TextStyle(
+    fontFamily: FontFamilyConfig.figtree,
+    fontSize: FontSizeConfig.fontSize32,
+    fontWeight: FontWeight.w400,
+    color: ColorConfig.primaryColor,
+  );
+
+  static const TextStyle chartDescTextStyle = TextStyle(
+    fontFamily: FontFamilyConfig.figtree,
+    fontSize: FontSizeConfig.fontSize22,
+    fontWeight: FontWeight.w400,
+    color: ColorConfig.primaryColor,
+  );
+
   static OutlineInputBorder borderDecoration = OutlineInputBorder(
     borderSide: const BorderSide(
       color: ColorConfig.textFieldBorderColor,
@@ -257,5 +294,13 @@ class FontTextStyleConfig {
         blurRadius: SizeConfig.size38point3,
       )
     ],
+  );
+
+  static const BoxDecoration folderDecoration = BoxDecoration(
+    color: ColorConfig.whiteColor,
+    borderRadius: BorderRadius.only(
+      topLeft: Radius.circular(SizeConfig.size12),
+      topRight: Radius.circular(SizeConfig.size4),
+    ),
   );
 }
