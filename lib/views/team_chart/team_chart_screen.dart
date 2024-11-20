@@ -32,33 +32,46 @@ class TeamChartScreen extends StatelessWidget {
               ),
             ),
             SizeConfig.size40.height,
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
+            context.width > SizeConfig.size900
+                ? Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          children: [
+                            teamMyQEngagementWidget(),
+                            SizeConfig.size28.height,
+                            teamGoalsWidget(),
+                          ],
+                        ),
+                      ),
+                      SizeConfig.size32.width,
+                      Expanded(
+                        flex: SizeConfig.size2.toInt(),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            teamDevelopmentWidget(
+                                teamChartController: _teamChartController),
+                            SizeConfig.size30.height,
+                            teamConnectionWidget(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ).paddingSymmetric(horizontal: SizeConfig.size32)
+                : Column(
                     children: [
                       teamMyQEngagementWidget(),
-                      SizeConfig.size28.height,
-                      teamGoalsWidget(),
-                    ],
-                  ),
-                ),
-                SizeConfig.size32.width,
-                Expanded(
-                  flex: SizeConfig.size2.toInt(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
+                      SizeConfig.size30.height,
                       teamDevelopmentWidget(
                           teamChartController: _teamChartController),
                       SizeConfig.size30.height,
+                      teamGoalsWidget(),
+                      SizeConfig.size30.height,
                       teamConnectionWidget(),
                     ],
-                  ),
-                ),
-              ],
-            ).paddingSymmetric(horizontal: SizeConfig.size32),
+                  ).paddingSymmetric(horizontal: SizeConfig.size32),
             SizeConfig.size40.height
           ],
         ),

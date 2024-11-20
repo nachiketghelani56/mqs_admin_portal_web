@@ -1,8 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/models/menu_model.dart';
 
 class MqsDashboardController extends GetxController {
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   List<MenuModel> menuItems = [
     MenuModel(
       icon: ImageConfig.home,
@@ -37,5 +39,5 @@ class MqsDashboardController extends GetxController {
       title: StringConfig.teamChart.teamChart,
     ),
   ].obs;
-  RxInt menuIndex = 0.obs, subMenuIndex = RxInt(5);
+  RxInt menuIndex = 0.obs, subMenuIndex = RxInt(-1);
 }

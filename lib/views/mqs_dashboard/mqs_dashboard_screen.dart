@@ -15,21 +15,28 @@ class MqsDashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _mqsDashboardController.scaffoldKey,
+      drawer: context.width < SizeConfig.size900
+          ? sideMenuWidget(mqsDashboardController: _mqsDashboardController)
+          : null,
       backgroundColor: ColorConfig.backgroundColor,
       body: Stack(
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              sideMenuWidget(mqsDashboardController: _mqsDashboardController),
+              if (context.width > SizeConfig.size900)
+                sideMenuWidget(mqsDashboardController: _mqsDashboardController),
               Expanded(
                 child: Obx(
                   () {
                     if (_mqsDashboardController.menuIndex.value == 0) {
                       if (_mqsDashboardController.subMenuIndex.value == 5) {
-                        return ReportingScreen();
+                        return ReportingScreen(
+                            scaffoldKey: _mqsDashboardController.scaffoldKey);
                       }
-                      return HomeScreen();
+                      return HomeScreen(
+                          scaffoldKey: _mqsDashboardController.scaffoldKey);
                     }
                     return const SizedBox.shrink();
                   },
@@ -37,15 +44,16 @@ class MqsDashboardScreen extends StatelessWidget {
               ),
             ],
           ),
-          Positioned(
-            left: SizeConfig.size248,
-            top: SizeConfig.size60,
-            child: Image.asset(
-              ImageConfig.arrowLeft,
-              height: SizeConfig.size29,
-              width: SizeConfig.size29,
+          if (context.width > SizeConfig.size900)
+            Positioned(
+              left: SizeConfig.size248,
+              top: SizeConfig.size60,
+              child: Image.asset(
+                ImageConfig.arrowLeft,
+                height: SizeConfig.size29,
+                width: SizeConfig.size29,
+              ),
             ),
-          ),
         ],
       ),
     );

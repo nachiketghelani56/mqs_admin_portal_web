@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 
-Widget wellAboveScoreWidget() {
+Widget wellAboveScoreWidget({required BuildContext context}) {
   return Container(
     padding: const EdgeInsets.all(SizeConfig.size24),
     decoration: FontTextStyleConfig.cardDecoration,
@@ -33,7 +35,10 @@ Widget wellAboveScoreWidget() {
                     SizeConfig.size12.height,
                     Text(
                       StringConfig.reporting.strategy,
-                      style: FontTextStyleConfig.cardSubTextStyle,
+                      style: FontTextStyleConfig.cardSubTextStyle.copyWith(
+                          fontSize: context.width < SizeConfig.size600
+                              ? FontSizeConfig.fontSize18
+                              : null),
                     ),
                   ],
                 ),
@@ -58,7 +63,10 @@ Widget wellAboveScoreWidget() {
                     SizeConfig.size12.height,
                     Text(
                       StringConfig.reporting.execution,
-                      style: FontTextStyleConfig.cardSubTextStyle,
+                      style: FontTextStyleConfig.cardSubTextStyle.copyWith(
+                          fontSize: context.width < SizeConfig.size600
+                              ? FontSizeConfig.fontSize18
+                              : null),
                     ),
                   ],
                 ),
@@ -83,7 +91,10 @@ Widget wellAboveScoreWidget() {
                     SizeConfig.size12.height,
                     Text(
                       StringConfig.reporting.outcome,
-                      style: FontTextStyleConfig.cardSubTextStyle,
+                      style: FontTextStyleConfig.cardSubTextStyle.copyWith(
+                          fontSize: context.width < SizeConfig.size600
+                              ? FontSizeConfig.fontSize18
+                              : null),
                     ),
                   ],
                 ),

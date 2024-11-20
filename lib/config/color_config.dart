@@ -29,4 +29,5 @@ class ColorConfig {
   static const Color bullet6Color = Color(0xFFFBB040);
   static const Color dividerColor = Color(0xFF959B9A);
   static const Color highlightColor = Color(0xFFF5E9A5);
+  static const Color chartColor = Color(0xFFB8543D);
 }

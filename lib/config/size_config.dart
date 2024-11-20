@@ -1,6 +1,7 @@
 class SizeConfig {
   static const double size1800 = 1800;
   static const double size1500 = 1500;
+  static const double size1000 = 1000;
   static const double size900 = 900;
   static const double size700 = 700;
   static const double size640 = 640;
@@ -25,6 +26,7 @@ class SizeConfig {
   static const double size124 = 124;
   static const double size120 = 120;
   static const double size100 = 100;
+  static const double size90 = 90;
   static const double size76 = 76;
   static const double size74 = 74;
   static const double size72 = 72;
@@ -83,4 +85,5 @@ class SizeConfig {
   static const double size0point1 = 0.1;
   static const double size0point7 = 0.7;
   static const double size0point93 = 0.93;
+  static const double size0point8 = 0.8;
 }

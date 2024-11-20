@@ -72,11 +72,12 @@ Widget sideMenuWidget(
                         ],
                       ),
                     ).tap(() {
-                      mqsDashboardController.menuIndex.value = index;
-                      mqsDashboardController.subMenuIndex.value = -1;
-                      if (mqsDashboardController.menuIndex.value ==
+                      if (index ==
                           mqsDashboardController.menuItems.length - 1) {
                         Get.toNamed(AppRoutes.teamChart);
+                      } else {
+                        mqsDashboardController.menuIndex.value = index;
+                        mqsDashboardController.subMenuIndex.value = -1;
                       }
                     }),
                     if (index == mqsDashboardController.menuIndex.value &&

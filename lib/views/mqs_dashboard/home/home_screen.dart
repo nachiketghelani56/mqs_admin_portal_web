@@ -6,9 +6,10 @@ import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/widgets/home_heade
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/widgets/home_options_widget.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+  HomeScreen({super.key, required this.scaffoldKey});
 
   final HomeController _homeController = Get.put(HomeController());
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,10 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          homeHeaderWidget(homeController: _homeController, context: context),
+          homeHeaderWidget(
+              homeController: _homeController,
+              context: context,
+              scaffoldKey: scaffoldKey),
           homeOptionsWidget(homeController: _homeController)
               .paddingAll(SizeConfig.size40),
         ],

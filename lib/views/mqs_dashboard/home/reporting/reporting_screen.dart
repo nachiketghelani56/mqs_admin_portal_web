@@ -8,10 +8,11 @@ import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/widgets/
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/widgets/well_above_score_widget.dart';
 
 class ReportingScreen extends StatelessWidget {
-  ReportingScreen({super.key});
+  ReportingScreen({super.key, required this.scaffoldKey});
 
   final ReportingController _reportingController =
       Get.put(ReportingController());
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +25,18 @@ class ReportingScreen extends StatelessWidget {
             color: ColorConfig.whiteColor,
             child: Row(
               children: [
+                if (context.width < SizeConfig.size900) ...[
+                  IconButton(
+                    onPressed: () {
+                      scaffoldKey.currentState?.openDrawer();
+                    },
+                    icon: const Icon(
+                      Icons.menu,
+                      color: ColorConfig.primaryColor,
+                    ),
+                  ),
+                  SizeConfig.size10.width,
+                ],
                 Expanded(
                   child: Text(
                     StringConfig.reporting.lastUpdate,
@@ -42,11 +55,13 @@ class ReportingScreen extends StatelessWidget {
           SizeConfig.size40.height,
           Column(
             children: [
-              headerWidget(reportingController: _reportingController),
+              headerWidget(
+                  reportingController: _reportingController, context: context),
               SizeConfig.size34.height,
-              wellAboveScoreWidget(),
+              wellAboveScoreWidget(context: context),
               SizeConfig.size39.height,
-              wellAboveChartsWidget(reportingController: _reportingController),
+              wellAboveChartsWidget(
+                  reportingController: _reportingController, context: context),
               SizeConfig.size50.height,
             ],
           ).paddingSymmetric(horizontal: SizeConfig.size40),

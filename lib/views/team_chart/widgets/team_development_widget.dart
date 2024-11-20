@@ -20,23 +20,44 @@ Widget teamDevelopmentWidget(
           StringConfig.teamChart.teamDevelopment,
           style: FontTextStyleConfig.chartTitleTextStyle,
         ),
-        20.height,
+        SizeConfig.size20.height,
         Expanded(
           child: Row(
             children: [
               Expanded(
                 child: SizedBox(
-                  width: 600,
+                  width: SizeConfig.size600,
                   child: SfCartesianChart(
                     series: <CartesianSeries<ChartModel, String>>[
                       ColumnSeries(
                         dataSource: teamChartController.devCharData,
                         xValueMapper: (ChartModel data, _) => data.x,
                         yValueMapper: (ChartModel data, _) => data.y1,
-                        width: SizeConfig.size0point3,
+                        width: SizeConfig.size0point8,
+                        spacing: SizeConfig.size0point1,
                         borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(6)),
+                            top: Radius.circular(SizeConfig.size6)),
                         color: ColorConfig.bullet1Color,
+                      ),
+                      ColumnSeries(
+                        dataSource: teamChartController.devCharData,
+                        xValueMapper: (ChartModel data, _) => data.x,
+                        yValueMapper: (ChartModel data, _) => data.y2,
+                        width: SizeConfig.size0point8,
+                        spacing: SizeConfig.size0point1,
+                        borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(SizeConfig.size6)),
+                        color: ColorConfig.chartColor,
+                      ),
+                      ColumnSeries(
+                        dataSource: teamChartController.devCharData,
+                        xValueMapper: (ChartModel data, _) => data.x,
+                        yValueMapper: (ChartModel data, _) => data.y3,
+                        width: SizeConfig.size0point8,
+                        spacing: SizeConfig.size0point1,
+                        borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(SizeConfig.size6)),
+                        color: ColorConfig.bullet6Color,
                       ),
                     ],
                     primaryXAxis: CategoryAxis(
