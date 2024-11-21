@@ -199,6 +199,8 @@ class MQSDashboard {
   final String chat = "Chat";
   final String profile = "Profile";
   final String settings = "Settings";
+  final String pathway = "Pathway";
+  final String challenge = "Challenge";
 }
 
 class Reporting {

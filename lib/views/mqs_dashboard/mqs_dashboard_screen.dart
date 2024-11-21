@@ -31,7 +31,7 @@ class MqsDashboardScreen extends StatelessWidget {
                 child: Obx(
                   () {
                     if (_mqsDashboardController.menuIndex.value == 0) {
-                      if (_mqsDashboardController.subMenuIndex.value == 5) {
+                      if (_mqsDashboardController.subMenuIndex.value == 4) {
                         return ReportingScreen(
                             scaffoldKey: _mqsDashboardController.scaffoldKey);
                       }

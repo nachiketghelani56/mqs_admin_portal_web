@@ -169,9 +169,9 @@ class FontTextStyleConfig {
 
   static OutlineInputBorder borderDecoration = OutlineInputBorder(
     borderSide: const BorderSide(
-      color: ColorConfig.textFieldBorderColor,
+      color: ColorConfig.transparentColor,
     ),
-    borderRadius: BorderRadius.circular(SizeConfig.size6),
+    borderRadius: BorderRadius.circular(SizeConfig.size10),
   );
 
   static BoxDecoration tableTitleDecoration = BoxDecoration(

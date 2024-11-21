@@ -21,7 +21,7 @@ class LoginController extends GetxController {
             password: passwordController.text);
         hideLoader();
         if (user != null) {
-          Get.offAllNamed(AppRoutes.dashboard);
+          Get.offAllNamed(AppRoutes.mqsDashboard);
         }
       }
     } on FirebaseAuthException catch (e) {

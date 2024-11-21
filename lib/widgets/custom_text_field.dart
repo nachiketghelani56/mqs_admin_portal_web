@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
+import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -16,7 +17,8 @@ class CustomTextField extends StatelessWidget {
     this.hintText,
     this.readOnly = false,
     this.onTap,
-    this.inputFormatters, this.autofillHints,
+    this.inputFormatters,
+    this.autofillHints,
   });
 
   final TextEditingController controller;
@@ -29,51 +31,63 @@ class CustomTextField extends StatelessWidget {
   final bool readOnly;
   final Function()? onTap;
   final List<TextInputFormatter>? inputFormatters;
-  final Iterable<String>?  autofillHints;
+  final Iterable<String>? autofillHints;
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      readOnly: readOnly,
-      onTap: onTap,
-      obscureText: isObscure,
-      obscuringCharacter: '•',
-      style: FontTextStyleConfig.textFieldTextStyle,
-      validator: validator,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      inputFormatters: inputFormatters,
-      autofillHints: autofillHints,
-      decoration: InputDecoration(
-        hintText: hintText,
-        isDense: true,
-        labelText: label,
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        labelStyle: FontTextStyleConfig.labelTextStyle,
-        border: FontTextStyleConfig.borderDecoration,
-        focusedBorder: FontTextStyleConfig.borderDecoration,
-        enabledBorder: FontTextStyleConfig.borderDecoration,
-        focusedErrorBorder: FontTextStyleConfig.borderDecoration,
-        errorBorder: FontTextStyleConfig.borderDecoration,
-        suffixIcon: suffixIcon != null
-            ? Container(
-                height: SizeConfig.size25,
-                width: SizeConfig.size25,
-                alignment: Alignment.center,
-                child: Image.asset(
-                  suffixIcon!,
-                  height: SizeConfig.size25,
-                  width: SizeConfig.size25,
-                ),
-              ).tap(() {
-                if (onSuffixIconTap != null) {
-                  onSuffixIconTap!();
-                }
-              }).paddingOnly(right: SizeConfig.size20)
-            : null,
-        contentPadding: const EdgeInsets.symmetric(
-            vertical: SizeConfig.size20, horizontal: SizeConfig.size20),
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: FontTextStyleConfig.labelTextStyle,
+        ).paddingOnly(left: SizeConfig.size2),
+        SizeConfig.size6.height,
+        TextFormField(
+          controller: controller,
+          readOnly: readOnly,
+          onTap: onTap,
+          obscureText: isObscure,
+          obscuringCharacter: '•',
+          style: FontTextStyleConfig.textFieldTextStyle
+              .copyWith(fontSize: FontSizeConfig.fontSize16),
+          validator: validator,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          inputFormatters: inputFormatters,
+          autofillHints: autofillHints,
+          decoration: InputDecoration(
+            hintText: hintText,
+            isDense: true,
+            filled: true,
+            fillColor: ColorConfig.backgroundColor,
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            labelStyle: FontTextStyleConfig.labelTextStyle,
+            border: FontTextStyleConfig.borderDecoration,
+            focusedBorder: FontTextStyleConfig.borderDecoration,
+            enabledBorder: FontTextStyleConfig.borderDecoration,
+            focusedErrorBorder: FontTextStyleConfig.borderDecoration,
+            errorBorder: FontTextStyleConfig.borderDecoration,
+            suffixIcon: suffixIcon != null
+                ? Container(
+                    height: SizeConfig.size25,
+                    width: SizeConfig.size25,
+                    alignment: Alignment.center,
+                    child: Image.asset(
+                      suffixIcon!,
+                      height: SizeConfig.size25,
+                      width: SizeConfig.size25,
+                    ),
+                  ).tap(() {
+                    if (onSuffixIconTap != null) {
+                      onSuffixIconTap!();
+                    }
+                  }).paddingOnly(right: SizeConfig.size20)
+                : null,
+            contentPadding: const EdgeInsets.symmetric(
+                vertical: SizeConfig.size20, horizontal: SizeConfig.size20),
+          ),
+        ),
+      ],
     );
   }
 }

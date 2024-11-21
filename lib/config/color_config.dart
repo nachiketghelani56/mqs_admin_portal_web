@@ -30,4 +30,6 @@ class ColorConfig {
   static const Color dividerColor = Color(0xFF959B9A);
   static const Color highlightColor = Color(0xFFF5E9A5);
   static const Color chartColor = Color(0xFFB8543D);
+  static const Color transparentColor = Colors.transparent;
+  static const Color hoverColor = Color(0xFF0E5A5B);
 }

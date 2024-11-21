@@ -72,13 +72,8 @@ Widget sideMenuWidget(
                         ],
                       ),
                     ).tap(() {
-                      if (index ==
-                          mqsDashboardController.menuItems.length - 1) {
-                        Get.toNamed(AppRoutes.teamChart);
-                      } else {
-                        mqsDashboardController.menuIndex.value = index;
-                        mqsDashboardController.subMenuIndex.value = -1;
-                      }
+                      mqsDashboardController.menuIndex.value = index;
+                      mqsDashboardController.subMenuIndex.value = -1;
                     }),
                     if (index == mqsDashboardController.menuIndex.value &&
                         mqsDashboardController
@@ -121,7 +116,13 @@ Widget sideMenuWidget(
                                 ),
                               ],
                             ).tap(() {
-                              mqsDashboardController.subMenuIndex.value = i;
+                              if (index == 0 && i == 0) {
+                                Get.toNamed(AppRoutes.dashboard);
+                              } else if (index == 0 && i == 3) {
+                                Get.toNamed(AppRoutes.teamChart);
+                              } else {
+                                mqsDashboardController.subMenuIndex.value = i;
+                              }
                             }),
                           );
                         },
