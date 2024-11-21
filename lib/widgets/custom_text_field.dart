@@ -16,7 +16,7 @@ class CustomTextField extends StatelessWidget {
     this.hintText,
     this.readOnly = false,
     this.onTap,
-    this.inputFormatters,
+    this.inputFormatters, this.autofillHints,
   });
 
   final TextEditingController controller;
@@ -29,6 +29,7 @@ class CustomTextField extends StatelessWidget {
   final bool readOnly;
   final Function()? onTap;
   final List<TextInputFormatter>? inputFormatters;
+  final Iterable<String>?  autofillHints;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +43,7 @@ class CustomTextField extends StatelessWidget {
       validator: validator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       inputFormatters: inputFormatters,
+      autofillHints: autofillHints,
       decoration: InputDecoration(
         hintText: hintText,
         isDense: true,

@@ -21,6 +21,7 @@ Widget textFieldsContainerWidget({required LoginController loginController}) {
         children: [
           CustomTextField(
             controller: loginController.emailController,
+            autofillHints: const [],
             label: StringConfig.login.emailID,
             validator: (p0) => Validator.emailValidator(p0 ?? ""),
           ),
@@ -28,6 +29,7 @@ Widget textFieldsContainerWidget({required LoginController loginController}) {
           Obx(
             () => CustomTextField(
               controller: loginController.passwordController,
+              autofillHints: const [],
               label: StringConfig.login.password,
               suffixIcon: loginController.isObscurePassword.value
                   ? ImageConfig.eyeOpened
