@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 extension ExtOnWidget on Widget {
-  Widget tap(Function onTap) => GestureDetector(
+  Widget tap(Function onTap) => InkWell(
         onTap: () {
           onTap();
         },

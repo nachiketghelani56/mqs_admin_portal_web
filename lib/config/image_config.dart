@@ -32,4 +32,6 @@ class ImageConfig {
   static const String survey = "assets/icons/survey.png";
   static const String training = "assets/icons/training.png";
   static const String searchNew = "assets/icons/search_new.png";
+  static const String myProfile = "assets/icons/my_profile.png";
+  static const String logout = "assets/icons/logout.png";
 }

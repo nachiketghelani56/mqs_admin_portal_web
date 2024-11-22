@@ -27,7 +27,7 @@ class MQSAdminPortalWeb extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       initialRoute: FirebaseAuth.instance.currentUser != null
-          ? AppRoutes.dashboard
+          ? AppRoutes.mqsDashboard
           : AppRoutes.login,
       // initialRoute: AppRoutes.mqsDashboard,
       getPages: AppRoutes.pages,

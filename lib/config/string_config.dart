@@ -201,6 +201,9 @@ class MQSDashboard {
   final String settings = "Settings";
   final String pathway = "Pathway";
   final String challenge = "Challenge";
+  final String areYouSureYouWantToLogout = "Are you sure you want to logout ?";
+  final String cancel = "Cancel";
+  final String logout = "Logout";
 }
 
 class Reporting {

@@ -27,4 +27,18 @@ class HomeController extends GetxController {
       title: StringConfig.mqsDashboard.reporting,
     ),
   ].obs;
+  RxList<MenuModel> profileOpts = [
+    MenuModel(
+      icon: ImageConfig.profile,
+      title: StringConfig.mqsDashboard.profile,
+    ),
+    MenuModel(
+      icon: ImageConfig.settings,
+      title: StringConfig.mqsDashboard.settings,
+    ),
+    MenuModel(
+      icon: ImageConfig.logout,
+      title: StringConfig.mqsDashboard.logout,
+    ),
+  ].obs;
 }

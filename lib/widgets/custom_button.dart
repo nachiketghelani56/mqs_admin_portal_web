@@ -21,6 +21,7 @@ class _CustomButtonState extends State<CustomButton> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      borderRadius: BorderRadius.circular(SizeConfig.size14),
       onHover: (value) {
         if (value) {
           setState(() {
