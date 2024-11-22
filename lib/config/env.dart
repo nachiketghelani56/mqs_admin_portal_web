@@ -24,4 +24,7 @@ final class Env {
 
   @EnviedField(varName: 'FBENTERPRISE', obfuscate: true)
   static String fbEnterprise = _Env.fbEnterprise;
+
+  @EnviedField(varName: 'FBCIRCLE', obfuscate: true)
+  static String fbCircle = _Env.fbCircle;
 }

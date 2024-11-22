@@ -211,10 +211,6 @@ class Reporting {
   final String entity = "Entity";
   final String unit = "Unit";
   final String function = "Function";
-  final String wellAboveScore = "WellAbove Score";
-  final String strategy = "Strategy";
-  final String execution = "Execution";
-  final String outcome = "Outcome";
   final String wellAboveIndicators = "WellAbove Indicators";
   final String leadership = "Leadership";
   final String management = "Management";
@@ -232,6 +228,17 @@ class Reporting {
   final String may = "May";
   final String june = "June";
   final String july = "July";
+  final String authSummary = "Authentication Summary";
+  final String totalRegisteredUsers = "Total Registered Users";
+  final String activeUsers = "Active Users";
+  final String inactiveUsers = "Inactive Users";
+  final String circleSummary = "Circle Summary";
+  final String totalCircles = "Total Circles";
+  final String featuredCircles = "Featured Cirlces";
+  final String flaggedCircles = "Flagged Cirlces";
+  final String lastDay = "Last day";
+  final String lastWeek = "Last week";
+  final String lastMonth = "Last month";
 }
 
 class Home {

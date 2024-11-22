@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
+import 'package:mqs_admin_portal_web/models/circle_model.dart';
 import 'package:mqs_admin_portal_web/models/enterprise_model.dart';
 import 'package:mqs_admin_portal_web/models/user_iam_model.dart';
 
@@ -9,6 +10,7 @@ class FirebaseStorageService {
   final FirebaseFirestore _instance = FirebaseFirestore.instance;
   CollectionReference get enterprise => _instance.collection(Env.fbEnterprise);
   CollectionReference get user => _instance.collection(Env.fbUser);
+  CollectionReference get circle => _instance.collection(Env.fbCircle);
 
   Future<List<EnterpriseModel>> getEnterprises() async {
     QuerySnapshot<Object?> ent = await enterprise.get();
@@ -45,5 +47,17 @@ class FirebaseStorageService {
 
   listenToUserChange(Function(QuerySnapshot<Object?>)? onData) {
     user.snapshots().listen((onData));
+  }
+
+  Future<List<CircleModel>> getCircles() async {
+    QuerySnapshot<Object?> cir = await circle.get();
+    List<CircleModel> cirList = cir.docs
+        .map((e) => CircleModel.fromJson(e.data() as Map<String, dynamic>))
+        .toList();
+    return cirList;
+  }
+
+  listenToCircleChange(Function(QuerySnapshot<Object?>)? onData) {
+    circle.snapshots().listen((onData));
   }
 }
