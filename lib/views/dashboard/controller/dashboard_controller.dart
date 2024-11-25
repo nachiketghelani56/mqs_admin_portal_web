@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
@@ -13,6 +14,7 @@ import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/services/firebase_storage_service.dart';
 import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/loader_widget.dart';
+import 'package:uuid/uuid.dart';
 
 class DashboardController extends GetxController {
   RxList<String> tabs = [
@@ -29,19 +31,37 @@ class DashboardController extends GetxController {
       TextEditingController();
   final TextEditingController mqsSubscriptionExpiryDateController =
       TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController mqsSubscriptionStartDateController =
+      TextEditingController();
+  final TextEditingController employeeEmailController = TextEditingController();
+  final TextEditingController teamEmailController = TextEditingController();
+  final TextEditingController employeeNameController = TextEditingController();
+  final TextEditingController teamMemberLimitController =
+      TextEditingController();
+  final TextEditingController teamNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController pinCodeController = TextEditingController();
   final TextEditingController pocAddressController = TextEditingController();
   final TextEditingController pocEmailController = TextEditingController();
   final TextEditingController pocNameController = TextEditingController();
+  final TextEditingController pocTypeController = TextEditingController();
+  final TextEditingController pocPinCodeController = TextEditingController();
+  final TextEditingController pocWebsiteController = TextEditingController();
+  final TextEditingController subscriptionStatusController =
+      TextEditingController();
+  final TextEditingController subscriptionActivePlanController =
+      TextEditingController();
   final TextEditingController pocPhoneNumberController =
       TextEditingController();
   final TextEditingController filterFieldController = TextEditingController();
-  RxBool mqsCommonLogin = false.obs, isSignedUp = false.obs;
+  RxBool mqsCommonLogin = false.obs,
+      isSignedUp = false.obs,
+      isTeam = false.obs,
+      isEnable = false.obs,
+      isPocsSignedUp = false.obs;
   RxBool showMqsEmpEmailList = false.obs,
+      showMqsTeamList = false.obs,
       showMqsEnterpriseLocationDetails = false.obs,
       showMqsEnterprisePOCs = false.obs,
       isAddEnterprise = false.obs,
@@ -90,15 +110,19 @@ class DashboardController extends GetxController {
   RxList<int> sceneIndexes = <int>[].obs;
   RxList<EnterpriseModel> searchedEnterprises = <EnterpriseModel>[].obs,
       enterprises = <EnterpriseModel>[].obs;
-  RxList<MqsEmployeeEmailModel> mqsEmployeeEmailList =
-      <MqsEmployeeEmailModel>[].obs;
-  RxList<MqsEnterprisePOC> mqsEnterprisePOCs = <MqsEnterprisePOC>[].obs;
+  RxList<MqsEmployee> mqsEmployeeEmailList = <MqsEmployee>[].obs;
+  RxList<MqsTeam> mqsTeamList = <MqsTeam>[].obs;
+  RxList<MqsEnterprisePOCs> mqsEnterprisePOCs = <MqsEnterprisePOCs>[].obs;
   RxInt viewIndex = 0.obs;
   final GlobalKey<FormState> enterpriseFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> entEmpEmailFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> entTeamFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> entPOCFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> entPOCSubscriptionFormKey = GlobalKey<FormState>();
   EnterpriseModel get enterpriseDetail => searchedEnterprises[viewIndex.value];
-  RxInt editMqsEmpEmailIndex = RxInt(-1), editMqsEntPOCIndex = RxInt(-1);
+  RxInt editMqsEmpEmailIndex = RxInt(-1),
+      editMqsEntPOCIndex = RxInt(-1),
+      editMqsTeamIndex = RxInt(-1);
   RxList<UserIAMModel> users = <UserIAMModel>[].obs;
   UserIAMModel get userDetail => users[viewIndex.value];
   RxInt pageLimit = 10.obs;
@@ -124,47 +148,71 @@ class DashboardController extends GetxController {
   }
 
   clearAllFields() {
-    subscriptionController.clear();
     mqsEnterpriseCodeController.clear();
-    mqsEnterpriseNameController.clear();
-    mqsSubscriptionExpiryDateController.clear();
-    clearMqsEmpEmailFields();
-    addressController.clear();
-    pinCodeController.clear();
+    isTeam.value = false;
     clearMqsEntPOCFields();
-    mqsEmployeeEmailList.clear();
-    mqsEnterprisePOCs.clear();
+    clearMqsEmpEmailFields();
+    clearMqsTeamFields();
+    clearMqsEnterprisePocsSubscriptionDetailFields();
   }
 
   clearMqsEmpEmailFields() {
-    emailController.clear();
-    mqsCommonLogin.value = false;
+    employeeEmailController.clear();
     isSignedUp.value = false;
-    firstNameController.clear();
-    lastNameController.clear();
+    employeeNameController.clear();
+  }
+
+  clearMqsTeamFields() {
+    teamNameController.clear();
+    isEnable.value = false;
+    teamEmailController.clear();
+    teamMemberLimitController.clear();
+  }
+
+  clearMqsEnterprisePocsSubscriptionDetailFields() {
+    subscriptionStatusController.clear();
+    mqsSubscriptionStartDateController.clear();
+    mqsSubscriptionExpiryDateController.clear();
+    subscriptionActivePlanController.clear();
   }
 
   clearMqsEntPOCFields() {
     pocAddressController.clear();
     pocEmailController.clear();
     pocNameController.clear();
+    pocWebsiteController.clear();
     pocPhoneNumberController.clear();
+    pocTypeController.clear();
+    pocPinCodeController.clear();
+    isSignedUp.value = false;
   }
 
   getEnterprises() async {
     try {
-      List<EnterpriseModel> ent =
+      // List<EnterpriseModel> ent =
+      //     await FirebaseStorageService.i.getEnterprises();
+      // searchedEnterprises.value = ent;
+      // enterprises.value = ent;
+      // FirebaseStorageService.i.listenToEnterpriseChange((data) {
+      //   List<EnterpriseModel> ent = data.docs
+      //       .map((e) => EnterpriseModel.fromJson(e.data() as  Map<String, dynamic>))
+      //       .toList();
+      //   print("ent-->${ent}");
+      //   searchedEnterprises.value = ent;
+      //
+      //   enterprises.value = ent;
+      //   print("enterprises.value-->${enterprises.value}");
+      // });
+      List<EnterpriseModel> enterprises =
           await FirebaseStorageService.i.getEnterprises();
-      searchedEnterprises.value = ent;
-      enterprises.value = ent;
-      FirebaseStorageService.i.listenToEnterpriseChange((data) {
-        List<EnterpriseModel> ent = data.docs
-            .map((e) => EnterpriseModel.fromJson(e.data() as Map))
-            .toList();
-        searchedEnterprises.value = ent;
-        enterprises.value = ent;
+      print("Fetched Enterprises: ${enterprises.length}");
+      enterprises.forEach((enterprise) {
+        print(
+            "Enterprise Name: ${enterprise.mqsEnterprisePOCs?.mqsEnterpriseName}");
       });
+      print("enterprises-->${enterprises.length}");
     } catch (e) {
+      print("e-->${e.toString()}");
       errorDialogWidget(msg: e.toString());
     } finally {}
   }
@@ -182,84 +230,127 @@ class DashboardController extends GetxController {
     } finally {}
   }
 
+  addMqsTeam() {
+    // final uuid = const Uuid().v4().replaceAll('-', '').substring(0, 24); // Generate UUID and remove dashes
+    // var res=  uuid.substring(0, 24);
+    // print("res-->${res}");
+    mqsTeamList.add(
+      MqsTeam(
+        mqsTeamID: const Uuid().v4().replaceAll('-', '').substring(0, 24),
+        mqsTeamName: teamNameController.text.trim(),
+        mqsTeamEmail: teamEmailController.text.trim(),
+        mqsTeamMembersLimit: int.parse(teamMemberLimitController.text),
+        mqsIsEnable: isEnable.value,
+      ),
+    );
+    clearMqsTeamFields();
+    showMqsTeamList.value = false;
+  }
+
+  editMqsTeam() {
+    // mqsEmployeeEmailList[editMqsEmpEmailIndex.value].email =
+    //     emailController.text.trim();
+    // mqsEmployeeEmailList[editMqsEmpEmailIndex.value].mqsCommonLogin =
+    //     mqsCommonLogin.value;
+    // mqsEmployeeEmailList[editMqsEmpEmailIndex.value].isSignedUp =
+    //     isSignedUp.value;
+    // mqsEmployeeEmailList[editMqsEmpEmailIndex.value].firstname =
+    //     firstNameController.text;
+    // mqsEmployeeEmailList[editMqsEmpEmailIndex.value].lastname =
+    //     lastNameController.text.trim();
+    // clearMqsEmpEmailFields();
+    // editMqsEmpEmailIndex.value = -1;
+    // showMqsEmpEmailList.value = false;
+  }
   addMqsEmpEmail() {
     mqsEmployeeEmailList.add(
-      MqsEmployeeEmailModel(
-        email: emailController.text.trim(),
-        firstname: firstNameController.text.trim(),
-        isSignedUp: isSignedUp.value,
-        lastname: lastNameController.text.trim(),
-        mqsCommonLogin: mqsCommonLogin.value,
+      MqsEmployee(
+        mqsEmployeeName: employeeEmailController.text.trim(),
+        mqsEmployeeEmail: employeeEmailController.text.trim(),
+        mqsIsSignUp: isSignedUp.value,
       ),
     );
     clearMqsEmpEmailFields();
     showMqsEmpEmailList.value = false;
   }
 
+  setMqsTeamForm({required int index}) {
+    // editMqsEmpEmailIndex.value = index;
+    // emailController.text = mqsEmployeeEmailList[index].email;
+    // mqsCommonLogin.value = mqsEmployeeEmailList[index].mqsCommonLogin;
+    // isSignedUp.value = mqsEmployeeEmailList[index].isSignedUp;
+    // firstNameController.text = mqsEmployeeEmailList[index].firstname;
+    // lastNameController.text = mqsEmployeeEmailList[index].lastname;
+    // showMqsEmpEmailList.value = true;
+  }
   setMqsEmpEmailForm({required int index}) {
-    editMqsEmpEmailIndex.value = index;
-    emailController.text = mqsEmployeeEmailList[index].email;
-    mqsCommonLogin.value = mqsEmployeeEmailList[index].mqsCommonLogin;
-    isSignedUp.value = mqsEmployeeEmailList[index].isSignedUp;
-    firstNameController.text = mqsEmployeeEmailList[index].firstname;
-    lastNameController.text = mqsEmployeeEmailList[index].lastname;
-    showMqsEmpEmailList.value = true;
+    // editMqsEmpEmailIndex.value = index;
+    // emailController.text = mqsEmployeeEmailList[index].email;
+    // mqsCommonLogin.value = mqsEmployeeEmailList[index].mqsCommonLogin;
+    // isSignedUp.value = mqsEmployeeEmailList[index].isSignedUp;
+    // firstNameController.text = mqsEmployeeEmailList[index].firstname;
+    // lastNameController.text = mqsEmployeeEmailList[index].lastname;
+    // showMqsEmpEmailList.value = true;
   }
 
   editMqsEmpEmail() {
-    mqsEmployeeEmailList[editMqsEmpEmailIndex.value].email =
-        emailController.text.trim();
-    mqsEmployeeEmailList[editMqsEmpEmailIndex.value].mqsCommonLogin =
-        mqsCommonLogin.value;
-    mqsEmployeeEmailList[editMqsEmpEmailIndex.value].isSignedUp =
-        isSignedUp.value;
-    mqsEmployeeEmailList[editMqsEmpEmailIndex.value].firstname =
-        firstNameController.text;
-    mqsEmployeeEmailList[editMqsEmpEmailIndex.value].lastname =
-        lastNameController.text.trim();
-    clearMqsEmpEmailFields();
-    editMqsEmpEmailIndex.value = -1;
-    showMqsEmpEmailList.value = false;
+    // mqsEmployeeEmailList[editMqsEmpEmailIndex.value].email =
+    //     emailController.text.trim();
+    // mqsEmployeeEmailList[editMqsEmpEmailIndex.value].mqsCommonLogin =
+    //     mqsCommonLogin.value;
+    // mqsEmployeeEmailList[editMqsEmpEmailIndex.value].isSignedUp =
+    //     isSignedUp.value;
+    // mqsEmployeeEmailList[editMqsEmpEmailIndex.value].firstname =
+    //     firstNameController.text;
+    // mqsEmployeeEmailList[editMqsEmpEmailIndex.value].lastname =
+    //     lastNameController.text.trim();
+    // clearMqsEmpEmailFields();
+    // editMqsEmpEmailIndex.value = -1;
+    // showMqsEmpEmailList.value = false;
   }
 
   deleteMqsEmpEmial({required int index}) {
     mqsEmployeeEmailList.removeAt(index);
   }
 
+  deleteMqsTeam({required int index}) {
+    mqsTeamList.removeAt(index);
+  }
+
   addMqsEntPOC() {
-    mqsEnterprisePOCs.add(
-      MqsEnterprisePOC(
-        address: pocAddressController.text.trim(),
-        email: pocEmailController.text.trim(),
-        name: pocNameController.text.trim(),
-        phoneNumber: pocPhoneNumberController.text.trim(),
-      ),
-    );
-    clearMqsEntPOCFields();
-    showMqsEnterprisePOCs.value = false;
+    // mqsEnterprisePOCs.add(
+    //   MqsEnterprisePOC(
+    //     address: pocAddressController.text.trim(),
+    //     email: pocEmailController.text.trim(),
+    //     name: pocNameController.text.trim(),
+    //     phoneNumber: pocPhoneNumberController.text.trim(),
+    //   ),
+    // );
+    // clearMqsEntPOCFields();
+    // showMqsEnterprisePOCs.value = false;
   }
 
   setMqsEntPOCForm({required int index}) {
-    editMqsEntPOCIndex.value = index;
-    pocEmailController.text = mqsEnterprisePOCs[index].email;
-    pocAddressController.text = mqsEnterprisePOCs[index].address;
-    pocNameController.text = mqsEnterprisePOCs[index].name;
-    pocPhoneNumberController.text = mqsEnterprisePOCs[index].phoneNumber;
-    showMqsEnterprisePOCs.value = true;
+    // editMqsEntPOCIndex.value = index;
+    // pocEmailController.text = mqsEnterprisePOCs[index].email;
+    // pocAddressController.text = mqsEnterprisePOCs[index].address;
+    // pocNameController.text = mqsEnterprisePOCs[index].name;
+    // pocPhoneNumberController.text = mqsEnterprisePOCs[index].phoneNumber;
+    // showMqsEnterprisePOCs.value = true;
   }
 
   editMqsEntPOC() {
-    mqsEnterprisePOCs[editMqsEntPOCIndex.value].email = pocEmailController.text;
-
-    mqsEnterprisePOCs[editMqsEntPOCIndex.value].address =
-        pocAddressController.text;
-    mqsEnterprisePOCs[editMqsEntPOCIndex.value].name = pocNameController.text;
-
-    mqsEnterprisePOCs[editMqsEntPOCIndex.value].phoneNumber =
-        pocPhoneNumberController.text;
-    clearMqsEntPOCFields();
-    editMqsEntPOCIndex.value = -1;
-    showMqsEnterprisePOCs.value = false;
+    // mqsEnterprisePOCs[editMqsEntPOCIndex.value].email = pocEmailController.text;
+    //
+    // mqsEnterprisePOCs[editMqsEntPOCIndex.value].address =
+    //     pocAddressController.text;
+    // mqsEnterprisePOCs[editMqsEntPOCIndex.value].name = pocNameController.text;
+    //
+    // mqsEnterprisePOCs[editMqsEntPOCIndex.value].phoneNumber =
+    //     pocPhoneNumberController.text;
+    // clearMqsEntPOCFields();
+    // editMqsEntPOCIndex.value = -1;
+    // showMqsEnterprisePOCs.value = false;
   }
 
   deleteMqsEntPOC({required int index}) {
@@ -269,25 +360,45 @@ class DashboardController extends GetxController {
   addEnterprise() async {
     try {
       if (enterpriseFormKey.currentState?.validate() ?? false) {
-        EnterpriseModel model = EnterpriseModel(
-          subscription: subscriptionController.text.trim(),
-          id: isEditEnterprise.value ? enterpriseDetail.id : '',
-          mqsEmployeeEmailList: mqsEmployeeEmailList,
-          mqsEnterpriseCode: mqsEnterpriseCodeController.text,
-          mqsEnterpriseLocationDetails: MqsEnterpriseLocationDetails(
-            address: addressController.text.trim(),
-            pinCode: pinCodeController.text.trim(),
+        final docRef = FirebaseStorageService.i.enterprise.doc().id;
+        final enterprise = EnterpriseModel(
+          mqsEnterprisePOCs: MqsEnterprisePOCs(
+            mqsEnterpriseID: docRef,
+            mqsEnterpriseName: pocNameController.text.trim(),
+            mqsEnterpriseEmail: pocEmailController.text.trim(),
+            mqsEnterprisePhoneNumber: pocPhoneNumberController.text,
+            mqsEnterpriseType: pocTypeController.text,
+            mqsEnterpriseWebsite: pocWebsiteController.text,
+            mqsEnterpriseAddress: pocAddressController.text.trim(),
+            mqsEnterprisePincode: pocPinCodeController.text.trim(),
+            mqsIsSignUp: isSignedUp.value,
           ),
-          mqsEnterpriseName: mqsEnterpriseNameController.text.trim(),
-          mqsEnterprisePOCs: mqsEnterprisePOCs,
-          mqsSubscriptionExpiryDate:
-              mqsSubscriptionExpiryDateController.text.trim(),
+          mqsEnterpriseCode: mqsEnterpriseCodeController.text,
+          mqsIsTeam: isTeam.value,
+          mqsTeamList: mqsTeamList,
+          mqsEmployeeList: mqsEmployeeEmailList,
+          mqsEnterprisePOCsSubscriptionDetails:
+              MqsEnterprisePOCsSubscriptionDetails(
+            mqsSubscriptionStatus: subscriptionStatusController.text.trim(),
+            mqsSubscriptionActivePlan:
+                subscriptionActivePlanController.text.trim(),
+            mqsSubscriptionStartDate:
+                mqsSubscriptionStartDateController.text.trim(),
+            mqsSubscriptionExpiryDate:
+                mqsSubscriptionExpiryDateController.text.trim(),
+          ),
+          mqsCreatedTimestamp: DateTime.now().toIso8601String(),
+          mqsUpdateTimestamp: DateTime.now().toIso8601String(),
         );
+
         showLoader();
         if (isEditEnterprise.value) {
-          await FirebaseStorageService.i.editEnterprises(model: model);
+          await FirebaseStorageService.i.editEnterprises(model: enterprise);
         } else {
-          await FirebaseStorageService.i.addEnterprises(model: model);
+          await FirebaseStorageService.i
+              .addEnterprises(enterprise: enterprise, customId: docRef);
+
+          getEnterprises();
         }
         hideLoader();
         clearAllFields();
@@ -304,17 +415,17 @@ class DashboardController extends GetxController {
   }
 
   setEnterpriseForm({required int index}) {
-    subscriptionController.text = enterpriseDetail.subscription;
-    mqsEnterpriseCodeController.text = enterpriseDetail.mqsEnterpriseCode;
-    mqsEnterpriseNameController.text = enterpriseDetail.mqsEnterpriseName;
-    mqsSubscriptionExpiryDateController.text =
-        enterpriseDetail.mqsSubscriptionExpiryDate;
-    mqsEmployeeEmailList.value = enterpriseDetail.mqsEmployeeEmailList;
-    addressController.text =
-        enterpriseDetail.mqsEnterpriseLocationDetails.address;
-    pinCodeController.text =
-        enterpriseDetail.mqsEnterpriseLocationDetails.pinCode;
-    mqsEnterprisePOCs.value = enterpriseDetail.mqsEnterprisePOCs;
+    // subscriptionController.text = enterpriseDetail.subscription;
+    // mqsEnterpriseCodeController.text = enterpriseDetail.mqsEnterpriseCode;
+    // mqsEnterpriseNameController.text = enterpriseDetail.mqsEnterpriseName;
+    // mqsSubscriptionExpiryDateController.text =
+    //     enterpriseDetail.mqsSubscriptionExpiryDate;
+    // mqsEmployeeEmailList.value = enterpriseDetail.mqsEmployeeEmailList;
+    // addressController.text =
+    //     enterpriseDetail.mqsEnterpriseLocationDetails.address;
+    // pinCodeController.text =
+    //     enterpriseDetail.mqsEnterpriseLocationDetails.pinCode;
+    // mqsEnterprisePOCs.value = enterpriseDetail.mqsEnterprisePOCs;
   }
 
   deleteEnterprise({required String docId}) async {
@@ -333,38 +444,38 @@ class DashboardController extends GetxController {
 
   importEnterprise() async {
     try {
-      final result = await FilePicker.platform.pickFiles(
-          allowMultiple: false,
-          type: FileType.custom,
-          allowedExtensions: ['csv']);
-      if (result != null) {
-        String csvData = utf8.decode(result.files.single.bytes ?? []);
-        List<List<dynamic>> rows = const CsvToListConverter().convert(csvData);
-        List<EnterpriseModel> importedModels = [];
-        for (var i = 1; i < rows.length; i++) {
-          var row = rows[i];
-          EnterpriseModel model = EnterpriseModel(
-            id: '',
-            subscription: row[0],
-            mqsEnterpriseName: row[1],
-            mqsEnterpriseCode: row[2].toString(),
-            mqsSubscriptionExpiryDate: row[3],
-            mqsEmployeeEmailList: (jsonDecode(row[4]) as List)
-                .map((e) => MqsEmployeeEmailModel.fromJson(e))
-                .toList(),
-            mqsEnterpriseLocationDetails: MqsEnterpriseLocationDetails.fromJson(
-              jsonDecode(row[5]),
-            ),
-            mqsEnterprisePOCs: (jsonDecode(row[6]) as List)
-                .map((e) => MqsEnterprisePOC.fromJson(e))
-                .toList(),
-          );
-          importedModels.add(model);
-        }
-        for (final enterprise in importedModels) {
-          await FirebaseStorageService.i.addEnterprises(model: enterprise);
-        }
-      }
+      // final result = await FilePicker.platform.pickFiles(
+      //     allowMultiple: false,
+      //     type: FileType.custom,
+      //     allowedExtensions: ['csv']);
+      // if (result != null) {
+      //   String csvData = utf8.decode(result.files.single.bytes ?? []);
+      //   List<List<dynamic>> rows = const CsvToListConverter().convert(csvData);
+      //   List<EnterpriseModel> importedModels = [];
+      //   for (var i = 1; i < rows.length; i++) {
+      //     var row = rows[i];
+      //     EnterpriseModel model = EnterpriseModel(
+      //       id: '',
+      //       subscription: row[0],
+      //       mqsEnterpriseName: row[1],
+      //       mqsEnterpriseCode: row[2].toString(),
+      //       mqsSubscriptionExpiryDate: row[3],
+      //       mqsEmployeeEmailList: (jsonDecode(row[4]) as List)
+      //           .map((e) => MqsEmployeeEmailModel.fromJson(e))
+      //           .toList(),
+      //       mqsEnterpriseLocationDetails: MqsEnterpriseLocationDetails.fromJson(
+      //         jsonDecode(row[5]),
+      //       ),
+      //       mqsEnterprisePOCs: (jsonDecode(row[6]) as List)
+      //           .map((e) => MqsEnterprisePOC.fromJson(e))
+      //           .toList(),
+      //     );
+      //     importedModels.add(model);
+      //   }
+      //   for (final enterprise in importedModels) {
+      //     await FirebaseStorageService.i.addEnterprises(model: enterprise);
+      //   }
+      // }
     } catch (e) {
       hideLoader();
       errorDialogWidget(msg: e.toString());
@@ -373,40 +484,40 @@ class DashboardController extends GetxController {
 
   exportEnterprise() async {
     try {
-      List<List<String>> rows = [
-        [
-          // 'ID',
-          StringConfig.csv.subscription,
-          StringConfig.dashboard.mqsEnterPriseName,
-          StringConfig.dashboard.mqsEnterPriseCode,
-          StringConfig.dashboard.mqsSubscriptionExpiryDate,
-          StringConfig.csv.employeeEmails,
-          StringConfig.csv.enterpriseLocation,
-          StringConfig.csv.pocs
-        ],
-        // Data Rows
-        ...enterprises.map((model) {
-          return [
-            // model.id,
-            model.subscription,
-            model.mqsEnterpriseName,
-            model.mqsEnterpriseCode,
-            model.mqsSubscriptionExpiryDate,
-            jsonEncode(
-                model.mqsEmployeeEmailList.map((e) => e.toJson()).toList()),
-            jsonEncode(model.mqsEnterpriseLocationDetails.toJson()),
-            jsonEncode(model.mqsEnterprisePOCs.map((p) => p.toJson()).toList()),
-          ];
-        }),
-      ];
-      String csvData = const ListToCsvConverter().convert(rows);
-      Uint8List bytes = Uint8List.fromList(utf8.encode(csvData));
-      await FileSaver.instance.saveFile(
-        bytes: bytes,
-        ext: "csv",
-        mimeType: MimeType.csv,
-        name: StringConfig.dashboard.enterpriseCollection,
-      );
+      // List<List<String>> rows = [
+      //   [
+      //     // 'ID',
+      //     StringConfig.csv.subscription,
+      //     StringConfig.dashboard.mqsEnterPriseName,
+      //     StringConfig.dashboard.mqsEnterPriseCode,
+      //     StringConfig.dashboard.mqsSubscriptionExpiryDate,
+      //     StringConfig.csv.employeeEmails,
+      //     StringConfig.csv.enterpriseLocation,
+      //     StringConfig.csv.pocs
+      //   ],
+      //   // Data Rows
+      //   ...enterprises.map((model) {
+      //     return [
+      //       // model.id,
+      //       model.subscription,
+      //       model.mqsEnterpriseName,
+      //       model.mqsEnterpriseCode,
+      //       model.mqsSubscriptionExpiryDate,
+      //       jsonEncode(
+      //           model.mqsEmployeeEmailList.map((e) => e.toJson()).toList()),
+      //       jsonEncode(model.mqsEnterpriseLocationDetails.toJson()),
+      //       jsonEncode(model.mqsEnterprisePOCs.map((p) => p.toJson()).toList()),
+      //     ];
+      //   }),
+      // ];
+      // String csvData = const ListToCsvConverter().convert(rows);
+      // Uint8List bytes = Uint8List.fromList(utf8.encode(csvData));
+      // await FileSaver.instance.saveFile(
+      //   bytes: bytes,
+      //   ext: "csv",
+      //   mimeType: MimeType.csv,
+      //   name: StringConfig.dashboard.enterpriseCollection,
+      // );
     } catch (e) {
       errorDialogWidget(msg: e.toString());
     } finally {}
@@ -463,12 +574,12 @@ class DashboardController extends GetxController {
       if (query.isEmpty) {
         searchedEnterprises.value = enterprises;
       } else {
-        searchedEnterprises.value = enterprises
-            .where((e) =>
-                e.subscription.toLowerCase().contains(query) ||
-                e.mqsEnterpriseCode.toLowerCase().contains(query) ||
-                e.mqsEnterpriseName.toLowerCase().contains(query))
-            .toList();
+        // searchedEnterprises.value = enterprises
+        //     .where((e) =>
+        //         e.subscription.toLowerCase().contains(query) ||
+        //         e.mqsEnterpriseCode.toLowerCase().contains(query) ||
+        //         e.mqsEnterpriseName.toLowerCase().contains(query))
+        //     .toList();
       }
     } catch (e) {
       errorDialogWidget(msg: e.toString());

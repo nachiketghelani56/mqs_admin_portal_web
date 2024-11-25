@@ -14,24 +14,38 @@ class FirebaseStorageService {
 
   Future<List<EnterpriseModel>> getEnterprises() async {
     QuerySnapshot<Object?> ent = await enterprise.get();
-    List<EnterpriseModel> entList =
-        ent.docs.map((e) => EnterpriseModel.fromJson(e.data() as Map)).toList();
-    return entList;
+
+    // Map the QuerySnapshot to your model
+    final List<EnterpriseModel> enterprises = ent.docs.map((doc) {
+      // Access each document's data
+      final data = doc.data() as Map<String, dynamic>;
+      // Convert the data to your model
+      return EnterpriseModel.fromJson(data);
+    }).toList();
+
+    return enterprises;
+    // QuerySnapshot<Object?> ent = await enterprise.get();
+    //
+    // List<EnterpriseModel> entList =
+    //     ent.docs.map((e) => EnterpriseModel.fromJson(e.data() as Map<String, dynamic>)).toList();
   }
 
   listenToEnterpriseChange(Function(QuerySnapshot<Object?>)? onData) {
     enterprise.snapshots().listen((onData));
   }
 
-  Future<DocumentReference<Object?>> addEnterprises(
-      {required EnterpriseModel model}) async {
-    DocumentReference<Object?> doc = await enterprise.add(model.toJson());
-    await enterprise.doc(doc.id).update({'_id': doc.id});
-    return doc;
+  Future<void> addEnterprises(
+      {required EnterpriseModel enterprise, required String customId}) async {
+    await FirebaseStorageService.i.enterprise.doc(customId).set({
+      ...enterprise.toJson(),
+    });
+    // DocumentReference<Object?> doc = await enterprise.add(model.toJson());
+    // print("doc--->${doc}");
+    // await enterprise.doc(doc.id).update({'_id': doc.id});
   }
 
   Future editEnterprises({required EnterpriseModel model}) async {
-    await enterprise.doc(model.id).update(model.toJson());
+    // await enterprise.doc(model.id).update(model.toJson());
   }
 
   Future deleteEnterprises({required String docId}) async {

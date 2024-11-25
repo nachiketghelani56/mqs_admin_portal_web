@@ -42,25 +42,47 @@ class Dashboard {
   final String enterCode = "Enter code";
   final String mqsEnterPriseName = "Enterprise Name";
   final String enterName = "Enter name";
+  final String enterSubscriptionStatus = "Enter Subscription Status";
+  final String enterSubscriptionActivePlan = "Enter Subscription Active Plan";
+  final String enterEmployeeName = "Enter Employee name";
+  final String enterTeamMemberLimit = "Enter team member limit";
+  final String enterTeamName = "Enter team name";
   final String mqsSubscriptionExpiryDate = "Subscription Expiry Date";
+  final String mqsSubscriptionStartDate = "Subscription Start Date";
   final String enterExpiryDate = "Enter expiry date";
-  final String mqsEmployeeEmailList = "Employee Email List";
-  final String emailAddress = "Email address";
+  final String enterStartDate = "Enter start date";
+  final String mqsEmployeeEmailList = "Employee List";
+  final String mqsTeamList = "Team List";
+  final String emailAddress = "Employee Email address";
+  final String teamEmailAddress = "Team Email address";
   final String enterEmailAddress = "Enter email address";
   final String mqsCommonLogin = "Common Login";
+  final String isEnable = "Is Enable";
   final String isSignedUp = "Is Signed Up";
+  final String isTeam = "Is Team";
   final String trueText = "True";
   final String falseText = "False";
   final String firstName = "First Name";
+  final String employeeName = "Employee Name";
+  final String teamMemberLimit = "Team Member Limit";
+  final String teamName = "Team Name";
   final String lastName = "Last Name";
   final String email = "Email";
   final String mqsEnterpriseLocationDetails = "Enterprise Location Details";
   final String address = "Address";
+  final String website = "Website";
   final String enterAddress = "Enter address";
+  final String enterWebsite = "Enter website";
   final String pinCode = "Pin code";
   final String enterPinCode = "Enter pin code";
+  final String enterType= "Enter type";
   final String mqsEnterprisePOCs = "Enterprise POCs";
+  final String mqsEnterprisePOCsSubscriptionDetail = "Enterprise POCs Subscription Detail";
   final String name = "Name";
+  final String subscriptionStatus = "Subscription Status";
+  final String subscriptionActivePlan = "Subscription Active Plan";
+
+  final String type = "Type";
   final String phoneNumber = "Phone Number";
   final String enterPhoneNumber = "Enter phone number";
   final String edit = "Edit";
@@ -143,6 +165,7 @@ class Validation {
   final String plsEnterValidEmail = "Please enter valid email address";
   final String plsEnterPassword = "Please enter password";
   final String plsEnter = "Please enter ";
+  final String expiryDateAfter = "Expiry date is after start date";
 }
 
 class Firebase {
