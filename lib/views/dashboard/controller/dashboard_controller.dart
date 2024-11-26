@@ -1,11 +1,6 @@
-import 'dart:convert';
-import 'dart:typed_data';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:csv/csv.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/models/enterprise_model.dart';
 import 'package:mqs_admin_portal_web/models/menu_option_model.dart';
@@ -22,6 +17,7 @@ class DashboardController extends GetxController {
     StringConfig.dashboard.userIAM,
   ].obs;
   RxInt selectedTabIndex = 0.obs;
+  RxString enterpriseId = "".obs;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   final TextEditingController searchController = TextEditingController();
   final TextEditingController subscriptionController = TextEditingController();
@@ -55,6 +51,7 @@ class DashboardController extends GetxController {
   final TextEditingController pocPhoneNumberController =
       TextEditingController();
   final TextEditingController filterFieldController = TextEditingController();
+  RxString startDate = "".obs, expiryDate = "".obs;
   RxBool mqsCommonLogin = false.obs,
       isSignedUp = false.obs,
       isTeam = false.obs,
@@ -114,6 +111,7 @@ class DashboardController extends GetxController {
   RxList<MqsTeam> mqsTeamList = <MqsTeam>[].obs;
   RxList<MqsEnterprisePOCs> mqsEnterprisePOCs = <MqsEnterprisePOCs>[].obs;
   RxInt viewIndex = 0.obs;
+  RxInt selectedViewIndex = (-1).obs;
   final GlobalKey<FormState> enterpriseFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> entEmpEmailFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> entTeamFormKey = GlobalKey<FormState>();
@@ -173,6 +171,8 @@ class DashboardController extends GetxController {
     subscriptionStatusController.clear();
     mqsSubscriptionStartDateController.clear();
     mqsSubscriptionExpiryDateController.clear();
+    expiryDate.value = "";
+    startDate.value = "";
     subscriptionActivePlanController.clear();
   }
 
@@ -189,6 +189,20 @@ class DashboardController extends GetxController {
 
   getEnterprises() async {
     try {
+      // try {
+      //   List<EnterpriseModel> ent =
+      //   await FirebaseStorageService.i.getEnterprises();
+      //   searchedEnterprises.value = ent;
+      //   enterprises.value = ent;
+      //   FirebaseStorageService.i.listenToEnterpriseChange((data) {
+      //     List<EnterpriseModel> ent = data.docs
+      //         .map((e) => EnterpriseModel.fromJson(e.data() as Map))
+      //         .toList();
+      //     searchedEnterprises.value = ent;
+      //     enterprises.value = ent;
+      //   });
+      // }
+
       // List<EnterpriseModel> ent =
       //     await FirebaseStorageService.i.getEnterprises();
       // searchedEnterprises.value = ent;
@@ -203,14 +217,16 @@ class DashboardController extends GetxController {
       //   enterprises.value = ent;
       //   print("enterprises.value-->${enterprises.value}");
       // });
-      List<EnterpriseModel> enterprises =
+      List<EnterpriseModel> enterpriseList =
           await FirebaseStorageService.i.getEnterprises();
-      print("Fetched Enterprises: ${enterprises.length}");
-      enterprises.forEach((enterprise) {
-        print(
-            "Enterprise Name: ${enterprise.mqsEnterprisePOCs?.mqsEnterpriseName}");
+      print("Fetched Enterprises: ${enterpriseList.length}");
+      searchedEnterprises.value = enterpriseList;
+      enterprises.value = enterpriseList;
+
+      FirebaseStorageService.i.getEnterpriseStream().listen((enterpriseList) {
+        searchedEnterprises.value = enterpriseList; // Update searched list
+        enterprises.value = enterpriseList; // Update full list
       });
-      print("enterprises-->${enterprises.length}");
     } catch (e) {
       print("e-->${e.toString()}");
       errorDialogWidget(msg: e.toString());
@@ -231,16 +247,14 @@ class DashboardController extends GetxController {
   }
 
   addMqsTeam() {
-    // final uuid = const Uuid().v4().replaceAll('-', '').substring(0, 24); // Generate UUID and remove dashes
-    // var res=  uuid.substring(0, 24);
-    // print("res-->${res}");
     mqsTeamList.add(
       MqsTeam(
         mqsTeamID: const Uuid().v4().replaceAll('-', '').substring(0, 24),
         mqsTeamName: teamNameController.text.trim(),
         mqsTeamEmail: teamEmailController.text.trim(),
         mqsTeamMembersLimit: int.parse(teamMemberLimitController.text),
-        mqsIsEnable: isEnable.value,
+        mqsIsEnable:
+            int.parse(teamMemberLimitController.text) == 0 ? false : true,
       ),
     );
     clearMqsTeamFields();
@@ -248,26 +262,24 @@ class DashboardController extends GetxController {
   }
 
   editMqsTeam() {
-    // mqsEmployeeEmailList[editMqsEmpEmailIndex.value].email =
-    //     emailController.text.trim();
-    // mqsEmployeeEmailList[editMqsEmpEmailIndex.value].mqsCommonLogin =
-    //     mqsCommonLogin.value;
-    // mqsEmployeeEmailList[editMqsEmpEmailIndex.value].isSignedUp =
-    //     isSignedUp.value;
-    // mqsEmployeeEmailList[editMqsEmpEmailIndex.value].firstname =
-    //     firstNameController.text;
-    // mqsEmployeeEmailList[editMqsEmpEmailIndex.value].lastname =
-    //     lastNameController.text.trim();
-    // clearMqsEmpEmailFields();
-    // editMqsEmpEmailIndex.value = -1;
-    // showMqsEmpEmailList.value = false;
+    mqsTeamList[editMqsTeamIndex.value].mqsTeamName =
+        teamNameController.text.trim();
+    mqsTeamList[editMqsTeamIndex.value].mqsTeamEmail = teamEmailController.text;
+    mqsTeamList[editMqsTeamIndex.value].mqsTeamMembersLimit =
+        int.parse(teamMemberLimitController.text);
+
+    clearMqsEmpEmailFields();
+    editMqsTeamIndex.value = -1;
+    showMqsTeamList.value = false;
   }
+
   addMqsEmpEmail() {
     mqsEmployeeEmailList.add(
       MqsEmployee(
+        mqsEmployeeID: const Uuid().v4().replaceAll('-', '').substring(0, 24),
         mqsEmployeeName: employeeEmailController.text.trim(),
         mqsEmployeeEmail: employeeEmailController.text.trim(),
-        mqsIsSignUp: isSignedUp.value,
+        mqsIsSignUp: false,
       ),
     );
     clearMqsEmpEmailFields();
@@ -275,38 +287,32 @@ class DashboardController extends GetxController {
   }
 
   setMqsTeamForm({required int index}) {
-    // editMqsEmpEmailIndex.value = index;
-    // emailController.text = mqsEmployeeEmailList[index].email;
-    // mqsCommonLogin.value = mqsEmployeeEmailList[index].mqsCommonLogin;
-    // isSignedUp.value = mqsEmployeeEmailList[index].isSignedUp;
-    // firstNameController.text = mqsEmployeeEmailList[index].firstname;
-    // lastNameController.text = mqsEmployeeEmailList[index].lastname;
-    // showMqsEmpEmailList.value = true;
+    editMqsTeamIndex.value = index;
+    teamNameController.text = mqsTeamList[index].mqsTeamName;
+    teamEmailController.text = mqsTeamList[index].mqsTeamEmail;
+    teamMemberLimitController.text =
+        "${mqsTeamList[index].mqsTeamMembersLimit}";
+    showMqsTeamList.value = true;
   }
+
   setMqsEmpEmailForm({required int index}) {
-    // editMqsEmpEmailIndex.value = index;
-    // emailController.text = mqsEmployeeEmailList[index].email;
-    // mqsCommonLogin.value = mqsEmployeeEmailList[index].mqsCommonLogin;
-    // isSignedUp.value = mqsEmployeeEmailList[index].isSignedUp;
-    // firstNameController.text = mqsEmployeeEmailList[index].firstname;
-    // lastNameController.text = mqsEmployeeEmailList[index].lastname;
-    // showMqsEmpEmailList.value = true;
+    editMqsEmpEmailIndex.value = index;
+    employeeEmailController.text = mqsEmployeeEmailList[index].mqsEmployeeEmail;
+
+    employeeNameController.text = mqsEmployeeEmailList[index].mqsEmployeeName;
+
+    showMqsEmpEmailList.value = true;
   }
 
   editMqsEmpEmail() {
-    // mqsEmployeeEmailList[editMqsEmpEmailIndex.value].email =
-    //     emailController.text.trim();
-    // mqsEmployeeEmailList[editMqsEmpEmailIndex.value].mqsCommonLogin =
-    //     mqsCommonLogin.value;
-    // mqsEmployeeEmailList[editMqsEmpEmailIndex.value].isSignedUp =
-    //     isSignedUp.value;
-    // mqsEmployeeEmailList[editMqsEmpEmailIndex.value].firstname =
-    //     firstNameController.text;
-    // mqsEmployeeEmailList[editMqsEmpEmailIndex.value].lastname =
-    //     lastNameController.text.trim();
-    // clearMqsEmpEmailFields();
-    // editMqsEmpEmailIndex.value = -1;
-    // showMqsEmpEmailList.value = false;
+    mqsEmployeeEmailList[editMqsEmpEmailIndex.value].mqsEmployeeName =
+        employeeNameController.text.trim();
+    mqsEmployeeEmailList[editMqsEmpEmailIndex.value].mqsEmployeeEmail =
+        employeeEmailController.text.trim();
+
+    clearMqsEmpEmailFields();
+    editMqsEmpEmailIndex.value = -1;
+    showMqsEmpEmailList.value = false;
   }
 
   deleteMqsEmpEmial({required int index}) {
@@ -363,7 +369,8 @@ class DashboardController extends GetxController {
         final docRef = FirebaseStorageService.i.enterprise.doc().id;
         final enterprise = EnterpriseModel(
           mqsEnterprisePOCs: MqsEnterprisePOCs(
-            mqsEnterpriseID: docRef,
+            mqsEnterpriseID:
+                isEditEnterprise.value ? enterpriseId.value : docRef,
             mqsEnterpriseName: pocNameController.text.trim(),
             mqsEnterpriseEmail: pocEmailController.text.trim(),
             mqsEnterprisePhoneNumber: pocPhoneNumberController.text,
@@ -371,10 +378,10 @@ class DashboardController extends GetxController {
             mqsEnterpriseWebsite: pocWebsiteController.text,
             mqsEnterpriseAddress: pocAddressController.text.trim(),
             mqsEnterprisePincode: pocPinCodeController.text.trim(),
-            mqsIsSignUp: isSignedUp.value,
+            mqsIsSignUp: false,
           ),
           mqsEnterpriseCode: mqsEnterpriseCodeController.text,
-          mqsIsTeam: isTeam.value,
+          mqsIsTeam: mqsTeamList.isNotEmpty ? true : false,
           mqsTeamList: mqsTeamList,
           mqsEmployeeList: mqsEmployeeEmailList,
           mqsEnterprisePOCsSubscriptionDetails:
@@ -382,10 +389,8 @@ class DashboardController extends GetxController {
             mqsSubscriptionStatus: subscriptionStatusController.text.trim(),
             mqsSubscriptionActivePlan:
                 subscriptionActivePlanController.text.trim(),
-            mqsSubscriptionStartDate:
-                mqsSubscriptionStartDateController.text.trim(),
-            mqsSubscriptionExpiryDate:
-                mqsSubscriptionExpiryDateController.text.trim(),
+            mqsSubscriptionStartDate: startDate.value.trim(),
+            mqsSubscriptionExpiryDate: expiryDate.value.trim(),
           ),
           mqsCreatedTimestamp: DateTime.now().toIso8601String(),
           mqsUpdateTimestamp: DateTime.now().toIso8601String(),
@@ -393,12 +398,11 @@ class DashboardController extends GetxController {
 
         showLoader();
         if (isEditEnterprise.value) {
-          await FirebaseStorageService.i.editEnterprises(model: enterprise);
+          await FirebaseStorageService.i.editEnterprises(
+              enterprise: enterprise, docId: enterpriseId.value);
         } else {
           await FirebaseStorageService.i
               .addEnterprises(enterprise: enterprise, customId: docRef);
-
-          getEnterprises();
         }
         hideLoader();
         clearAllFields();
@@ -415,23 +419,46 @@ class DashboardController extends GetxController {
   }
 
   setEnterpriseForm({required int index}) {
-    // subscriptionController.text = enterpriseDetail.subscription;
-    // mqsEnterpriseCodeController.text = enterpriseDetail.mqsEnterpriseCode;
-    // mqsEnterpriseNameController.text = enterpriseDetail.mqsEnterpriseName;
-    // mqsSubscriptionExpiryDateController.text =
-    //     enterpriseDetail.mqsSubscriptionExpiryDate;
-    // mqsEmployeeEmailList.value = enterpriseDetail.mqsEmployeeEmailList;
-    // addressController.text =
-    //     enterpriseDetail.mqsEnterpriseLocationDetails.address;
-    // pinCodeController.text =
-    //     enterpriseDetail.mqsEnterpriseLocationDetails.pinCode;
-    // mqsEnterprisePOCs.value = enterpriseDetail.mqsEnterprisePOCs;
+    enterpriseId.value = enterpriseDetail.mqsEnterprisePOCs.mqsEnterpriseID;
+    mqsEnterpriseCodeController.text = enterpriseDetail.mqsEnterpriseCode;
+    pocNameController.text =
+        enterpriseDetail.mqsEnterprisePOCs.mqsEnterpriseName;
+
+    pocEmailController.text =
+        enterpriseDetail.mqsEnterprisePOCs.mqsEnterpriseEmail;
+    pocAddressController.text =
+        enterpriseDetail.mqsEnterprisePOCs.mqsEnterpriseAddress;
+    pocWebsiteController.text =
+        enterpriseDetail.mqsEnterprisePOCs.mqsEnterpriseWebsite;
+    pocTypeController.text =
+        enterpriseDetail.mqsEnterprisePOCs.mqsEnterpriseType;
+    pocPhoneNumberController.text =
+        enterpriseDetail.mqsEnterprisePOCs.mqsEnterprisePhoneNumber;
+    pocPinCodeController.text =
+        enterpriseDetail.mqsEnterprisePOCs.mqsEnterprisePincode;
+    subscriptionActivePlanController.text = enterpriseDetail
+        .mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionActivePlan;
+    subscriptionStatusController.text = enterpriseDetail
+        .mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionStatus;
+    mqsSubscriptionStartDateController.text = dateConvert(enterpriseDetail
+        .mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionStartDate);
+    mqsSubscriptionExpiryDateController.text = dateConvert(enterpriseDetail
+        .mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionExpiryDate);
+    startDate.value = DateTime.parse(enterpriseDetail
+            .mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionStartDate)
+        .toIso8601String();
+    expiryDate.value = DateTime.parse(enterpriseDetail
+            .mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionExpiryDate)
+        .toIso8601String();
+    mqsEmployeeEmailList.value = enterpriseDetail.mqsEmployeeList;
+    mqsTeamList.value = enterpriseDetail.mqsTeamList;
   }
 
   deleteEnterprise({required String docId}) async {
     try {
       showLoader();
       viewIndex.value = 0;
+      selectedViewIndex.value = (-1);
       isAddEnterprise.value = false;
       isEditEnterprise.value = false;
       await FirebaseStorageService.i.deleteEnterprises(docId: docId);
@@ -584,5 +611,129 @@ class DashboardController extends GetxController {
     } catch (e) {
       errorDialogWidget(msg: e.toString());
     } finally {}
+  }
+
+  bool checkEnterprisePOCsSubscriptionDetail() {
+    if (enterpriseDetail.mqsEnterprisePOCsSubscriptionDetails
+            .mqsSubscriptionStartDate.isEmpty &&
+        enterpriseDetail.mqsEnterprisePOCsSubscriptionDetails
+            .mqsSubscriptionExpiryDate.isEmpty &&
+        enterpriseDetail.mqsEnterprisePOCsSubscriptionDetails
+            .mqsSubscriptionActivePlan.isEmpty &&
+        enterpriseDetail.mqsEnterprisePOCsSubscriptionDetails
+            .mqsSubscriptionStatus.isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  String dateConvert(String date) {
+    if (date.isNotEmpty) {
+      final formattedDateTime = DateFormat(StringConfig.dashboard.dateYYYYMMDD)
+          .format(DateTime.parse(date));
+
+      return formattedDateTime;
+    } else {
+      return "";
+    }
+  }
+
+  Future<void> pickStartDateTime(
+      BuildContext context, TextEditingController controller) async {
+    DateTime? pickedDate = await showDatePicker(
+      initialEntryMode: DatePickerEntryMode.calendar,
+      context: context,
+      firstDate: DateTime(0),
+      lastDate: DateTime(3000),
+      initialDate: DateTime.now(),
+    );
+
+    if (pickedDate != null) {
+      TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+
+      if (pickedTime != null) {
+        final DateTime pickedDateTime = DateTime(
+          pickedDate.year,
+          pickedDate.month,
+          pickedDate.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        );
+
+        final formattedDateTime =
+            DateFormat(StringConfig.dashboard.dateYYYYMMDD)
+                .format(pickedDateTime);
+
+        mqsSubscriptionStartDateController.text = formattedDateTime;
+
+        startDate.value = pickedDateTime.toIso8601String();
+      }
+    }
+  }
+
+  Future<void> pickExpiryDateTime(
+      BuildContext context, TextEditingController controller) async {
+    // DateTime? date = await showDatePicker(
+    //   context: context,
+    //   firstDate: dashboardController.startDate.value.isNotEmpty
+    //       ? DateTime.parse(
+    //           dashboardController.startDate.value,
+    //         )
+    //       : DateTime.now(),
+    //   lastDate: DateTime(3000),
+    //   initialDate: dashboardController.startDate.value.isNotEmpty
+    //       ? DateTime.parse(
+    //           dashboardController.startDate.value,
+    //         )
+    //       : DateTime.now(),
+    // );
+    // if (date != null) {
+    //   dashboardController.mqsSubscriptionExpiryDateController.text =
+    //       '${date.day}-${date.month}-${date.year}';
+    //   dashb
+
+    DateTime? pickedDate = await showDatePicker(
+      initialEntryMode: DatePickerEntryMode.calendar,
+      context: context,
+      firstDate: startDate.value.isNotEmpty
+          ? DateTime.parse(
+              startDate.value,
+            )
+          : DateTime.now(),
+      lastDate: DateTime(3000),
+      initialDate: startDate.value.isNotEmpty
+          ? DateTime.parse(
+              startDate.value,
+            )
+          : DateTime.now(),
+    );
+
+    if (pickedDate != null) {
+      TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+
+      if (pickedTime != null) {
+        final DateTime pickedDateTime = DateTime(
+          pickedDate.year,
+          pickedDate.month,
+          pickedDate.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        );
+        final formattedDateTime =
+            DateFormat(StringConfig.dashboard.dateYYYYMMDD)
+                .format(pickedDateTime);
+
+        mqsSubscriptionExpiryDateController.text = formattedDateTime;
+
+        expiryDate.value = pickedDateTime.toIso8601String();
+      }
+    }
   }
 }

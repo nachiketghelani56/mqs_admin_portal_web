@@ -18,7 +18,7 @@ class CustomTextField extends StatelessWidget {
     this.readOnly = false,
     this.onTap,
     this.inputFormatters,
-    this.autofillHints,
+    this.autofillHints, this.suffix, this.keyboardType,
   });
 
   final TextEditingController controller;
@@ -32,6 +32,8 @@ class CustomTextField extends StatelessWidget {
   final Function()? onTap;
   final List<TextInputFormatter>? inputFormatters;
   final Iterable<String>? autofillHints;
+  final Widget? suffix;
+  final TextInputType? keyboardType;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +49,7 @@ class CustomTextField extends StatelessWidget {
           controller: controller,
           readOnly: readOnly,
           onTap: onTap,
+          keyboardType:keyboardType,
           obscureText: isObscure,
           obscuringCharacter: '•',
           style: FontTextStyleConfig.textFieldTextStyle
@@ -67,7 +70,7 @@ class CustomTextField extends StatelessWidget {
             enabledBorder: FontTextStyleConfig.borderDecoration,
             focusedErrorBorder: FontTextStyleConfig.borderDecoration,
             errorBorder: FontTextStyleConfig.borderDecoration,
-            suffixIcon: suffixIcon != null
+            suffixIcon:suffix ?? (suffixIcon != null
                 ? Container(
                     height: SizeConfig.size25,
                     width: SizeConfig.size25,
@@ -82,7 +85,7 @@ class CustomTextField extends StatelessWidget {
                       onSuffixIconTap!();
                     }
                   }).paddingOnly(right: SizeConfig.size20)
-                : null,
+                : null),
             contentPadding: const EdgeInsets.symmetric(
                 vertical: SizeConfig.size20, horizontal: SizeConfig.size20),
           ),

@@ -16,10 +16,10 @@ class EnterpriseDetailScreen extends StatelessWidget {
         padding: EdgeInsets.all(context.width > SizeConfig.size600
             ? SizeConfig.size50
             : SizeConfig.size15),
-        // child: Obx(
-        //   () =>
-        //       enterpriseDetailWidget(dashboardController: _dashboardController),
-        // ),
+        child: Obx(
+          () =>
+              enterpriseDetailWidget(dashboardController: _dashboardController),
+        ),
       ),
     );
   }

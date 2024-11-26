@@ -37,17 +37,17 @@ Widget enterpriseWidget(
                       child: Column(
                         children: [
                           enterpriseTableTitleWidget(context: context),
-                          // for (int i = dashboardController.offset.value;
-                          //     i < dashboardController.getMaxOffset();
-                          //     i++)
-                            // enterpriseTableRowWidget(
-                            //   isSelected: i ==
-                            //           dashboardController.viewIndex.value &&
-                            //       !dashboardController.isAddEnterprise.value,
-                            //   dashboardController: dashboardController,
-                            //   context: context,
-                            //   index: i,
-                            // ),
+                          for (int i = dashboardController.offset.value;
+                              i < dashboardController.getMaxOffset();
+                              i++)
+                            enterpriseTableRowWidget(
+                              isSelected: i ==
+                                      dashboardController.viewIndex.value &&
+                                  !dashboardController.isAddEnterprise.value,
+                              dashboardController: dashboardController,
+                              context: context,
+                              index: i,
+                            ),
                           enterpriseTableBottomWidget(
                               dashboardController: dashboardController),
                         ],
@@ -62,14 +62,14 @@ Widget enterpriseWidget(
               dashboardController.isAddEnterprise.value)) ...[
         SizeConfig.size20.width,
         Expanded(
-          child:
-          // dashboardController.isAddEnterprise.value ||
-          //         dashboardController.isEditEnterprise.value
-          //     ?
-          addEnterpriseWidget(
+          child: dashboardController.isAddEnterprise.value ||
+                  dashboardController.isEditEnterprise.value
+              ? addEnterpriseWidget(
                   dashboardController: dashboardController, context: context)
-              // : enterpriseDetailWidget(
-              //     dashboardController: dashboardController),
+              : dashboardController.selectedViewIndex.value > (-1)
+                  ? enterpriseDetailWidget(
+                      dashboardController: dashboardController)
+                  : Container(),
         ),
       ],
     ],

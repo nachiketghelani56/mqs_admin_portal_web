@@ -39,7 +39,7 @@ class Dashboard {
   final String subscription = "Subscription";
   final String enterSubscription = "Enter subscription";
   final String enterId = "Enter id";
-  final String enterCode = "Enter code";
+  final String enterCode = "Enter enterprise code";
   final String mqsEnterPriseName = "Enterprise Name";
   final String enterName = "Enter name";
   final String enterSubscriptionStatus = "Enter Subscription Status";
@@ -51,11 +51,13 @@ class Dashboard {
   final String mqsSubscriptionStartDate = "Subscription Start Date";
   final String enterExpiryDate = "Enter expiry date";
   final String enterStartDate = "Enter start date";
+  final String startDate = "Start date";
+  final String expiryDate = "Expiry date";
   final String mqsEmployeeEmailList = "Employee List";
   final String mqsTeamList = "Team List";
-  final String emailAddress = "Employee Email address";
-  final String teamEmailAddress = "Team Email address";
-  final String enterEmailAddress = "Enter email address";
+  final String emailAddress = "Employee Email";
+  final String teamEmailAddress = "Team Email";
+  final String enterEmailAddress = "Enter email";
   final String mqsCommonLogin = "Common Login";
   final String isEnable = "Is Enable";
   final String isSignedUp = "Is Signed Up";
@@ -81,6 +83,10 @@ class Dashboard {
   final String name = "Name";
   final String subscriptionStatus = "Subscription Status";
   final String subscriptionActivePlan = "Subscription Active Plan";
+  final String activePlan = "Active Plan";
+  final String status = "Status";
+  final String enterpriseEmail = "Enterprise email";
+  final String dateYYYYMMDD = "yyyy-MM-dd hh:mm a";
 
   final String type = "Type";
   final String phoneNumber = "Phone Number";
@@ -161,8 +167,8 @@ class RefExp {
 }
 
 class Validation {
-  final String plsEnterEmail = "Please enter email address";
-  final String plsEnterValidEmail = "Please enter valid email address";
+  final String plsEnterEmail = "Please enter email";
+  final String plsEnterValidEmail = "Please enter valid email";
   final String plsEnterPassword = "Please enter password";
   final String plsEnter = "Please enter ";
   final String expiryDateAfter = "Expiry date is after start date";

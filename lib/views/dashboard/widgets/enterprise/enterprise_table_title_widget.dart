@@ -10,18 +10,32 @@ Widget enterpriseTableTitleWidget({required BuildContext context}) {
     padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size26),
     child: Row(
       children: [
+        Expanded(
+          flex: SizeConfig.size2.toInt(),
+          child: Text(
+            StringConfig.dashboard.mqsEnterPriseName,
+            style: FontTextStyleConfig.textFieldTextStyle,
+          ),
+        ),
         if (context.width > SizeConfig.size900)
           Expanded(
-            flex: SizeConfig.size4.toInt(),
+            flex: SizeConfig.size2.toInt(),
             child: Text(
-              StringConfig.dashboard.mqsEnterPriseName,
+              StringConfig.dashboard.enterpriseEmail,
               style: FontTextStyleConfig.textFieldTextStyle,
             ),
           ),
         Expanded(
-          flex: SizeConfig.size4.toInt(),
+          flex: SizeConfig.size2.toInt(),
           child: Text(
             StringConfig.dashboard.mqsEnterPriseCode,
+            style: FontTextStyleConfig.textFieldTextStyle,
+          ),
+        ),
+        Expanded(
+          flex: SizeConfig.size2.toInt(),
+          child: Text(
+            StringConfig.dashboard.subscriptionStatus,
             style: FontTextStyleConfig.textFieldTextStyle,
           ),
         ),

@@ -5,12 +5,10 @@ import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/enterprise/add_mqs_emp_email_list_widget.dart';
-import 'package:mqs_admin_portal_web/views/dashboard/widgets/enterprise/add_mqs_enterprise_location_detail_widget.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/enterprise/add_mqs_enterprise_pocs_subscription_detail.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/enterprise/add_mqs_enterprise_pocs_widget.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/enterprise/add_mqs_team_list_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_button.dart';
-import 'package:mqs_admin_portal_web/widgets/custom_drop_down.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_text_field.dart';
 
 Widget addEnterpriseWidget(
@@ -34,47 +32,6 @@ Widget addEnterpriseWidget(
                   .copyWith(fontWeight: FontWeight.w600),
             ),
             SizeConfig.size24.height,
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: CustomTextField(
-                    controller: dashboardController.mqsEnterpriseCodeController,
-                    label: StringConfig.dashboard.mqsEnterPriseCode,
-                    hintText: StringConfig.dashboard.enterCode,
-                    validator: (p0) => Validator.emptyValidator(
-                        p0 ?? "", StringConfig.dashboard.mqsEnterPriseCode),
-                  ),
-                ),
-                SizeConfig.size24.width,
-                Expanded(
-                  child: CustomDropDown(
-                    label: StringConfig.dashboard.isTeam,
-                    value: dashboardController.isTeam.value,
-                    items: [
-                      DropdownMenuItem(
-                        value: true,
-                        child: Text(
-                          StringConfig.dashboard.trueText,
-                          style: FontTextStyleConfig.tableTextStyle,
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: false,
-                        child: Text(
-                          StringConfig.dashboard.falseText,
-                          style: FontTextStyleConfig.tableTextStyle,
-                        ),
-                      ),
-                    ],
-                    onChanged: (val) {
-                      dashboardController.isTeam.value = val;
-                    },
-                  ),
-                ),
-              ],
-            ),
-            SizeConfig.size34.height,
             addMqsEnterprisePOCsWidget(
                 dashboardController: dashboardController),
             SizeConfig.size34.height,
@@ -84,6 +41,14 @@ Widget addEnterpriseWidget(
             SizeConfig.size34.height,
             addMqsEnterprisePOCsSubscriptionDetailWidget(
                 dashboardController: dashboardController, context: context),
+            SizeConfig.size34.height,
+            CustomTextField(
+              controller: dashboardController.mqsEnterpriseCodeController,
+              label: StringConfig.dashboard.mqsEnterPriseCode,
+              hintText: StringConfig.dashboard.enterCode,
+              validator: (p0) => Validator.emptyValidator(
+                  p0 ?? "", StringConfig.dashboard.mqsEnterPriseCode),
+            ),
             SizeConfig.size34.height,
             Row(
               mainAxisAlignment: MainAxisAlignment.end,

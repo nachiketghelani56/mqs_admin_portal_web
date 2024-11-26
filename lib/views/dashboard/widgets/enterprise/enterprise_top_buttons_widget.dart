@@ -31,11 +31,6 @@ Widget enterpriseTopButtonsWidget(
             ),
             const Spacer(),
             SizeConfig.size12.width,
-            // CustomPrefixButton(
-            //   prefixIcon: ImageConfig.export,
-            //   btnText: StringConfig.dashboard.export,
-            //   onTap: () {},
-            // ),
             Container(
               height: SizeConfig.size46,
               decoration: FontTextStyleConfig.topOptionDecoration,
@@ -68,6 +63,10 @@ Widget enterpriseTopButtonsWidget(
               onTap: () {
                 dashboardController.isEditEnterprise.value = false;
                 dashboardController.isAddEnterprise.value = true;
+                dashboardController.showMqsEmpEmailList.value = false;
+                dashboardController.showMqsTeamList.value = false;
+                dashboardController.mqsEmployeeEmailList.clear();
+                dashboardController.mqsTeamList.clear();
                 dashboardController.clearAllFields();
                 if (context.width < SizeConfig.size1500) {
                   Get.toNamed(AppRoutes.addEnterprise);

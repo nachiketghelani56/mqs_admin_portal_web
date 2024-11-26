@@ -3,6 +3,7 @@ import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/models/circle_model.dart';
 import 'package:mqs_admin_portal_web/models/enterprise_model.dart';
 import 'package:mqs_admin_portal_web/models/user_iam_model.dart';
+import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
 
 class FirebaseStorageService {
   FirebaseStorageService._();
@@ -15,23 +16,36 @@ class FirebaseStorageService {
   Future<List<EnterpriseModel>> getEnterprises() async {
     QuerySnapshot<Object?> ent = await enterprise.get();
 
-    // Map the QuerySnapshot to your model
     final List<EnterpriseModel> enterprises = ent.docs.map((doc) {
-      // Access each document's data
       final data = doc.data() as Map<String, dynamic>;
-      // Convert the data to your model
       return EnterpriseModel.fromJson(data);
     }).toList();
 
     return enterprises;
-    // QuerySnapshot<Object?> ent = await enterprise.get();
-    //
-    // List<EnterpriseModel> entList =
-    //     ent.docs.map((e) => EnterpriseModel.fromJson(e.data() as Map<String, dynamic>)).toList();
+  }
+
+  Stream<List<EnterpriseModel>> getEnterpriseStream() {
+    return enterprise.snapshots().map((snapshot) {
+      return snapshot.docs
+          .map((doc) =>
+              EnterpriseModel.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+    });
   }
 
   listenToEnterpriseChange(Function(QuerySnapshot<Object?>)? onData) {
     enterprise.snapshots().listen((onData));
+  }
+
+  Future<void> editEnterprises(
+      {required String docId, required EnterpriseModel enterprise}) async {
+    try {
+      await FirebaseStorageService.i.enterprise
+          .doc(docId)
+          .set(enterprise.toJson(), SetOptions(merge: true));
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    }
   }
 
   Future<void> addEnterprises(
@@ -39,13 +53,6 @@ class FirebaseStorageService {
     await FirebaseStorageService.i.enterprise.doc(customId).set({
       ...enterprise.toJson(),
     });
-    // DocumentReference<Object?> doc = await enterprise.add(model.toJson());
-    // print("doc--->${doc}");
-    // await enterprise.doc(doc.id).update({'_id': doc.id});
-  }
-
-  Future editEnterprises({required EnterpriseModel model}) async {
-    // await enterprise.doc(model.id).update(model.toJson());
   }
 
   Future deleteEnterprises({required String docId}) async {

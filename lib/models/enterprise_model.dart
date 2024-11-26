@@ -23,8 +23,8 @@ class EnterpriseModel {
   factory EnterpriseModel.fromJson(Map<String, dynamic> json) {
     return EnterpriseModel(
       mqsEnterprisePOCs: MqsEnterprisePOCs.fromJson(json['mqsEnterprisePOCs']),
-      mqsEnterpriseCode: json['mqsEnterpriseCode'],
-      mqsIsTeam: json['mqsIsTeam'],
+      mqsEnterpriseCode: json['mqsEnterpriseCode'] ?? "",
+      mqsIsTeam: json['mqsIsTeam'] ?? false,
       mqsTeamList: (json['mqsTeamList'] as List)
           .map((team) => MqsTeam.fromJson(team))
           .toList(),
@@ -34,8 +34,8 @@ class EnterpriseModel {
       mqsEnterprisePOCsSubscriptionDetails:
           MqsEnterprisePOCsSubscriptionDetails.fromJson(
               json['mqsEnterprisePOCsSubscriptionDetails']),
-      mqsCreatedTimestamp: json['mqsCreatedTimestamp'],
-      mqsUpdateTimestamp: json['mqsUpdateTimestamp'],
+      mqsCreatedTimestamp: json['mqsCreatedTimestamp'] ?? "",
+      mqsUpdateTimestamp: json['mqsUpdateTimestamp'] ?? "",
     );
   }
 
@@ -80,15 +80,15 @@ class MqsEnterprisePOCs {
 
   factory MqsEnterprisePOCs.fromJson(Map<String, dynamic> json) {
     return MqsEnterprisePOCs(
-      mqsEnterpriseID: json['mqsEnterpriseID'],
-      mqsEnterpriseName: json['mqsEnterpriseName'],
-      mqsEnterpriseEmail: json['mqsEnterpriseEmail'],
-      mqsEnterprisePhoneNumber: json['mqsEnterprisePhoneNumber'],
-      mqsEnterpriseType: json['mqsEnterpriseType'],
-      mqsEnterpriseWebsite: json['mqsEnterpriseWebsite'],
-      mqsEnterpriseAddress: json['mqsEnterpriseAddress'],
-      mqsEnterprisePincode: json['mqsEnterprisePincode'],
-      mqsIsSignUp: json['mqsIsSignUp'],
+      mqsEnterpriseID: json['mqsEnterpriseID'] ?? "",
+      mqsEnterpriseName: json['mqsEnterpriseName'] ?? "",
+      mqsEnterpriseEmail: json['mqsEnterpriseEmail'] ?? "",
+      mqsEnterprisePhoneNumber: json['mqsEnterprisePhoneNumber'] ?? "",
+      mqsEnterpriseType: json['mqsEnterpriseType'] ?? "",
+      mqsEnterpriseWebsite: json['mqsEnterpriseWebsite'] ?? "",
+      mqsEnterpriseAddress: json['mqsEnterpriseAddress'] ?? "",
+      mqsEnterprisePincode: json['mqsEnterprisePincode'] ?? "",
+      mqsIsSignUp: json['mqsIsSignUp'] ?? false,
     );
   }
 
@@ -109,10 +109,10 @@ class MqsEnterprisePOCs {
 
 class MqsTeam {
   final String mqsTeamID;
-  final String mqsTeamName;
-  final String mqsTeamEmail;
-  final int mqsTeamMembersLimit;
-  final bool mqsIsEnable;
+  String mqsTeamName;
+  String mqsTeamEmail;
+  int mqsTeamMembersLimit;
+  bool mqsIsEnable;
 
   MqsTeam({
     required this.mqsTeamID,
@@ -124,11 +124,11 @@ class MqsTeam {
 
   factory MqsTeam.fromJson(Map<String, dynamic> json) {
     return MqsTeam(
-      mqsTeamID: json['mqsTeamID'],
-      mqsTeamName: json['mqsTeamName'],
-      mqsTeamEmail: json['mqsTeamEmail'],
-      mqsTeamMembersLimit: json['mqsTeamMembersLimit'],
-      mqsIsEnable: json['mqsIsEnable'],
+      mqsTeamID: json['mqsTeamID'] ?? "",
+      mqsTeamName: json['mqsTeamName'] ?? "",
+      mqsTeamEmail: json['mqsTeamEmail'] ?? "",
+      mqsTeamMembersLimit: json['mqsTeamMembersLimit'] ?? 0,
+      mqsIsEnable: json['mqsIsEnable'] ?? false,
     );
   }
 
@@ -141,16 +141,16 @@ class MqsTeam {
       'mqsIsEnable': mqsIsEnable,
     };
   }
-
-  int get uniqueKey => hashCode;
 }
 
 class MqsEmployee {
-  final String mqsEmployeeName;
-  final String mqsEmployeeEmail;
+  final String mqsEmployeeID;
+  String mqsEmployeeName;
+  String mqsEmployeeEmail;
   final bool mqsIsSignUp;
 
   MqsEmployee({
+    required this.mqsEmployeeID,
     required this.mqsEmployeeName,
     required this.mqsEmployeeEmail,
     required this.mqsIsSignUp,
@@ -158,14 +158,16 @@ class MqsEmployee {
 
   factory MqsEmployee.fromJson(Map<String, dynamic> json) {
     return MqsEmployee(
-      mqsEmployeeName: json['mqsEmployeeName'],
-      mqsEmployeeEmail: json['mqsEmployeeEmail'],
-      mqsIsSignUp: json['mqsIsSignUp'],
+      mqsEmployeeID: json['mqsEmployeeID'] ?? "",
+      mqsEmployeeName: json['mqsEmployeeName'] ?? "",
+      mqsEmployeeEmail: json['mqsEmployeeEmail'] ?? "",
+      mqsIsSignUp: json['mqsIsSignUp'] ?? false,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'mqsEmployeeID': mqsEmployeeID,
       'mqsEmployeeName': mqsEmployeeName,
       'mqsEmployeeEmail': mqsEmployeeEmail,
       'mqsIsSignUp': mqsIsSignUp,
@@ -189,10 +191,10 @@ class MqsEnterprisePOCsSubscriptionDetails {
   factory MqsEnterprisePOCsSubscriptionDetails.fromJson(
       Map<String, dynamic> json) {
     return MqsEnterprisePOCsSubscriptionDetails(
-      mqsSubscriptionStatus: json['mqsSubscriptionStatus'],
-      mqsSubscriptionActivePlan: json['mqsSubscriptionActivePlan'],
-      mqsSubscriptionStartDate: json['mqsSubscriptionStartDate'],
-      mqsSubscriptionExpiryDate: json['mqsSubscriptionExpiryDate'],
+      mqsSubscriptionStatus: json['mqsSubscriptionStatus'] ?? "",
+      mqsSubscriptionActivePlan: json['mqsSubscriptionActivePlan'] ?? "",
+      mqsSubscriptionStartDate: json['mqsSubscriptionStartDate'] ?? "",
+      mqsSubscriptionExpiryDate: json['mqsSubscriptionExpiryDate'] ?? "",
     );
   }
 

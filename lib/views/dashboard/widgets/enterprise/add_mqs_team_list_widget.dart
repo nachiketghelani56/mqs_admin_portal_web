@@ -6,7 +6,6 @@ import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_button.dart';
-import 'package:mqs_admin_portal_web/widgets/custom_drop_down.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_text_field.dart';
 import 'package:mqs_admin_portal_web/widgets/title_widget.dart';
 
@@ -21,6 +20,7 @@ Widget addMqsTeamListWidget(
           showAddIcon: true,
         ).tap(() {
           dashboardController.showMqsTeamList.value = true;
+          dashboardController.clearMqsTeamFields();
         }),
         if (dashboardController.showMqsTeamList.value) ...[
           SizeConfig.size34.height,
@@ -39,50 +39,60 @@ Widget addMqsTeamListWidget(
             validator: (p0) => Validator.emailValidator(p0 ?? ""),
           ),
           SizeConfig.size34.height,
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: CustomDropDown(
-                  label: StringConfig.dashboard.isEnable,
-                  value: dashboardController.isEnable.value,
-                  items: [
-                    DropdownMenuItem(
-                      value: true,
-                      child: Text(
-                        StringConfig.dashboard.trueText,
-                        style: FontTextStyleConfig.tableTextStyle,
-                      ),
-                    ),
-                    DropdownMenuItem(
-                      value: false,
-                      child: Text(
-                        StringConfig.dashboard.falseText,
-                        style: FontTextStyleConfig.tableTextStyle,
-                      ),
-                    ),
-                  ],
-                  onChanged: (val) {
-                    dashboardController.isEnable.value = val;
+          CustomTextField(
+            controller: dashboardController.teamMemberLimitController,
+            label: StringConfig.dashboard.teamMemberLimit,
+            hintText: StringConfig.dashboard.enterTeamMemberLimit,
+            validator: (p0) => Validator.emptyValidator(
+                p0 ?? "", StringConfig.dashboard.teamMemberLimit),
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+            ],
+            keyboardType: const TextInputType.numberWithOptions(
+                decimal: false, signed: false),
+            suffix: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  visualDensity:
+                      const VisualDensity(vertical: -SizeConfig.size4),
+                  padding: EdgeInsets.zero,
+                  icon: const Icon(Icons.arrow_drop_up),
+                  onPressed: () {
+                    int currentValue = dashboardController
+                            .teamMemberLimitController.text.isEmpty
+                        ? 0
+                        : int.parse(
+                            dashboardController.teamMemberLimitController.text);
+                    if (currentValue > 0) {
+                      currentValue++;
+                      dashboardController.teamMemberLimitController.text =
+                          (currentValue).toString();
+                    }
+                    // incrementing value
                   },
                 ),
-              ),
-              SizeConfig.size24.width,
-              Expanded(
-                child: CustomTextField(
-                  controller: dashboardController.teamMemberLimitController,
-                  label: StringConfig.dashboard.teamMemberLimit,
-                  hintText: StringConfig.dashboard.enterTeamMemberLimit,
-                  validator: (p0) => Validator.emptyValidator(
-                      p0 ?? "", StringConfig.dashboard.teamMemberLimit),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                  ],
+                IconButton(
+                  visualDensity: const VisualDensity(vertical: -4),
+                  padding: EdgeInsets.zero,
+                  icon: const Icon(Icons.arrow_drop_down),
+                  onPressed: () {
+                    int currentValue = dashboardController
+                            .teamMemberLimitController.text.isEmpty
+                        ? 0
+                        : int.parse(
+                            dashboardController.teamMemberLimitController.text);
+                    if (currentValue > 1) {
+                      currentValue--;
+                      dashboardController.teamMemberLimitController.text =
+                          (currentValue).toString();
+                    }
+                  },
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-
           SizeConfig.size18.height,
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -108,7 +118,7 @@ Widget addMqsTeamListWidget(
                       : StringConfig.dashboard.add,
                   onTap: () {
                     if (dashboardController.entTeamFormKey.currentState
-                        ?.validate() ??
+                            ?.validate() ??
                         false) {
                       if (dashboardController.editMqsTeamIndex.value >= 0) {
                         dashboardController.editMqsTeam();
@@ -158,25 +168,21 @@ Widget addMqsTeamListWidget(
                     style: FontTextStyleConfig.tableBottomTextStyle,
                   ),
                 ),
-
                 const Expanded(child: SizedBox()),
               ],
             ),
           ),
-          for (int i = 0;
-          i < dashboardController.mqsTeamList.length;
-          i++)
+          for (int i = 0; i < dashboardController.mqsTeamList.length; i++)
             Container(
               height: SizeConfig.size55,
               padding:
-              const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
-              decoration:
-              i == dashboardController.mqsTeamList.length - 1
+                  const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
+              decoration: i == dashboardController.mqsTeamList.length - 1
                   ? FontTextStyleConfig.contentDecoration.copyWith(
-                borderRadius: const BorderRadius.vertical(
-                  bottom: Radius.circular(SizeConfig.size12),
-                ),
-              )
+                      borderRadius: const BorderRadius.vertical(
+                        bottom: Radius.circular(SizeConfig.size12),
+                      ),
+                    )
                   : FontTextStyleConfig.contentDecoration,
               child: Row(
                 children: [
@@ -212,7 +218,6 @@ Widget addMqsTeamListWidget(
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-
                   Expanded(
                     child: PopupMenuButton<int>(
                       icon: const Icon(
@@ -230,8 +235,8 @@ Widget addMqsTeamListWidget(
                       itemBuilder: (context) {
                         return [
                           for (int i = 0;
-                          i < dashboardController.options.length;
-                          i++)
+                              i < dashboardController.options.length;
+                              i++)
                             PopupMenuItem<int>(
                               value: i,
                               child: Container(
@@ -251,8 +256,8 @@ Widget addMqsTeamListWidget(
                                         style: FontTextStyleConfig
                                             .tableTextStyle
                                             .copyWith(
-                                            color: dashboardController
-                                                .options[i].color),
+                                                color: dashboardController
+                                                    .options[i].color),
                                       ),
                                     ),
                                   ],

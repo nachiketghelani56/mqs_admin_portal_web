@@ -5,7 +5,6 @@ import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_button.dart';
-import 'package:mqs_admin_portal_web/widgets/custom_drop_down.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_text_field.dart';
 import 'package:mqs_admin_portal_web/widgets/title_widget.dart';
 
@@ -20,6 +19,7 @@ Widget addMqsEmpEmailListWidget(
           showAddIcon: true,
         ).tap(() {
           dashboardController.showMqsEmpEmailList.value = true;
+          dashboardController.clearMqsEmpEmailFields();
         }),
         if (dashboardController.showMqsEmpEmailList.value) ...[
           SizeConfig.size34.height,
@@ -36,47 +36,13 @@ Widget addMqsEmpEmailListWidget(
             ],
           ),
           SizeConfig.size34.height,
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: CustomTextField(
-                  controller: dashboardController.employeeNameController,
-                  label: StringConfig.dashboard.employeeName,
-                  hintText: StringConfig.dashboard.enterEmployeeName,
-                  validator: (p0) => Validator.emptyValidator(
-                      p0 ?? "", StringConfig.dashboard.employeeName),
-                ),
-              ),
-              SizeConfig.size24.width,
-              Expanded(
-                child: CustomDropDown(
-                  label: StringConfig.dashboard.isSignedUp,
-                  value: dashboardController.isSignedUp.value,
-                  items: [
-                    DropdownMenuItem(
-                      value: true,
-                      child: Text(
-                        StringConfig.dashboard.trueText,
-                        style: FontTextStyleConfig.tableTextStyle,
-                      ),
-                    ),
-                    DropdownMenuItem(
-                      value: false,
-                      child: Text(
-                        StringConfig.dashboard.falseText,
-                        style: FontTextStyleConfig.tableTextStyle,
-                      ),
-                    ),
-                  ],
-                  onChanged: (val) {
-                    dashboardController.isSignedUp.value = val;
-                  },
-                ),
-              ),
-            ],
+          CustomTextField(
+            controller: dashboardController.employeeNameController,
+            label: StringConfig.dashboard.employeeName,
+            hintText: StringConfig.dashboard.enterEmployeeName,
+            validator: (p0) => Validator.emptyValidator(
+                p0 ?? "", StringConfig.dashboard.employeeName),
           ),
-
           SizeConfig.size18.height,
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -131,7 +97,6 @@ Widget addMqsEmpEmailListWidget(
                     style: FontTextStyleConfig.tableBottomTextStyle,
                   ),
                 ),
-
                 Expanded(
                   flex: SizeConfig.size3.toInt(),
                   child: Text(
@@ -146,7 +111,6 @@ Widget addMqsEmpEmailListWidget(
                     style: FontTextStyleConfig.tableBottomTextStyle,
                   ),
                 ),
-
                 const Expanded(child: SizedBox()),
               ],
             ),
@@ -171,16 +135,17 @@ Widget addMqsEmpEmailListWidget(
                   Expanded(
                     flex: SizeConfig.size4.toInt(),
                     child: Text(
-                      dashboardController.mqsEmployeeEmailList[i].mqsEmployeeEmail,
+                      dashboardController
+                          .mqsEmployeeEmailList[i].mqsEmployeeEmail,
                       style: FontTextStyleConfig.tableContentTextStyle,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-
                   Expanded(
                     flex: SizeConfig.size3.toInt(),
                     child: Text(
-                      dashboardController.mqsEmployeeEmailList[i].mqsEmployeeName,
+                      dashboardController
+                          .mqsEmployeeEmailList[i].mqsEmployeeName,
                       style: FontTextStyleConfig.tableContentTextStyle,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -193,7 +158,6 @@ Widget addMqsEmpEmailListWidget(
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-
                   Expanded(
                     child: PopupMenuButton<int>(
                       icon: const Icon(
