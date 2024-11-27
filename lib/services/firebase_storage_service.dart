@@ -66,6 +66,15 @@ class FirebaseStorageService {
     return userList;
   }
 
+  Stream<List<UserIAMModel>> getUserStream() {
+    return user.snapshots().map((snapshot) {
+      return snapshot.docs
+          .map((doc) =>
+              UserIAMModel.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+    });
+  }
+
   listenToUserChange(Function(QuerySnapshot<Object?>)? onData) {
     user.snapshots().listen((onData));
   }

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/controller/reporting_controller.dart';
+import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/widgets/custom_range_dialog.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_button.dart';
 
 Widget authSummaryWidget(
@@ -14,58 +15,82 @@ Widget authSummaryWidget(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                StringConfig.reporting.authSummary,
-                style: FontTextStyleConfig.cardTitleTextStyle,
-              ),
-            ),
-            SizedBox(
-              width: SizeConfig.size124,
-              child: CustomButton(
-                isSelected: false,
-                btnText: StringConfig.dashboard.export,
-                onTap: () {},
-              ),
-            ),
-            SizeConfig.size12.width,
-            SizedBox(
-              width: SizeConfig.size55,
-              child: CustomButton(
-                isSelected: false,
-                onTap: () {},
-                onTapDown: (details) {
-                  final offset = details.globalPosition;
-                  showMenu(
-                      context: context,
-                      position: RelativeRect.fromLTRB(
-                        offset.dx,
-                        offset.dy,
-                        context.width - offset.dx,
-                        context.height - offset.dy,
-                      ),
-                      items: [
-                        PopupMenuItem(
-                          child: Text(StringConfig.reporting.lastDay),
-                        ),
-                        PopupMenuItem(
-                          child: Text(StringConfig.reporting.lastWeek),
-                        ),
-                        PopupMenuItem(
-                          child: Text(StringConfig.reporting.lastMonth),
-                        ),
-                      ]);
-                },
-                child: Image.asset(
-                  ImageConfig.filterNew,
-                  height: SizeConfig.size28,
-                  width: SizeConfig.size28,
+        Obx(
+          () => Row(
+            children: [
+              Expanded(
+                child: Text(
+                  '${StringConfig.reporting.authSummary} ${reportingController.authFilter.value.isNotEmpty ? "(${reportingController.authFilter.value})" : ""}',
+                  style: FontTextStyleConfig.cardTitleTextStyle,
                 ),
               ),
-            ),
-          ],
+              SizedBox(
+                width: SizeConfig.size124,
+                child: CustomButton(
+                  isSelected: false,
+                  btnText: StringConfig.dashboard.export,
+                  onTap: () {
+                    reportingController.exportAuthSummary();
+                  },
+                ),
+              ),
+              PopupMenuButton(
+                icon: Container(
+                  height: SizeConfig.size50,
+                  width: SizeConfig.size55,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: ColorConfig.primaryColor),
+                    borderRadius: BorderRadius.circular(SizeConfig.size14),
+                  ),
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    ImageConfig.filterNew,
+                    height: SizeConfig.size28,
+                    width: SizeConfig.size28,
+                  ),
+                ),
+                onSelected: (value) {
+                  if (value == StringConfig.reporting.customRange) {
+                    reportingController.startDateController.clear();
+                    reportingController.endDateController.clear();
+                    customRangeDialog(
+                      context: context,
+                      reportingController: reportingController,
+                      type: StringConfig.reporting.authSummary,
+                    );
+                  } else {
+                    reportingController.authFilter.value = value;
+                    reportingController.filterAuth();
+                  }
+                },
+                itemBuilder: (context) {
+                  return [
+                    for (int i = 0;
+                        i < reportingController.filterOpts.length;
+                        i++)
+                      PopupMenuItem(
+                        value: reportingController.filterOpts[i],
+                        child: Text(
+                          reportingController.filterOpts[i],
+                          style: FontTextStyleConfig.fieldTextStyle,
+                        ),
+                      ),
+                  ];
+                },
+              ),
+              if (reportingController.authFilter.isNotEmpty)
+                IconButton(
+                  onPressed: () {
+                    reportingController.authFilter.value = '';
+                    reportingController.getAuthSummary();
+                  },
+                  icon: const Icon(
+                    Icons.refresh,
+                    color: ColorConfig.primaryColor,
+                  ),
+                ),
+            ],
+          ),
         ),
         SizeConfig.size24.height,
         Row(

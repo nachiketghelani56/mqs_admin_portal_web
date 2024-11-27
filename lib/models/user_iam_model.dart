@@ -5,6 +5,7 @@ class UserIAMModel {
   final bool isEnterpriseUser;
   final String isFirebaseUserId;
   final String isRegister;
+  final bool isUserActive;
   final String mqsCreatedTimestamp;
   final String about;
   final bool aboutValue;
@@ -32,6 +33,7 @@ class UserIAMModel {
     required this.isEnterpriseUser,
     required this.isFirebaseUserId,
     required this.isRegister,
+    required this.isUserActive,
     required this.mqsCreatedTimestamp,
     required this.about,
     required this.aboutValue,
@@ -58,6 +60,7 @@ class UserIAMModel {
         isEnterpriseUser = json['isEnterPriseUser'] ?? false,
         isFirebaseUserId = json['isFirebaseUserID'] ?? "",
         isRegister = json['isRegister'] ?? "",
+        isUserActive = json['isUserActive'] ?? false,
         mqsCreatedTimestamp = json['mqsCreatedTimestamp'] ?? "",
         about = json['About'] ?? "",
         aboutValue = json['AboutValue'] ?? false,
@@ -147,6 +150,15 @@ class CheckInModel {
         id = json['id'] ?? "",
         mqsCINValue = json['mqsCINValue'] ?? 0,
         mqsTimestamp = json['mqsTimestamp'] ?? "";
+
+  Map<String, dynamic> toJson() {
+    return {
+      'checkInScore': checkInScore,
+      'id': id,
+      'mqsCINValue': mqsCINValue,
+      'mqsTimestamp': mqsTimestamp,
+    };
+  }
 }
 
 class DemographicModel {
@@ -159,6 +171,13 @@ class DemographicModel {
   DemographicModel.fromJson(Map json)
       : currentSelectedAnswer = json['currentSelectedAnswer'] ?? "",
         selectedIndex = json['selectedIndex'] ?? 0;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'currentSelectedAnswer': currentSelectedAnswer,
+      'selectedIndex': selectedIndex,
+    };
+  }
 }
 
 class ScenesModel {
@@ -193,6 +212,20 @@ class ScenesModel {
         mqsTimeStamp = json['mqsTimeStamp'] ?? "",
         mqsUserOBRegDate = json['mqsUserOBRegDate'] ?? "",
         mqsUserOBScenesScore = json['mqsUserOBScenesScore'] ?? 0;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'mqsSceneID': mqsSceneID,
+      'mqsSceneOptionGrScore': mqsSceneOptionGrScore,
+      'mqsSceneOptionText': mqsSceneOptionText,
+      'mqsSceneOptionWeight': mqsSceneOptionWeight,
+      'mqsSceneStScore': mqsSceneStScore,
+      'mqsSceneStmt': mqsSceneStmt,
+      'mqsTimeStamp': mqsTimeStamp,
+      'mqsUserOBRegDate': mqsUserOBRegDate,
+      'mqsUserOBScenesScore': mqsUserOBScenesScore,
+    };
+  }
 }
 
 class WOLModel {
@@ -224,4 +257,17 @@ class WOLModel {
         relationship = json['relationship'] ?? 0,
         social = json['social'] ?? 0,
         work = json['work'] ?? 0;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'family': family,
+      'finances': finances,
+      'fun': fun,
+      'health': health,
+      'purpose': purpose,
+      'relationship': relationship,
+      'social': social,
+      'work': work,
+    };
+  }
 }

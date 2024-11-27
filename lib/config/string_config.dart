@@ -77,9 +77,10 @@ class Dashboard {
   final String enterWebsite = "Enter website";
   final String pinCode = "Pin code";
   final String enterPinCode = "Enter pin code";
-  final String enterType= "Enter type";
+  final String enterType = "Enter type";
   final String mqsEnterprisePOCs = "Enterprise POCs";
-  final String mqsEnterprisePOCsSubscriptionDetail = "Enterprise POCs Subscription Detail";
+  final String mqsEnterprisePOCsSubscriptionDetail =
+      "Enterprise POCs Subscription Detail";
   final String name = "Name";
   final String subscriptionStatus = "Subscription Status";
   final String subscriptionActivePlan = "Subscription Active Plan";
@@ -268,6 +269,31 @@ class Reporting {
   final String lastDay = "Last day";
   final String lastWeek = "Last week";
   final String lastMonth = "Last month";
+  final String customRange = "Custom range";
+  final String startDate = "Start Date";
+  final String endDate = "End Date";
+  final String postTitle = "Post Title";
+  final String postContent = "Post Content";
+  final String postTime = "Post Time";
+  final String postViews = "Post Views";
+  final String userIsGuide = "User is Guide";
+  final String isMainPost = "Is Main Post";
+  final String isFlag = "Is Flag";
+  final String flagName = "Flag Name";
+  final String postReplies = "Post Replies";
+  final String hashTags = "Hash Tags";
+  final String creationDate = "Creation Date";
+  final String enterpriseUser = "Enterprise User";
+  final String firebaseUserId = "Firebase User ID";
+  final String mongoDbUserId = "Mongo DB User ID";
+  final String subscriptionActivePlan = "Subscription Active Plan";
+  final String subscriptionStatus = "Subscripion Status";
+  final String subscriptionPlatform = "Subscription Platform";
+  final String subscriptionExpiryDate = "Subscription Expiry Date";
+  final String obCheckIn = "OB Check In";
+  final String obDemographic = "OB Demographic";
+  final String obScenes = "OB Scenes";
+  final String obWOL = "OB WOL";
 }
 
 class Home {
