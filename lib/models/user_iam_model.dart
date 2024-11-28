@@ -5,7 +5,7 @@ class UserIAMModel {
   final bool isEnterpriseUser;
   final String isFirebaseUserId;
   final String isRegister;
-  final bool isUserActive;
+  final bool mqsIsUserActive;
   final String mqsCreatedTimestamp;
   final String about;
   final bool aboutValue;
@@ -33,7 +33,7 @@ class UserIAMModel {
     required this.isEnterpriseUser,
     required this.isFirebaseUserId,
     required this.isRegister,
-    required this.isUserActive,
+    required this.mqsIsUserActive,
     required this.mqsCreatedTimestamp,
     required this.about,
     required this.aboutValue,
@@ -60,7 +60,7 @@ class UserIAMModel {
         isEnterpriseUser = json['isEnterPriseUser'] ?? false,
         isFirebaseUserId = json['isFirebaseUserID'] ?? "",
         isRegister = json['isRegister'] ?? "",
-        isUserActive = json['isUserActive'] ?? false,
+        mqsIsUserActive = json['mqsIsUserActive'] ?? false,
         mqsCreatedTimestamp = json['mqsCreatedTimestamp'] ?? "",
         about = json['About'] ?? "",
         aboutValue = json['AboutValue'] ?? false,

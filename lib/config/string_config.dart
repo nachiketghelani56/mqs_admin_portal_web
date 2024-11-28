@@ -251,10 +251,10 @@ class Reporting {
   final String acceptance = "Acceptance";
   final String aptitude = "Aptitude";
   final String adoption = "Adoption";
-  final String wellAboveDrivers = "WellAbove Drivers";
-  final String trainingProgram = "Training Program";
-  final String leadershipSupport = "Leadership Support";
-  final String recognitionProgram = "Recognition Program";
+  final String onboardingSummary = "Onboarding Summary";
+  final String completed = "Completed";
+  final String partialCompletion = "Partial Completion";
+  final String skipped = "Skipped";
   final String may = "May";
   final String june = "June";
   final String july = "July";
@@ -294,6 +294,19 @@ class Reporting {
   final String obDemographic = "OB Demographic";
   final String obScenes = "OB Scenes";
   final String obWOL = "OB WOL";
+  final String users = "Users";
+  final String subscriptionSummary = "Subscription Summary";
+  final String active = "Active";
+  final String purchased = "Purchased";
+  final String cancelled = "Cancelled";
+  final String appSpecificSharedSecret = "App Specific Shared Secret";
+  final String expiryDate = "Expiry Date";
+  final String localVerificationData = "Local Verification Data";
+  final String packageName = "Package Name";
+  final String purchaseId = "Purchase ID";
+  final String serverVerificationData = "Server Verification Data";
+  final String source = "Source";
+  final String transactionId = "Transaction ID";
 }
 
 class Home {

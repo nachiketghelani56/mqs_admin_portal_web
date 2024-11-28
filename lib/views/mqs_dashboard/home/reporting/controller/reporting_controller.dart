@@ -24,11 +24,17 @@ class ReportingController extends GetxController {
     StringConfig.reporting.team: ColorConfig.bullet3Color,
     StringConfig.reporting.employees: ColorConfig.bullet4Color,
   };
-  Map<String, Color> circleChartOpts = {
-    StringConfig.reporting.trainingProgram: ColorConfig.card3TextColor,
-    StringConfig.reporting.leadershipSupport: ColorConfig.card2TextColor,
-    StringConfig.reporting.recognitionProgram: ColorConfig.card1TextColor,
-  };
+  Map<String, Map<Color, RxInt>> get circleChartOpts => {
+        StringConfig.reporting.completed: {
+          ColorConfig.card3TextColor: completedOBUsers
+        },
+        StringConfig.reporting.partialCompletion: {
+          ColorConfig.card2TextColor: partialCompletedOBUsers
+        },
+        StringConfig.reporting.skipped: {
+          ColorConfig.card1TextColor: skippedOBUsers
+        },
+      };
   RxInt optionIndex = 0.obs;
   RxList<ChartModel> indicatorCharData = [
     ChartModel(StringConfig.reporting.advocacy, 6),
@@ -45,26 +51,40 @@ class ReportingController extends GetxController {
   ].obs;
   RxString circleFilter = ''.obs, authFilter = ''.obs;
   RxInt totalRegisteredUsers = 0.obs,
+      activeUsers = 0.obs,
+      inactiveUsers = 0.obs,
       totalCircles = 0.obs,
       featuredCircles = 0.obs,
-      flaggedCircles = 0.obs;
+      flaggedCircles = 0.obs,
+      completedOBUsers = 0.obs,
+      partialCompletedOBUsers = 0.obs,
+      skippedOBUsers = 0.obs;
   final TextEditingController startDateController = TextEditingController();
   final TextEditingController endDateController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  RxDouble completedOB = 0.0.obs,
+      partialCompletedOB = 0.0.obs,
+      skippedOB = 0.0.obs;
 
   @override
   onInit() {
-    getAuthSummary();
+    getAuthAndOBSummary();
     getCircleSummary();
     super.onInit();
   }
 
-  getAuthSummary() async {
+  getAuthAndOBSummary() async {
     try {
       List<UserIAMModel> users = await FirebaseStorageService.i.getUsers();
       totalRegisteredUsers.value = users.length;
+      activeUsers.value = users.where((e) => e.mqsIsUserActive).length;
+      inactiveUsers.value = users.where((e) => !e.mqsIsUserActive).length;
+      getOBSummary(users: users);
       FirebaseStorageService.i.getUserStream().listen((data) {
         totalRegisteredUsers.value = data.length;
+        activeUsers.value = data.where((e) => e.mqsIsUserActive).length;
+        inactiveUsers.value = data.where((e) => !e.mqsIsUserActive).length;
+        getOBSummary(users: data);
       });
     } catch (e) {
       errorDialogWidget(msg: e.toString());
@@ -129,7 +149,7 @@ class ReportingController extends GetxController {
             model.firstName,
             model.lastName,
             model.mqsCreatedTimestamp.isNotEmpty
-                ? DateFormat('dd/MM/yyyy')
+                ? DateFormat('dd/MM/yyyy hh:mm a')
                     .format(DateTime.parse(model.mqsCreatedTimestamp))
                 : "",
             "${model.isEnterpriseUser}",
@@ -139,7 +159,7 @@ class ReportingController extends GetxController {
             model.mqsUserSubscriptionStatus,
             model.mqsSubscriptionPlatform,
             model.mqsExpiryDate.isNotEmpty
-                ? DateFormat('dd/MM/yyyy')
+                ? DateFormat('dd/MM/yyyy hh:mm a')
                     .format(DateTime.parse(model.mqsExpiryDate))
                 : "",
             jsonEncode(model.onboardingModel.checkInValue
@@ -375,6 +395,32 @@ class ReportingController extends GetxController {
         mimeType: MimeType.csv,
         name: StringConfig.reporting.circleSummary,
       );
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    } finally {}
+  }
+
+  getOBSummary({required List<UserIAMModel> users}) async {
+    try {
+      completedOBUsers.value = users
+          .where((e) =>
+              e.onboardingModel.checkInValue.isNotEmpty &&
+              e.onboardingModel.demoGraphicValue.isNotEmpty &&
+              e.onboardingModel.scenesValue.isNotEmpty)
+          .toList()
+          .length;
+      skippedOBUsers.value = users
+          .where((e) =>
+              e.onboardingModel.checkInValue.isEmpty &&
+              e.onboardingModel.demoGraphicValue.isEmpty &&
+              e.onboardingModel.scenesValue.isEmpty)
+          .toList()
+          .length;
+      partialCompletedOBUsers.value =
+          users.length - (completedOBUsers.value + skippedOBUsers.value);
+      completedOB.value = completedOBUsers.value / users.length;
+      skippedOB.value = skippedOBUsers.value / users.length;
+      partialCompletedOB.value = partialCompletedOBUsers.value / users.length;
     } catch (e) {
       errorDialogWidget(msg: e.toString());
     } finally {}

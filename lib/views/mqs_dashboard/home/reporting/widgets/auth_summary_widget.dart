@@ -82,7 +82,7 @@ Widget authSummaryWidget(
                 IconButton(
                   onPressed: () {
                     reportingController.authFilter.value = '';
-                    reportingController.getAuthSummary();
+                    reportingController.getAuthAndOBSummary();
                   },
                   icon: const Icon(
                     Icons.refresh,
@@ -135,10 +135,12 @@ Widget authSummaryWidget(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      '0',
-                      style: FontTextStyleConfig.cardMainTextStyle
-                          .copyWith(color: ColorConfig.card2TextColor),
+                    Obx(
+                      () => Text(
+                        '${reportingController.activeUsers.value}',
+                        style: FontTextStyleConfig.cardMainTextStyle
+                            .copyWith(color: ColorConfig.card2TextColor),
+                      ),
                     ),
                     SizeConfig.size12.height,
                     Text(
@@ -164,10 +166,12 @@ Widget authSummaryWidget(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      '0',
-                      style: FontTextStyleConfig.cardMainTextStyle
-                          .copyWith(color: ColorConfig.card3TextColor),
+                    Obx(
+                      () => Text(
+                        '${reportingController.inactiveUsers.value}',
+                        style: FontTextStyleConfig.cardMainTextStyle
+                            .copyWith(color: ColorConfig.card3TextColor),
+                      ),
                     ),
                     SizeConfig.size12.height,
                     Text(
