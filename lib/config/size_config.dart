@@ -1,4 +1,5 @@
 class SizeConfig {
+  static const double size1900 = 1900;
   static const double size1885 = 1885;
   static const double size1800 = 1800;
   static const double size1500 = 1500;

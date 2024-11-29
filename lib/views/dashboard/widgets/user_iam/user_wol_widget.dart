@@ -21,7 +21,7 @@ Widget userWOLWidget({required DashboardController dashboardController}) {
           key: StringConfig.dashboard.family,
           value:
               "${dashboardController.userDetail.onboardingModel.wOLValue.family}",
-          topBorder: true,
+          isFirst: true,
         ),
         keyValueRowWidget(
           key: StringConfig.dashboard.finance,
@@ -57,6 +57,7 @@ Widget userWOLWidget({required DashboardController dashboardController}) {
           key: StringConfig.dashboard.work,
           value:
               "${dashboardController.userDetail.onboardingModel.wOLValue.work}",
+          isLast: true,
         ),
       ],
     ],

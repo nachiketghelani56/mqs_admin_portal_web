@@ -10,7 +10,8 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({super.key, required this.scaffoldKey});
 
   final HomeController _homeController = Get.put(HomeController());
-  final MqsDashboardController _mqsDashboardController = Get.put(MqsDashboardController());
+  final MqsDashboardController _mqsDashboardController =
+      Get.put(MqsDashboardController());
   final GlobalKey<ScaffoldState> scaffoldKey;
 
   @override
@@ -23,7 +24,9 @@ class HomeScreen extends StatelessWidget {
               homeController: _homeController,
               context: context,
               scaffoldKey: scaffoldKey),
-          homeOptionsWidget(homeController: _homeController, mqsDashboardController :_mqsDashboardController)
+          homeOptionsWidget(
+                  homeController: _homeController,
+                  mqsDashboardController: _mqsDashboardController)
               .paddingAll(SizeConfig.size40),
         ],
       ),

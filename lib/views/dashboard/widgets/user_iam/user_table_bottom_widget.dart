@@ -7,7 +7,15 @@ Widget userTableBottomWidget(
     {required DashboardController dashboardController}) {
   return Container(
     height: SizeConfig.size76,
-    decoration: FontTextStyleConfig.tableBottomDecoration,
+    decoration: FontTextStyleConfig.tableBottomDecoration.copyWith(
+      border: Border(
+        bottom: BorderSide.none,
+        top: BorderSide(
+            color: ColorConfig.labelColor.withOpacity(SizeConfig.size0point4)),
+        left: BorderSide.none,
+        right: BorderSide.none,
+      ),
+    ),
     padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size26),
     child: Row(
       children: [
@@ -18,7 +26,7 @@ Widget userTableBottomWidget(
         SizeConfig.size5.width,
         const Spacer(),
         Text(
-          '${dashboardController.offset.value + 1}-${dashboardController.getMaxOffset()} ${StringConfig.dashboard.of} ${dashboardController.users.length}',
+          '${dashboardController.offset.value + 1}-${dashboardController.getMaxOffset()} ${StringConfig.dashboard.of} ${dashboardController.searchedUsers.length}',
           style: FontTextStyleConfig.tableBottomTextStyle,
         ),
         SizeConfig.size20.width,

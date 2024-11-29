@@ -3,6 +3,7 @@ import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/models/circle_model.dart';
 import 'package:mqs_admin_portal_web/models/enterprise_model.dart';
 import 'package:mqs_admin_portal_web/models/user_iam_model.dart';
+import 'package:mqs_admin_portal_web/models/user_subscription_receipt_model.dart';
 import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
 
 class FirebaseStorageService {
@@ -12,6 +13,8 @@ class FirebaseStorageService {
   CollectionReference get enterprise => _instance.collection(Env.fbEnterprise);
   CollectionReference get user => _instance.collection(Env.fbUser);
   CollectionReference get circle => _instance.collection(Env.fbCircle);
+  CollectionReference get userSubscriptionReceipt =>
+      _instance.collection(Env.fbUserSubscriptionReceipt);
 
   Future<List<EnterpriseModel>> getEnterprises() async {
     QuerySnapshot<Object?> ent = await enterprise.get();
@@ -98,5 +101,25 @@ class FirebaseStorageService {
 
   listenToCircleChange(Function(QuerySnapshot<Object?>)? onData) {
     circle.snapshots().listen((onData));
+  }
+
+  Future<List<UserSubscriptionReceiptModel>>
+      getUserSubscriptionReceipt() async {
+    QuerySnapshot<Object?> receipt = await userSubscriptionReceipt.get();
+    List<UserSubscriptionReceiptModel> receiptList = receipt.docs
+        .map((e) => UserSubscriptionReceiptModel.fromJson(
+            e.data() as Map<String, dynamic>))
+        .toList();
+    return receiptList;
+  }
+
+  Stream<List<UserSubscriptionReceiptModel>>
+      getUserSubscriptionReceiptStream() {
+    return userSubscriptionReceipt.snapshots().map((snapshot) {
+      return snapshot.docs
+          .map((doc) => UserSubscriptionReceiptModel.fromJson(
+              doc.data() as Map<String, dynamic>))
+          .toList();
+    });
   }
 }

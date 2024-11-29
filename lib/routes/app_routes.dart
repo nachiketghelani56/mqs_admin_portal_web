@@ -1,10 +1,8 @@
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/views/add_enterprise/add_enterprise_screen.dart';
-import 'package:mqs_admin_portal_web/views/dashboard/dashboard_screen.dart';
 import 'package:mqs_admin_portal_web/views/enterprise_detail/enterprise_detail_screen.dart';
 import 'package:mqs_admin_portal_web/views/login/login_screen.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/mqs_dashboard_screen.dart';
-import 'package:mqs_admin_portal_web/views/team_chart/team_chart_screen.dart';
 import 'package:mqs_admin_portal_web/views/user_iam_detail/user_iam_detail_screen.dart';
 
 class AppRoutes {

@@ -6,6 +6,7 @@ import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/widgets/circle_summary_widget.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/widgets/header_widget.dart';
+import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/widgets/subscription_summary_widget.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/widgets/well_above_charts_widget.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/widgets/auth_summary_widget.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/widgets/home_header_widget.dart';
@@ -32,15 +33,18 @@ class ReportingScreen extends StatelessWidget {
             children: [
               headerWidget(
                   reportingController: _reportingController, context: context),
-              SizeConfig.size34.height,
+              SizeConfig.size25.height,
               authSummaryWidget(
                   context: context, reportingController: _reportingController),
-              SizeConfig.size34.height,
+              SizeConfig.size25.height,
               circleSummaryWidget(
                   context: context, reportingController: _reportingController),
-              SizeConfig.size34.height,
+              SizeConfig.size25.height,
               wellAboveChartsWidget(
                   reportingController: _reportingController, context: context),
+              SizeConfig.size25.height,
+              subscriptionSummaryWidget(
+                  context: context, reportingController: _reportingController),
               SizeConfig.size50.height,
             ],
           ).paddingSymmetric(horizontal: SizeConfig.size40),

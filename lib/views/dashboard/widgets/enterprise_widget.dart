@@ -24,7 +24,7 @@ Widget enterpriseWidget(
         child: SingleChildScrollView(
           child: Container(
             decoration: FontTextStyleConfig.cardDecoration,
-            padding: const EdgeInsets.all(SizeConfig.size16 ),
+            padding: const EdgeInsets.all(SizeConfig.size16),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -73,7 +73,7 @@ Widget enterpriseWidget(
                   dashboardController.isEditEnterprise.value
               ? addEnterpriseWidget(
                   dashboardController: dashboardController, context: context)
-              : dashboardController.selectedViewIndex.value > (-1)
+              : dashboardController.viewIndex.value > (-1)
                   ? enterpriseDetailWidget(
                       dashboardController: dashboardController)
                   : Container(),

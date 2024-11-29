@@ -13,24 +13,33 @@ Widget userTableRowWidget({
 }) {
   return Container(
     height: SizeConfig.size76,
-    decoration: FontTextStyleConfig.tableRowDecoration.copyWith(
+    decoration: FontTextStyleConfig.cardDecoration.copyWith(
+      borderRadius: BorderRadius.circular(SizeConfig.size0),
       color: isSelected ? ColorConfig.bg2Color : null,
     ),
     padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size26),
     child: Row(
       children: [
-        if (context.width > SizeConfig.size900)
-          Expanded(
-            flex: SizeConfig.size3.toInt(),
-            child: Text(
-              dashboardController.users[index].isFirebaseUserId,
-              overflow: TextOverflow.ellipsis,
-              style: FontTextStyleConfig.tableTextStyle,
-            ),
-          ),
         Expanded(
+          flex: SizeConfig.size3.toInt(),
           child: Text(
-            dashboardController.users[index].userName,
+            dashboardController.searchedUsers[index].email,
+            overflow: TextOverflow.ellipsis,
+            style: FontTextStyleConfig.tableTextStyle,
+          ),
+        ),
+        Expanded(
+          flex: SizeConfig.size2.toInt(),
+          child: Text(
+            dashboardController.searchedUsers[index].userName,
+            overflow: TextOverflow.ellipsis,
+            style: FontTextStyleConfig.tableTextStyle,
+          ),
+        ),
+        Expanded(
+          flex: SizeConfig.size2.toInt(),
+          child: Text(
+            dashboardController.searchedUsers[index].loginWith,
             overflow: TextOverflow.ellipsis,
             style: FontTextStyleConfig.tableTextStyle,
           ),

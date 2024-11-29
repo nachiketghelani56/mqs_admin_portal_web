@@ -8,10 +8,12 @@ class SearchTextField extends StatelessWidget {
     super.key,
     required this.controller,
     this.onChanged,
+    this.hintText,
   });
 
   final TextEditingController controller;
   final Function(String)? onChanged;
+  final String? hintText;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,7 @@ class SearchTextField extends StatelessWidget {
               onChanged: onChanged,
               decoration: InputDecoration(
                 isDense: true,
-                hintText: StringConfig.dashboard.searchUserIdNameEmail,
+                hintText: hintText,
                 hintStyle: FontTextStyleConfig.labelTextStyle,
                 border: InputBorder.none,
                 focusedBorder: InputBorder.none,

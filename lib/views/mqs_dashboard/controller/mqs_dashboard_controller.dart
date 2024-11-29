@@ -11,6 +11,7 @@ class MqsDashboardController extends GetxController {
       title: StringConfig.mqsDashboard.home,
       subtitles: [
         StringConfig.dashboard.enterprise,
+        StringConfig.dashboard.userIAM,
         StringConfig.teamChart.teamChart,
         StringConfig.mqsDashboard.reporting,
       ],

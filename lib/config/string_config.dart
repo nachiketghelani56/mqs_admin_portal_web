@@ -29,7 +29,9 @@ class Dashboard {
   final String export = "Export";
   final String addEnterprise = "Add Enterprise";
   final String editEnterprise = "Edit Enterprise";
-  final String searchUserIdNameEmail = "Search Enterprise Name, Email  etc.";
+  final String searchEnterpriseNameEmail =
+      "Search Enterprise Name, Email  etc.";
+  final String searchUserNameEmail = "Search User Name, Email  etc.";
   final String id = "id";
   final String mqsEnterPriseCode = "Enterprise Code";
   final String rowsPerPage = "Rows per page:";
@@ -118,7 +120,7 @@ class Dashboard {
   final String pronouns = "Pronouns";
   final String pronounsValue = "PronounsValue";
   final String userImage = "UserImage";
-  final String isEnterPriseUser = "IsEnterPriceUser";
+  final String isEnterpriseUser = "IsEnterpriseUser";
   final String isFirebaseUserId = "IsFirebaseUserId";
   final String isMongoDBUserId = "IsMONGODBUserId";
   final String isRegister = "IsRegister";
@@ -127,7 +129,7 @@ class Dashboard {
   final String mqsSubscriptionActivePlan = "mqsSubscriptionActivePlan";
   final String mqsSubscriptionPlatform = "mqsSubscriptionPlatform";
   final String mqsSubscriptionStatus = "mqsSubscriptionStatus";
-  final String onboardingData = "onboardingData";
+  final String onboardingData = "Onboarding Data";
   final String checkINValue = "Check IN Value";
   final String checkInScore = "checkInScore";
   final String mqsCINValue = "mqsCINValue";
@@ -163,7 +165,8 @@ class Dashboard {
   final String equalToAny = "(in) equal to any of the following";
   final String notEqualToAny = "(not-in) not equal to any of the following";
   final String arrayContaining = "(array-contains) an array containing";
-  final String arrayContainingAny = "(array-contains-any) an array containing any";
+  final String arrayContainingAny =
+      "(array-contains-any) an array containing any";
   final String string = "String";
   final String number = "Number";
   final String boolean = "Boolean";
@@ -172,12 +175,13 @@ class Dashboard {
   final String signedUp = "Signed Up";
   final String enable = "Enable";
   final String pinCodeText = "Pin Code";
-
-
   final String noDataFound = "No data found";
   final String enterpriseCollection = "enterprise_collection";
+  final String userCollection = "user_collection";
   final String invalidCSVFile = "Invalid CSV file";
   final String emailAddressText = "email address";
+  final String userInformation = "User Information";
+  final String userSubscriptionReceipt = "User Subscription Receipt";
 }
 
 class RefExp {
@@ -187,7 +191,8 @@ class RefExp {
 
 class Validation {
   final String plsEnterEmail = "Please enter email";
-  final String pleaseProvideValidEmail = "Please provide a valid email address to proceed.";
+  final String pleaseProvideValidEmail =
+      "Please provide a valid email address to proceed.";
   final String plsEnterPassword = "Please enter password";
   final String plsEnter = "Please enter ";
   final String expiryDateAfter = "Expiry date is after start date";
@@ -244,7 +249,6 @@ class CSV {
   final String teams = "Teams";
   final String createdTimestamp = "Created Timestamp";
   final String updatedTimestamp = "Updated Timestamp";
-
 }
 
 class MQSDashboard {

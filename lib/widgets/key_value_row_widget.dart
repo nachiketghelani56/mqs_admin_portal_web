@@ -4,46 +4,37 @@ import 'package:mqs_admin_portal_web/config/config.dart';
 Widget keyValueRowWidget(
     {required String key,
     required String value,
-    bool topBorder = false,
-    bool bottomBorder = true}) {
+    bool isFirst = false,
+    isLast = false}) {
   return Container(
-    decoration: topBorder
-        ? FontTextStyleConfig.detailDecoration
-        : bottomBorder
-            ? FontTextStyleConfig.detailBottomDecoration
-            : null,
-    child: IntrinsicHeight(
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: SizeConfig.size12),
-              child: Text(
-                key,
-                style: FontTextStyleConfig.tableTextStyle,
-              ),
-            ),
+    height: SizeConfig.size55,
+    padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
+    decoration: isFirst
+        ? FontTextStyleConfig.headerDecoration
+        : FontTextStyleConfig.contentDecoration.copyWith(
+            borderRadius: isLast
+                ? const BorderRadius.vertical(
+                    bottom: Radius.circular(SizeConfig.size12),
+                  )
+                : null,
           ),
-          Container(
-            width: SizeConfig.size1,
-            color: ColorConfig.textFieldTextColor.withOpacity(.14),
+    child: Row(
+      children: [
+        Expanded(
+          flex: SizeConfig.size2.toInt(),
+          child: Text(
+            key,
+            style: FontTextStyleConfig.tableBottomTextStyle,
           ),
-          Expanded(
-            flex: SizeConfig.size2.toInt(),
-            child: Container(
-              padding: const EdgeInsets.only(
-                top: SizeConfig.size12,
-                bottom: SizeConfig.size12,
-                left: SizeConfig.size20,
-              ),
-              child: Text(
-                value,
-                style: FontTextStyleConfig.tableTextStyle,
-              ),
-            ),
+        ),
+        Expanded(
+          flex: SizeConfig.size4.toInt(),
+          child: Text(
+            value,
+            style: FontTextStyleConfig.tableContentTextStyle,
           ),
-        ],
-      ),
+        ),
+      ],
     ),
   );
 }

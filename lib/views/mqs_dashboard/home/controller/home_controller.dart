@@ -11,10 +11,13 @@ class HomeController extends GetxController {
       title: StringConfig.dashboard.enterprise,
     ),
     MenuModel(
+      icon: ImageConfig.userIAM,
+      title: StringConfig.dashboard.userIAM,
+    ),
+    MenuModel(
       icon: ImageConfig.teamChart,
       title: StringConfig.teamChart.teamChart,
     ),
-
     MenuModel(
       icon: ImageConfig.reporting,
       title: StringConfig.mqsDashboard.reporting,

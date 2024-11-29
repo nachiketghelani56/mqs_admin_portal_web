@@ -3,11 +3,12 @@ import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
-import 'package:mqs_admin_portal_web/routes/app_routes.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 
 Widget sideMenuWidget(
-    {required MqsDashboardController mqsDashboardController}) {
+    {required MqsDashboardController mqsDashboardController,
+    required DashboardController dashboardController}) {
   return Container(
     width: SizeConfig.size263,
     height: Get.height,
@@ -18,9 +19,8 @@ Widget sideMenuWidget(
           SizeConfig.size4.height,
           Image.asset(
             ImageConfig.appLogo,
-            height:SizeConfig.size65,
-          )
-              .centerLeft.paddingSymmetric(horizontal: SizeConfig.size24),
+            height: SizeConfig.size65,
+          ).centerLeft.paddingSymmetric(horizontal: SizeConfig.size24),
           SizeConfig.size4.height,
           Container(
             height: SizeConfig.size1,
@@ -41,10 +41,10 @@ Widget sideMenuWidget(
                       padding: const EdgeInsets.symmetric(
                           horizontal: SizeConfig.size12),
                       decoration: BoxDecoration(
-                        color:index == mqsDashboardController.menuIndex.value
+                        color: index == mqsDashboardController.menuIndex.value
                             ? ColorConfig.whiteColor
                                 .withOpacity(SizeConfig.size0point29)
-                            : null ,
+                            : null,
                         borderRadius: BorderRadius.circular(SizeConfig.size12),
                       ),
                       child: Row(
@@ -64,76 +64,77 @@ Widget sideMenuWidget(
                               mqsDashboardController
                                   .menuItems[index].subtitles.isNotEmpty) ...[
                             SizeConfig.size8.width,
-                            Icon(mqsDashboardController.isShowHome.value ?Icons.keyboard_arrow_down :Icons.keyboard_arrow_up,color: ColorConfig.whiteColor,size: SizeConfig.size20,),
-
+                            Icon(
+                              mqsDashboardController.isShowHome.value
+                                  ? Icons.keyboard_arrow_down
+                                  : Icons.keyboard_arrow_up,
+                              color: ColorConfig.whiteColor,
+                              size: SizeConfig.size20,
+                            ),
                           ],
                         ],
                       ),
                     ).tap(() {
                       mqsDashboardController.menuIndex.value = index;
                       mqsDashboardController.subMenuIndex.value = -1;
-                      mqsDashboardController.isShowHome.value = !mqsDashboardController.isShowHome.value;
+                      mqsDashboardController.isShowHome.value =
+                          !mqsDashboardController.isShowHome.value;
                     }),
-                    if(mqsDashboardController.isShowHome.value)
-                    if (index == mqsDashboardController.menuIndex.value &&
-                        mqsDashboardController
-                            .menuItems[index].subtitles.isNotEmpty) ...[
-                      ListView.separated(
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.only(
-                            left: SizeConfig.size38,
-                            top: SizeConfig.size12,
-                            bottom: SizeConfig.size24),
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, i) {
-                          return Obx(
-                            () => Row(
-                              children: [
-                                Container(
-                                  height: SizeConfig.size5,
-                                  width: SizeConfig.size5,
-                                  decoration: BoxDecoration(
-                                      color: ColorConfig.whiteColor.withOpacity(
-                                          i ==
-                                                  mqsDashboardController
-                                                      .subMenuIndex.value
-                                              ? SizeConfig.size1
-                                              : SizeConfig.size0point7),
-                                      shape: BoxShape.circle),
-                                ),
-                                SizeConfig.size6.width,
-                                Text(
-                                  mqsDashboardController
-                                      .menuItems[index].subtitles[i],
-                                  style: i ==
-                                          mqsDashboardController
-                                              .subMenuIndex.value
-                                      ? FontTextStyleConfig.subMenuTextStyle
-                                          .copyWith(
-                                              fontWeight: FontWeight.w500,
-                                              color: ColorConfig.whiteColor)
-                                      : FontTextStyleConfig.subMenuTextStyle,
-                                ),
-                              ],
-                            ).tap(() {
-                              if (index == 0 && i == 0) {
+                    if (mqsDashboardController.isShowHome.value)
+                      if (index == mqsDashboardController.menuIndex.value &&
+                          mqsDashboardController
+                              .menuItems[index].subtitles.isNotEmpty) ...[
+                        ListView.separated(
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.only(
+                              left: SizeConfig.size38,
+                              top: SizeConfig.size12,
+                              bottom: SizeConfig.size24),
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, i) {
+                            return Obx(
+                              () => Row(
+                                children: [
+                                  Container(
+                                    height: SizeConfig.size5,
+                                    width: SizeConfig.size5,
+                                    decoration: BoxDecoration(
+                                        color: ColorConfig.whiteColor
+                                            .withOpacity(i ==
+                                                    mqsDashboardController
+                                                        .subMenuIndex.value
+                                                ? SizeConfig.size1
+                                                : SizeConfig.size0point7),
+                                        shape: BoxShape.circle),
+                                  ),
+                                  SizeConfig.size6.width,
+                                  Text(
+                                    mqsDashboardController
+                                        .menuItems[index].subtitles[i],
+                                    style: i ==
+                                            mqsDashboardController
+                                                .subMenuIndex.value
+                                        ? FontTextStyleConfig.subMenuTextStyle
+                                            .copyWith(
+                                                fontWeight: FontWeight.w500,
+                                                color: ColorConfig.whiteColor)
+                                        : FontTextStyleConfig.subMenuTextStyle,
+                                  ),
+                                ],
+                              ).tap(() {
                                 mqsDashboardController.subMenuIndex.value = i;
-                                // Get.toNamed(AppRoutes.dashboard);
-                              } else if (index == 0 && i == 1) {
-                                mqsDashboardController.subMenuIndex.value = i;
-                                // Get.toNamed(AppRoutes.teamChart);
-                              } else {
-                                mqsDashboardController.subMenuIndex.value = i;
-                              }
-                            }),
-                          );
-                        },
-                        separatorBuilder: (context, index) =>
-                            SizeConfig.size12.height,
-                        itemCount: mqsDashboardController
-                            .menuItems[index].subtitles.length,
-                      )
-                    ],
+                                if (index == 0 && [0, 1].contains(i)) {
+                                  dashboardController.setTabIndex(index: i);
+                                }
+                              }),
+                            );
+                          },
+                          separatorBuilder: (context, index) =>
+                              SizeConfig.size12.height,
+                          itemCount: mqsDashboardController
+                              .menuItems[index].subtitles.length,
+                        )
+                      ],
                   ],
                 ),
               );

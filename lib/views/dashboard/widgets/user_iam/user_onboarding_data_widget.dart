@@ -6,16 +6,16 @@ import 'package:mqs_admin_portal_web/views/dashboard/widgets/user_iam/user_check
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/user_iam/user_demographic_widget.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/user_iam/user_scenes_widget.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/user_iam/user_wol_widget.dart';
+import 'package:mqs_admin_portal_web/widgets/title_widget.dart';
 
 Widget userOnboardingDataWidget(
     {required DashboardController dashboardController}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(
-        StringConfig.dashboard.onboardingData,
-        style: FontTextStyleConfig.textFieldTextStyle
-            .copyWith(fontWeight: FontWeight.w600),
+      titleWidget(
+        title: StringConfig.dashboard.onboardingData,
+        showArrowIcon: false,
       ),
       if (dashboardController
           .userDetail.onboardingModel.checkInValue.isNotEmpty) ...[

@@ -9,6 +9,7 @@ import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/models/chart_model.dart';
 import 'package:mqs_admin_portal_web/models/circle_model.dart';
 import 'package:mqs_admin_portal_web/models/user_iam_model.dart';
+import 'package:mqs_admin_portal_web/models/user_subscription_receipt_model.dart';
 import 'package:mqs_admin_portal_web/services/firebase_storage_service.dart';
 import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
 
@@ -58,7 +59,9 @@ class ReportingController extends GetxController {
       flaggedCircles = 0.obs,
       completedOBUsers = 0.obs,
       partialCompletedOBUsers = 0.obs,
-      skippedOBUsers = 0.obs;
+      skippedOBUsers = 0.obs,
+      activeSubscriptions = 0.obs,
+      purchasedSubscription = 0.obs;
   final TextEditingController startDateController = TextEditingController();
   final TextEditingController endDateController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -70,6 +73,7 @@ class ReportingController extends GetxController {
   onInit() {
     getAuthAndOBSummary();
     getCircleSummary();
+    getSubscriptionSummary();
     super.onInit();
   }
 
@@ -149,7 +153,7 @@ class ReportingController extends GetxController {
             model.firstName,
             model.lastName,
             model.mqsCreatedTimestamp.isNotEmpty
-                ? DateFormat('dd/MM/yyyy hh:mm a')
+                ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
                     .format(DateTime.parse(model.mqsCreatedTimestamp))
                 : "",
             "${model.isEnterpriseUser}",
@@ -159,7 +163,7 @@ class ReportingController extends GetxController {
             model.mqsUserSubscriptionStatus,
             model.mqsSubscriptionPlatform,
             model.mqsExpiryDate.isNotEmpty
-                ? DateFormat('dd/MM/yyyy hh:mm a')
+                ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
                     .format(DateTime.parse(model.mqsExpiryDate))
                 : "",
             jsonEncode(model.onboardingModel.checkInValue
@@ -354,7 +358,7 @@ class ReportingController extends GetxController {
             model.postTitle ?? "",
             model.postContent ?? "",
             (model.postTime ?? "").isNotEmpty
-                ? DateFormat('dd/MM/yyyy hh:mm a')
+                ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
                     .format(DateTime.parse(model.postTime ?? ""))
                 : "",
             "${model.postView ?? 0}",
@@ -421,6 +425,85 @@ class ReportingController extends GetxController {
       completedOB.value = completedOBUsers.value / users.length;
       skippedOB.value = skippedOBUsers.value / users.length;
       partialCompletedOB.value = partialCompletedOBUsers.value / users.length;
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    } finally {}
+  }
+
+  getSubscriptionSummary() async {
+    try {
+      List<UserSubscriptionReceiptModel> receipt =
+          await FirebaseStorageService.i.getUserSubscriptionReceipt();
+      activeSubscriptions.value = receipt
+          .where((e) =>
+              e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+          .length;
+      purchasedSubscription.value =
+          receipt.where((e) => e.mqsPurchaseID.isNotEmpty).length;
+      FirebaseStorageService.i
+          .getUserSubscriptionReceiptStream()
+          .listen((data) {
+        activeSubscriptions.value = data
+            .where((e) =>
+                e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+            .length;
+        purchasedSubscription.value =
+            data.where((e) => e.mqsPurchaseID.isNotEmpty).length;
+      });
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    } finally {}
+  }
+
+  exportSubscriptionSummary() async {
+    try {
+      List<UserSubscriptionReceiptModel> receipt =
+          await FirebaseStorageService.i.getUserSubscriptionReceipt();
+      List<List<String>> rows = [
+        [
+          StringConfig.reporting.firebaseUserId,
+          StringConfig.reporting.mongoDbUserId,
+          StringConfig.reporting.appSpecificSharedSecret,
+          StringConfig.reporting.expiryDate,
+          StringConfig.reporting.localVerificationData,
+          StringConfig.reporting.packageName,
+          StringConfig.reporting.purchaseId,
+          StringConfig.reporting.serverVerificationData,
+          StringConfig.reporting.source,
+          StringConfig.reporting.subscriptionActivePlan,
+          StringConfig.reporting.subscriptionPlatform,
+          StringConfig.reporting.transactionId,
+          StringConfig.reporting.subscriptionStatus,
+        ],
+        ...receipt.map((model) {
+          return [
+            model.isFirebaseUserID,
+            model.isMONGODBUserID,
+            model.mqsAppSpecificSharedSecret,
+            model.mqsExpiryDate.isNotEmpty
+                ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
+                    .format(DateTime.parse(model.mqsExpiryDate))
+                : "",
+            model.mqsLocalVerificationData,
+            model.mqsPackageName,
+            model.mqsPurchaseID,
+            model.mqsServerVerificationData,
+            model.mqsSource,
+            model.mqsSubscriptionActivePlan,
+            model.mqsSubscriptionPlatform,
+            model.mqsTransactionID,
+            model.mqsUserSubscriptionStatus,
+          ];
+        }),
+      ];
+      String csvData = const ListToCsvConverter().convert(rows);
+      Uint8List bytes = Uint8List.fromList(utf8.encode(csvData));
+      await FileSaver.instance.saveFile(
+        bytes: bytes,
+        ext: "csv",
+        mimeType: MimeType.csv,
+        name: StringConfig.reporting.subscriptionSummary,
+      );
     } catch (e) {
       errorDialogWidget(msg: e.toString());
     } finally {}

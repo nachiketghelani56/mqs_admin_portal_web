@@ -16,14 +16,17 @@ class MqsDashboardScreen extends StatelessWidget {
   final MqsDashboardController _mqsDashboardController =
       Get.put(MqsDashboardController());
   final DashboardController _dashboardController =
-  Get.put(DashboardController());
+      Get.put(DashboardController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _mqsDashboardController.scaffoldKey,
       drawer: context.width < SizeConfig.size900
-          ? sideMenuWidget(mqsDashboardController: _mqsDashboardController)
+          ? sideMenuWidget(
+              mqsDashboardController: _mqsDashboardController,
+              dashboardController: _dashboardController,
+            )
           : null,
       endDrawer: filterSheetWidget(dashboardController: _dashboardController),
       backgroundColor: ColorConfig.backgroundColor,
@@ -33,7 +36,10 @@ class MqsDashboardScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (context.width > SizeConfig.size900)
-                sideMenuWidget(mqsDashboardController: _mqsDashboardController),
+                sideMenuWidget(
+                  mqsDashboardController: _mqsDashboardController,
+                  dashboardController: _dashboardController,
+                ),
               Expanded(
                 child: Obx(
                   () {
@@ -43,10 +49,16 @@ class MqsDashboardScreen extends StatelessWidget {
                             scaffoldKey: _mqsDashboardController.scaffoldKey);
                       } else if (_mqsDashboardController.subMenuIndex.value ==
                           1) {
+                        return DashboardScreen(
+                          scaffoldKey: _mqsDashboardController.scaffoldKey,
+                          isEnterprise: false,
+                        );
+                      } else if (_mqsDashboardController.subMenuIndex.value ==
+                          2) {
                         return TeamChartScreen(
                             scaffoldKey: _mqsDashboardController.scaffoldKey);
                       } else if (_mqsDashboardController.subMenuIndex.value ==
-                          2) {
+                          3) {
                         return ReportingScreen(
                             scaffoldKey: _mqsDashboardController.scaffoldKey);
                       } else {
@@ -60,7 +72,6 @@ class MqsDashboardScreen extends StatelessWidget {
               ),
             ],
           ),
-
         ],
       ),
     );

@@ -11,6 +11,7 @@ import 'package:mqs_admin_portal_web/models/enterprise_model.dart';
 import 'package:mqs_admin_portal_web/models/menu_option_model.dart';
 import 'package:mqs_admin_portal_web/models/row_input_model.dart';
 import 'package:mqs_admin_portal_web/models/user_iam_model.dart';
+import 'package:mqs_admin_portal_web/models/user_subscription_receipt_model.dart';
 import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/services/firebase_storage_service.dart';
 import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
@@ -118,8 +119,7 @@ class DashboardController extends GetxController {
   RxList<MqsEmployee> mqsEmployeeEmailList = <MqsEmployee>[].obs;
   RxList<MqsTeam> mqsTeamList = <MqsTeam>[].obs;
   RxList<MqsEnterprisePOCs> mqsEnterprisePOCs = <MqsEnterprisePOCs>[].obs;
-  RxInt viewIndex = 0.obs;
-  RxInt selectedViewIndex = (-1).obs;
+  RxInt viewIndex = (-1).obs;
   final GlobalKey<FormState> enterpriseFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> entEmpEmailFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> entTeamFormKey = GlobalKey<FormState>();
@@ -129,13 +129,19 @@ class DashboardController extends GetxController {
   RxInt editMqsEmpEmailIndex = RxInt(-1),
       editMqsEntPOCIndex = RxInt(-1),
       editMqsTeamIndex = RxInt(-1);
-  RxList<UserIAMModel> users = <UserIAMModel>[].obs;
-  UserIAMModel get userDetail => users[viewIndex.value];
+  RxList<UserIAMModel> searchedUsers = <UserIAMModel>[].obs,
+      users = <UserIAMModel>[].obs;
+  UserIAMModel get userDetail => searchedUsers[viewIndex.value];
   RxInt pageLimit = 10.obs;
   RxInt offset = 0.obs, currentPage = 1.obs;
   int get totalEnterprisePage =>
       (searchedEnterprises.length / pageLimit.value).ceil();
-  int get totalUserPage => (users.length / pageLimit.value).ceil();
+  int get totalUserPage => (searchedUsers.length / pageLimit.value).ceil();
+  RxList<UserSubscriptionReceiptModel> userSubscriptionReceipts =
+      <UserSubscriptionReceiptModel>[].obs;
+  UserSubscriptionReceiptModel? get userSubscriptionDetail =>
+      userSubscriptionReceipts.firstWhereOrNull(
+          (e) => e.isFirebaseUserID == userDetail.isFirebaseUserId);
 
   RxList<TextEditingController> inputControllers =
       <TextEditingController>[].obs;
@@ -151,6 +157,7 @@ class DashboardController extends GetxController {
   onInit() {
     getEnterprises();
     getUsers();
+    getUserSubscriptionRecipts();
     super.onInit();
   }
 
@@ -285,11 +292,26 @@ class DashboardController extends GetxController {
 
   getUsers() async {
     try {
-      users.value = await FirebaseStorageService.i.getUsers();
-      FirebaseStorageService.i.listenToUserChange((data) {
-        users.value = data.docs
-            .map((e) => UserIAMModel.fromJson(e.data() as Map))
-            .toList();
+      List<UserIAMModel> userList = await FirebaseStorageService.i.getUsers();
+      searchedUsers.value = userList;
+      users.value = userList;
+      FirebaseStorageService.i.getUserStream().listen((data) {
+        searchedUsers.value = data;
+        users.value = data;
+      });
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    } finally {}
+  }
+
+  getUserSubscriptionRecipts() async {
+    try {
+      userSubscriptionReceipts.value =
+          await FirebaseStorageService.i.getUserSubscriptionReceipt();
+      FirebaseStorageService.i
+          .getUserSubscriptionReceiptStream()
+          .listen((data) {
+        userSubscriptionReceipts.value = data;
       });
     } catch (e) {
       errorDialogWidget(msg: e.toString());
@@ -517,7 +539,6 @@ class DashboardController extends GetxController {
     try {
       showLoader();
       viewIndex.value = 0;
-      selectedViewIndex.value = (-1);
       isAddEnterprise.value = false;
       isEditEnterprise.value = false;
       await FirebaseStorageService.i.deleteEnterprises(docId: docId);
@@ -697,16 +718,15 @@ class DashboardController extends GetxController {
               mqsEnterpriseName: rowMap['Enterprise Name'] ?? "",
               mqsEnterpriseEmail: rowMap['Enterprise Email'] ?? "",
               mqsEnterprisePhoneNumber:
-                  rowMap['Enterprise Phone Number'].toString() ?? "",
+                  rowMap['Enterprise Phone Number'].toString(),
               mqsEnterpriseType: rowMap['Enterprise Type'] ?? "",
               mqsEnterpriseWebsite: rowMap['Enterprise Website'] ?? "",
               mqsEnterpriseAddress: rowMap['Enterprise Address'] ?? "",
-              mqsEnterprisePincode:
-                  rowMap['Enterprise Pincode'].toString() ?? "",
+              mqsEnterprisePincode: rowMap['Enterprise Pincode'].toString(),
               mqsIsSignUp:
                   rowMap['IsSignUp'].toString().toLowerCase() == 'true',
             ),
-            mqsEnterpriseCode: rowMap['Enterprise Code'].toString() ?? "",
+            mqsEnterpriseCode: rowMap['Enterprise Code'].toString(),
             mqsIsTeam: rowMap['Is Team']?.toString().toLowerCase() == 'true',
             mqsTeamList: mqsTeamList,
             mqsEmployeeList: mqsEmployeeList,
@@ -878,16 +898,19 @@ class DashboardController extends GetxController {
   }
 
   setTabIndex({required int index}) {
-    viewIndex.value = 0;
+    viewIndex.value = -1;
     selectedTabIndex.value = index;
     offset.value = 0;
     currentPage.value = 1;
+    searchedEnterprises.value = enterprises;
+    searchedUsers.value = users;
+    searchController.clear();
   }
 
   getMaxOffset() {
     int rem = (selectedTabIndex.value == 0
             ? searchedEnterprises.length
-            : users.length) %
+            : searchedUsers.length) %
         pageLimit.value;
     if (rem != 0 &&
         currentPage.value ==
@@ -1067,5 +1090,96 @@ class DashboardController extends GetxController {
         expiryDate.value = pickedDateTime.toIso8601String();
       }
     }
+  }
+
+  exportUserIAM() async {
+    try {
+      String currentDate = DateFormat('dd/MM/yyyy').format(DateTime(0));
+      List<List<String>> rows = [
+        ...users.map((model) {
+          return [
+            model.email,
+            model.firstName,
+            model.lastName,
+            model.mqsCreatedTimestamp.isNotEmpty
+                ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
+                    .format(DateTime.parse(model.mqsCreatedTimestamp))
+                : "",
+            "${model.isEnterpriseUser}",
+            model.isFirebaseUserId,
+            model.isMongoDBUserId,
+            model.mqsSubscriptionActivePlan,
+            model.mqsUserSubscriptionStatus,
+            model.mqsSubscriptionPlatform,
+            model.mqsExpiryDate.isNotEmpty
+                ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
+                    .format(DateTime.parse(model.mqsExpiryDate))
+                : "",
+            jsonEncode(model.onboardingModel.checkInValue
+                .map((e) => e.toJson())
+                .toList()),
+            jsonEncode(model.onboardingModel.demoGraphicValue
+                .map((e) => e.toJson())
+                .toList()),
+            jsonEncode(model.onboardingModel.scenesValue
+                .map((e) => e.toJson())
+                .toList()),
+            jsonEncode(model.onboardingModel.wOLValue.toJson()),
+          ];
+        }),
+      ];
+      rows.sort((a, b) => DateFormat('dd/MM/yyyy')
+          .parse(b[3].isNotEmpty ? b[3] : currentDate)
+          .compareTo(DateFormat('dd/MM/yyyy')
+              .parse(a[3].isNotEmpty ? a[3] : currentDate)));
+      rows.insert(
+        0,
+        [
+          StringConfig.dashboard.email,
+          StringConfig.dashboard.firstName,
+          StringConfig.dashboard.lastName,
+          StringConfig.reporting.creationDate,
+          StringConfig.reporting.enterpriseUser,
+          StringConfig.reporting.firebaseUserId,
+          StringConfig.reporting.mongoDbUserId,
+          StringConfig.reporting.subscriptionActivePlan,
+          StringConfig.reporting.subscriptionStatus,
+          StringConfig.reporting.subscriptionPlatform,
+          StringConfig.reporting.subscriptionExpiryDate,
+          StringConfig.reporting.obCheckIn,
+          StringConfig.reporting.obDemographic,
+          StringConfig.reporting.obScenes,
+          StringConfig.reporting.obWOL,
+        ],
+      );
+      String csvData = const ListToCsvConverter().convert(rows);
+      Uint8List bytes = Uint8List.fromList(utf8.encode(csvData));
+      await FileSaver.instance.saveFile(
+        bytes: bytes,
+        ext: "csv",
+        mimeType: MimeType.csv,
+        name: StringConfig.dashboard.userCollection,
+      );
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    } finally {}
+  }
+
+  searchUser() {
+    try {
+      String query = searchController.text.trim().toLowerCase();
+      if (query.isEmpty) {
+        searchedUsers.value = users;
+      } else {
+        searchedUsers.value = users.where((e) {
+          return e.email.toLowerCase().contains(query) ||
+              e.firstName.toLowerCase().contains(query) ||
+              e.lastName.toLowerCase().contains(query) ||
+              e.loginWith.toLowerCase().contains(query);
+        }).toList();
+      }
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    } finally {}
   }
 }

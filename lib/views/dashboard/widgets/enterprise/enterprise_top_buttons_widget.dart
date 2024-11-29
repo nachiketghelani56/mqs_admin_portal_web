@@ -11,9 +11,9 @@ import 'package:mqs_admin_portal_web/widgets/custom_prefix_button.dart';
 import 'package:mqs_admin_portal_web/widgets/search_text_field.dart';
 
 Widget enterpriseTopButtonsWidget(
-    {required DashboardController dashboardController,required MqsDashboardController mqsDashboardController,
+    {required DashboardController dashboardController,
+    required MqsDashboardController mqsDashboardController,
     required BuildContext context}) {
-
   return context.width > SizeConfig.size1885
       ? Row(
           children: [
@@ -21,12 +21,15 @@ Widget enterpriseTopButtonsWidget(
               prefixIcon: ImageConfig.filter,
               btnText: StringConfig.dashboard.filter,
               padding: SizeConfig.size15,
-              onTap: () {mqsDashboardController.scaffoldKey.currentState?.openEndDrawer();
+              onTap: () {
+                mqsDashboardController.scaffoldKey.currentState
+                    ?.openEndDrawer();
               },
             ),
             SizeConfig.size12.width,
             SearchTextField(
               controller: dashboardController.searchController,
+              hintText: StringConfig.dashboard.searchEnterpriseNameEmail,
               onChanged: (p0) {
                 dashboardController.searchEnterprise();
               },
@@ -35,7 +38,9 @@ Widget enterpriseTopButtonsWidget(
             SizeConfig.size12.width,
             Container(
               height: SizeConfig.size46,
-              decoration: FontTextStyleConfig.topOptionDecoration.copyWith(borderRadius: BorderRadius.circular(SizeConfig.size12),),
+              decoration: FontTextStyleConfig.topOptionDecoration.copyWith(
+                borderRadius: BorderRadius.circular(SizeConfig.size12),
+              ),
               padding:
                   const EdgeInsets.symmetric(horizontal: SizeConfig.size15),
               child: Image.asset(
@@ -48,7 +53,9 @@ Widget enterpriseTopButtonsWidget(
             SizeConfig.size12.width,
             Container(
               height: SizeConfig.size46,
-              decoration: FontTextStyleConfig.topOptionDecoration.copyWith(borderRadius: BorderRadius.circular(SizeConfig.size12),),
+              decoration: FontTextStyleConfig.topOptionDecoration.copyWith(
+                borderRadius: BorderRadius.circular(SizeConfig.size12),
+              ),
               padding:
                   const EdgeInsets.symmetric(horizontal: SizeConfig.size15),
               child: Image.asset(
@@ -56,7 +63,8 @@ Widget enterpriseTopButtonsWidget(
                 width: SizeConfig.size22,
               ),
             ).tap(() {
-              dashboardController.exportEnterprise(dashboardController.enterprises);
+              dashboardController
+                  .exportEnterprise(dashboardController.enterprises);
             }),
             SizeConfig.size12.width,
             CustomPrefixButton(
@@ -82,7 +90,9 @@ Widget enterpriseTopButtonsWidget(
           children: [
             Container(
               height: SizeConfig.size46,
-              decoration: FontTextStyleConfig.topOptionDecoration.copyWith(borderRadius: BorderRadius.circular(SizeConfig.size12),),
+              decoration: FontTextStyleConfig.topOptionDecoration.copyWith(
+                borderRadius: BorderRadius.circular(SizeConfig.size12),
+              ),
               padding:
                   const EdgeInsets.symmetric(horizontal: SizeConfig.size15),
               child: Image.asset(
@@ -90,15 +100,23 @@ Widget enterpriseTopButtonsWidget(
                 width: SizeConfig.size22,
               ),
             ).tap(() {
-              dashboardController.scaffoldKey.currentState?.openEndDrawer();
+              mqsDashboardController.scaffoldKey.currentState?.openEndDrawer();
             }),
             SizeConfig.size12.width,
-            SearchTextField(controller: dashboardController.searchController),
+            SearchTextField(
+              controller: dashboardController.searchController,
+              hintText: StringConfig.dashboard.searchEnterpriseNameEmail,
+              onChanged: (p0) {
+                dashboardController.searchEnterprise();
+              },
+            ),
             const Spacer(),
             SizeConfig.size12.width,
             Container(
               height: SizeConfig.size46,
-              decoration: FontTextStyleConfig.topOptionDecoration.copyWith(borderRadius: BorderRadius.circular(SizeConfig.size12),),
+              decoration: FontTextStyleConfig.topOptionDecoration.copyWith(
+                borderRadius: BorderRadius.circular(SizeConfig.size12),
+              ),
               padding:
                   const EdgeInsets.symmetric(horizontal: SizeConfig.size15),
               child: Image.asset(
@@ -111,7 +129,9 @@ Widget enterpriseTopButtonsWidget(
             SizeConfig.size12.width,
             Container(
               height: SizeConfig.size46,
-              decoration: FontTextStyleConfig.topOptionDecoration.copyWith(borderRadius: BorderRadius.circular(SizeConfig.size12),),
+              decoration: FontTextStyleConfig.topOptionDecoration.copyWith(
+                borderRadius: BorderRadius.circular(SizeConfig.size12),
+              ),
               padding:
                   const EdgeInsets.symmetric(horizontal: SizeConfig.size15),
               child: Image.asset(
@@ -119,12 +139,15 @@ Widget enterpriseTopButtonsWidget(
                 width: SizeConfig.size22,
               ),
             ).tap(() {
-              dashboardController.exportEnterprise(dashboardController.enterprises);
+              dashboardController
+                  .exportEnterprise(dashboardController.enterprises);
             }),
             SizeConfig.size12.width,
             Container(
               height: SizeConfig.size46,
-              decoration: FontTextStyleConfig.topOptionDecoration.copyWith(borderRadius: BorderRadius.circular(SizeConfig.size12),),
+              decoration: FontTextStyleConfig.topOptionDecoration.copyWith(
+                borderRadius: BorderRadius.circular(SizeConfig.size12),
+              ),
               padding:
                   const EdgeInsets.symmetric(horizontal: SizeConfig.size15),
               child: Image.asset(
@@ -134,6 +157,10 @@ Widget enterpriseTopButtonsWidget(
             ).tap(() {
               dashboardController.isEditEnterprise.value = false;
               dashboardController.isAddEnterprise.value = true;
+              dashboardController.showMqsEmpEmailList.value = false;
+              dashboardController.showMqsTeamList.value = false;
+              dashboardController.mqsEmployeeEmailList.clear();
+              dashboardController.mqsTeamList.clear();
               dashboardController.clearAllFields();
               if (context.width < SizeConfig.size1500) {
                 Get.toNamed(AppRoutes.addEnterprise);

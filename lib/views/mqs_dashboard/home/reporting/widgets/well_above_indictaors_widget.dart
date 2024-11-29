@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/models/chart_model.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/controller/reporting_controller.dart';
-import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/widgets/well_above_indictaor_labels.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 Widget wellAboveIndicatorsWidget(
@@ -18,23 +16,23 @@ Widget wellAboveIndicatorsWidget(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          StringConfig.reporting.wellAboveIndicators,
-          style: FontTextStyleConfig.cardTitleTextStyle,
-        ),
-        SizeConfig.size26.height,
-        context.width > SizeConfig.size600
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: wellAboveIndicatorLabels(
-                    reportingController: reportingController),
-              ).paddingSymmetric(horizontal: SizeConfig.size30)
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: wellAboveIndicatorLabels(
-                    reportingController: reportingController),
-              ),
-        20.height,
+        // Text(
+        //   StringConfig.reporting.wellAboveIndicators,
+        //   style: FontTextStyleConfig.cardTitleTextStyle,
+        // ),
+        // SizeConfig.size26.height,
+        // context.width > SizeConfig.size600
+        //     ? Row(
+        //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //         children: wellAboveIndicatorLabels(
+        //             reportingController: reportingController),
+        //       ).paddingSymmetric(horizontal: SizeConfig.size30)
+        //     : Column(
+        //         crossAxisAlignment: CrossAxisAlignment.start,
+        //         children: wellAboveIndicatorLabels(
+        //             reportingController: reportingController),
+        //       ),
+        SizeConfig.size20.height,
         Expanded(
           child: SfCartesianChart(
             series: <CartesianSeries<ChartModel, String>>[

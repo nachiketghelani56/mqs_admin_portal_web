@@ -13,24 +13,24 @@ Widget wellAboveChartsWidget(
       ? Row(
           children: [
             Expanded(
-              flex: SizeConfig.size5.toInt(),
-              child: wellAboveIndicatorsWidget(
+              flex: SizeConfig.size4.toInt(),
+              child: obSummaryWidget(
                   reportingController: reportingController, context: context),
             ),
             SizeConfig.size34.width,
             Expanded(
-              flex: SizeConfig.size4.toInt(),
-              child: obSummaryWidget(
+              flex: SizeConfig.size5.toInt(),
+              child: wellAboveIndicatorsWidget(
                   reportingController: reportingController, context: context),
             ),
           ],
         )
       : Column(
           children: [
-            wellAboveIndicatorsWidget(
+            obSummaryWidget(
                 reportingController: reportingController, context: context),
             SizeConfig.size34.height,
-            obSummaryWidget(
+            wellAboveIndicatorsWidget(
                 reportingController: reportingController, context: context),
           ],
         );

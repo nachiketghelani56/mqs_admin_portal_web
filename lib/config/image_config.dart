@@ -37,4 +37,5 @@ class ImageConfig {
   static const String logout = "assets/icons/logout.png";
   static const String enterprise = "assets/icons/enterprise.png";
   static const String teamChart = "assets/icons/team_chart.png";
+  static const String userIAM = "assets/icons/user_iam.png";
 }

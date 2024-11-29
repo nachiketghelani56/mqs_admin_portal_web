@@ -26,8 +26,8 @@ Widget enterpriseTableRowWidget({
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size4),
             child: Text(
-              dashboardController
-                  .searchedEnterprises[index].mqsEnterprisePOCs.mqsEnterpriseName,
+              dashboardController.searchedEnterprises[index].mqsEnterprisePOCs
+                  .mqsEnterpriseName,
               overflow: TextOverflow.ellipsis,
               style: FontTextStyleConfig.tableTextStyle.copyWith(
                 fontSize: FontSizeConfig.fontSize15,
@@ -35,8 +35,6 @@ Widget enterpriseTableRowWidget({
             ),
           ),
         ),
-
-
         Expanded(
           flex: SizeConfig.size3.toInt(),
           child: Padding(
@@ -63,7 +61,6 @@ Widget enterpriseTableRowWidget({
                 dashboardController.isAddEnterprise.value = false;
                 dashboardController.isEditEnterprise.value = false;
                 dashboardController.viewIndex.value = index;
-                dashboardController.selectedViewIndex.value = index;
                 if (context.width < SizeConfig.size1500) {
                   Get.toNamed(AppRoutes.enterpriseDetail);
                 }
@@ -77,7 +74,6 @@ Widget enterpriseTableRowWidget({
                 dashboardController.isAddEnterprise.value = false;
                 dashboardController.isEditEnterprise.value = true;
                 dashboardController.viewIndex.value = index;
-                dashboardController.selectedViewIndex.value = index;
                 dashboardController.setEnterpriseForm(index: index);
                 if (context.width < SizeConfig.size1500) {
                   Get.toNamed(AppRoutes.addEnterprise);
