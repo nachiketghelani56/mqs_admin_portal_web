@@ -21,7 +21,7 @@ class CustomPrefixButton extends StatelessWidget {
       height: SizeConfig.size46,
       decoration: BoxDecoration(
         border: Border.all(color: ColorConfig.primaryColor),
-        borderRadius: BorderRadius.circular(SizeConfig.size2),
+        borderRadius: BorderRadius.circular(SizeConfig.size12),
       ),
       padding:  EdgeInsets.symmetric(horizontal: padding ??SizeConfig.size34),
       child: Row(

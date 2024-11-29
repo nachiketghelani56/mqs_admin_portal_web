@@ -7,7 +7,14 @@ Widget enterpriseTableBottomWidget(
     {required DashboardController dashboardController}) {
   return Container(
     height: SizeConfig.size76,
-    decoration: FontTextStyleConfig.tableBottomDecoration,
+    decoration: FontTextStyleConfig.tableBottomDecoration.copyWith(
+      border:  Border(
+        bottom: BorderSide.none,
+      top: BorderSide(color:ColorConfig.labelColor.withOpacity(SizeConfig.size0point4)),
+        left: BorderSide.none,
+        right: BorderSide.none,
+      ),
+    ),
     padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size26),
     child: Row(
       children: [

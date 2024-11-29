@@ -18,9 +18,10 @@ class SearchTextField extends StatelessWidget {
     return Container(
       width: context.width > SizeConfig.size700
           ? SizeConfig.size271
-          : SizeConfig.size150,
+          : SizeConfig.size100,
       height: SizeConfig.size46,
       decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(SizeConfig.size12),
         color:
             ColorConfig.textFieldTextColor.withOpacity(SizeConfig.size0point1),
       ),

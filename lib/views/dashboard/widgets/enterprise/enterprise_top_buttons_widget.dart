@@ -14,7 +14,7 @@ Widget enterpriseTopButtonsWidget(
     {required DashboardController dashboardController,required MqsDashboardController mqsDashboardController,
     required BuildContext context}) {
 
-  return context.width > SizeConfig.size1800
+  return context.width > SizeConfig.size1885
       ? Row(
           children: [
             CustomPrefixButton(
@@ -35,7 +35,7 @@ Widget enterpriseTopButtonsWidget(
             SizeConfig.size12.width,
             Container(
               height: SizeConfig.size46,
-              decoration: FontTextStyleConfig.topOptionDecoration,
+              decoration: FontTextStyleConfig.topOptionDecoration.copyWith(borderRadius: BorderRadius.circular(SizeConfig.size12),),
               padding:
                   const EdgeInsets.symmetric(horizontal: SizeConfig.size15),
               child: Image.asset(
@@ -48,7 +48,7 @@ Widget enterpriseTopButtonsWidget(
             SizeConfig.size12.width,
             Container(
               height: SizeConfig.size46,
-              decoration: FontTextStyleConfig.topOptionDecoration,
+              decoration: FontTextStyleConfig.topOptionDecoration.copyWith(borderRadius: BorderRadius.circular(SizeConfig.size12),),
               padding:
                   const EdgeInsets.symmetric(horizontal: SizeConfig.size15),
               child: Image.asset(
@@ -82,7 +82,7 @@ Widget enterpriseTopButtonsWidget(
           children: [
             Container(
               height: SizeConfig.size46,
-              decoration: FontTextStyleConfig.topOptionDecoration,
+              decoration: FontTextStyleConfig.topOptionDecoration.copyWith(borderRadius: BorderRadius.circular(SizeConfig.size12),),
               padding:
                   const EdgeInsets.symmetric(horizontal: SizeConfig.size15),
               child: Image.asset(
@@ -98,7 +98,7 @@ Widget enterpriseTopButtonsWidget(
             SizeConfig.size12.width,
             Container(
               height: SizeConfig.size46,
-              decoration: FontTextStyleConfig.topOptionDecoration,
+              decoration: FontTextStyleConfig.topOptionDecoration.copyWith(borderRadius: BorderRadius.circular(SizeConfig.size12),),
               padding:
                   const EdgeInsets.symmetric(horizontal: SizeConfig.size15),
               child: Image.asset(
@@ -111,7 +111,7 @@ Widget enterpriseTopButtonsWidget(
             SizeConfig.size12.width,
             Container(
               height: SizeConfig.size46,
-              decoration: FontTextStyleConfig.topOptionDecoration,
+              decoration: FontTextStyleConfig.topOptionDecoration.copyWith(borderRadius: BorderRadius.circular(SizeConfig.size12),),
               padding:
                   const EdgeInsets.symmetric(horizontal: SizeConfig.size15),
               child: Image.asset(
@@ -124,7 +124,7 @@ Widget enterpriseTopButtonsWidget(
             SizeConfig.size12.width,
             Container(
               height: SizeConfig.size46,
-              decoration: FontTextStyleConfig.topOptionDecoration,
+              decoration: FontTextStyleConfig.topOptionDecoration.copyWith(borderRadius: BorderRadius.circular(SizeConfig.size12),),
               padding:
                   const EdgeInsets.symmetric(horizontal: SizeConfig.size15),
               child: Image.asset(

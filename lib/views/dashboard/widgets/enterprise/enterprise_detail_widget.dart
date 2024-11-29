@@ -13,7 +13,7 @@ Widget enterpriseDetailWidget(
   return SingleChildScrollView(
     padding: const EdgeInsets.only(bottom: SizeConfig.size24),
     child: Container(
-      padding: const EdgeInsets.all(SizeConfig.size26),
+      padding: const EdgeInsets.all(SizeConfig.size16),
       decoration: FontTextStyleConfig.cardDecoration,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +36,7 @@ Widget enterpriseDetailWidget(
                 Expanded(
                   flex: SizeConfig.size3.toInt(),
                   child: Text(
-                    StringConfig.dashboard.isTeam,
+                    StringConfig.dashboard.team,
                     style: FontTextStyleConfig.tableBottomTextStyle,
                   ),
                 )
@@ -86,7 +86,62 @@ Widget enterpriseDetailWidget(
             SizeConfig.size34.height,
             mqsEnterpriseSubscriptionDetailWidget(
                 dashboardController: dashboardController),
-          ]
+          ],
+          SizeConfig.size34.height,
+          Container(
+            height: SizeConfig.size55,
+            padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
+            decoration: FontTextStyleConfig.headerDecoration,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: SizeConfig.size4.toInt(),
+                  child: Text(
+                    StringConfig.csv.createdTimestamp,
+                    style: FontTextStyleConfig.tableBottomTextStyle,
+                  ),
+                ),
+                Expanded(
+                  flex: SizeConfig.size3.toInt(),
+                  child: Text(
+                    StringConfig.csv.updatedTimestamp,
+                    style: FontTextStyleConfig.tableBottomTextStyle,
+                  ),
+                )
+              ],
+            ),
+          ),
+          Container(
+            height: SizeConfig.size55,
+            padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
+            decoration: FontTextStyleConfig.contentDecoration.copyWith(
+              borderRadius: const BorderRadius.vertical(
+                bottom: Radius.circular(SizeConfig.size12),
+              ),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: SizeConfig.size4.toInt(),
+                  child: Text(
+                    dashboardController.dateConvert(dashboardController
+                        .enterpriseDetail.mqsCreatedTimestamp),
+                    style: FontTextStyleConfig.tableContentTextStyle,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Expanded(
+                  flex: SizeConfig.size3.toInt(),
+                  child: Text(
+                    dashboardController.dateConvert(dashboardController
+                        .enterpriseDetail.mqsUpdateTimestamp),
+                    style: FontTextStyleConfig.tableContentTextStyle,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     ),

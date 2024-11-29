@@ -171,7 +171,7 @@ class FontTextStyleConfig {
     borderSide: const BorderSide(
       color: ColorConfig.transparentColor,
     ),
-    borderRadius: BorderRadius.circular(SizeConfig.size10),
+    borderRadius: BorderRadius.circular(SizeConfig.size12),
   );
 
   static BoxDecoration tableTitleDecoration = BoxDecoration(

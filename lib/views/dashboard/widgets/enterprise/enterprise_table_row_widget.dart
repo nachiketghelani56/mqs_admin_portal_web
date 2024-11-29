@@ -14,46 +14,41 @@ Widget enterpriseTableRowWidget({
 }) {
   return Container(
     height: SizeConfig.size76,
-    decoration: FontTextStyleConfig.tableRowDecoration.copyWith(
+    decoration: FontTextStyleConfig.cardDecoration.copyWith(
+      borderRadius: BorderRadius.circular(SizeConfig.size0),
       color: isSelected ? ColorConfig.bg2Color : null,
     ),
     padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size26),
     child: Row(
       children: [
         Expanded(
-          flex: SizeConfig.size2.toInt(),
-          child: Text(
-            dashboardController
-                .searchedEnterprises[index].mqsEnterprisePOCs.mqsEnterpriseName,
-            overflow: TextOverflow.ellipsis,
-            style: FontTextStyleConfig.tableTextStyle,
-          ),
-        ),
-        if (context.width > SizeConfig.size900)
-          Expanded(
-            flex: SizeConfig.size2.toInt(),
+          flex: SizeConfig.size4.toInt(),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size4),
             child: Text(
-              dashboardController.searchedEnterprises[index].mqsEnterprisePOCs
-                  .mqsEnterpriseEmail,
+              dashboardController
+                  .searchedEnterprises[index].mqsEnterprisePOCs.mqsEnterpriseName,
               overflow: TextOverflow.ellipsis,
-              style: FontTextStyleConfig.tableTextStyle,
+              style: FontTextStyleConfig.tableTextStyle.copyWith(
+                fontSize: FontSizeConfig.fontSize15,
+              ),
             ),
           ),
-        Expanded(
-          flex: SizeConfig.size2.toInt(),
-          child: Text(
-            dashboardController.searchedEnterprises[index].mqsEnterpriseCode,
-            overflow: TextOverflow.ellipsis,
-            style: FontTextStyleConfig.tableTextStyle,
-          ),
         ),
+
+
         Expanded(
-          flex: SizeConfig.size2.toInt(),
-          child: Text(
-            dashboardController.searchedEnterprises[index]
-                .mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionStatus,
-            overflow: TextOverflow.ellipsis,
-            style: FontTextStyleConfig.tableTextStyle,
+          flex: SizeConfig.size3.toInt(),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size4),
+            child: Text(
+              dashboardController.searchedEnterprises[index]
+                  .mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionStatus,
+              overflow: TextOverflow.ellipsis,
+              style: FontTextStyleConfig.tableTextStyle.copyWith(
+                fontSize: FontSizeConfig.fontSize15,
+              ),
+            ),
           ),
         ),
         Expanded(

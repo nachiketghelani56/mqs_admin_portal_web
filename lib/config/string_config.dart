@@ -29,7 +29,7 @@ class Dashboard {
   final String export = "Export";
   final String addEnterprise = "Add Enterprise";
   final String editEnterprise = "Edit Enterprise";
-  final String searchUserIdNameEmail = "Search User ID, Name etc.";
+  final String searchUserIdNameEmail = "Search Enterprise Name, Email  etc.";
   final String id = "id";
   final String mqsEnterPriseCode = "Enterprise Code";
   final String rowsPerPage = "Rows per page:";
@@ -85,11 +85,12 @@ class Dashboard {
       "Enterprise POCs Subscription Detail";
   final String name = "Name";
   final String subscriptionStatus = "Subscription Status";
+  final String status = "Status";
   final String subscriptionActivePlan = "Subscription Active Plan";
   final String activePlan = "Active Plan";
-  final String status = "Status";
   final String enterpriseEmail = "Enterprise Email";
   final String dateYYYYMMDD = "yyyy-MM-dd hh:mm a";
+  final String team = "Team";
 
   final String type = "Type";
   final String phoneNumber = "Phone Number";

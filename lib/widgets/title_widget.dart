@@ -12,6 +12,7 @@ Widget titleWidget(
     decoration: BoxDecoration(
       color:
           ColorConfig.textFieldTextColor.withOpacity(SizeConfig.size0point06),
+      borderRadius: BorderRadius.circular(SizeConfig.size12),
     ),
     child: Row(
       children: [

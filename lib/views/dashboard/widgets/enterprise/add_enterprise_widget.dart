@@ -17,7 +17,7 @@ Widget addEnterpriseWidget(
   return SingleChildScrollView(
     padding: const EdgeInsets.only(bottom: SizeConfig.size24),
     child: Container(
-      padding: const EdgeInsets.all(SizeConfig.size26),
+      padding: const EdgeInsets.all(SizeConfig.size16),
       decoration: FontTextStyleConfig.cardDecoration,
 
       child: Form(
