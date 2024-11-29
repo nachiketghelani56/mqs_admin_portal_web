@@ -12,7 +12,7 @@ class HomeController extends GetxController {
     ),
     MenuModel(
       icon: ImageConfig.userIAM,
-      title: StringConfig.dashboard.userIAM,
+      title: StringConfig.dashboard.users,
     ),
     MenuModel(
       icon: ImageConfig.teamChart,
@@ -20,7 +20,7 @@ class HomeController extends GetxController {
     ),
     MenuModel(
       icon: ImageConfig.reporting,
-      title: StringConfig.mqsDashboard.reporting,
+      title: StringConfig.mqsDashboard.reports,
     ),
   ].obs;
   RxList<MenuModel> profileOpts = [

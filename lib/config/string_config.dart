@@ -24,7 +24,7 @@ class Login {
 
 class Dashboard {
   final String enterprise = "Enterprise";
-  final String userIAM = "User-IAM";
+  final String users = "Users";
   final String filter = "Filter";
   final String export = "Export";
   final String addEnterprise = "Add Enterprise";
@@ -258,7 +258,7 @@ class MQSDashboard {
   final String training = "Training";
   final String survey = "Survey";
   final String space = "Space";
-  final String reporting = "Reporting";
+  final String reports = "Reports";
   final String documents = "Documents";
   final String chat = "Chat";
   final String profile = "Profile";

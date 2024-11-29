@@ -12,7 +12,7 @@ Widget headerWidget(
         children: [
           Expanded(
             child: Text(
-              StringConfig.mqsDashboard.reporting,
+              StringConfig.mqsDashboard.reports,
               style: FontTextStyleConfig.headerTextStyle,
             ),
           ),

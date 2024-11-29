@@ -21,7 +21,7 @@ import 'package:uuid/uuid.dart';
 class DashboardController extends GetxController {
   RxList<String> tabs = [
     StringConfig.dashboard.enterprise,
-    StringConfig.dashboard.userIAM,
+    StringConfig.dashboard.users,
   ].obs;
   RxInt selectedTabIndex = 0.obs;
   RxString enterpriseId = "".obs;
