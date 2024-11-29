@@ -48,7 +48,7 @@ Widget mqsTeamListWidget({required DashboardController dashboardController}) {
               Expanded(
                 flex: SizeConfig.size2.toInt(),
                 child: Text(
-                  StringConfig.dashboard.isEnable,
+                  StringConfig.dashboard.enable,
                   style: FontTextStyleConfig.tableBottomTextStyle,
                 ),
               ),

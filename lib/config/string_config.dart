@@ -36,6 +36,8 @@ class Dashboard {
   final String of = "of";
   final String add = "Add";
   final String cancel = "Cancel";
+  final String submit = "Submit";
+  final String update = "Update";
   final String subscription = "Subscription";
   final String enterSubscription = "Enter subscription";
   final String enterId = "Enter id";
@@ -86,7 +88,7 @@ class Dashboard {
   final String subscriptionActivePlan = "Subscription Active Plan";
   final String activePlan = "Active Plan";
   final String status = "Status";
-  final String enterpriseEmail = "Enterprise email";
+  final String enterpriseEmail = "Enterprise Email";
   final String dateYYYYMMDD = "yyyy-MM-dd hh:mm a";
 
   final String type = "Type";
@@ -157,9 +159,24 @@ class Dashboard {
   final String greaterThanEqualTo = "(>=) greater than or equal to";
   final String lessThan = "(<) less than";
   final String lessThanEqualTo = "(<=) less than or equal to";
+  final String equalToAny = "(in) equal to any of the following";
+  final String notEqualToAny = "(not-in) not equal to any of the following";
+  final String arrayContaining = "(array-contains) an array containing";
+  final String arrayContainingAny = "(array-contains-any) an array containing any";
+  final String string = "String";
+  final String number = "Number";
+  final String boolean = "Boolean";
+  final String enterUpValues = "Enter up to 10 values";
+  final String addValue = "Add value";
+  final String signedUp = "Signed Up";
+  final String enable = "Enable";
+  final String pinCodeText = "Pin Code";
+
+
   final String noDataFound = "No data found";
   final String enterpriseCollection = "enterprise_collection";
   final String invalidCSVFile = "Invalid CSV file";
+  final String emailAddressText = "email address";
 }
 
 class RefExp {
@@ -169,10 +186,12 @@ class RefExp {
 
 class Validation {
   final String plsEnterEmail = "Please enter email";
-  final String plsEnterValidEmail = "Please enter valid email";
+  final String pleaseProvideValidEmail = "Please provide a valid email address to proceed.";
   final String plsEnterPassword = "Please enter password";
   final String plsEnter = "Please enter ";
   final String expiryDateAfter = "Expiry date is after start date";
+  final String pleaseProvideYour = "Please provide your ";
+  final String toProceed = " to proceed.";
 }
 
 class Firebase {
@@ -215,6 +234,16 @@ class CSV {
   final String employeeEmails = "Employee Emails";
   final String enterpriseLocation = "Enterprise Location";
   final String pocs = "POCs";
+  final String enterprisePhoneNumber = "Enterprise Phone Number";
+  final String enterpriseType = "Enterprise Type";
+  final String enterpriseWebsite = "Enterprise Website";
+  final String enterpriseAddress = "Enterprise Address";
+  final String enterprisePinCode = "Enterprise Pincode";
+  final String isSignUp = "IsSignUp";
+  final String teams = "Teams";
+  final String createdTimestamp = "Created Timestamp";
+  final String updatedTimestamp = "Updated Timestamp";
+
 }
 
 class MQSDashboard {

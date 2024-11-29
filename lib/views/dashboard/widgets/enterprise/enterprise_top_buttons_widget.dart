@@ -6,20 +6,22 @@ import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
 import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
+import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_prefix_button.dart';
 import 'package:mqs_admin_portal_web/widgets/search_text_field.dart';
 
 Widget enterpriseTopButtonsWidget(
-    {required DashboardController dashboardController,
+    {required DashboardController dashboardController,required MqsDashboardController mqsDashboardController,
     required BuildContext context}) {
+
   return context.width > SizeConfig.size1800
       ? Row(
           children: [
             CustomPrefixButton(
               prefixIcon: ImageConfig.filter,
               btnText: StringConfig.dashboard.filter,
-              onTap: () {
-                dashboardController.scaffoldKey.currentState?.openEndDrawer();
+              padding: SizeConfig.size15,
+              onTap: () {mqsDashboardController.scaffoldKey.currentState?.openEndDrawer();
               },
             ),
             SizeConfig.size12.width,
@@ -54,11 +56,12 @@ Widget enterpriseTopButtonsWidget(
                 width: SizeConfig.size22,
               ),
             ).tap(() {
-              dashboardController.exportEnterprise();
+              dashboardController.exportEnterprise(dashboardController.enterprises);
             }),
             SizeConfig.size12.width,
             CustomPrefixButton(
               prefixIcon: ImageConfig.add,
+              padding: SizeConfig.size15,
               btnText: StringConfig.dashboard.addEnterprise,
               onTap: () {
                 dashboardController.isEditEnterprise.value = false;
@@ -116,7 +119,7 @@ Widget enterpriseTopButtonsWidget(
                 width: SizeConfig.size22,
               ),
             ).tap(() {
-              dashboardController.exportEnterprise();
+              dashboardController.exportEnterprise(dashboardController.enterprises);
             }),
             SizeConfig.size12.width,
             Container(

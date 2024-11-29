@@ -18,7 +18,8 @@ Widget addEnterpriseWidget(
     padding: const EdgeInsets.only(bottom: SizeConfig.size24),
     child: Container(
       padding: const EdgeInsets.all(SizeConfig.size26),
-      decoration: FontTextStyleConfig.detailMainDecoration,
+      decoration: FontTextStyleConfig.cardDecoration,
+
       child: Form(
         key: dashboardController.enterpriseFormKey,
         child: Column(
@@ -47,7 +48,7 @@ Widget addEnterpriseWidget(
               label: StringConfig.dashboard.mqsEnterPriseCode,
               hintText: StringConfig.dashboard.enterCode,
               validator: (p0) => Validator.emptyValidator(
-                  p0 ?? "", StringConfig.dashboard.mqsEnterPriseCode),
+                  p0 ?? "", StringConfig.dashboard.mqsEnterPriseCode.toLowerCase()),
             ),
             SizeConfig.size34.height,
             Row(
@@ -71,8 +72,8 @@ Widget addEnterpriseWidget(
                 Expanded(
                   child: CustomButton(
                     btnText: dashboardController.isEditEnterprise.value
-                        ? StringConfig.dashboard.edit
-                        : StringConfig.dashboard.add,
+                        ? StringConfig.dashboard.update
+                        : StringConfig.dashboard.submit,
                     onTap: () {
                       dashboardController.addEnterprise();
                     },

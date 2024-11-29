@@ -19,8 +19,8 @@ Widget addMqsEnterprisePOCsSubscriptionDetailWidget(
         controller: dashboardController.subscriptionActivePlanController,
         label: StringConfig.dashboard.subscriptionActivePlan,
         hintText: StringConfig.dashboard.enterSubscriptionActivePlan,
-        validator: (p0) => Validator.emptyValidator(
-            p0 ?? "", StringConfig.dashboard.subscriptionActivePlan),
+        validator: (p0) => Validator.emptyValidator(p0 ?? "",
+            StringConfig.dashboard.subscriptionActivePlan.toLowerCase()),
       ),
       SizeConfig.size34.height,
       CustomTextField(
@@ -28,7 +28,7 @@ Widget addMqsEnterprisePOCsSubscriptionDetailWidget(
         label: StringConfig.dashboard.subscriptionStatus,
         hintText: StringConfig.dashboard.enterSubscriptionStatus,
         validator: (p0) => Validator.emptyValidator(
-            p0 ?? "", StringConfig.dashboard.subscriptionStatus),
+            p0 ?? "", StringConfig.dashboard.subscriptionStatus.toLowerCase()),
       ),
       SizeConfig.size34.height,
       Row(
@@ -43,21 +43,12 @@ Widget addMqsEnterprisePOCsSubscriptionDetailWidget(
               suffixIcon: ImageConfig.calendar,
               readOnly: true,
               validator: (p0) => Validator.emptyValidator(
-                  p0 ?? "", StringConfig.dashboard.mqsSubscriptionStartDate),
+                  p0 ?? "",
+                  StringConfig.dashboard.mqsSubscriptionStartDate
+                      .toLowerCase()),
               onTap: () async {
-                dashboardController.pickStartDateTime(context, dashboardController.mqsSubscriptionStartDateController);
-                // DateTime? date = await showDatePicker(
-                //   context: context,
-                //   firstDate: DateTime(0),
-                //   lastDate: DateTime(3000),
-                //   initialDate: DateTime.now(),
-                // );
-                // if (date != null) {
-                //   dashboardController.mqsSubscriptionStartDateController.text =
-                //       '${date.day}-${date.month}-${date.year}';
-                //
-                //   dashboardController.startDate.value = date.toIso8601String();
-                // }
+                dashboardController.pickStartDateTime(context,
+                    dashboardController.mqsSubscriptionStartDateController);
               },
             ),
           ),
@@ -71,28 +62,12 @@ Widget addMqsEnterprisePOCsSubscriptionDetailWidget(
               suffixIcon: ImageConfig.calendar,
               readOnly: true,
               validator: (p0) => Validator.emptyValidator(
-                  p0 ?? "", StringConfig.dashboard.mqsSubscriptionExpiryDate),
+                  p0 ?? "",
+                  StringConfig.dashboard.mqsSubscriptionExpiryDate
+                      .toLowerCase()),
               onTap: () async {
-                dashboardController.pickExpiryDateTime(context, dashboardController.mqsSubscriptionStartDateController);
-                // DateTime? date = await showDatePicker(
-                //   context: context,
-                //   firstDate: dashboardController.startDate.value.isNotEmpty
-                //       ? DateTime.parse(
-                //           dashboardController.startDate.value,
-                //         )
-                //       : DateTime.now(),
-                //   lastDate: DateTime(3000),
-                //   initialDate: dashboardController.startDate.value.isNotEmpty
-                //       ? DateTime.parse(
-                //           dashboardController.startDate.value,
-                //         )
-                //       : DateTime.now(),
-                // );
-                // if (date != null) {
-                //   dashboardController.mqsSubscriptionExpiryDateController.text =
-                //       '${date.day}-${date.month}-${date.year}';
-                //   dashboardController.expiryDate.value = date.toIso8601String();
-                // }
+                dashboardController.pickExpiryDateTime(context,
+                    dashboardController.mqsSubscriptionStartDateController);
               },
             ),
           ),

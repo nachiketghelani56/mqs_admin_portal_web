@@ -30,7 +30,7 @@ Widget addMqsEmpEmailListWidget(
                   controller: dashboardController.employeeEmailController,
                   label: StringConfig.dashboard.emailAddress,
                   hintText: StringConfig.dashboard.enterEmailAddress,
-                  validator: (p0) => Validator.emailValidator(p0 ?? ""),
+                  validator: (p0) => Validator.emailValidator(p0 ?? "",StringConfig.dashboard.emailAddressText),
                 ),
               ),
             ],
@@ -41,7 +41,7 @@ Widget addMqsEmpEmailListWidget(
             label: StringConfig.dashboard.employeeName,
             hintText: StringConfig.dashboard.enterEmployeeName,
             validator: (p0) => Validator.emptyValidator(
-                p0 ?? "", StringConfig.dashboard.employeeName),
+                p0 ?? "", StringConfig.dashboard.employeeName.toLowerCase()),
           ),
           SizeConfig.size18.height,
           Row(
@@ -64,8 +64,8 @@ Widget addMqsEmpEmailListWidget(
                 width: SizeConfig.size162,
                 child: CustomButton(
                   btnText: dashboardController.editMqsEmpEmailIndex.value >= 0
-                      ? StringConfig.dashboard.edit
-                      : StringConfig.dashboard.add,
+                      ? StringConfig.dashboard.update
+                      : StringConfig.dashboard.submit,
                   onTap: () {
                     if (dashboardController.entEmpEmailFormKey.currentState
                             ?.validate() ??

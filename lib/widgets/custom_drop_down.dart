@@ -22,11 +22,13 @@ class CustomDropDown extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        if(label.isNotEmpty)...[
         Text(
           label,
           style: FontTextStyleConfig.labelTextStyle,
         ).paddingOnly(left: SizeConfig.size2),
         SizeConfig.size6.height,
+        ],
         DropdownButtonFormField(
           items: items,
           value: value,

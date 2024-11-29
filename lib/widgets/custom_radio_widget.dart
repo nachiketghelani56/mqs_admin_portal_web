@@ -11,10 +11,11 @@ class CustomRadioWidget extends StatelessWidget {
       {super.key,
       required this.title,
       required this.isSelected,
-      required this.onChanged});
+      required this.onChanged, required this.isAddCondition});
 
   final String title;
   final bool isSelected;
+  final bool isAddCondition;
   final Function onChanged;
 
   @override

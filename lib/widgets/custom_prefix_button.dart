@@ -8,10 +8,12 @@ class CustomPrefixButton extends StatelessWidget {
       {super.key,
       required this.btnText,
       required this.onTap,
-      required this.prefixIcon});
+      required this.prefixIcon, this.padding});
 
   final String btnText, prefixIcon;
   final Function onTap;
+  final double? padding;
+
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class CustomPrefixButton extends StatelessWidget {
         border: Border.all(color: ColorConfig.primaryColor),
         borderRadius: BorderRadius.circular(SizeConfig.size2),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size34),
+      padding:  EdgeInsets.symmetric(horizontal: padding ??SizeConfig.size34),
       child: Row(
         children: [
           Image.asset(

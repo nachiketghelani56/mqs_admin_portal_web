@@ -29,14 +29,14 @@ Widget addMqsTeamListWidget(
             label: StringConfig.dashboard.teamName,
             hintText: StringConfig.dashboard.enterTeamName,
             validator: (p0) => Validator.emptyValidator(
-                p0 ?? "", StringConfig.dashboard.teamName),
+                p0 ?? "", StringConfig.dashboard.teamName.toLowerCase()),
           ),
           SizeConfig.size34.height,
           CustomTextField(
             controller: dashboardController.teamEmailController,
             label: StringConfig.dashboard.teamEmailAddress,
             hintText: StringConfig.dashboard.enterEmailAddress,
-            validator: (p0) => Validator.emailValidator(p0 ?? ""),
+            validator: (p0) => Validator.emailValidator(p0 ?? "",StringConfig.dashboard.emailAddressText),
           ),
           SizeConfig.size34.height,
           CustomTextField(
@@ -44,7 +44,7 @@ Widget addMqsTeamListWidget(
             label: StringConfig.dashboard.teamMemberLimit,
             hintText: StringConfig.dashboard.enterTeamMemberLimit,
             validator: (p0) => Validator.emptyValidator(
-                p0 ?? "", StringConfig.dashboard.teamMemberLimit),
+                p0 ?? "", StringConfig.dashboard.teamMemberLimit.toLowerCase()),
             inputFormatters: [
               FilteringTextInputFormatter.digitsOnly,
             ],
@@ -114,8 +114,8 @@ Widget addMqsTeamListWidget(
                 width: SizeConfig.size162,
                 child: CustomButton(
                   btnText: dashboardController.editMqsTeamIndex.value >= 0
-                      ? StringConfig.dashboard.edit
-                      : StringConfig.dashboard.add,
+                      ? StringConfig.dashboard.update
+                      : StringConfig.dashboard.submit,
                   onTap: () {
                     if (dashboardController.entTeamFormKey.currentState
                             ?.validate() ??

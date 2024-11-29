@@ -21,6 +21,7 @@
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="A new Flutter project.">
   <meta name="autofill" content="off">
+  <meta name="autocomplete" content="off">
 
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -45,11 +46,38 @@
   <link rel="icon" type="image/png" href="favicon.png" />
 
   <title>MQS Admin Portal Web</title>
+  <script>
+      window.addEventListener("DOMContentLoaded", function () {
+          document.querySelectorAll("form").forEach((form) => {
+              form.setAttribute("autocomplete", "off");
+          });
+          document.querySelectorAll("input").forEach((input) => {
+              input.setAttribute("autocomplete", "off");
+          });
+      });
+    </script>
+  <script>
+        window.addEventListener("DOMContentLoaded", (event) => {
+            const passwordFields = document.querySelectorAll("input[type='password']");
+            passwordFields.forEach((field) => {
+                field.setAttribute("autocomplete", "new-password");
+            });
+        });
+    </script>
+  <script>
+
+      window.addEventListener("beforeunload", function (event) {
+        event.preventDefault();
+        event.returnValue = ''; // Required for modern browsers to suppress the default dialog
+      });
+    </script>
   <link rel="manifest" href="manifest.json">
 </head>
 
 <body>
+<form autocomplete="off">
   <script src="flutter_bootstrap.js" async></script>
+</form>
 </body>
 
 </html>

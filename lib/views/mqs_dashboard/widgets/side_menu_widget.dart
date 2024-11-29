@@ -15,12 +15,13 @@ Widget sideMenuWidget(
     child: SingleChildScrollView(
       child: Column(
         children: [
-          SizeConfig.size16.height,
+          SizeConfig.size4.height,
           Image.asset(
-            ImageConfig.logo,
-            height: SizeConfig.size42,
-          ).centerLeft.paddingSymmetric(horizontal: SizeConfig.size24),
-          SizeConfig.size16.height,
+            ImageConfig.appLogo,
+            height:SizeConfig.size65,
+          )
+              .centerLeft.paddingSymmetric(horizontal: SizeConfig.size24),
+          SizeConfig.size4.height,
           Container(
             height: SizeConfig.size1,
             color: ColorConfig.secondaryColor,
@@ -40,10 +41,10 @@ Widget sideMenuWidget(
                       padding: const EdgeInsets.symmetric(
                           horizontal: SizeConfig.size12),
                       decoration: BoxDecoration(
-                        color: index == mqsDashboardController.menuIndex.value
+                        color:index == mqsDashboardController.menuIndex.value
                             ? ColorConfig.whiteColor
                                 .withOpacity(SizeConfig.size0point29)
-                            : null,
+                            : null ,
                         borderRadius: BorderRadius.circular(SizeConfig.size12),
                       ),
                       child: Row(
@@ -63,18 +64,17 @@ Widget sideMenuWidget(
                               mqsDashboardController
                                   .menuItems[index].subtitles.isNotEmpty) ...[
                             SizeConfig.size8.width,
-                            Image.asset(
-                              ImageConfig.arrowDown,
-                              width: SizeConfig.size12,
-                              height: SizeConfig.size12,
-                            )
+                            Icon(mqsDashboardController.isShowHome.value ?Icons.keyboard_arrow_down :Icons.keyboard_arrow_up,color: ColorConfig.whiteColor,size: SizeConfig.size20,),
+
                           ],
                         ],
                       ),
                     ).tap(() {
                       mqsDashboardController.menuIndex.value = index;
                       mqsDashboardController.subMenuIndex.value = -1;
+                      mqsDashboardController.isShowHome.value = !mqsDashboardController.isShowHome.value;
                     }),
+                    if(mqsDashboardController.isShowHome.value)
                     if (index == mqsDashboardController.menuIndex.value &&
                         mqsDashboardController
                             .menuItems[index].subtitles.isNotEmpty) ...[
@@ -117,9 +117,11 @@ Widget sideMenuWidget(
                               ],
                             ).tap(() {
                               if (index == 0 && i == 0) {
-                                Get.toNamed(AppRoutes.dashboard);
-                              } else if (index == 0 && i == 3) {
-                                Get.toNamed(AppRoutes.teamChart);
+                                mqsDashboardController.subMenuIndex.value = i;
+                                // Get.toNamed(AppRoutes.dashboard);
+                              } else if (index == 0 && i == 1) {
+                                mqsDashboardController.subMenuIndex.value = i;
+                                // Get.toNamed(AppRoutes.teamChart);
                               } else {
                                 mqsDashboardController.subMenuIndex.value = i;
                               }

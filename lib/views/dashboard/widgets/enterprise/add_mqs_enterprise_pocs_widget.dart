@@ -20,7 +20,7 @@ Widget addMqsEnterprisePOCsWidget(
         label: StringConfig.dashboard.name,
         hintText: StringConfig.dashboard.enterName,
         validator: (p0) =>
-            Validator.emptyValidator(p0 ?? "", StringConfig.dashboard.name),
+            Validator.emptyValidator(p0 ?? "", StringConfig.dashboard.name.toLowerCase()),
       ),
       SizeConfig.size34.height,
       Row(
@@ -30,7 +30,7 @@ Widget addMqsEnterprisePOCsWidget(
               controller: dashboardController.pocEmailController,
               label: StringConfig.dashboard.emailAddress,
               hintText: StringConfig.dashboard.enterEmailAddress,
-              validator: (p0) => Validator.emailValidator(p0 ?? ""),
+              validator: (p0) => Validator.emailValidator(p0 ?? "",StringConfig.dashboard.emailAddressText),
             ),
           ),
         ],
@@ -41,7 +41,7 @@ Widget addMqsEnterprisePOCsWidget(
         label: StringConfig.dashboard.address,
         hintText: StringConfig.dashboard.enterAddress,
         validator: (p0) =>
-            Validator.emptyValidator(p0 ?? "", StringConfig.dashboard.address),
+            Validator.emptyValidator(p0 ?? "", StringConfig.dashboard.address.toLowerCase()),
       ),
       SizeConfig.size34.height,
       CustomTextField(
@@ -49,7 +49,7 @@ Widget addMqsEnterprisePOCsWidget(
         label: StringConfig.dashboard.website,
         hintText: StringConfig.dashboard.enterWebsite,
         validator: (p0) =>
-            Validator.emptyValidator(p0 ?? "", StringConfig.dashboard.website),
+            Validator.emptyValidator(p0 ?? "", StringConfig.dashboard.website.toLowerCase()),
       ),
       SizeConfig.size34.height,
       CustomTextField(
@@ -57,7 +57,7 @@ Widget addMqsEnterprisePOCsWidget(
         label: StringConfig.dashboard.type,
         hintText: StringConfig.dashboard.enterType,
         validator: (p0) =>
-            Validator.emptyValidator(p0 ?? "", StringConfig.dashboard.type),
+            Validator.emptyValidator(p0 ?? "", StringConfig.dashboard.type.toLowerCase()),
       ),
       SizeConfig.size34.height,
       Row(
@@ -69,7 +69,7 @@ Widget addMqsEnterprisePOCsWidget(
               label: StringConfig.dashboard.phoneNumber,
               hintText: StringConfig.dashboard.enterPhoneNumber,
               validator: (p0) => Validator.emptyValidator(
-                  p0 ?? "", StringConfig.dashboard.phoneNumber),
+                  p0 ?? "", StringConfig.dashboard.phoneNumber.toLowerCase()),
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(10),
@@ -83,7 +83,7 @@ Widget addMqsEnterprisePOCsWidget(
               label: StringConfig.dashboard.pinCode,
               hintText: StringConfig.dashboard.enterPinCode,
               validator: (p0) => Validator.emptyValidator(
-                  p0 ?? "", StringConfig.dashboard.pinCode),
+                  p0 ?? "", StringConfig.dashboard.pinCode.toLowerCase()),
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(6),

@@ -11,16 +11,17 @@ class MqsDashboardController extends GetxController {
       title: StringConfig.mqsDashboard.home,
       subtitles: [
         StringConfig.dashboard.enterprise,
-        StringConfig.mqsDashboard.pathway,
-        StringConfig.mqsDashboard.challenge,
         StringConfig.teamChart.teamChart,
         StringConfig.mqsDashboard.reporting,
       ],
     ),
-    MenuModel(
-      icon: ImageConfig.documents,
-      title: StringConfig.mqsDashboard.documents,
-    ),
   ].obs;
   RxInt menuIndex = 0.obs, subMenuIndex = RxInt(-1);
+  RxBool isShowHome = false.obs;
+
+  @override
+  void onInit() {
+    isShowHome.value = true;
+    super.onInit();
+  }
 }

@@ -167,7 +167,7 @@ Widget mqsEnterprisePOCsWidget(
             Expanded(
               flex: SizeConfig.size2.toInt(),
               child: Text(
-                StringConfig.dashboard.pinCode,
+                StringConfig.dashboard.pinCodeText,
                 style: FontTextStyleConfig.tableBottomTextStyle,
               ),
             ),
@@ -195,7 +195,7 @@ Widget mqsEnterprisePOCsWidget(
             Expanded(
               flex: SizeConfig.size2.toInt(),
               child: Text(
-                StringConfig.dashboard.isSignedUp,
+                StringConfig.dashboard.signedUp,
                 style: FontTextStyleConfig.tableBottomTextStyle,
               ),
             ),

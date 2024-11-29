@@ -42,7 +42,7 @@ Widget mqsEmployeeEmailListWidget(
               Expanded(
                 flex: SizeConfig.size2.toInt(),
                 child: Text(
-                  StringConfig.dashboard.isSignedUp,
+                  StringConfig.dashboard.signedUp,
                   style: FontTextStyleConfig.tableBottomTextStyle,
                 ),
               ),

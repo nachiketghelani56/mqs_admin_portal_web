@@ -7,21 +7,14 @@ class HomeController extends GetxController {
   final TextEditingController searchController = TextEditingController();
   RxList<MenuModel> options = [
     MenuModel(
-      icon: ImageConfig.onboarding,
-      title: StringConfig.mqsDashboard.onboarding,
+      icon: ImageConfig.enterprise,
+      title: StringConfig.dashboard.enterprise,
     ),
     MenuModel(
-      icon: ImageConfig.communication,
-      title: StringConfig.mqsDashboard.communication,
+      icon: ImageConfig.teamChart,
+      title: StringConfig.teamChart.teamChart,
     ),
-    MenuModel(
-      icon: ImageConfig.training,
-      title: StringConfig.mqsDashboard.training,
-    ),
-    MenuModel(
-      icon: ImageConfig.survey,
-      title: StringConfig.mqsDashboard.survey,
-    ),
+
     MenuModel(
       icon: ImageConfig.reporting,
       title: StringConfig.mqsDashboard.reporting,

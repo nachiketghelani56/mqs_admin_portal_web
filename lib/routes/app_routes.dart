@@ -14,11 +14,11 @@ class AppRoutes {
   static const String addEnterprise = "/add_enterprise";
   static const String userIAMDetail = "/user_iam_detail";
   static const String mqsDashboard = "/mqs_dashboard";
-  static const String teamChart = "/team_chart";
+  // static const String teamChart = "/team_chart";
 
   static List<GetPage> get pages => [
         GetPage(name: AppRoutes.login, page: () => LoginScreen()),
-        GetPage(name: AppRoutes.dashboard, page: () => DashboardScreen()),
+        // GetPage(name: AppRoutes.dashboard, page: () => DashboardScreen()),
         GetPage(
             name: AppRoutes.enterpriseDetail,
             page: () => EnterpriseDetailScreen()),
@@ -27,6 +27,6 @@ class AppRoutes {
         GetPage(
             name: AppRoutes.userIAMDetail, page: () => UserIAMDetailScreen()),
         GetPage(name: AppRoutes.mqsDashboard, page: () => MqsDashboardScreen()),
-        GetPage(name: AppRoutes.teamChart, page: () => TeamChartScreen()),
+        // GetPage(name: AppRoutes.teamChart, page: () => TeamChartScreen()),
       ];
 }

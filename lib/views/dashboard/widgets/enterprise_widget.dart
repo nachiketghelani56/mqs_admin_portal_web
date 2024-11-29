@@ -11,9 +11,10 @@ import 'package:mqs_admin_portal_web/views/dashboard/widgets/enterprise/enterpri
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/enterprise/enterprise_table_row_widget.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/enterprise/enterprise_table_title_widget.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/enterprise/enterprise_top_buttons_widget.dart';
+import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 
 Widget enterpriseWidget(
-    {required DashboardController dashboardController,
+    {required DashboardController dashboardController,required MqsDashboardController mqsDashboardController,
     required BuildContext context}) {
   return Row(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,6 +24,7 @@ Widget enterpriseWidget(
           children: [
             enterpriseTopButtonsWidget(
               dashboardController: dashboardController,
+              mqsDashboardController: mqsDashboardController,
               context: context,
             ),
             SizeConfig.size26.height,

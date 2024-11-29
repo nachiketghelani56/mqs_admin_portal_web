@@ -111,6 +111,8 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
             ).tap(() {
               dashboardController.showAddCondition.value =
                   !dashboardController.showAddCondition.value;
+              dashboardController.selectedConditionIndex.value = -1;
+
             }),
             if (dashboardController.showAddCondition.value) ...[
               SizeConfig.size14.height,
@@ -130,11 +132,115 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                 label: StringConfig.dashboard.selectCondition,
               ),
               if (dashboardController.selectedConditionIndex.value >= 0) ...[
-                SizeConfig.size14.height,
-                CustomTextField(
-                  controller: dashboardController.filterFieldController,
-                  label: StringConfig.dashboard.enterValue,
+                SizeConfig.size18.height,
+                Text(
+                  StringConfig.dashboard.enterUpValues,
+                  style: FontTextStyleConfig.labelTextStyle
+                      .copyWith(color: ColorConfig.subtitleColor),
                 ),
+                SizeConfig.size10.height,
+                ...List.generate(dashboardController.rows.length, (index) {
+                  final row = dashboardController.rows[index];
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Row(
+                      children: [
+                        Flexible(
+                          flex: 2,
+                          child: CustomDropDown(
+                            label: "",
+                            value: row.dataType,
+                            items:
+                                dashboardController.dataTypes.map((dataType) {
+                              return DropdownMenuItem(
+                                value: dataType,
+                                child: Text(dataType),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              if (value != null) {
+                                row.dataType = value;
+                                dashboardController.rows[index] = row;
+                              }
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        if (row.dataType == "Boolean")
+                          Flexible(
+                            flex: 3,
+                            child: CustomDropDown(
+                              label: "",
+                              value: row.selectedBoolean,
+                              items: dashboardController.booleanValues
+                                  .map((boolValue) {
+                                return DropdownMenuItem(
+                                  value: boolValue,
+                                  child: Text(boolValue),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                if (value != null) {
+                                  row.selectedBoolean = value;
+                                  dashboardController.rows[index] = row;
+                                }
+                              },
+                            ),
+                          )
+                        else
+                          Flexible(
+                            flex: 3,
+                            child: CustomTextField(
+                              controller: row.textController,
+                              label: "",
+                              padding: SizeConfig.size22,
+                              border: dashboardController.validateInput(
+                                          row.dataType,
+                                          row.textController.text) !=
+                                      null
+                                  ? FontTextStyleConfig.borderDecoration
+                                      .copyWith(
+                                      borderSide: const BorderSide(
+                                        color: Colors.red,
+                                      ),
+                                    )
+                                  : FontTextStyleConfig.borderDecoration,
+                              onChanged: (_) {
+                                dashboardController.rows.refresh();
+                              },
+                            ),
+                          ),
+                        SizeConfig.size8.width,
+                        GestureDetector(
+                          onTap: () {
+                            dashboardController.removeRow(index);
+                          },
+                          child: Image.asset(
+                            ImageConfig.delete,
+                            height: SizeConfig.size24,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+                if (dashboardController.rows.length < 10) ...[
+                  SizeConfig.size5.height,
+                  TextButton.icon(
+                    onPressed: dashboardController.addRow,
+                    icon: const Icon(
+                      Icons.add,
+                      size: SizeConfig.size20,
+                    ),
+                    label: Text(
+                      StringConfig.dashboard.addValue,
+                      style: FontTextStyleConfig.labelTextStyle.copyWith(
+                        color: ColorConfig.subtitleColor,
+                        fontSize: FontSizeConfig.fontSize14,
+                      ),
+                    ),
+                  ),
+                ]
               ],
             ],
             SizeConfig.size30.height,
@@ -155,6 +261,9 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                     onChanged: () {
                       dashboardController.isAsc.value = true;
                     },
+                    isAddCondition: dashboardController
+                            .showAddCondition.value &&
+                        dashboardController.selectedConditionIndex.value != -1,
                   ),
                   SizeConfig.size42.width,
                   CustomRadioWidget(
@@ -163,6 +272,9 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                     onChanged: () {
                       dashboardController.isAsc.value = false;
                     },
+                    isAddCondition: dashboardController
+                            .showAddCondition.value &&
+                        dashboardController.selectedConditionIndex.value != -1,
                   ),
                 ],
               ),
@@ -188,6 +300,7 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                   child: CustomButton(
                     btnText: StringConfig.dashboard.apply,
                     onTap: () {
+                      // dashboardController.filterRows();
                       Get.back();
                     },
                   ),
@@ -200,3 +313,4 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
     ),
   );
 }
+

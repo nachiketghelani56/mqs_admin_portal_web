@@ -18,7 +18,13 @@ class CustomTextField extends StatelessWidget {
     this.readOnly = false,
     this.onTap,
     this.inputFormatters,
-    this.autofillHints, this.suffix, this.keyboardType,
+    this.autofillHints,
+    this.suffix,
+    this.keyboardType,
+    this.uniqueKey,
+    this.onChanged,
+    this.border,
+    this.padding,
   });
 
   final TextEditingController controller;
@@ -34,22 +40,30 @@ class CustomTextField extends StatelessWidget {
   final Iterable<String>? autofillHints;
   final Widget? suffix;
   final TextInputType? keyboardType;
+  final Key? uniqueKey;
+  final Function(String)? onChanged;
+  final InputBorder? border;
+  final double? padding;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: FontTextStyleConfig.labelTextStyle,
-        ).paddingOnly(left: SizeConfig.size2),
-        SizeConfig.size6.height,
+        if (label.isNotEmpty) ...[
+          Text(
+            label,
+            style: FontTextStyleConfig.labelTextStyle,
+          ).paddingOnly(left: SizeConfig.size2),
+          SizeConfig.size6.height,
+        ],
         TextFormField(
+          key: uniqueKey,
           controller: controller,
           readOnly: readOnly,
           onTap: onTap,
-          keyboardType:keyboardType,
+          onChanged: onChanged,
+          keyboardType: keyboardType,
           obscureText: isObscure,
           obscuringCharacter: '•',
           style: FontTextStyleConfig.textFieldTextStyle
@@ -65,29 +79,31 @@ class CustomTextField extends StatelessWidget {
             fillColor: ColorConfig.backgroundColor,
             floatingLabelBehavior: FloatingLabelBehavior.always,
             labelStyle: FontTextStyleConfig.labelTextStyle,
-            border: FontTextStyleConfig.borderDecoration,
-            focusedBorder: FontTextStyleConfig.borderDecoration,
-            enabledBorder: FontTextStyleConfig.borderDecoration,
-            focusedErrorBorder: FontTextStyleConfig.borderDecoration,
-            errorBorder: FontTextStyleConfig.borderDecoration,
-            suffixIcon:suffix ?? (suffixIcon != null
-                ? Container(
-                    height: SizeConfig.size25,
-                    width: SizeConfig.size25,
-                    alignment: Alignment.center,
-                    child: Image.asset(
-                      suffixIcon!,
-                      height: SizeConfig.size25,
-                      width: SizeConfig.size25,
-                    ),
-                  ).tap(() {
-                    if (onSuffixIconTap != null) {
-                      onSuffixIconTap!();
-                    }
-                  }).paddingOnly(right: SizeConfig.size20)
-                : null),
-            contentPadding: const EdgeInsets.symmetric(
-                vertical: SizeConfig.size20, horizontal: SizeConfig.size20),
+            border: border ?? FontTextStyleConfig.borderDecoration,
+            focusedBorder: border ?? FontTextStyleConfig.borderDecoration,
+            enabledBorder: border ?? FontTextStyleConfig.borderDecoration,
+            focusedErrorBorder: border ?? FontTextStyleConfig.borderDecoration,
+            errorBorder: border ?? FontTextStyleConfig.borderDecoration,
+            suffixIcon: suffix ??
+                (suffixIcon != null
+                    ? Container(
+                        height: SizeConfig.size25,
+                        width: SizeConfig.size25,
+                        alignment: Alignment.center,
+                        child: Image.asset(
+                          suffixIcon!,
+                          height: SizeConfig.size25,
+                          width: SizeConfig.size25,
+                        ),
+                      ).tap(() {
+                        if (onSuffixIconTap != null) {
+                          onSuffixIconTap!();
+                        }
+                      }).paddingOnly(right: SizeConfig.size20)
+                    : null),
+            contentPadding: EdgeInsets.symmetric(
+                vertical: padding ?? SizeConfig.size20,
+                horizontal: SizeConfig.size20),
           ),
         ),
       ],

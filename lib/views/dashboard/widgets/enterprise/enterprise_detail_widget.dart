@@ -14,7 +14,7 @@ Widget enterpriseDetailWidget(
     padding: const EdgeInsets.only(bottom: SizeConfig.size24),
     child: Container(
       padding: const EdgeInsets.all(SizeConfig.size26),
-      decoration: FontTextStyleConfig.detailMainDecoration,
+      decoration: FontTextStyleConfig.cardDecoration,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

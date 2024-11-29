@@ -23,6 +23,15 @@ class FirebaseStorageService {
 
     return enterprises;
   }
+  Future<List<Map<String, dynamic>>> getEnterpriseFields() async {
+    QuerySnapshot<Object?> ent = await enterprise.get();
+
+    final List<Map<String, dynamic>> fields = ent.docs.map((doc) {
+      return doc.data() as Map<String, dynamic>;
+    }).toList();
+
+    return fields;
+  }
 
   Stream<List<EnterpriseModel>> getEnterpriseStream() {
     return enterprise.snapshots().map((snapshot) {
