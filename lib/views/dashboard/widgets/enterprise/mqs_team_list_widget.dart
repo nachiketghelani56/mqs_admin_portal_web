@@ -25,7 +25,7 @@ Widget mqsTeamListWidget({required DashboardController dashboardController}) {
           child: Row(
             children: [
               Expanded(
-                flex: SizeConfig.size4.toInt(),
+                flex: SizeConfig.size3.toInt(),
                 child: Text(
                   StringConfig.dashboard.teamName,
                   style: FontTextStyleConfig.tableBottomTextStyle,
@@ -39,7 +39,7 @@ Widget mqsTeamListWidget({required DashboardController dashboardController}) {
                 ),
               ),
               Expanded(
-                flex: SizeConfig.size3.toInt(),
+                flex: SizeConfig.size2.toInt(),
                 child: Text(
                   StringConfig.dashboard.teamMemberLimit,
                   style: FontTextStyleConfig.tableBottomTextStyle,
@@ -59,8 +59,8 @@ Widget mqsTeamListWidget({required DashboardController dashboardController}) {
             i < dashboardController.enterpriseDetail.mqsTeamList.length;
             i++)
           Container(
-            height: SizeConfig.size55,
-            padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
+            padding: const EdgeInsets.symmetric(
+                horizontal: SizeConfig.size14, vertical: SizeConfig.size14),
             decoration:
                 i == dashboardController.enterpriseDetail.mqsTeamList.length - 1
                     ? FontTextStyleConfig.contentDecoration.copyWith(
@@ -72,12 +72,11 @@ Widget mqsTeamListWidget({required DashboardController dashboardController}) {
             child: Row(
               children: [
                 Expanded(
-                  flex: SizeConfig.size4.toInt(),
+                  flex: SizeConfig.size3.toInt(),
                   child: Text(
                     dashboardController
                         .enterpriseDetail.mqsTeamList[i].mqsTeamName,
                     style: FontTextStyleConfig.tableContentTextStyle,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Expanded(
@@ -86,15 +85,13 @@ Widget mqsTeamListWidget({required DashboardController dashboardController}) {
                     dashboardController
                         .enterpriseDetail.mqsTeamList[i].mqsTeamEmail,
                     style: FontTextStyleConfig.tableContentTextStyle,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Expanded(
-                  flex: SizeConfig.size3.toInt(),
+                  flex: SizeConfig.size2.toInt(),
                   child: Text(
                     "${dashboardController.enterpriseDetail.mqsTeamList[i].mqsTeamMembersLimit}",
                     style: FontTextStyleConfig.tableContentTextStyle,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Expanded(
@@ -102,7 +99,6 @@ Widget mqsTeamListWidget({required DashboardController dashboardController}) {
                   child: Text(
                     "${dashboardController.enterpriseDetail.mqsTeamList[i].mqsIsEnable.toString().capitalize}",
                     style: FontTextStyleConfig.tableContentTextStyle,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],

@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/controller/home_controller.dart';
 
-Widget homeOptionsWidget({required HomeController homeController, required MqsDashboardController mqsDashboardController}) {
+Widget homeOptionsWidget(
+    {required HomeController homeController,
+    required MqsDashboardController mqsDashboardController,
+    required DashboardController dashboardController}) {
   return Wrap(
     spacing: SizeConfig.size34,
     runSpacing: SizeConfig.size34,
     children: [
       for (int i = 0; i < homeController.options.length; i++)
         GestureDetector(
-          onTap: (){
+          onTap: () {
             mqsDashboardController.subMenuIndex.value = i;
-            mqsDashboardController.isShowHome.value=  true;
+            mqsDashboardController.isShowHome.value = true;
+            if (i < 2) {
+              dashboardController.setTabIndex(index: i);
+            }
           },
-
           child: Stack(
             alignment: Alignment.topLeft,
             children: [

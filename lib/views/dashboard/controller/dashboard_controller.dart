@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
@@ -159,13 +158,13 @@ class DashboardController extends GetxController {
     getEnterprises();
     getUsers();
     getUserSubscriptionRecipts();
-
     super.onInit();
   }
 
   Future<void> applyFilter(
       String field, List<RowInputModel> value, Object matchKey) async {
     try {
+      reset();
       String condition = '';
       if (matchKey == 0) {
         condition = "==";
@@ -262,6 +261,7 @@ class DashboardController extends GetxController {
     rows.clear();
     addRow();
     getEnterprises();
+    reset();
   }
 
   clearAllFields() {
@@ -340,10 +340,6 @@ class DashboardController extends GetxController {
           await FirebaseStorageService.i.getEnterprises();
       searchedEnterprises.value = enterpriseList;
       enterprises.value = enterpriseList;
-      filterFields.value = enterprises
-          .expand((e) => e.toJson().keys) // Convert model to Map
-          .toSet() // Ensure uniqueness
-          .toList();
       FirebaseStorageService.i.getEnterpriseStream().listen((enterpriseList) {
         searchedEnterprises.value = enterpriseList; // Update searched list
         enterprises.value = enterpriseList; // Update full list
@@ -961,13 +957,32 @@ class DashboardController extends GetxController {
   }
 
   setTabIndex({required int index}) {
-    viewIndex.value = -1;
     selectedTabIndex.value = index;
-    offset.value = 0;
+    searchController.clear();
+    reset();
+    setFilterFields();
+  }
+
+  reset() {
+    viewIndex.value = -1;
     currentPage.value = 1;
+    offset.value = 0;
     searchedEnterprises.value = enterprises;
     searchedUsers.value = users;
-    searchController.clear();
+  }
+
+  setFilterFields() {
+    if (selectedTabIndex.value == 0) {
+      filterFields.value = enterprises
+          .expand((e) => e.toJson().keys) // Convert model to Map
+          .toSet() // Ensure uniqueness
+          .toList();
+    } else {
+      filterFields.value = users
+          .expand((e) => e.toJson().keys) // Convert model to Map
+          .toSet() // Ensure uniqueness
+          .toList();
+    }
   }
 
   getMaxOffset() {
@@ -1157,7 +1172,8 @@ class DashboardController extends GetxController {
 
   exportUserIAM() async {
     try {
-      String currentDate = DateFormat('dd/MM/yyyy').format(DateTime(0));
+      String currentDate =
+          DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(DateTime(0));
       List<List<String>> rows = [
         ...users.map((model) {
           return [
@@ -1191,9 +1207,9 @@ class DashboardController extends GetxController {
           ];
         }),
       ];
-      rows.sort((a, b) => DateFormat('dd/MM/yyyy')
+      rows.sort((a, b) => DateFormat(StringConfig.dashboard.dateYYYYMMDD)
           .parse(b[3].isNotEmpty ? b[3] : currentDate)
-          .compareTo(DateFormat('dd/MM/yyyy')
+          .compareTo(DateFormat(StringConfig.dashboard.dateYYYYMMDD)
               .parse(a[3].isNotEmpty ? a[3] : currentDate)));
       rows.insert(
         0,

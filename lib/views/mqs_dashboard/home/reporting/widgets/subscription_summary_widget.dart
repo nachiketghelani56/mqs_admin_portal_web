@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/controller/reporting_controller.dart';
-import 'package:mqs_admin_portal_web/widgets/custom_button.dart';
+import 'package:mqs_admin_portal_web/widgets/custom_icon_button.dart';
 
 Widget subscriptionSummaryWidget(
     {required BuildContext context,
@@ -22,15 +22,11 @@ Widget subscriptionSummaryWidget(
                 style: FontTextStyleConfig.cardTitleTextStyle,
               ),
             ),
-            SizedBox(
-              width: SizeConfig.size124,
-              child: CustomButton(
-                isSelected: false,
-                btnText: StringConfig.dashboard.export,
-                onTap: () {
-                  reportingController.exportSubscriptionSummary();
-                },
-              ),
+            CustomIconButton(
+              icon: ImageConfig.export,
+              onTap: () {
+                reportingController.exportSubscriptionSummary();
+              },
             ),
           ],
         ),

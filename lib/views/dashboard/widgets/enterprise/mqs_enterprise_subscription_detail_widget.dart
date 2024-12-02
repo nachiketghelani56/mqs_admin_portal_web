@@ -50,8 +50,8 @@ Widget mqsEnterpriseSubscriptionDetailWidget(
         ),
       ),
       Container(
-        height: SizeConfig.size55,
-        padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
+        padding: const EdgeInsets.symmetric(
+            horizontal: SizeConfig.size14, vertical: SizeConfig.size14),
         decoration: FontTextStyleConfig.contentDecoration.copyWith(
           borderRadius: const BorderRadius.vertical(
             bottom: Radius.circular(SizeConfig.size12),

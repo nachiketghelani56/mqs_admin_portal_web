@@ -26,7 +26,7 @@ Widget mqsEmployeeEmailListWidget(
           child: Row(
             children: [
               Expanded(
-                flex: SizeConfig.size4.toInt(),
+                flex: SizeConfig.size3.toInt(),
                 child: Text(
                   StringConfig.dashboard.employeeName,
                   style: FontTextStyleConfig.tableBottomTextStyle,
@@ -53,8 +53,8 @@ Widget mqsEmployeeEmailListWidget(
             i < dashboardController.enterpriseDetail.mqsEmployeeList.length;
             i++)
           Container(
-            height: SizeConfig.size55,
-            padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
+            padding: const EdgeInsets.symmetric(
+                horizontal: SizeConfig.size14, vertical: SizeConfig.size14),
             decoration: i ==
                     dashboardController
                             .enterpriseDetail.mqsEmployeeList.length -
@@ -68,12 +68,11 @@ Widget mqsEmployeeEmailListWidget(
             child: Row(
               children: [
                 Expanded(
-                  flex: SizeConfig.size4.toInt(),
+                  flex: SizeConfig.size3.toInt(),
                   child: Text(
                     dashboardController
                         .enterpriseDetail.mqsEmployeeList[i].mqsEmployeeName,
                     style: FontTextStyleConfig.tableContentTextStyle,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Expanded(
@@ -82,7 +81,6 @@ Widget mqsEmployeeEmailListWidget(
                     dashboardController
                         .enterpriseDetail.mqsEmployeeList[i].mqsEmployeeEmail,
                     style: FontTextStyleConfig.tableContentTextStyle,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Expanded(
@@ -90,7 +88,6 @@ Widget mqsEmployeeEmailListWidget(
                   child: Text(
                     "${dashboardController.enterpriseDetail.mqsEmployeeList[i].mqsIsSignUp.toString().capitalize}",
                     style: FontTextStyleConfig.tableContentTextStyle,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],

@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/controller/home_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/widgets/home_header_widget.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/widgets/home_options_widget.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key, required this.scaffoldKey});
+  HomeScreen(
+      {super.key,
+      required this.scaffoldKey,
+      required this.dashboardController});
 
   final HomeController _homeController = Get.put(HomeController());
   final MqsDashboardController _mqsDashboardController =
       Get.put(MqsDashboardController());
   final GlobalKey<ScaffoldState> scaffoldKey;
+  final DashboardController dashboardController;
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +30,10 @@ class HomeScreen extends StatelessWidget {
               context: context,
               scaffoldKey: scaffoldKey),
           homeOptionsWidget(
-                  homeController: _homeController,
-                  mqsDashboardController: _mqsDashboardController)
-              .paddingAll(SizeConfig.size40),
+            homeController: _homeController,
+            mqsDashboardController: _mqsDashboardController,
+            dashboardController: dashboardController,
+          ).paddingAll(SizeConfig.size40),
         ],
       ),
     );

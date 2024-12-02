@@ -29,9 +29,8 @@ class Dashboard {
   final String export = "Export";
   final String addEnterprise = "Add Enterprise";
   final String editEnterprise = "Edit Enterprise";
-  final String searchEnterpriseNameEmail =
-      "Search Enterprise Name, Email  etc.";
-  final String searchUserNameEmail = "Search User Name, Email  etc.";
+  final String searchEnterpriseNameEmail = "Search Name, Email  etc.";
+  final String searchUserNameEmail = "Search Name, Email  etc.";
   final String id = "id";
   final String mqsEnterPriseCode = "Enterprise Code";
   final String rowsPerPage = "Rows per page:";

@@ -112,7 +112,6 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
               dashboardController.showAddCondition.value =
                   !dashboardController.showAddCondition.value;
               dashboardController.selectedConditionIndex.value = -1;
-
             }),
             if (dashboardController.showAddCondition.value) ...[
               SizeConfig.size14.height,
@@ -311,11 +310,13 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                   child: CustomButton(
                     btnText: StringConfig.dashboard.apply,
                     onTap: () {
-                      dashboardController.applyFilter(
-                          dashboardController.filterFields[dashboardController
-                              .selectedFilterFieldIndex.value],
-                          dashboardController.rows,
-                          dashboardController.selectedConditionIndex.value);
+                      if (dashboardController.selectedTabIndex.value == 0) {
+                        dashboardController.applyFilter(
+                            dashboardController.filterFields[dashboardController
+                                .selectedFilterFieldIndex.value],
+                            dashboardController.rows,
+                            dashboardController.selectedConditionIndex.value);
+                      }
                       Get.back();
                     },
                   ),

@@ -3,9 +3,9 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
-import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
+import 'package:mqs_admin_portal_web/widgets/custom_icon_button.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_prefix_button.dart';
 import 'package:mqs_admin_portal_web/widgets/search_text_field.dart';
 
@@ -35,9 +35,8 @@ Widget userTopButtonsWidget(
             ),
             const Spacer(),
             SizeConfig.size12.width,
-            CustomPrefixButton(
-              prefixIcon: ImageConfig.export,
-              btnText: StringConfig.dashboard.export,
+            CustomIconButton(
+              icon: ImageConfig.export,
               onTap: () {
                 dashboardController.exportUserIAM();
               },
@@ -46,18 +45,13 @@ Widget userTopButtonsWidget(
         )
       : Row(
           children: [
-            Container(
-              height: SizeConfig.size46,
-              decoration: FontTextStyleConfig.topOptionDecoration,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: SizeConfig.size15),
-              child: Image.asset(
-                ImageConfig.filter,
-                width: SizeConfig.size22,
-              ),
-            ).tap(() {
-              mqsDashboardController.scaffoldKey.currentState?.openEndDrawer();
-            }),
+            CustomIconButton(
+              icon: ImageConfig.filter,
+              onTap: () {
+                mqsDashboardController.scaffoldKey.currentState
+                    ?.openEndDrawer();
+              },
+            ),
             SizeConfig.size12.width,
             SearchTextField(
               controller: dashboardController.searchController,
@@ -68,18 +62,12 @@ Widget userTopButtonsWidget(
             ),
             const Spacer(),
             SizeConfig.size12.width,
-            Container(
-              height: SizeConfig.size46,
-              decoration: FontTextStyleConfig.topOptionDecoration,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: SizeConfig.size15),
-              child: Image.asset(
-                ImageConfig.export,
-                width: SizeConfig.size22,
-              ),
-            ).tap(() {
-              dashboardController.exportUserIAM();
-            }),
+            CustomIconButton(
+              icon: ImageConfig.export,
+              onTap: () {
+                dashboardController.exportUserIAM();
+              },
+            ),
           ],
         );
 }

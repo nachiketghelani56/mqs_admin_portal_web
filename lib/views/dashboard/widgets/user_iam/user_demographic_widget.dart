@@ -25,6 +25,7 @@ Widget userDemographicWidget(
           child: Row(
             children: [
               Expanded(
+                flex: SizeConfig.size2.toInt(),
                 child: Text(
                   StringConfig.dashboard.currentSelectedAnswer,
                   style: FontTextStyleConfig.tableBottomTextStyle,
@@ -45,8 +46,8 @@ Widget userDemographicWidget(
                     .userDetail.onboardingModel.demoGraphicValue.length;
             i++)
           Container(
-            height: SizeConfig.size55,
-            padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
+            padding: const EdgeInsets.symmetric(
+                horizontal: SizeConfig.size14, vertical: SizeConfig.size14),
             decoration: i ==
                     dashboardController.userDetail.onboardingModel
                             .demoGraphicValue.length -
@@ -60,6 +61,7 @@ Widget userDemographicWidget(
             child: Row(
               children: [
                 Expanded(
+                  flex: SizeConfig.size2.toInt(),
                   child: Text(
                     dashboardController.userDetail.onboardingModel
                         .demoGraphicValue[i].currentSelectedAnswer,

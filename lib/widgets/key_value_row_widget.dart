@@ -7,8 +7,9 @@ Widget keyValueRowWidget(
     bool isFirst = false,
     isLast = false}) {
   return Container(
-    height: SizeConfig.size55,
-    padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
+    // height: SizeConfig.size55,
+    padding: const EdgeInsets.symmetric(
+        horizontal: SizeConfig.size14, vertical: SizeConfig.size14),
     decoration: isFirst
         ? FontTextStyleConfig.headerDecoration
         : FontTextStyleConfig.contentDecoration.copyWith(

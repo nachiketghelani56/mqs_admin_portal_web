@@ -145,7 +145,8 @@ class ReportingController extends GetxController {
   exportAuthSummary() async {
     try {
       List<UserIAMModel> users = await FirebaseStorageService.i.getUsers();
-      String currentDate = DateFormat('dd/MM/yyyy').format(DateTime(0));
+      String currentDate =
+          DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(DateTime(0));
       List<List<String>> rows = [
         ...users.map((model) {
           return [
@@ -179,9 +180,9 @@ class ReportingController extends GetxController {
           ];
         }),
       ];
-      rows.sort((a, b) => DateFormat('dd/MM/yyyy')
+      rows.sort((a, b) => DateFormat(StringConfig.dashboard.dateYYYYMMDD)
           .parse(b[3].isNotEmpty ? b[3] : currentDate)
-          .compareTo(DateFormat('dd/MM/yyyy')
+          .compareTo(DateFormat(StringConfig.dashboard.dateYYYYMMDD)
               .parse(a[3].isNotEmpty ? a[3] : currentDate)));
       rows.insert(
         0,
@@ -350,7 +351,8 @@ class ReportingController extends GetxController {
   exportCircleSummary() async {
     try {
       List<CircleModel> circles = await FirebaseStorageService.i.getCircles();
-      String currentDate = DateFormat('dd/MM/yyyy').format(DateTime(0));
+      String currentDate =
+          DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(DateTime(0));
       List<List<String>> rows = [
         ...circles.map((model) {
           return [
@@ -371,9 +373,9 @@ class ReportingController extends GetxController {
           ];
         }),
       ];
-      rows.sort((a, b) => DateFormat('dd/MM/yyyy')
+      rows.sort((a, b) => DateFormat(StringConfig.dashboard.dateYYYYMMDD)
           .parse(b[3].isNotEmpty ? b[3] : currentDate)
-          .compareTo(DateFormat('dd/MM/yyyy')
+          .compareTo(DateFormat(StringConfig.dashboard.dateYYYYMMDD)
               .parse(a[3].isNotEmpty ? a[3] : currentDate)));
       rows.insert(
         0,

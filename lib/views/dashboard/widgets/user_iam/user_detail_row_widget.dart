@@ -71,6 +71,7 @@ Widget userDetailRowWidget({required DashboardController dashboardController}) {
       keyValueRowWidget(
         key: StringConfig.dashboard.isRegister,
         value: dashboardController.userDetail.isRegister,
+        isLast: true,
       ),
     ],
   );

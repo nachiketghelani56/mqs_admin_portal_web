@@ -30,7 +30,7 @@ class FirebaseStorageService {
   Future<List<QueryDocumentSnapshot>> fetchFilteredData(String fieldKey,
       List<Map<String, dynamic>> filter, String condition) async {
     Query query = enterprise;
-    filter.forEach((filter) {
+    for (var filter in filter) {
       String field = filter['field'];
       var condition = filter['condition'];
       if (condition is Map<String, dynamic>) {
@@ -82,7 +82,7 @@ class FirebaseStorageService {
             break;
 
           case 'in': // In array
-            query = query.where(field, whereIn: value);
+            query = query.where(field, whereIn: [value.toString()]);
             break;
 
           case 'array-contains': // Array contains
@@ -90,28 +90,18 @@ class FirebaseStorageService {
             break;
 
           case 'array-contains-any': // Array contains any
-            query = query.where(field, arrayContainsAny: value);
+            query = query.where(field, arrayContainsAny: [value.toString()]);
             break;
 
           default:
             break;
         }
       }
-    });
+    }
     // Get the filtered query results
     QuerySnapshot querySnapshot = await query.get();
     // Return the matching documents
     return querySnapshot.docs;
-  }
-
-  Future<List<Map<String, dynamic>>> getEnterpriseFields() async {
-    QuerySnapshot<Object?> ent = await enterprise.get();
-
-    final List<Map<String, dynamic>> fields = ent.docs.map((doc) {
-      return doc.data() as Map<String, dynamic>;
-    }).toList();
-
-    return fields;
   }
 
   Stream<List<EnterpriseModel>> getEnterpriseStream() {
@@ -121,10 +111,6 @@ class FirebaseStorageService {
               EnterpriseModel.fromJson(doc.data() as Map<String, dynamic>))
           .toList();
     });
-  }
-
-  listenToEnterpriseChange(Function(QuerySnapshot<Object?>)? onData) {
-    enterprise.snapshots().listen((onData));
   }
 
   Future<void> editEnterprises(
@@ -163,10 +149,6 @@ class FirebaseStorageService {
               UserIAMModel.fromJson(doc.data() as Map<String, dynamic>))
           .toList();
     });
-  }
-
-  listenToUserChange(Function(QuerySnapshot<Object?>)? onData) {
-    user.snapshots().listen((onData));
   }
 
   Future<List<CircleModel>> getCircles() async {

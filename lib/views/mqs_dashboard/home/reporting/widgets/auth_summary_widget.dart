@@ -4,7 +4,7 @@ import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/controller/reporting_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/widgets/custom_range_dialog.dart';
-import 'package:mqs_admin_portal_web/widgets/custom_button.dart';
+import 'package:mqs_admin_portal_web/widgets/custom_icon_button.dart';
 
 Widget authSummaryWidget(
     {required BuildContext context,
@@ -24,29 +24,23 @@ Widget authSummaryWidget(
                   style: FontTextStyleConfig.cardTitleTextStyle,
                 ),
               ),
-              SizedBox(
-                width: SizeConfig.size124,
-                child: CustomButton(
-                  isSelected: false,
-                  btnText: StringConfig.dashboard.export,
-                  onTap: () {
-                    reportingController.exportAuthSummary();
-                  },
-                ),
+              CustomIconButton(
+                icon: ImageConfig.export,
+                onTap: () {
+                  reportingController.exportAuthSummary();
+                },
               ),
               PopupMenuButton(
                 icon: Container(
-                  height: SizeConfig.size50,
-                  width: SizeConfig.size55,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: ColorConfig.primaryColor),
-                    borderRadius: BorderRadius.circular(SizeConfig.size14),
+                  height: SizeConfig.size46,
+                  decoration: FontTextStyleConfig.topOptionDecoration.copyWith(
+                    borderRadius: BorderRadius.circular(SizeConfig.size12),
                   ),
-                  alignment: Alignment.center,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: SizeConfig.size15),
                   child: Image.asset(
                     ImageConfig.filterNew,
-                    height: SizeConfig.size28,
-                    width: SizeConfig.size28,
+                    width: SizeConfig.size22,
                   ),
                 ),
                 onSelected: (value) {

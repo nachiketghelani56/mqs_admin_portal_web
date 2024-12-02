@@ -63,7 +63,9 @@ class MqsDashboardScreen extends StatelessWidget {
                             scaffoldKey: _mqsDashboardController.scaffoldKey);
                       } else {
                         return HomeScreen(
-                            scaffoldKey: _mqsDashboardController.scaffoldKey);
+                          scaffoldKey: _mqsDashboardController.scaffoldKey,
+                          dashboardController: _dashboardController,
+                        );
                       }
                     }
                     return const SizedBox.shrink();

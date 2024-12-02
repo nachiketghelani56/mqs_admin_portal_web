@@ -93,6 +93,35 @@ class UserIAMModel {
                     relationship: 0,
                     social: 0,
                     work: 0));
+
+  Map<String, dynamic> toJson() {
+    return {
+      'Email': email,
+      'FirstName': firstName,
+      'LastName': lastName,
+      'isEnterPriseUser': isEnterpriseUser,
+      'isFirebaseUserID': isFirebaseUserId,
+      'isRegister': isRegister,
+      'mqsIsUserActive': mqsIsUserActive,
+      'mqsCreatedTimestamp': mqsCreatedTimestamp,
+      'About': about,
+      'AboutValue': aboutValue,
+      'Country': country,
+      'CountryValue': countryValue,
+      'Pronouns': pronouns,
+      'PronounsValue': pronounsValue,
+      'UserImage': userImage,
+      'enterPriseID': enterpriseId,
+      'isMONGODBUserID': isMongoDBUserId,
+      'loginWith': loginWith,
+      'mqsExpiryDate': mqsExpiryDate,
+      'mqsSubscriptionActivePlan': mqsSubscriptionActivePlan,
+      'mqsSubscriptionPlatform': mqsSubscriptionPlatform,
+      'mqsUpdateTimestamp': mqsUpdateTimestamp,
+      'mqsUserSubscriptionStatus': mqsUserSubscriptionStatus,
+      'onboardingData': onboardingModel,
+    };
+  }
 }
 
 class OnboardingModel {
@@ -131,6 +160,16 @@ class OnboardingModel {
                 relationship: 0,
                 social: 0,
                 work: 0);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'checkINValue': List.from((checkInValue).map((model) => model.toJson())),
+      'demoGraphicValue':
+          List.from((demoGraphicValue).map((model) => model.toJson())),
+      'scenesValue': List.from((scenesValue).map((model) => model.toJson())),
+      'wOLValue': wOLValue.toJson(),
+    };
+  }
 }
 
 class CheckInModel {

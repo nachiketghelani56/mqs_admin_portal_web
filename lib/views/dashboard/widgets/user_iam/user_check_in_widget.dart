@@ -57,8 +57,8 @@ Widget userCheckInWidget({required DashboardController dashboardController}) {
                     .userDetail.onboardingModel.checkInValue.length;
             i++)
           Container(
-            height: SizeConfig.size55,
-            padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
+            padding: const EdgeInsets.symmetric(
+                horizontal: SizeConfig.size14, vertical: SizeConfig.size14),
             decoration: i ==
                     dashboardController
                             .userDetail.onboardingModel.checkInValue.length -
@@ -75,7 +75,6 @@ Widget userCheckInWidget({required DashboardController dashboardController}) {
                   child: Text(
                     "${dashboardController.userDetail.onboardingModel.checkInValue[i].checkInScore}",
                     style: FontTextStyleConfig.tableContentTextStyle,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Expanded(
@@ -83,14 +82,12 @@ Widget userCheckInWidget({required DashboardController dashboardController}) {
                     dashboardController
                         .userDetail.onboardingModel.checkInValue[i].id,
                     style: FontTextStyleConfig.tableContentTextStyle,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Expanded(
                   child: Text(
                     "${dashboardController.userDetail.onboardingModel.checkInValue[i].mqsCINValue}",
                     style: FontTextStyleConfig.tableContentTextStyle,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Expanded(
@@ -99,7 +96,6 @@ Widget userCheckInWidget({required DashboardController dashboardController}) {
                         dashboardController.userDetail.onboardingModel
                             .checkInValue[i].mqsTimestamp)),
                     style: FontTextStyleConfig.tableContentTextStyle,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
