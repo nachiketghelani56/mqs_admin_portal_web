@@ -26,6 +26,84 @@ class FirebaseStorageService {
 
     return enterprises;
   }
+
+  Future<List<QueryDocumentSnapshot>> fetchFilteredData(String fieldKey,
+      List<Map<String, dynamic>> filter, String condition) async {
+    Query query = enterprise;
+    filter.forEach((filter) {
+      String field = filter['field'];
+      var condition = filter['condition'];
+      if (condition is Map<String, dynamic>) {
+        String operator = condition['operator'];
+        var type = condition['type'];
+        var value = condition['value'];
+        switch (operator) {
+          case '==': // Equal to
+            query = query.where(field,
+                isEqualTo: type == StringConfig.dashboard.boolean
+                    ? value == 'true'
+                    : value.toString());
+            break;
+
+          case '!=': // Not equal to
+
+            query = query.where(field,
+                isNotEqualTo: type == StringConfig.dashboard.boolean
+                    ? value == 'true'
+                    : value.toString());
+            break;
+
+          case '>': // Greater than
+            query = query.where(field,
+                isGreaterThan: type == StringConfig.dashboard.boolean
+                    ? value == 'true'
+                    : value.toString());
+            break;
+
+          case '>=': // Greater than or equal to
+            query = query.where(field,
+                isGreaterThanOrEqualTo: type == StringConfig.dashboard.boolean
+                    ? value == 'true'
+                    : value.toString());
+            break;
+
+          case '<': // Less than
+            query = query.where(field,
+                isLessThan: type == StringConfig.dashboard.boolean
+                    ? value == 'true'
+                    : value.toString());
+            break;
+
+          case '<=': // Less than or equal to
+            query = query.where(field,
+                isLessThanOrEqualTo: type == StringConfig.dashboard.boolean
+                    ? value == 'true'
+                    : value.toString());
+            break;
+
+          case 'in': // In array
+            query = query.where(field, whereIn: value);
+            break;
+
+          case 'array-contains': // Array contains
+            query = query.where(field, arrayContains: value);
+            break;
+
+          case 'array-contains-any': // Array contains any
+            query = query.where(field, arrayContainsAny: value);
+            break;
+
+          default:
+            break;
+        }
+      }
+    });
+    // Get the filtered query results
+    QuerySnapshot querySnapshot = await query.get();
+    // Return the matching documents
+    return querySnapshot.docs;
+  }
+
   Future<List<Map<String, dynamic>>> getEnterpriseFields() async {
     QuerySnapshot<Object?> ent = await enterprise.get();
 

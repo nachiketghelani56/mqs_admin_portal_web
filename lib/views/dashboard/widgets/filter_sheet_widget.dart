@@ -133,11 +133,14 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
               ),
               if (dashboardController.selectedConditionIndex.value >= 0) ...[
                 SizeConfig.size18.height,
-                Text(
-                  StringConfig.dashboard.enterUpValues,
-                  style: FontTextStyleConfig.labelTextStyle
-                      .copyWith(color: ColorConfig.subtitleColor),
-                ),
+                if (dashboardController.selectedConditionIndex.value == 6 ||
+                    dashboardController.selectedConditionIndex.value == 7 ||
+                    dashboardController.selectedConditionIndex.value == 9)
+                  Text(
+                    StringConfig.dashboard.enterUpValues,
+                    style: FontTextStyleConfig.labelTextStyle
+                        .copyWith(color: ColorConfig.subtitleColor),
+                  ),
                 SizeConfig.size10.height,
                 ...List.generate(dashboardController.rows.length, (index) {
                   final row = dashboardController.rows[index];
@@ -211,36 +214,44 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                             ),
                           ),
                         SizeConfig.size8.width,
-                        GestureDetector(
-                          onTap: () {
-                            dashboardController.removeRow(index);
-                          },
-                          child: Image.asset(
-                            ImageConfig.delete,
-                            height: SizeConfig.size24,
+                        if (dashboardController.selectedConditionIndex.value == 6 ||
+                            dashboardController.selectedConditionIndex.value ==
+                                7 ||
+                            dashboardController.selectedConditionIndex.value ==
+                                9)
+                          GestureDetector(
+                            onTap: () {
+                              dashboardController.removeRow(index);
+                            },
+                            child: Image.asset(
+                              ImageConfig.delete,
+                              height: SizeConfig.size24,
+                            ),
                           ),
-                        ),
                       ],
                     ),
                   );
                 }),
-                if (dashboardController.rows.length < 10) ...[
-                  SizeConfig.size5.height,
-                  TextButton.icon(
-                    onPressed: dashboardController.addRow,
-                    icon: const Icon(
-                      Icons.add,
-                      size: SizeConfig.size20,
-                    ),
-                    label: Text(
-                      StringConfig.dashboard.addValue,
-                      style: FontTextStyleConfig.labelTextStyle.copyWith(
-                        color: ColorConfig.subtitleColor,
-                        fontSize: FontSizeConfig.fontSize14,
+                if (dashboardController.selectedConditionIndex.value == 6 ||
+                    dashboardController.selectedConditionIndex.value == 7 ||
+                    dashboardController.selectedConditionIndex.value == 9)
+                  if (dashboardController.rows.length < 10) ...[
+                    SizeConfig.size5.height,
+                    TextButton.icon(
+                      onPressed: dashboardController.addRow,
+                      icon: const Icon(
+                        Icons.add,
+                        size: SizeConfig.size20,
+                      ),
+                      label: Text(
+                        StringConfig.dashboard.addValue,
+                        style: FontTextStyleConfig.labelTextStyle.copyWith(
+                          color: ColorConfig.subtitleColor,
+                          fontSize: FontSizeConfig.fontSize14,
+                        ),
                       ),
                     ),
-                  ),
-                ]
+                  ]
               ],
             ],
             SizeConfig.size30.height,
@@ -300,7 +311,11 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                   child: CustomButton(
                     btnText: StringConfig.dashboard.apply,
                     onTap: () {
-                      // dashboardController.filterRows();
+                      dashboardController.applyFilter(
+                          dashboardController.filterFields[dashboardController
+                              .selectedFilterFieldIndex.value],
+                          dashboardController.rows,
+                          dashboardController.selectedConditionIndex.value);
                       Get.back();
                     },
                   ),
@@ -313,4 +328,3 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
     ),
   );
 }
-

@@ -24,6 +24,7 @@ Widget enterpriseTopButtonsWidget(
               onTap: () {
                 mqsDashboardController.scaffoldKey.currentState
                     ?.openEndDrawer();
+               dashboardController.resetFilter();
               },
             ),
             SizeConfig.size12.width,

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
@@ -158,7 +159,66 @@ class DashboardController extends GetxController {
     getEnterprises();
     getUsers();
     getUserSubscriptionRecipts();
+
     super.onInit();
+  }
+
+  Future<void> applyFilter(
+      String field, List<RowInputModel> value, Object matchKey) async {
+    try {
+      String condition = '';
+      if (matchKey == 0) {
+        condition = "==";
+      } else if (matchKey == 1) {
+        condition = "!=";
+      } else if (matchKey == 2) {
+        condition = ">";
+      } else if (matchKey == 3) {
+        condition = ">=";
+      } else if (matchKey == 4) {
+        condition = "<";
+      } else if (matchKey == 5) {
+        condition = "<=";
+      } else if (matchKey == 6) {
+        condition = "in";
+      } else if (matchKey == 7) {
+        condition = "not-in";
+      } else if (matchKey == 8) {
+        condition = "array-contains";
+      } else if (matchKey == 9) {
+        condition = "array-contains-any";
+      }
+      List<Map<String, dynamic>> filters = [];
+      for (int i = 0; i < value.length; i++) {
+        filters.add(
+          {
+            'field': field,
+            'condition': {
+              'operator': condition,
+              'type': value[i].dataType,
+              'value': value[i].dataType == StringConfig.dashboard.boolean
+                  ? value[i].selectedBoolean.toString()
+                  : value[i].textController.text.toString(),
+            },
+          },
+        );
+      }
+
+      final docs = await FirebaseStorageService.i
+          .fetchFilteredData(field, filters, condition);
+      searchedEnterprises.value = docs.map((doc) {
+        final data =
+            doc.data() as Map<String, dynamic>; // Extract document data
+        return EnterpriseModel.fromJson(data); // Convert to model
+      }).toList();
+      enterprises.value = docs.map((doc) {
+        final data =
+            doc.data() as Map<String, dynamic>; // Extract document data
+        return EnterpriseModel.fromJson(data); // Convert to model
+      }).toList();
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    } finally {}
   }
 
   void addRow() {
@@ -199,6 +259,9 @@ class DashboardController extends GetxController {
     showFilterByField.value = false;
     showAddCondition.value = false;
     showSortResults.value = false;
+    rows.clear();
+    addRow();
+    getEnterprises();
   }
 
   clearAllFields() {
