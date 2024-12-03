@@ -4,6 +4,7 @@ class FirebaseAuthService {
   FirebaseAuthService._();
   static final i = FirebaseAuthService._();
   final FirebaseAuth _instance = FirebaseAuth.instance;
+  User? get user => _instance.currentUser;
   Future<User?> signUpWithEmailPassword(
       {required String email, required String password}) async {
     final credential = await _instance.createUserWithEmailAndPassword(
@@ -20,5 +21,9 @@ class FirebaseAuthService {
       password: password,
     );
     return credential.user;
+  }
+
+  Future signOut() async {
+    await _instance.signOut();
   }
 }

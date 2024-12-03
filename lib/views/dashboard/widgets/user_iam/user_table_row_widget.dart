@@ -21,6 +21,14 @@ Widget userTableRowWidget({
     child: Row(
       children: [
         Expanded(
+          flex: SizeConfig.size2.toInt(),
+          child: Text(
+            '${dashboardController.searchedUsers[index].firstName} ${dashboardController.searchedUsers[index].lastName}',
+            overflow: TextOverflow.ellipsis,
+            style: FontTextStyleConfig.tableTextStyle,
+          ),
+        ),
+        Expanded(
           flex: SizeConfig.size3.toInt(),
           child: Text(
             dashboardController.searchedUsers[index].email,
@@ -28,22 +36,14 @@ Widget userTableRowWidget({
             style: FontTextStyleConfig.tableTextStyle,
           ),
         ),
-        Expanded(
-          flex: SizeConfig.size2.toInt(),
-          child: Text(
-            dashboardController.searchedUsers[index].userName,
-            overflow: TextOverflow.ellipsis,
-            style: FontTextStyleConfig.tableTextStyle,
-          ),
-        ),
-        Expanded(
-          flex: SizeConfig.size2.toInt(),
-          child: Text(
-            dashboardController.searchedUsers[index].loginWith,
-            overflow: TextOverflow.ellipsis,
-            style: FontTextStyleConfig.tableTextStyle,
-          ),
-        ),
+        // Expanded(
+        //   flex: SizeConfig.size2.toInt(),
+        //   child: Text(
+        //     dashboardController.searchedUsers[index].loginWith,
+        //     overflow: TextOverflow.ellipsis,
+        //     style: FontTextStyleConfig.tableTextStyle,
+        //   ),
+        // ),
         Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -29,8 +29,7 @@ class Dashboard {
   final String export = "Export";
   final String addEnterprise = "Add Enterprise";
   final String editEnterprise = "Edit Enterprise";
-  final String searchEnterpriseNameEmail = "Search Name, Email  etc.";
-  final String searchUserNameEmail = "Search Name, Email  etc.";
+  final String searchByNameEmail = "Search by name or email.";
   final String id = "id";
   final String mqsEnterPriseCode = "Enterprise Code";
   final String rowsPerPage = "Rows per page:";
@@ -111,7 +110,7 @@ class Dashboard {
   final String reset = "Reset";
   final String enterValue = "Enter value";
   final String userId = "User ID";
-  final String userName = "User Name";
+  final String fullName = "Full Name";
   final String about = "About";
   final String aboutValue = "AboutValue";
   final String country = "Country";

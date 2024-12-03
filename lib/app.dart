@@ -1,9 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/main.dart';
 import 'package:mqs_admin_portal_web/routes/app_routes.dart';
+import 'package:mqs_admin_portal_web/services/firebase_auth_service.dart';
 
 class MQSAdminPortalWeb extends StatelessWidget {
   const MQSAdminPortalWeb({super.key});
@@ -26,7 +26,7 @@ class MQSAdminPortalWeb extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      initialRoute: FirebaseAuth.instance.currentUser != null
+      initialRoute: FirebaseAuthService.i.user != null
           ? AppRoutes.mqsDashboard
           : AppRoutes.login,
       // initialRoute: AppRoutes.mqsDashboard,

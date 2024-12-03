@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:csv/csv.dart';
@@ -142,16 +143,18 @@ class DashboardController extends GetxController {
   UserSubscriptionReceiptModel? get userSubscriptionDetail =>
       userSubscriptionReceipts.firstWhereOrNull(
           (e) => e.isFirebaseUserID == userDetail.isFirebaseUserId);
-
   RxList<TextEditingController> inputControllers =
       <TextEditingController>[].obs;
-
   RxList<String> dataTypes = [
     StringConfig.dashboard.number,
     StringConfig.dashboard.boolean,
     StringConfig.dashboard.string
   ].obs;
   RxList<RowInputModel> rows = <RowInputModel>[].obs;
+  StreamSubscription<List<EnterpriseModel>>? entStream;
+  StreamSubscription<List<UserIAMModel>>? userStream;
+  StreamSubscription<List<UserSubscriptionReceiptModel>>?
+      userSubscriptionReceiptStream;
 
   @override
   onInit() {
@@ -159,6 +162,14 @@ class DashboardController extends GetxController {
     getUsers();
     getUserSubscriptionRecipts();
     super.onInit();
+  }
+
+  @override
+  void onClose() async {
+    await entStream?.cancel();
+    await userStream?.cancel();
+    await userSubscriptionReceiptStream?.cancel();
+    super.onClose();
   }
 
   Future<void> applyFilter(
@@ -202,19 +213,13 @@ class DashboardController extends GetxController {
           },
         );
       }
-
-      final docs = await FirebaseStorageService.i
-          .fetchFilteredData(field, filters, condition);
-      searchedEnterprises.value = docs.map((doc) {
-        final data =
-            doc.data() as Map<String, dynamic>; // Extract document data
-        return EnterpriseModel.fromJson(data); // Convert to model
-      }).toList();
-      enterprises.value = docs.map((doc) {
-        final data =
-            doc.data() as Map<String, dynamic>; // Extract document data
-        return EnterpriseModel.fromJson(data); // Convert to model
-      }).toList();
+      if (selectedTabIndex.value == 0) {
+        searchedEnterprises.value = await FirebaseStorageService.i
+            .fetchFilteredData(field, filters, condition, isAsc.value);
+      } else {
+        searchedUsers.value = await FirebaseStorageService.i
+            .fetchUserFilteredData(field, filters, condition, isAsc.value);
+      }
     } catch (e) {
       errorDialogWidget(msg: e.toString());
     } finally {}
@@ -260,7 +265,6 @@ class DashboardController extends GetxController {
     showSortResults.value = false;
     rows.clear();
     addRow();
-    getEnterprises();
     reset();
   }
 
@@ -308,39 +312,13 @@ class DashboardController extends GetxController {
 
   getEnterprises() async {
     try {
-      // try {
-      //   List<EnterpriseModel> ent =
-      //   await FirebaseStorageService.i.getEnterprises();
-      //   searchedEnterprises.value = ent;
-      //   enterprises.value = ent;
-      //   FirebaseStorageService.i.listenToEnterpriseChange((data) {
-      //     List<EnterpriseModel> ent = data.docs
-      //         .map((e) => EnterpriseModel.fromJson(e.data() as Map))
-      //         .toList();
-      //     searchedEnterprises.value = ent;
-      //     enterprises.value = ent;
-      //   });
-      // }
-
-      // List<EnterpriseModel> ent =
-      //     await FirebaseStorageService.i.getEnterprises();
-      // searchedEnterprises.value = ent;
-      // enterprises.value = ent;
-      // FirebaseStorageService.i.listenToEnterpriseChange((data) {
-      //   List<EnterpriseModel> ent = data.docs
-      //       .map((e) => EnterpriseModel.fromJson(e.data() as  Map<String, dynamic>))
-      //       .toList();
-      //   print("ent-->${ent}");
-      //   searchedEnterprises.value = ent;
-      //
-      //   enterprises.value = ent;
-      //   print("enterprises.value-->${enterprises.value}");
-      // });
       List<EnterpriseModel> enterpriseList =
           await FirebaseStorageService.i.getEnterprises();
       searchedEnterprises.value = enterpriseList;
       enterprises.value = enterpriseList;
-      FirebaseStorageService.i.getEnterpriseStream().listen((enterpriseList) {
+      entStream = FirebaseStorageService.i
+          .getEnterpriseStream()
+          .listen((enterpriseList) {
         searchedEnterprises.value = enterpriseList; // Update searched list
         enterprises.value = enterpriseList; // Update full list
       });
@@ -354,7 +332,7 @@ class DashboardController extends GetxController {
       List<UserIAMModel> userList = await FirebaseStorageService.i.getUsers();
       searchedUsers.value = userList;
       users.value = userList;
-      FirebaseStorageService.i.getUserStream().listen((data) {
+      userStream = FirebaseStorageService.i.getUserStream().listen((data) {
         searchedUsers.value = data;
         users.value = data;
       });
@@ -367,7 +345,7 @@ class DashboardController extends GetxController {
     try {
       userSubscriptionReceipts.value =
           await FirebaseStorageService.i.getUserSubscriptionReceipt();
-      FirebaseStorageService.i
+      userSubscriptionReceiptStream = FirebaseStorageService.i
           .getUserSubscriptionReceiptStream()
           .listen((data) {
         userSubscriptionReceipts.value = data;
@@ -452,42 +430,6 @@ class DashboardController extends GetxController {
 
   deleteMqsTeam({required int index}) {
     mqsTeamList.removeAt(index);
-  }
-
-  addMqsEntPOC() {
-    // mqsEnterprisePOCs.add(
-    //   MqsEnterprisePOC(
-    //     address: pocAddressController.text.trim(),
-    //     email: pocEmailController.text.trim(),
-    //     name: pocNameController.text.trim(),
-    //     phoneNumber: pocPhoneNumberController.text.trim(),
-    //   ),
-    // );
-    // clearMqsEntPOCFields();
-    // showMqsEnterprisePOCs.value = false;
-  }
-
-  setMqsEntPOCForm({required int index}) {
-    // editMqsEntPOCIndex.value = index;
-    // pocEmailController.text = mqsEnterprisePOCs[index].email;
-    // pocAddressController.text = mqsEnterprisePOCs[index].address;
-    // pocNameController.text = mqsEnterprisePOCs[index].name;
-    // pocPhoneNumberController.text = mqsEnterprisePOCs[index].phoneNumber;
-    // showMqsEnterprisePOCs.value = true;
-  }
-
-  editMqsEntPOC() {
-    // mqsEnterprisePOCs[editMqsEntPOCIndex.value].email = pocEmailController.text;
-    //
-    // mqsEnterprisePOCs[editMqsEntPOCIndex.value].address =
-    //     pocAddressController.text;
-    // mqsEnterprisePOCs[editMqsEntPOCIndex.value].name = pocNameController.text;
-    //
-    // mqsEnterprisePOCs[editMqsEntPOCIndex.value].phoneNumber =
-    //     pocPhoneNumberController.text;
-    // clearMqsEntPOCFields();
-    // editMqsEntPOCIndex.value = -1;
-    // showMqsEnterprisePOCs.value = false;
   }
 
   deleteMqsEntPOC({required int index}) {
@@ -608,108 +550,6 @@ class DashboardController extends GetxController {
     } finally {}
   }
 
-  /// working
-  // importEnterprise() async {
-  //   try {
-  //     final result = await FilePicker.platform.pickFiles(
-  //         allowMultiple: false,
-  //         type: FileType.custom,
-  //         allowedExtensions: ['csv']);
-  //     if (result != null) {
-  //       String csvData = utf8.decode(result.files.single.bytes ?? []);
-  //       List<List<dynamic>> rows = const CsvToListConverter().convert(csvData);
-  //
-  //       for (int i = 1; i < rows.length; i++) {
-  //         List<dynamic> row = rows[i];
-  //         List<MqsEmployee> mqsEmployeeList = [];
-  //         if (row[10] != null && row[10].toString().isNotEmpty) {
-  //           try {
-  //             List<dynamic> employees = jsonDecode(row[10]);
-  //             mqsEmployeeList = employees.map((employee) {
-  //               return MqsEmployee(
-  //                 mqsEmployeeID: employee['mqsEmployeeID'] ?? "",
-  //                 mqsEmployeeName: employee['mqsEmployeeName'] ?? "",
-  //                 mqsEmployeeEmail: employee['mqsEmployeeEmail'] ?? "",
-  //                 mqsIsSignUp:
-  //                 employee['mqsIsSignUp']?.toString().toLowerCase() ==
-  //                     'true',
-  //               );
-  //             }).toList();
-  //           } catch (e) {
-  //             errorDialogWidget(msg: e.toString());
-  //           }
-  //         }
-  //         List<MqsTeam> mqsTeamList = [];
-  //         if (row[9] != null && row[9].toString().isNotEmpty) {
-  //           try {
-  //             List<dynamic> teams = jsonDecode(row[9]);
-  //             mqsTeamList = teams.map((team) {
-  //               return MqsTeam(
-  //                 mqsTeamID: team['mqsTeamID'] ?? "",
-  //                 mqsTeamName: team['mqsTeamName'] ?? "",
-  //                 mqsTeamEmail: team['mqsTeamEmail'] ?? "",
-  //                 mqsTeamMembersLimit: team['mqsTeamMembersLimit'] ?? 0,
-  //                 mqsIsEnable:
-  //                 team['mqsIsEnable']?.toString().toLowerCase() == 'true',
-  //               );
-  //             }).toList();
-  //           } catch (e) {
-  //             errorDialogWidget(msg: e.toString());
-  //           }
-  //         }
-  //         final docRef = FirebaseStorageService.i.enterprise.doc().id;
-  //         EnterpriseModel enterprise = EnterpriseModel(
-  //           mqsEnterprisePOCs: MqsEnterprisePOCs(
-  //             mqsEnterpriseID: docRef,
-  //             mqsEnterpriseName: row[1],
-  //             mqsEnterpriseEmail: row[2],
-  //             mqsEnterprisePhoneNumber: row[3].toString(),
-  //             mqsEnterpriseType: row[4],
-  //             mqsEnterpriseWebsite: row[5],
-  //             mqsEnterpriseAddress: row[6],
-  //             mqsEnterprisePincode: row[7].toString(),
-  //             mqsIsSignUp: row[8].toString().toLowerCase() == 'true',
-  //           ),
-  //           mqsEnterpriseCode: row[0].toString(),
-  //           mqsIsTeam: row[10].toString().toLowerCase() == 'true',
-  //           mqsTeamList: mqsTeamList,
-  //           mqsEmployeeList: mqsEmployeeList,
-  //           mqsEnterprisePOCsSubscriptionDetails:
-  //           MqsEnterprisePOCsSubscriptionDetails(
-  //             mqsSubscriptionStatus: row[11],
-  //             mqsSubscriptionActivePlan: row[12],
-  //             mqsSubscriptionStartDate: row[13].toString().isEmpty
-  //                 ? ""
-  //                 : DateFormat(StringConfig.dashboard.dateYYYYMMDD)
-  //                 .parse(row[13])
-  //                 .toIso8601String(),
-  //             mqsSubscriptionExpiryDate: row[14].toString().isEmpty
-  //                 ? ""
-  //                 : DateFormat(StringConfig.dashboard.dateYYYYMMDD)
-  //                 .parse(row[14])
-  //                 .toIso8601String(),
-  //           ),
-  //           mqsCreatedTimestamp: row[15].toString().isEmpty
-  //               ? ""
-  //               : DateFormat(StringConfig.dashboard.dateYYYYMMDD)
-  //               .parse(row[15])
-  //               .toIso8601String(),
-  //           mqsUpdateTimestamp: row[16].toString().isEmpty
-  //               ? ""
-  //               : DateFormat(StringConfig.dashboard.dateYYYYMMDD)
-  //               .parse(row[16])
-  //               .toIso8601String(),
-  //         );
-  //
-  //         await FirebaseStorageService.i
-  //             .addEnterprises(enterprise: enterprise, customId: docRef);
-  //       }
-  //     }
-  //   } catch (e) {
-  //     hideLoader();
-  //     errorDialogWidget(msg: e.toString());
-  //   } finally {}
-  // }
   importEnterprise() async {
     try {
       final result = await FilePicker.platform.pickFiles(
@@ -829,70 +669,6 @@ class DashboardController extends GetxController {
     }
   }
 
-  ///Working
-//   exportEnterprise(List<EnterpriseModel> enterpriseModels) async {
-//     try {
-//       List<List<String>> rows = [
-//         [
-//           StringConfig.dashboard.mqsEnterPriseCode,
-//           StringConfig.dashboard.mqsEnterPriseName,
-//           StringConfig.dashboard.enterpriseEmail,
-//           StringConfig.csv.enterprisePhoneNumber,
-//           StringConfig.csv.enterpriseType,
-//           StringConfig.csv.enterpriseWebsite,
-//           StringConfig.csv.enterpriseAddress,
-//           StringConfig.csv.enterprisePinCode,
-//           StringConfig.csv.isSignUp,
-//           StringConfig.dashboard.isTeam,
-//           StringConfig.csv.teams,
-//           StringConfig.reporting.employees,
-//           StringConfig.dashboard.subscriptionStatus,
-//           StringConfig.dashboard.subscriptionActivePlan,
-//           StringConfig.dashboard.mqsSubscriptionStartDate,
-//           StringConfig.dashboard.mqsSubscriptionExpiryDate,
-//           StringConfig.csv.createdTimestamp,
-//           StringConfig.csv.updatedTimestamp,
-//         ],
-//         // Data Rows
-//         ...enterprises.map((model) {
-//           return [
-//             model.mqsEnterpriseCode,
-//             model.mqsEnterprisePOCs.mqsEnterpriseName,
-//             model.mqsEnterprisePOCs.mqsEnterpriseEmail,
-//             model.mqsEnterprisePOCs.mqsEnterprisePhoneNumber,
-//             model.mqsEnterprisePOCs.mqsEnterpriseType,
-//             model.mqsEnterprisePOCs.mqsEnterpriseWebsite,
-//             model.mqsEnterprisePOCs.mqsEnterpriseAddress,
-//             model.mqsEnterprisePOCs.mqsEnterprisePincode,
-//             model.mqsEnterprisePOCs.mqsIsSignUp.toString(),
-//             model.mqsIsTeam.toString(),
-//             jsonEncode(model.mqsTeamList.map((p) => p.toJson()).toList()),
-//             jsonEncode(model.mqsEmployeeList.map((p) => p.toJson()).toList()),
-//             model.mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionStatus,
-//             model
-//                 .mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionActivePlan,
-//             dateConvert(model
-//                 .mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionStartDate),
-//             dateConvert(model.mqsEnterprisePOCsSubscriptionDetails
-//                 .mqsSubscriptionExpiryDate),
-//             dateConvert(model.mqsCreatedTimestamp),
-//             dateConvert(model.mqsUpdateTimestamp),
-//           ];
-//         }),
-//       ];
-//       String csvData = const ListToCsvConverter().convert(rows);
-//       Uint8List bytes = Uint8List.fromList(utf8.encode(csvData));
-//       await FileSaver.instance.saveFile(
-//         bytes: bytes,
-//         ext: "csv",
-//         mimeType: MimeType.csv,
-//         name: StringConfig.dashboard.enterpriseCollection,
-//       );
-//     } catch (e) {
-//       errorDialogWidget(msg: e.toString());
-//     } finally {}
-//   }
-
   exportEnterprise(List<EnterpriseModel> enterpriseModels) async {
     try {
       List<List<String>> rows = [
@@ -974,12 +750,24 @@ class DashboardController extends GetxController {
   setFilterFields() {
     if (selectedTabIndex.value == 0) {
       filterFields.value = enterprises
-          .expand((e) => e.toJson().keys) // Convert model to Map
+          .expand((e) =>
+              e.toJson().entries) // Convert model to Map and get all entries
+          .where((entry) {
+            var value = entry.value;
+            return !(value is List || value is Map);
+          })
+          .map((entry) => entry.key) // Get only the keys from the entries
           .toSet() // Ensure uniqueness
           .toList();
     } else {
       filterFields.value = users
-          .expand((e) => e.toJson().keys) // Convert model to Map
+          .expand((e) =>
+              e.toJson().entries) // Convert model to Map and get all entries
+          .where((entry) {
+            var value = entry.value;
+            return !(value is List || value is Map);
+          })
+          .map((entry) => entry.key) // Get only the keys from the entries
           .toSet() // Ensure uniqueness
           .toList();
     }

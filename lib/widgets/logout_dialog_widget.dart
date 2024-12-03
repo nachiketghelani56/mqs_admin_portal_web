@@ -1,9 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/main.dart';
 import 'package:mqs_admin_portal_web/routes/app_routes.dart';
+import 'package:mqs_admin_portal_web/services/firebase_auth_service.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_button.dart';
 import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
 
@@ -50,7 +50,7 @@ logoutDialogWidget() {
                 onTap: () async {
                   Get.back();
                   try {
-                    await FirebaseAuth.instance.signOut();
+                    await FirebaseAuthService.i.signOut();
                     Get.offAllNamed(AppRoutes.login);
                   } catch (e) {
                     errorDialogWidget(msg: e.toString());

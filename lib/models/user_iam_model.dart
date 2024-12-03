@@ -119,7 +119,7 @@ class UserIAMModel {
       'mqsSubscriptionPlatform': mqsSubscriptionPlatform,
       'mqsUpdateTimestamp': mqsUpdateTimestamp,
       'mqsUserSubscriptionStatus': mqsUserSubscriptionStatus,
-      'onboardingData': onboardingModel,
+      'onboardingData': onboardingModel.toJson(),
     };
   }
 }

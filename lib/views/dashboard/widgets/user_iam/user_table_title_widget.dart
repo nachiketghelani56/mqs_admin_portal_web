@@ -18,6 +18,16 @@ Widget userTableTitleWidget({required BuildContext context}) {
     child: Row(
       children: [
         Expanded(
+          flex: SizeConfig.size2.toInt(),
+          child: Text(
+            StringConfig.dashboard.fullName,
+            style: FontTextStyleConfig.textFieldTextStyle.copyWith(
+              fontSize: FontSizeConfig.fontSize15,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+        Expanded(
           flex: SizeConfig.size3.toInt(),
           child: Text(
             StringConfig.dashboard.email,
@@ -27,26 +37,16 @@ Widget userTableTitleWidget({required BuildContext context}) {
             ),
           ),
         ),
-        Expanded(
-          flex: SizeConfig.size2.toInt(),
-          child: Text(
-            StringConfig.dashboard.userName,
-            style: FontTextStyleConfig.textFieldTextStyle.copyWith(
-              fontSize: FontSizeConfig.fontSize15,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-        Expanded(
-          flex: SizeConfig.size2.toInt(),
-          child: Text(
-            StringConfig.dashboard.loginWith,
-            style: FontTextStyleConfig.textFieldTextStyle.copyWith(
-              fontSize: FontSizeConfig.fontSize15,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
+        // Expanded(
+        //   flex: SizeConfig.size2.toInt(),
+        //   child: Text(
+        //     StringConfig.dashboard.loginWith,
+        //     style: FontTextStyleConfig.textFieldTextStyle.copyWith(
+        //       fontSize: FontSizeConfig.fontSize15,
+        //       fontWeight: FontWeight.w700,
+        //     ),
+        //   ),
+        // ),
         const Expanded(child: SizedBox()),
       ],
     ),

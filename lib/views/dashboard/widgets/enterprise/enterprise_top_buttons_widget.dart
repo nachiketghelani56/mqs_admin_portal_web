@@ -24,13 +24,12 @@ Widget enterpriseTopButtonsWidget(
               onTap: () {
                 mqsDashboardController.scaffoldKey.currentState
                     ?.openEndDrawer();
-               dashboardController.resetFilter();
               },
             ),
             SizeConfig.size12.width,
             SearchTextField(
               controller: dashboardController.searchController,
-              hintText: StringConfig.dashboard.searchEnterpriseNameEmail,
+              hintText: StringConfig.dashboard.searchByNameEmail,
               onChanged: (p0) {
                 dashboardController.searchEnterprise();
               },
@@ -83,7 +82,7 @@ Widget enterpriseTopButtonsWidget(
             SizeConfig.size12.width,
             SearchTextField(
               controller: dashboardController.searchController,
-              hintText: StringConfig.dashboard.searchEnterpriseNameEmail,
+              hintText: StringConfig.dashboard.searchByNameEmail,
               onChanged: (p0) {
                 dashboardController.searchEnterprise();
               },

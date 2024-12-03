@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
@@ -111,11 +112,13 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
             ).tap(() {
               dashboardController.showAddCondition.value =
                   !dashboardController.showAddCondition.value;
-              dashboardController.selectedConditionIndex.value = -1;
             }),
             if (dashboardController.showAddCondition.value) ...[
               SizeConfig.size14.height,
               CustomDropDown(
+                value: dashboardController.selectedConditionIndex.value > 0
+                    ? dashboardController.selectedConditionIndex.value
+                    : null,
                 items: [
                   for (int i = 0;
                       i < dashboardController.filterConditions.length;
@@ -127,6 +130,9 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                 ],
                 onChanged: (val) {
                   dashboardController.selectedConditionIndex.value = val;
+                  if (dashboardController.rows.isEmpty) {
+                    dashboardController.addRow();
+                  }
                 },
                 label: StringConfig.dashboard.selectCondition,
               ),
@@ -161,6 +167,8 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                             }).toList(),
                             onChanged: (value) {
                               if (value != null) {
+                                dashboardController.rows[index].textController
+                                    .clear();
                                 row.dataType = value;
                                 dashboardController.rows[index] = row;
                               }
@@ -196,6 +204,12 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                               controller: row.textController,
                               label: "",
                               padding: SizeConfig.size22,
+                              inputFormatters: row.dataType ==
+                                      StringConfig.dashboard.string
+                                  ? []
+                                  : [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                    ],
                               border: dashboardController.validateInput(
                                           row.dataType,
                                           row.textController.text) !=
@@ -254,40 +268,49 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
               ],
             ],
             SizeConfig.size30.height,
-            titleWidget(
-              title: StringConfig.dashboard.sortResults,
-              isShowContent: dashboardController.showSortResults.value,
-            ).tap(() {
-              dashboardController.showSortResults.value =
-                  !dashboardController.showSortResults.value;
-            }),
-            if (dashboardController.showSortResults.value) ...[
-              SizeConfig.size14.height,
-              Row(
-                children: [
-                  CustomRadioWidget(
-                    title: StringConfig.dashboard.ascending,
-                    isSelected: dashboardController.isAsc.value,
-                    onChanged: () {
-                      dashboardController.isAsc.value = true;
-                    },
-                    isAddCondition: dashboardController
-                            .showAddCondition.value &&
-                        dashboardController.selectedConditionIndex.value != -1,
-                  ),
-                  SizeConfig.size42.width,
-                  CustomRadioWidget(
-                    title: StringConfig.dashboard.descending,
-                    isSelected: !dashboardController.isAsc.value,
-                    onChanged: () {
-                      dashboardController.isAsc.value = false;
-                    },
-                    isAddCondition: dashboardController
-                            .showAddCondition.value &&
-                        dashboardController.selectedConditionIndex.value != -1,
-                  ),
-                ],
-              ),
+            if (![
+              6,
+              7,
+              8,
+              9
+            ].contains(dashboardController.selectedConditionIndex.value)) ...[
+              titleWidget(
+                title: StringConfig.dashboard.sortResults,
+                isShowContent: dashboardController.showSortResults.value,
+              ).tap(() {
+                dashboardController.showSortResults.value =
+                    !dashboardController.showSortResults.value;
+              }),
+              if (dashboardController.showSortResults.value) ...[
+                SizeConfig.size14.height,
+                Row(
+                  children: [
+                    CustomRadioWidget(
+                      title: StringConfig.dashboard.ascending,
+                      isSelected: dashboardController.isAsc.value,
+                      onChanged: () {
+                        dashboardController.isAsc.value = true;
+                      },
+                      isAddCondition: dashboardController
+                              .showAddCondition.value &&
+                          dashboardController.selectedConditionIndex.value !=
+                              -1,
+                    ),
+                    SizeConfig.size42.width,
+                    CustomRadioWidget(
+                      title: StringConfig.dashboard.descending,
+                      isSelected: !dashboardController.isAsc.value,
+                      onChanged: () {
+                        dashboardController.isAsc.value = false;
+                      },
+                      isAddCondition: dashboardController
+                              .showAddCondition.value &&
+                          dashboardController.selectedConditionIndex.value !=
+                              -1,
+                    ),
+                  ],
+                ),
+              ],
             ],
             SizeConfig.size55.height,
             Row(
@@ -310,7 +333,8 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                   child: CustomButton(
                     btnText: StringConfig.dashboard.apply,
                     onTap: () {
-                      if (dashboardController.selectedTabIndex.value == 0) {
+                      if (dashboardController.selectedFilterFieldIndex.value >=
+                          0) {
                         dashboardController.applyFilter(
                             dashboardController.filterFields[dashboardController
                                 .selectedFilterFieldIndex.value],

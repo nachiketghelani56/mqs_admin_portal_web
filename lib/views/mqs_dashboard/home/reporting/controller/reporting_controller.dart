@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:csv/csv.dart';
@@ -68,6 +69,10 @@ class ReportingController extends GetxController {
   RxDouble completedOB = 0.0.obs,
       partialCompletedOB = 0.0.obs,
       skippedOB = 0.0.obs;
+  StreamSubscription<List<UserIAMModel>>? userStream;
+  StreamSubscription<List<CircleModel>>? circleStream;
+  StreamSubscription<List<UserSubscriptionReceiptModel>>?
+      userSubscriptionReceiptStream;
 
   @override
   onInit() {
@@ -77,6 +82,14 @@ class ReportingController extends GetxController {
     super.onInit();
   }
 
+  @override
+  void onClose() async {
+    await userStream?.cancel();
+    await circleStream?.cancel();
+    await userSubscriptionReceiptStream?.cancel();
+    super.onClose();
+  }
+
   getAuthAndOBSummary() async {
     try {
       List<UserIAMModel> users = await FirebaseStorageService.i.getUsers();
@@ -84,7 +97,7 @@ class ReportingController extends GetxController {
       activeUsers.value = users.where((e) => e.mqsIsUserActive).length;
       inactiveUsers.value = users.where((e) => !e.mqsIsUserActive).length;
       getOBSummary(users: users);
-      FirebaseStorageService.i.getUserStream().listen((data) {
+      userStream = FirebaseStorageService.i.getUserStream().listen((data) {
         totalRegisteredUsers.value = data.length;
         activeUsers.value = data.where((e) => e.mqsIsUserActive).length;
         inactiveUsers.value = data.where((e) => !e.mqsIsUserActive).length;
@@ -221,11 +234,8 @@ class ReportingController extends GetxController {
     try {
       List<CircleModel> circles = await FirebaseStorageService.i.getCircles();
       setCircle(circles);
-      FirebaseStorageService.i.listenToCircleChange((data) {
-        List<CircleModel> circles = data.docs
-            .map((e) => CircleModel.fromJson(e.data() as Map<String, dynamic>))
-            .toList();
-        setCircle(circles);
+      circleStream = FirebaseStorageService.i.getCircleStream().listen((data) {
+        setCircle(data);
       });
     } catch (e) {
       errorDialogWidget(msg: e.toString());
@@ -380,7 +390,7 @@ class ReportingController extends GetxController {
       rows.insert(
         0,
         [
-          StringConfig.dashboard.userName,
+          StringConfig.dashboard.fullName,
           StringConfig.reporting.postTitle,
           StringConfig.reporting.postContent,
           StringConfig.reporting.postTime,
@@ -442,7 +452,7 @@ class ReportingController extends GetxController {
           .length;
       purchasedSubscription.value =
           receipt.where((e) => e.mqsPurchaseID.isNotEmpty).length;
-      FirebaseStorageService.i
+      userSubscriptionReceiptStream = FirebaseStorageService.i
           .getUserSubscriptionReceiptStream()
           .listen((data) {
         activeSubscriptions.value = data

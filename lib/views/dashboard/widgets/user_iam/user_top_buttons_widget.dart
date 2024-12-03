@@ -28,7 +28,7 @@ Widget userTopButtonsWidget(
             SizeConfig.size12.width,
             SearchTextField(
               controller: dashboardController.searchController,
-              hintText: StringConfig.dashboard.searchUserNameEmail,
+              hintText: StringConfig.dashboard.searchByNameEmail,
               onChanged: (p0) {
                 dashboardController.searchUser();
               },
@@ -55,7 +55,7 @@ Widget userTopButtonsWidget(
             SizeConfig.size12.width,
             SearchTextField(
               controller: dashboardController.searchController,
-              hintText: StringConfig.dashboard.searchUserNameEmail,
+              hintText: StringConfig.dashboard.searchByNameEmail,
               onChanged: (p0) {
                 dashboardController.searchUser();
               },
