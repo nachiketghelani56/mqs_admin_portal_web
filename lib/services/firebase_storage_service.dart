@@ -30,9 +30,14 @@ class FirebaseStorageService {
   Future<List<EnterpriseModel>> fetchFilteredData(String fieldKey,
       List<Map<String, dynamic>> filter, String condition, bool isAsc) async {
     Query query = enterprise;
+    List<EnterpriseModel> allRes = [];
     if (filter.isEmpty) {
       query = query.orderBy(fieldKey, descending: !isAsc);
     }
+
+    List<EnterpriseModel> enterpriseList =
+        await FirebaseStorageService.i.getEnterprises();
+
     for (Map<String, dynamic> filter in filter) {
       String field = filter['field'];
       dynamic condition = filter['condition'];
@@ -90,27 +95,35 @@ class FirebaseStorageService {
                         : value.toString())
                 .orderBy(field, descending: !isAsc);
             break;
-          case 'in': // In array
-            query = query.where(field, whereIn: [value.toString()]);
-            break;
-          case 'array-contains': // Array contains
-            query = query.where(field, arrayContains: value);
-            break;
+
           case 'array-contains-any': // Array contains any
-            query = query.where(field, arrayContainsAny: [value.toString()]);
+            allRes = enterpriseList
+                .where((e) => e.toJson().toString().contains(value))
+                .toList();
+
             break;
           default:
             break;
         }
       }
     }
-    // Get the filtered query results
-    QuerySnapshot querySnapshot = await query.get();
-    // Return the matching documents
-    return querySnapshot.docs.map((doc) {
-      final data = doc.data() as Map<String, dynamic>;
-      return EnterpriseModel.fromJson(data);
-    }).toList();
+    if (condition == "array-contains-any") {
+      return allRes;
+    } else {
+      QuerySnapshot querySnapshot = await query.get();
+      return querySnapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        return EnterpriseModel.fromJson(data);
+      }).toList();
+    }
+    // // Get the filtered query results
+    // QuerySnapshot querySnapshot = await query.get();
+    // // Return the matching documents
+    // // return querySnapshot.docs.map((doc) {
+    // //   final data = doc.data() as Map<String, dynamic>;
+    // //   return EnterpriseModel.fromJson(data);
+    // // }).toList();
+    // return allRes;
   }
 
   Future<List<UserIAMModel>> fetchUserFilteredData(String fieldKey,

@@ -116,7 +116,7 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
             if (dashboardController.showAddCondition.value) ...[
               SizeConfig.size14.height,
               CustomDropDown(
-                value: dashboardController.selectedConditionIndex.value > 0
+                value: dashboardController.selectedConditionIndex.value >= 0
                     ? dashboardController.selectedConditionIndex.value
                     : null,
                 items: [

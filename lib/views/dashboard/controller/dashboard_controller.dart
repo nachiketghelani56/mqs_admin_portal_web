@@ -94,9 +94,6 @@ class DashboardController extends GetxController {
     StringConfig.dashboard.greaterThanEqualTo,
     StringConfig.dashboard.lessThan,
     StringConfig.dashboard.lessThanEqualTo,
-    StringConfig.dashboard.equalToAny,
-    StringConfig.dashboard.notEqualToAny,
-    StringConfig.dashboard.arrayContaining,
     StringConfig.dashboard.arrayContainingAny,
   ].obs;
   RxInt selectedConditionIndex = RxInt(-1);
@@ -190,12 +187,6 @@ class DashboardController extends GetxController {
       } else if (matchKey == 5) {
         condition = "<=";
       } else if (matchKey == 6) {
-        condition = "in";
-      } else if (matchKey == 7) {
-        condition = "not-in";
-      } else if (matchKey == 8) {
-        condition = "array-contains";
-      } else if (matchKey == 9) {
         condition = "array-contains-any";
       }
       List<Map<String, dynamic>> filters = [];
@@ -750,15 +741,20 @@ class DashboardController extends GetxController {
   setFilterFields() {
     if (selectedTabIndex.value == 0) {
       filterFields.value = enterprises
-          .expand((e) =>
-              e.toJson().entries) // Convert model to Map and get all entries
-          .where((entry) {
-            var value = entry.value;
-            return !(value is List || value is Map);
-          })
-          .map((entry) => entry.key) // Get only the keys from the entries
+          .expand((e) => e.toJson().keys) // Convert model to Map
           .toSet() // Ensure uniqueness
           .toList();
+
+      // filterFields.value = enterprises
+      //     .expand((e) =>
+      //         e.toJson().entries) // Convert model to Map and get all entries
+      //     .where((entry) {
+      //       var value = entry.value;
+      //       return !(value is List || value is Map);
+      //     })
+      //     .map((entry) => entry.key) // Get only the keys from the entries
+      //     .toSet() // Ensure uniqueness
+      //     .toList();
     } else {
       filterFields.value = users
           .expand((e) =>
