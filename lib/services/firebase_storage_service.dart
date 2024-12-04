@@ -97,9 +97,16 @@ class FirebaseStorageService {
             break;
 
           case 'array-contains-any': // Array contains any
-            allRes = enterpriseList
-                .where((e) => e.toJson().toString().contains(value))
-                .toList();
+
+            if (!allRes.contains(value)) {
+              allRes.addAll(enterpriseList.where((EnterpriseModel e) {
+                Map<String, dynamic> json =
+                    e.toJson(); // Convert object to JSON
+                String? fieldValue =
+                    json[field]?.toString(); // Get the dynamic field value
+                return fieldValue != null && fieldValue.contains(value);
+              }).toList());
+            }
 
             break;
           default:
@@ -116,22 +123,18 @@ class FirebaseStorageService {
         return EnterpriseModel.fromJson(data);
       }).toList();
     }
-    // // Get the filtered query results
-    // QuerySnapshot querySnapshot = await query.get();
-    // // Return the matching documents
-    // // return querySnapshot.docs.map((doc) {
-    // //   final data = doc.data() as Map<String, dynamic>;
-    // //   return EnterpriseModel.fromJson(data);
-    // // }).toList();
-    // return allRes;
   }
 
   Future<List<UserIAMModel>> fetchUserFilteredData(String fieldKey,
       List<Map<String, dynamic>> filter, String condition, bool isAsc) async {
     Query query = user;
+    List<UserIAMModel> allRes = [];
     if (filter.isEmpty) {
       query = query.orderBy(fieldKey, descending: !isAsc);
     }
+
+    List<UserIAMModel> userList = await FirebaseStorageService.i.getUsers();
+
     for (Map<String, dynamic> filter in filter) {
       String field = filter['field'];
       var condition = filter['condition'];
@@ -189,26 +192,35 @@ class FirebaseStorageService {
                         : value.toString())
                 .orderBy(field, descending: !isAsc);
             break;
-          case 'in': // In array
-            query = query.where(field, whereIn: [value.toString()]);
-            break;
-          case 'array-contains': // Array contains
-            query = query.where(field, arrayContains: value);
-            break;
+
           case 'array-contains-any': // Array contains any
-            query = query.where(field, arrayContainsAny: [value.toString()]);
+            if (!allRes.contains(value)) {
+              allRes.addAll(userList.where((UserIAMModel e) {
+                Map<String, dynamic> json = e.toJson(); // Convert object to JSON
+                String? fieldValue =
+                json[field]?.toString(); // Get the dynamic field value
+                return fieldValue != null && fieldValue.contains(value);
+              }).toList());
+            }
+
+
+
             break;
           default:
             break;
         }
       }
     }
-    // Get the filtered query results
-    QuerySnapshot querySnapshot = await query.get();
-    // Return the matching documents
-    return querySnapshot.docs
-        .map((e) => UserIAMModel.fromJson(e.data() as Map))
-        .toList();
+    if (condition == "array-contains-any") {
+      return allRes;
+    } else {
+      // Get the filtered query results
+      QuerySnapshot querySnapshot = await query.get();
+      // Return the matching documents
+      return querySnapshot.docs
+          .map((e) => UserIAMModel.fromJson(e.data() as Map))
+          .toList();
+    }
   }
 
   Stream<List<EnterpriseModel>> getEnterpriseStream() {

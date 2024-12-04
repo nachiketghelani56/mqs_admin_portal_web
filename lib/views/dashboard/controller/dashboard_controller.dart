@@ -106,7 +106,7 @@ class DashboardController extends GetxController {
       showAddCondition = false.obs,
       showSortResults = false.obs;
   RxBool isAsc = true.obs;
-  RxInt selectedFilterFieldIndex = 0.obs;
+  RxInt selectedFilterFieldIndex = (-1).obs;
   RxBool showCheckIn = false.obs,
       showDemographic = false.obs,
       showScenes = false.obs,
@@ -248,7 +248,7 @@ class DashboardController extends GetxController {
   }
 
   resetFilter() {
-    selectedFilterFieldIndex.value = 0;
+    selectedFilterFieldIndex.value = -1;
     selectedConditionIndex.value = -1;
     isAsc.value = true;
     showFilterByField.value = false;
@@ -744,26 +744,9 @@ class DashboardController extends GetxController {
           .expand((e) => e.toJson().keys) // Convert model to Map
           .toSet() // Ensure uniqueness
           .toList();
-
-      // filterFields.value = enterprises
-      //     .expand((e) =>
-      //         e.toJson().entries) // Convert model to Map and get all entries
-      //     .where((entry) {
-      //       var value = entry.value;
-      //       return !(value is List || value is Map);
-      //     })
-      //     .map((entry) => entry.key) // Get only the keys from the entries
-      //     .toSet() // Ensure uniqueness
-      //     .toList();
     } else {
       filterFields.value = users
-          .expand((e) =>
-              e.toJson().entries) // Convert model to Map and get all entries
-          .where((entry) {
-            var value = entry.value;
-            return !(value is List || value is Map);
-          })
-          .map((entry) => entry.key) // Get only the keys from the entries
+          .expand((e) => e.toJson().keys) // Convert model to Map
           .toSet() // Ensure uniqueness
           .toList();
     }
@@ -1044,5 +1027,80 @@ class DashboardController extends GetxController {
     } catch (e) {
       errorDialogWidget(msg: e.toString());
     } finally {}
+  }
+
+  String enterpriseKeyName(String keyName) {
+    if (keyName == StringConfig.dashboard.mqsEnterprisePOCsKey) {
+      return StringConfig.dashboard.mqsEnterprisePOCs;
+    } else if (keyName == StringConfig.firebase.mqsEnterpriseCode) {
+      return StringConfig.dashboard.mqsEnterPriseCode;
+    } else if (keyName == StringConfig.dashboard.mqsIsTeam) {
+      return StringConfig.dashboard.team;
+    } else if (keyName == StringConfig.dashboard.mqsTeamListKey) {
+      return StringConfig.dashboard.mqsTeamList;
+    } else if (keyName == StringConfig.dashboard.mqsEmployeeList) {
+      return StringConfig.dashboard.mqsEmployeeEmailList;
+    } else if (keyName ==
+        StringConfig.dashboard.mqsEnterprisePOCsSubscriptionDetails) {
+      return StringConfig.dashboard.mqsEnterprisePOCsSubscriptionDetail;
+    } else if (keyName == StringConfig.firebase.mqsCreatedTimestamp) {
+      return StringConfig.csv.createdTimestamp;
+    } else if (keyName == StringConfig.dashboard.mqsUpdateTimestamp) {
+      return StringConfig.csv.updatedTimestamp;
+    }
+    return "";
+  }
+
+  String userKeyName(String keyName) {
+    if (keyName == StringConfig.dashboard.email) {
+      return StringConfig.dashboard.email;
+    } else if (keyName == StringConfig.firebase.firstName) {
+      return StringConfig.dashboard.firstName;
+    } else if (keyName == StringConfig.firebase.lastName) {
+      return StringConfig.dashboard.lastName;
+    } else if (keyName == StringConfig.firebase.isEnterPriseUser) {
+      return StringConfig.reporting.enterpriseUser;
+    } else if (keyName == StringConfig.firebase.isFirebaseUserID) {
+      return StringConfig.reporting.firebaseUserId;
+    } else if (keyName == StringConfig.firebase.isRegister) {
+      return StringConfig.dashboard.register;
+    } else if (keyName == StringConfig.dashboard.mqsIsUserActive) {
+      return StringConfig.dashboard.userActive;
+    } else if (keyName == StringConfig.firebase.mqsCreatedTimestamp) {
+      return StringConfig.csv.createdTimestamp;
+    } else if (keyName == StringConfig.dashboard.about) {
+      return StringConfig.dashboard.about;
+    } else if (keyName == StringConfig.dashboard.aboutValue) {
+      return StringConfig.dashboard.aboutValueText;
+    } else if (keyName == StringConfig.dashboard.country) {
+      return StringConfig.dashboard.country;
+    } else if (keyName == StringConfig.dashboard.countryValue) {
+      return StringConfig.dashboard.countryValueText;
+    } else if (keyName == StringConfig.dashboard.pronouns) {
+      return StringConfig.dashboard.pronouns;
+    } else if (keyName == StringConfig.dashboard.pronounsValue) {
+      return StringConfig.dashboard.pronounsValueText;
+    } else if (keyName == StringConfig.dashboard.userImage) {
+      return StringConfig.dashboard.userImageText;
+    } else if (keyName == StringConfig.firebase.enterPriseID) {
+      return StringConfig.dashboard.enterPriseID;
+    } else if (keyName == StringConfig.dashboard.isMongoDBUserIdText) {
+      return StringConfig.dashboard.mongoDBUserId;
+    } else if (keyName == StringConfig.dashboard.loginWithKey) {
+      return StringConfig.dashboard.loginWithText;
+    } else if (keyName == StringConfig.dashboard.mqsExpiryDate) {
+      return StringConfig.reporting.expiryDate;
+    } else if (keyName == StringConfig.dashboard.mqsSubscriptionActivePlan) {
+      return StringConfig.dashboard.subscriptionActivePlan;
+    } else if (keyName == StringConfig.dashboard.mqsSubscriptionPlatform) {
+      return StringConfig.reporting.subscriptionPlatform;
+    } else if (keyName == StringConfig.dashboard.mqsUpdateTimestamp) {
+      return StringConfig.csv.updatedTimestamp;
+    } else if (keyName == StringConfig.dashboard.mqsUserSubscriptionStatus) {
+      return StringConfig.dashboard.userSubscriptionStatus;
+    } else if (keyName == StringConfig.dashboard.onboardingDataKey) {
+      return StringConfig.dashboard.onboardingData;
+    }
+    return "";
   }
 }

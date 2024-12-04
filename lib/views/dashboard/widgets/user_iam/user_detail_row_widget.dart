@@ -27,6 +27,7 @@ Widget userDetailRowWidget({required DashboardController dashboardController}) {
       keyValueRowWidget(
         key: StringConfig.dashboard.userImage,
         value: dashboardController.userDetail.userImage,
+        isImage: true,
       ),
       keyValueRowWidget(
         key: StringConfig.reporting.enterpriseUser,

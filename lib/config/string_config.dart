@@ -91,7 +91,7 @@ class Dashboard {
   final String enterpriseEmail = "Enterprise Email";
   final String dateYYYYMMDD = "yyyy-MM-dd hh:mm a";
   final String team = "Team";
-
+  final String register = "Register";
   final String type = "Type";
   final String phoneNumber = "Phone Number";
   final String enterPhoneNumber = "Enter phone number";
@@ -173,13 +173,34 @@ class Dashboard {
   final String signedUp = "Signed Up";
   final String enable = "Enable";
   final String pinCodeText = "Pin Code";
-  final String noDataFound = "No data found";
+  final String noDataFound = "Sorry, we couldn't find anything that matches your filters.";
   final String enterpriseCollection = "enterprise_collection";
   final String userCollection = "user_collection";
   final String invalidCSVFile = "Invalid CSV file";
   final String emailAddressText = "email address";
   final String userInformation = "User Information";
   final String userSubscriptionReceipt = "User Subscription Receipt";
+  final String userActive = "User Active";
+  final String aboutValueText = "About Value";
+  final String countryValueText = "Country Value";
+  final String pronounsValueText = "Pronouns Value";
+  final String userImageText = "User Image";
+  final String enterPriseID = "EnterPrise ID";
+  final String mongoDBUserId = "MONGODB User Id";
+  final String loginWithText = "Login With";
+  final String userSubscriptionStatus = "User Subscription Status";
+  final String mqsIsUserActive = "mqsIsUserActive";
+  final String isMongoDBUserIdText = "isMONGODBUserID";
+  final String loginWithKey = "loginWith";
+  final String mqsUpdateTimestamp = "mqsUpdateTimestamp";
+  final String mqsUserSubscriptionStatus = "mqsUserSubscriptionStatus";
+  final String onboardingDataKey = "onboardingData";
+  final String mqsEnterprisePOCsKey = "mqsEnterprisePOCs";
+  final String mqsIsTeam = "mqsIsTeam";
+  final String mqsTeamListKey = "mqsTeamList";
+  final String mqsEmployeeList = "mqsEmployeeList";
+  final String mqsEnterprisePOCsSubscriptionDetails = "mqsEnterprisePOCsSubscriptionDetails";
+
 }
 
 class RefExp {

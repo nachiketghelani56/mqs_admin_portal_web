@@ -60,9 +60,15 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              dashboardController.filterFields[
-                                  dashboardController
-                                      .selectedFilterFieldIndex.value],
+                              dashboardController.selectedTabIndex.value == 0
+                                  ? dashboardController.enterpriseKeyName(
+                                      dashboardController.filterFields[
+                                          dashboardController
+                                              .selectedFilterFieldIndex.value])
+                                  : dashboardController.userKeyName(
+                                      dashboardController.filterFields[
+                                          dashboardController
+                                              .selectedFilterFieldIndex.value]),
                               style: FontTextStyleConfig.labelTextStyle
                                   .copyWith(color: ColorConfig.whiteColor),
                             ),
@@ -96,7 +102,11 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                           vertical: SizeConfig.size6),
                       decoration: FontTextStyleConfig.subOptionDecoration,
                       child: Text(
-                        dashboardController.filterFields[i],
+                        dashboardController.selectedTabIndex.value == 0
+                            ? dashboardController.enterpriseKeyName(
+                                dashboardController.filterFields[i])
+                            : dashboardController.userKeyName(
+                                dashboardController.filterFields[i]),
                         style: FontTextStyleConfig.tableContentTextStyle,
                       ),
                     ).tap(() {
