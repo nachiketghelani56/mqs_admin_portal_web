@@ -14,7 +14,7 @@ Widget loginFormWidget({required LoginController loginController}) {
       children: [
         Image.asset(
           ImageConfig.appLogo,
-          height:SizeConfig.size65,
+          height: SizeConfig.size65,
           color: ColorConfig.primaryColor,
         ),
         // logoWidget(mainAxisSize: MainAxisSize.min),
@@ -29,7 +29,7 @@ Widget loginFormWidget({required LoginController loginController}) {
         ),
         SizeConfig.size24.height,
         Obx(
-          () => CustomTextField(
+              () => CustomTextField(
             uniqueKey: UniqueKey(),
             controller: loginController.passwordController,
             autofillHints: const [],
@@ -37,10 +37,18 @@ Widget loginFormWidget({required LoginController loginController}) {
             suffixIcon: loginController.isObscurePassword.value
                 ? ImageConfig.eyeOpened
                 : ImageConfig.eyeClosed,
-            isObscure: loginController.isObscurePassword.value,
             onSuffixIconTap: () {
               loginController.isObscurePassword.value =
-                  !loginController.isObscurePassword.value;
+              !loginController.isObscurePassword.value;
+              String text = loginController.passwordController.text;
+              if (loginController.isObscurePassword.value) {
+                loginController.passwordController =
+                    ObscuringTextEditingController();
+                loginController.passwordController.text = text;
+              } else {
+                loginController.passwordController =
+                    TextEditingController(text: text);
+              }
             },
             validator: (p0) => Validator.passwordValidator(
                 p0 ?? "", StringConfig.firebase.password),

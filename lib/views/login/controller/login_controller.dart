@@ -8,7 +8,7 @@ import 'package:mqs_admin_portal_web/widgets/loader_widget.dart';
 
 class LoginController extends GetxController {
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  TextEditingController passwordController = ObscuringTextEditingController();
   RxBool isObscurePassword = true.obs;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -31,5 +31,17 @@ class LoginController extends GetxController {
       hideLoader();
       errorDialogWidget(msg: e.toString());
     } finally {}
+  }
+}
+
+class ObscuringTextEditingController extends TextEditingController {
+  @override
+  TextSpan buildTextSpan(
+      {required BuildContext context,
+        TextStyle? style,
+        required bool withComposing}) {
+    String obscuredText =
+    text.replaceAll(RegExp(r"."), "•"); // Replace characters with bullets
+    return TextSpan(text: obscuredText, style: style);
   }
 }
