@@ -25,11 +25,13 @@ class Login {
 class Dashboard {
   final String enterprise = "Enterprise";
   final String users = "Users";
+  final String circle = "Circle";
   final String filter = "Filter";
   final String export = "Export";
   final String addEnterprise = "Add Enterprise";
   final String editEnterprise = "Edit Enterprise";
   final String searchByNameEmail = "Search by name or email.";
+  final String searchByNameTitle = "Search by name or title.";
   final String id = "id";
   final String mqsEnterPriseCode = "Enterprise Code";
   final String rowsPerPage = "Rows per page:";
@@ -173,7 +175,8 @@ class Dashboard {
   final String signedUp = "Signed Up";
   final String enable = "Enable";
   final String pinCodeText = "Pin Code";
-  final String noDataFound = "Sorry, we couldn't find anything that matches your filters.";
+  final String noDataFound =
+      "Sorry, we couldn't find anything that matches your filters.";
   final String enterpriseCollection = "enterprise_collection";
   final String userCollection = "user_collection";
   final String invalidCSVFile = "Invalid CSV file";
@@ -199,8 +202,9 @@ class Dashboard {
   final String mqsIsTeam = "mqsIsTeam";
   final String mqsTeamListKey = "mqsTeamList";
   final String mqsEmployeeList = "mqsEmployeeList";
-  final String mqsEnterprisePOCsSubscriptionDetails = "mqsEnterprisePOCsSubscriptionDetails";
-
+  final String mqsEnterprisePOCsSubscriptionDetails =
+      "mqsEnterprisePOCsSubscriptionDetails";
+  final String circleInformation = "Circle Information";
 }
 
 class RefExp {

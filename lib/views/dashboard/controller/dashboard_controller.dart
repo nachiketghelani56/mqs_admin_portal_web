@@ -792,6 +792,7 @@ class DashboardController extends GetxController {
 
   searchEnterprise() {
     try {
+      reset();
       String query = searchController.text.trim().toLowerCase();
       if (query.isEmpty) {
         searchedEnterprises.value = enterprises;
@@ -1013,6 +1014,7 @@ class DashboardController extends GetxController {
 
   searchUser() {
     try {
+      reset();
       String query = searchController.text.trim().toLowerCase();
       if (query.isEmpty) {
         searchedUsers.value = users;

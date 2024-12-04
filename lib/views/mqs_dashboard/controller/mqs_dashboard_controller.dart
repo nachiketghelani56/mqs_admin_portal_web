@@ -12,6 +12,7 @@ class MqsDashboardController extends GetxController {
       subtitles: [
         StringConfig.dashboard.enterprise,
         StringConfig.dashboard.users,
+        StringConfig.dashboard.circle,
         StringConfig.teamChart.teamChart,
         StringConfig.mqsDashboard.reports,
       ],

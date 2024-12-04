@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
+import 'package:mqs_admin_portal_web/views/circle/circle_screen.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/dashboard_screen.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/filter_sheet_widget.dart';
@@ -55,10 +56,14 @@ class MqsDashboardScreen extends StatelessWidget {
                         );
                       } else if (_mqsDashboardController.subMenuIndex.value ==
                           2) {
-                        return TeamChartScreen(
+                        return CircleScreen(
                             scaffoldKey: _mqsDashboardController.scaffoldKey);
                       } else if (_mqsDashboardController.subMenuIndex.value ==
                           3) {
+                        return TeamChartScreen(
+                            scaffoldKey: _mqsDashboardController.scaffoldKey);
+                      } else if (_mqsDashboardController.subMenuIndex.value ==
+                          4) {
                         return ReportingScreen(
                             scaffoldKey: _mqsDashboardController.scaffoldKey);
                       } else {
