@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
+import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
 import 'package:mqs_admin_portal_web/views/circle/controller/circle_controller.dart';
 import 'package:mqs_admin_portal_web/widgets/key_value_row_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/title_widget.dart';
@@ -16,7 +18,7 @@ Widget circleDetailWidget({required CircleController circleController}) {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           titleWidget(
-            title: StringConfig.dashboard.circleInformation,
+            title: StringConfig.circle.circleInformation,
             showArrowIcon: false,
           ),
           SizeConfig.size10.height,
@@ -56,16 +58,50 @@ Widget circleDetailWidget({required CircleController circleController}) {
           keyValueRowWidget(
             key: StringConfig.reporting.isFlag,
             value: "${circleController.circleDetail.isFlag ?? false}",
+            isLast: circleController.circleDetail.isFlag == false,
           ),
-          keyValueRowWidget(
-            key: StringConfig.reporting.flagName,
-            value: circleController.circleDetail.flagName ?? "",
-          ),
-          keyValueRowWidget(
-            key: StringConfig.reporting.hashTags,
-            value: circleController.circleDetail.hashtag?.join(', ') ?? "",
-            isLast: true,
-          ),
+          if (circleController.circleDetail.isFlag ?? false)
+            keyValueRowWidget(
+              key: StringConfig.reporting.flagName,
+              value: circleController.circleDetail.flagName ?? "",
+              isLast: true,
+            ),
+          if (circleController.circleDetail.hashtag?.isNotEmpty ?? false) ...[
+            SizeConfig.size34.height,
+            titleWidget(
+              title: StringConfig.circle.hashTags,
+              isShowContent: circleController.showHashTag.value,
+            ).tap(() {
+              circleController.showHashTag.value =
+                  !circleController.showHashTag.value;
+            }),
+            if (circleController.showHashTag.value) ...[
+              SizeConfig.size10.height,
+              Wrap(
+                spacing: SizeConfig.size12,
+                runSpacing: SizeConfig.size12,
+                children: [
+                  for (int i = 0;
+                      i < (circleController.circleDetail.hashtag?.length ?? 0);
+                      i++)
+                    Container(
+                      decoration: FontTextStyleConfig.optionDecoration,
+                      padding: const EdgeInsets.all(SizeConfig.size10),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            '#${circleController.circleDetail.hashtag?[i].name ?? ''}',
+                            style: FontTextStyleConfig.labelTextStyle
+                                .copyWith(color: ColorConfig.whiteColor),
+                          ),
+                        ],
+                      ),
+                    )
+                ],
+              ).paddingSymmetric(horizontal: SizeConfig.size10),
+            ],
+          ],
         ],
       ),
     ),

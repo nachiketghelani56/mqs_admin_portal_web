@@ -1,16 +1,20 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 import 'dart:typed_data';
-
 import 'package:csv/csv.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/models/circle_model.dart';
+import 'package:mqs_admin_portal_web/routes/app_routes.dart';
+import 'package:mqs_admin_portal_web/services/firebase_auth_service.dart';
 import 'package:mqs_admin_portal_web/services/firebase_storage_service.dart';
 import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
+import 'package:mqs_admin_portal_web/widgets/loader_widget.dart';
 
 class CircleController extends GetxController {
   final TextEditingController searchController = TextEditingController();
@@ -22,6 +26,37 @@ class CircleController extends GetxController {
   RxInt viewIndex = (-1).obs;
   CircleModel get circleDetail => searchedCircle[viewIndex.value];
   StreamSubscription<List<CircleModel>>? circleStream;
+  RxBool isAdd = false.obs, isEdit = false.obs;
+  final GlobalKey<FormState> circleFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> hashtagFormKey = GlobalKey<FormState>();
+  final TextEditingController postTitleController = TextEditingController();
+  final TextEditingController postContentController = TextEditingController();
+  final TextEditingController postViewController = TextEditingController();
+  final TextEditingController flagNameController = TextEditingController();
+  final TextEditingController hashtagController = TextEditingController();
+  RxList<Hashtag> hashtags = <Hashtag>[].obs;
+  RxBool isMainPost = false.obs,
+      userIsGuide = false.obs,
+      isFlag = false.obs,
+      showHashTag = false.obs;
+  List<DropdownMenuItem> get boolOptions => [
+        DropdownMenuItem(
+          value: true,
+          child: Text(
+            StringConfig.dashboard.trueText,
+            style: FontTextStyleConfig.textFieldTextStyle
+                .copyWith(fontSize: FontSizeConfig.fontSize16),
+          ),
+        ),
+        DropdownMenuItem(
+          value: false,
+          child: Text(
+            StringConfig.dashboard.falseText,
+            style: FontTextStyleConfig.textFieldTextStyle
+                .copyWith(fontSize: FontSizeConfig.fontSize16),
+          ),
+        )
+      ];
 
   @override
   onInit() {
@@ -49,6 +84,101 @@ class CircleController extends GetxController {
     } catch (e) {
       errorDialogWidget(msg: e.toString());
     } finally {}
+  }
+
+  deleteCircle({required String docId}) async {
+    try {
+      showLoader();
+      viewIndex.value = 0;
+      isAdd.value = false;
+      isEdit.value = false;
+      await FirebaseStorageService.i.deleteCircle(docId: docId);
+      hideLoader();
+    } catch (e) {
+      hideLoader();
+      errorDialogWidget(msg: e.toString());
+    } finally {}
+  }
+
+  clearAllFields() {
+    postTitleController.clear();
+    postContentController.clear();
+    postViewController.clear();
+    flagNameController.clear();
+    isMainPost.value = false;
+    userIsGuide.value = false;
+    isFlag.value = false;
+    hashtags.clear();
+  }
+
+  setCircleForm() {
+    postTitleController.text = circleDetail.postTitle ?? "";
+    postContentController.text = circleDetail.postContent ?? "";
+    postViewController.text = (circleDetail.postView ?? 0).toString();
+    flagNameController.text = circleDetail.flagName ?? "";
+    isMainPost.value = circleDetail.isMainPost ?? false;
+    userIsGuide.value = circleDetail.userIsGuide ?? false;
+    isFlag.value = circleDetail.isFlag ?? false;
+    hashtags.value = circleDetail.hashtag ?? [];
+  }
+
+  addCircle() async {
+    try {
+      if (circleFormKey.currentState?.validate() ?? false) {
+        final docRef = FirebaseStorageService.i.enterprise.doc().id;
+        final circle = CircleModel(
+          id: docRef,
+          userId: isAdd.value
+              ? FirebaseAuthService.i.user?.uid
+              : circleDetail.userId,
+          userName: isAdd.value
+              ? FirebaseAuthService.i.user?.displayName ?? 'Admin'
+              : circleDetail.userName,
+          userIsGuide: userIsGuide.value,
+          isFlag: isFlag.value,
+          flagName: flagNameController.text.trim(),
+          isMainPost: isMainPost.value,
+          postTime: isAdd.value
+              ? DateTime.now().toIso8601String()
+              : circleDetail.postTime,
+          postView: int.parse(postViewController.text),
+          postTitle: postTitleController.text,
+          postContent: postContentController.text,
+          hashtag: hashtags,
+          postReply: [],
+        );
+        showLoader();
+        if (isEdit.value) {
+          await FirebaseStorageService.i
+              .editCircle(circle: circle, docId: circleDetail.id ?? "");
+        } else {
+          await FirebaseStorageService.i
+              .addCircle(circle: circle, customId: docRef);
+        }
+        hideLoader();
+        clearAllFields();
+        isAdd.value = false;
+        isEdit.value = false;
+        if (Get.currentRoute == AppRoutes.addCircle) {
+          Get.back();
+        }
+      }
+    } catch (e) {
+      hideLoader();
+      errorDialogWidget(msg: e.toString());
+    } finally {}
+  }
+
+  addHashatag() {
+    hashtags.add(Hashtag(
+      id: Random().nextInt(10000),
+      name: hashtagController.text.trim(),
+    ));
+    hashtagController.clear();
+  }
+
+  removeHashtag({required int? id}) {
+    hashtags.removeWhere((e) => e.id == id);
   }
 
   getMaxOffset() {
@@ -110,6 +240,76 @@ class CircleController extends GetxController {
     } finally {}
   }
 
+  importCircle() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+          allowMultiple: false,
+          type: FileType.custom,
+          allowedExtensions: ['csv']);
+      if (result != null) {
+        String csvData = utf8.decode(result.files.single.bytes ?? []);
+        List<List<dynamic>> rows = const CsvToListConverter().convert(csvData);
+        if (rows.isEmpty) {
+          return;
+        }
+        List<String> headers = rows[0].map((e) => e.toString()).toList();
+        for (int i = 1; i < rows.length; i++) {
+          Map<String, dynamic> rowMap = {
+            for (int j = 0; j < headers.length; j++) headers[j]: rows[i][j]
+          };
+          List<Hashtag> hashTags = [];
+          if (rowMap[StringConfig.reporting.hashTags] != null &&
+              rowMap[StringConfig.reporting.hashTags].toString().isNotEmpty) {
+            try {
+              List<dynamic> tags =
+                  jsonDecode(rowMap[StringConfig.reporting.hashTags]);
+              hashTags = tags.map((team) {
+                return Hashtag(
+                  id: Random().nextInt(10000),
+                  name: (team['name'] ?? "").toString(),
+                );
+              }).toList();
+            } catch (e) {
+              errorDialogWidget(msg: e.toString());
+            }
+          }
+          final docRef = FirebaseStorageService.i.enterprise.doc().id;
+          CircleModel circle = CircleModel(
+            id: docRef,
+            userId: rowMap[StringConfig.dashboard.userId].toString(),
+            userName: rowMap[StringConfig.dashboard.fullName].toString(),
+            userIsGuide: rowMap[StringConfig.reporting.userIsGuide]
+                    .toString()
+                    .toLowerCase() ==
+                StringConfig.dashboard.trueText.toLowerCase(),
+            isFlag: rowMap[StringConfig.reporting.isFlag]
+                    .toString()
+                    .toLowerCase() ==
+                StringConfig.dashboard.trueText.toLowerCase(),
+            flagName: rowMap[StringConfig.reporting.flagName].toString(),
+            isMainPost: rowMap[StringConfig.reporting.isMainPost]
+                    .toString()
+                    .toLowerCase() ==
+                StringConfig.dashboard.trueText.toLowerCase(),
+            postTime: DateFormat(StringConfig.dashboard.dateYYYYMMDD)
+                .parse(rowMap[StringConfig.reporting.postTime])
+                .toIso8601String(),
+            postView: rowMap[StringConfig.reporting.postViews],
+            postTitle: rowMap[StringConfig.reporting.postTitle].toString(),
+            postContent: rowMap[StringConfig.reporting.postContent].toString(),
+            hashtag: hashTags,
+            postReply: [],
+          );
+          await FirebaseStorageService.i
+              .addCircle(circle: circle, customId: docRef);
+        }
+      }
+    } catch (e) {
+      hideLoader();
+      errorDialogWidget(msg: e.toString());
+    }
+  }
+
   exportCircle() async {
     try {
       String currentDate =
@@ -117,6 +317,7 @@ class CircleController extends GetxController {
       List<List<String>> rows = [
         ...circle.map((model) {
           return [
+            model.userId ?? "",
             model.userName ?? "",
             model.postTitle ?? "",
             model.postContent ?? "",
@@ -130,17 +331,18 @@ class CircleController extends GetxController {
             "${model.isFlag}",
             model.flagName ?? "",
             "${model.postReply?.length ?? 0}",
-            model.hashtag?.join(", ") ?? "",
+            jsonEncode(model.hashtag?.map((p) => p.toJson()).toList() ?? []),
           ];
         }),
       ];
       rows.sort((a, b) => DateFormat(StringConfig.dashboard.dateYYYYMMDD)
-          .parse(b[3].isNotEmpty ? b[3] : currentDate)
+          .parse(b[4].isNotEmpty ? b[4] : currentDate)
           .compareTo(DateFormat(StringConfig.dashboard.dateYYYYMMDD)
-              .parse(a[3].isNotEmpty ? a[3] : currentDate)));
+              .parse(a[4].isNotEmpty ? a[4] : currentDate)));
       rows.insert(
         0,
         [
+          StringConfig.dashboard.userId,
           StringConfig.dashboard.fullName,
           StringConfig.reporting.postTitle,
           StringConfig.reporting.postContent,
@@ -160,7 +362,7 @@ class CircleController extends GetxController {
         bytes: bytes,
         ext: "csv",
         mimeType: MimeType.csv,
-        name: StringConfig.dashboard.circleInformation,
+        name: StringConfig.circle.circleInformation,
       );
     } catch (e) {
       errorDialogWidget(msg: e.toString());

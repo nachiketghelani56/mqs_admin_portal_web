@@ -25,6 +25,7 @@ class CustomTextField extends StatelessWidget {
     this.onChanged,
     this.border,
     this.padding,
+    this.prefixText,
   });
 
   final TextEditingController controller;
@@ -44,6 +45,7 @@ class CustomTextField extends StatelessWidget {
   final Function(String)? onChanged;
   final InputBorder? border;
   final double? padding;
+  final String? prefixText;
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +86,7 @@ class CustomTextField extends StatelessWidget {
             enabledBorder: border ?? FontTextStyleConfig.borderDecoration,
             focusedErrorBorder: border ?? FontTextStyleConfig.borderDecoration,
             errorBorder: border ?? FontTextStyleConfig.borderDecoration,
+            prefixText: prefixText,
             suffixIcon: suffix ??
                 (suffixIcon != null
                     ? Container(

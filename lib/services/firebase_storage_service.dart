@@ -34,10 +34,8 @@ class FirebaseStorageService {
     if (filter.isEmpty) {
       query = query.orderBy(fieldKey, descending: !isAsc);
     }
-
     List<EnterpriseModel> enterpriseList =
         await FirebaseStorageService.i.getEnterprises();
-
     for (Map<String, dynamic> filter in filter) {
       String field = filter['field'];
       dynamic condition = filter['condition'];
@@ -107,7 +105,6 @@ class FirebaseStorageService {
                 return fieldValue != null && fieldValue.contains(value);
               }).toList());
             }
-
             break;
           default:
             break;
@@ -132,9 +129,7 @@ class FirebaseStorageService {
     if (filter.isEmpty) {
       query = query.orderBy(fieldKey, descending: !isAsc);
     }
-
     List<UserIAMModel> userList = await FirebaseStorageService.i.getUsers();
-
     for (Map<String, dynamic> filter in filter) {
       String field = filter['field'];
       var condition = filter['condition'];
@@ -192,19 +187,16 @@ class FirebaseStorageService {
                         : value.toString())
                 .orderBy(field, descending: !isAsc);
             break;
-
           case 'array-contains-any': // Array contains any
             if (!allRes.contains(value)) {
               allRes.addAll(userList.where((UserIAMModel e) {
-                Map<String, dynamic> json = e.toJson(); // Convert object to JSON
+                Map<String, dynamic> json =
+                    e.toJson(); // Convert object to JSON
                 String? fieldValue =
-                json[field]?.toString(); // Get the dynamic field value
+                    json[field]?.toString(); // Get the dynamic field value
                 return fieldValue != null && fieldValue.contains(value);
               }).toList());
             }
-
-
-
             break;
           default:
             break;
@@ -280,18 +272,32 @@ class FirebaseStorageService {
 
   Future<List<CircleModel>> getCircles() async {
     QuerySnapshot<Object?> cir = await circle.get();
-    List<CircleModel> cirList = cir.docs
-        .map((e) => CircleModel.fromJson(e.data() as Map<String, dynamic>))
-        .toList();
+    List<CircleModel> cirList = cir.docs.map((e) {
+      CircleModel model =
+          CircleModel.fromJson(e.data() as Map<String, dynamic>);
+      model.id = e.id;
+      return model;
+    }).toList();
+    cirList.sort((a, b) => DateTime.parse(
+            b.postTime ?? DateTime.now().toIso8601String())
+        .compareTo(
+            DateTime.parse(a.postTime ?? DateTime.now().toIso8601String())));
     return cirList;
   }
 
   Stream<List<CircleModel>> getCircleStream() {
     return circle.snapshots().map((snapshot) {
-      return snapshot.docs
-          .map(
-              (doc) => CircleModel.fromJson(doc.data() as Map<String, dynamic>))
-          .toList();
+      List<CircleModel> cirList = snapshot.docs.map((doc) {
+        CircleModel model =
+            CircleModel.fromJson(doc.data() as Map<String, dynamic>);
+        model.id = doc.id;
+        return model;
+      }).toList();
+      cirList.sort((a, b) => DateTime.parse(
+              b.postTime ?? DateTime.now().toIso8601String())
+          .compareTo(
+              DateTime.parse(a.postTime ?? DateTime.now().toIso8601String())));
+      return cirList;
     });
   }
 
@@ -303,6 +309,28 @@ class FirebaseStorageService {
             e.data() as Map<String, dynamic>))
         .toList();
     return receiptList;
+  }
+
+  Future<void> editCircle(
+      {required String docId, required CircleModel circle}) async {
+    try {
+      await FirebaseStorageService.i.circle
+          .doc(docId)
+          .set(circle.toJson(), SetOptions(merge: true));
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    }
+  }
+
+  Future<void> addCircle(
+      {required CircleModel circle, required String customId}) async {
+    await FirebaseStorageService.i.circle.doc(customId).set({
+      ...circle.toJson(),
+    });
+  }
+
+  Future deleteCircle({required String docId}) async {
+    await circle.doc(docId).delete();
   }
 
   Stream<List<UserSubscriptionReceiptModel>>

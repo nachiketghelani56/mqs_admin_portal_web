@@ -135,7 +135,11 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                       i++)
                     DropdownMenuItem(
                       value: i,
-                      child: Text(dashboardController.filterConditions[i]),
+                      child: Text(
+                        dashboardController.filterConditions[i],
+                        style: FontTextStyleConfig.textFieldTextStyle
+                            .copyWith(fontSize: FontSizeConfig.fontSize16),
+                      ),
                     ),
                 ],
                 onChanged: (val) {
@@ -172,7 +176,12 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                                 dashboardController.dataTypes.map((dataType) {
                               return DropdownMenuItem(
                                 value: dataType,
-                                child: Text(dataType),
+                                child: Text(
+                                  dataType,
+                                  style: FontTextStyleConfig.textFieldTextStyle
+                                      .copyWith(
+                                          fontSize: FontSizeConfig.fontSize16),
+                                ),
                               );
                             }).toList(),
                             onChanged: (value) {
@@ -196,7 +205,14 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                                   .map((boolValue) {
                                 return DropdownMenuItem(
                                   value: boolValue,
-                                  child: Text(boolValue),
+                                  child: Text(
+                                    boolValue,
+                                    style: FontTextStyleConfig
+                                        .textFieldTextStyle
+                                        .copyWith(
+                                            fontSize:
+                                                FontSizeConfig.fontSize16),
+                                  ),
                                 );
                               }).toList(),
                               onChanged: (value) {

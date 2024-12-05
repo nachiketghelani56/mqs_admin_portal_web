@@ -12,6 +12,7 @@ class StringConfig {
   static final reporting = Reporting();
   static final home = Home();
   static final teamChart = TeamChart();
+  static final circle = Circle();
 }
 
 class Login {
@@ -204,7 +205,6 @@ class Dashboard {
   final String mqsEmployeeList = "mqsEmployeeList";
   final String mqsEnterprisePOCsSubscriptionDetails =
       "mqsEnterprisePOCsSubscriptionDetails";
-  final String circleInformation = "Circle Information";
 }
 
 class RefExp {
@@ -390,4 +390,20 @@ class TeamChart {
   final String ofPathways = "# of Pathways";
   final String ofMomentsThatMatter = "# of Moments That Matter";
   final String showMore = "Show more";
+}
+
+class Circle {
+  final String areYouSureYouWantToDeleteThisCircle =
+      "Are you sure you want to delete this circle ?";
+  final String addCircle = "Add Circle";
+  final String editCircle = "Edit Circle";
+  final String circleInformation = "Circle Information";
+  final String enterPostTitle = "Enter post title";
+  final String enterPostContent = "Enter post content";
+  final String enterPostView = "Enter post views";
+  final String enterPostTime = "Enter post time";
+  final String enterFlagName = "Enter flag name";
+  final String hashTags = "Hashtags";
+  final String hashTag = "Hashtag";
+  final String enterTag = "Enter tag";
 }

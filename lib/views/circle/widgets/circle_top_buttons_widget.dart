@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
+import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/views/circle/controller/circle_controller.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_icon_button.dart';
+import 'package:mqs_admin_portal_web/widgets/custom_prefix_button.dart';
 import 'package:mqs_admin_portal_web/widgets/search_text_field.dart';
 
 Widget circleTopButtonsWidget(
@@ -32,9 +34,31 @@ Widget circleTopButtonsWidget(
             const Spacer(),
             SizeConfig.size12.width,
             CustomIconButton(
+              icon: ImageConfig.import,
+              onTap: () {
+                circleController.importCircle();
+              },
+            ),
+            SizeConfig.size12.width,
+            CustomIconButton(
               icon: ImageConfig.export,
               onTap: () {
                 circleController.exportCircle();
+              },
+            ),
+            SizeConfig.size12.width,
+            CustomPrefixButton(
+              prefixIcon: ImageConfig.add,
+              padding: SizeConfig.size15,
+              btnText: StringConfig.circle.addCircle,
+              onTap: () {
+                circleController.isEdit.value = false;
+                circleController.isAdd.value = true;
+                circleController.showHashTag.value = false;
+                circleController.clearAllFields();
+                if (context.width < SizeConfig.size1500) {
+                  Get.toNamed(AppRoutes.addCircle);
+                }
               },
             ),
           ],
@@ -56,11 +80,30 @@ Widget circleTopButtonsWidget(
               },
             ),
             const Spacer(),
+            CustomIconButton(
+              icon: ImageConfig.import,
+              onTap: () {
+                circleController.importCircle();
+              },
+            ),
             SizeConfig.size12.width,
             CustomIconButton(
               icon: ImageConfig.export,
               onTap: () {
                 circleController.exportCircle();
+              },
+            ),
+            SizeConfig.size12.width,
+            CustomIconButton(
+              icon: ImageConfig.add,
+              onTap: () {
+                circleController.isEdit.value = false;
+                circleController.isAdd.value = true;
+                circleController.showHashTag.value = false;
+                circleController.clearAllFields();
+                if (context.width < SizeConfig.size1500) {
+                  Get.toNamed(AppRoutes.addCircle);
+                }
               },
             ),
           ],

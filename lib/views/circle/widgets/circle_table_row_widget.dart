@@ -4,6 +4,7 @@ import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
 import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/views/circle/controller/circle_controller.dart';
+import 'package:mqs_admin_portal_web/views/circle/widgets/circle_delete_dialog_widget.dart';
 
 Widget circleTableRowWidget({
   required CircleController circleController,
@@ -36,16 +37,41 @@ Widget circleTableRowWidget({
         ),
         Expanded(
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Image.asset(
                 ImageConfig.eyeOpened,
                 height: SizeConfig.size24,
               ).tap(() {
+                circleController.isAdd.value = false;
+                circleController.isEdit.value = false;
                 circleController.viewIndex.value = index;
                 if (context.width < SizeConfig.size1500) {
                   Get.toNamed(AppRoutes.circleDetail);
                 }
+              }),
+              Image.asset(
+                ImageConfig.edit,
+                height: SizeConfig.size24,
+              ).tap(() {
+                circleController.viewIndex.value = index;
+                circleController.isAdd.value = false;
+                circleController.isEdit.value = true;
+                circleController.showHashTag.value = false;
+                circleController.setCircleForm();
+                if (context.width < SizeConfig.size1500) {
+                  Get.toNamed(AppRoutes.addCircle);
+                }
+              }),
+              Image.asset(
+                ImageConfig.delete,
+                height: SizeConfig.size24,
+              ).tap(() {
+                circleDeleteDialogWidget(
+                  context: context,
+                  circleController: circleController,
+                  docId: circleController.searchedCircle[index].id ?? "",
+                );
               }),
             ],
           ),
