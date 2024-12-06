@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
+import 'package:mqs_admin_portal_web/models/circle_model.dart';
 import 'package:mqs_admin_portal_web/models/enterprise_model.dart';
 import 'package:mqs_admin_portal_web/models/menu_option_model.dart';
 import 'package:mqs_admin_portal_web/models/row_input_model.dart';
@@ -15,6 +16,10 @@ import 'package:mqs_admin_portal_web/models/user_iam_model.dart';
 import 'package:mqs_admin_portal_web/models/user_subscription_receipt_model.dart';
 import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/services/firebase_storage_service.dart';
+import 'package:mqs_admin_portal_web/views/circle/controller/circle_controller.dart';
+import 'package:mqs_admin_portal_web/views/circle/repository/circle_repository.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/repository/enterprise_repository.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/repository/user_repository.dart';
 import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/loader_widget.dart';
 import 'package:uuid/uuid.dart';
@@ -169,9 +174,10 @@ class DashboardController extends GetxController {
     super.onClose();
   }
 
-  Future<void> applyFilter(
-      String field, List<RowInputModel> value, Object matchKey) async {
+  Future<void> applyFilter() async {
     try {
+      String field = filterFields[selectedFilterFieldIndex.value];
+      int matchKey = selectedConditionIndex.value;
       reset();
       String condition = '';
       if (matchKey == 0) {
@@ -190,26 +196,31 @@ class DashboardController extends GetxController {
         condition = "array-contains-any";
       }
       List<Map<String, dynamic>> filters = [];
-      for (int i = 0; i < value.length; i++) {
+      for (int i = 0; i < rows.length; i++) {
         filters.add(
           {
             'field': field,
             'condition': {
               'operator': condition,
-              'type': value[i].dataType,
-              'value': value[i].dataType == StringConfig.dashboard.boolean
-                  ? value[i].selectedBoolean.toString()
-                  : value[i].textController.text.toString(),
+              'type': rows[i].dataType,
+              'value': rows[i].dataType == StringConfig.dashboard.boolean
+                  ? rows[i].selectedBoolean.toString()
+                  : rows[i].textController.text.toString(),
             },
           },
         );
       }
       if (selectedTabIndex.value == 0) {
-        searchedEnterprises.value = await FirebaseStorageService.i
-            .fetchFilteredData(field, filters, condition, isAsc.value);
-      } else {
-        searchedUsers.value = await FirebaseStorageService.i
+        searchedEnterprises.value = await EnterpriseRepository.i
+            .fetchEnterpriseFilteredData(
+                field, filters, condition, isAsc.value);
+      } else if (selectedTabIndex.value == 1) {
+        searchedUsers.value = await UserRepository.i
             .fetchUserFilteredData(field, filters, condition, isAsc.value);
+      } else if (selectedTabIndex.value == 2) {
+        Get.find<CircleController>().searchedCircle.value =
+            await CircleRepository.i.fetchCircleFilteredData(
+                field, filters, condition, isAsc.value);
       }
     } catch (e) {
       errorDialogWidget(msg: e.toString());
@@ -248,6 +259,13 @@ class DashboardController extends GetxController {
   }
 
   resetFilter() {
+    if (selectedTabIndex.value == 2) {
+      CircleController controller = Get.find<CircleController>();
+      controller.searchedCircle.value = controller.circle;
+    } else {
+      searchedEnterprises.value = enterprises;
+      searchedUsers.value = users;
+    }
     selectedFilterFieldIndex.value = -1;
     selectedConditionIndex.value = -1;
     isAsc.value = true;
@@ -304,14 +322,14 @@ class DashboardController extends GetxController {
   getEnterprises() async {
     try {
       List<EnterpriseModel> enterpriseList =
-          await FirebaseStorageService.i.getEnterprises();
+          await EnterpriseRepository.i.getEnterprises();
       searchedEnterprises.value = enterpriseList;
       enterprises.value = enterpriseList;
-      entStream = FirebaseStorageService.i
-          .getEnterpriseStream()
-          .listen((enterpriseList) {
+      entStream =
+          EnterpriseRepository.i.getEnterpriseStream().listen((enterpriseList) {
         searchedEnterprises.value = enterpriseList; // Update searched list
         enterprises.value = enterpriseList; // Update full list
+        viewIndex.value = -1;
       });
     } catch (e) {
       errorDialogWidget(msg: e.toString());
@@ -320,12 +338,13 @@ class DashboardController extends GetxController {
 
   getUsers() async {
     try {
-      List<UserIAMModel> userList = await FirebaseStorageService.i.getUsers();
+      List<UserIAMModel> userList = await UserRepository.i.getUsers();
       searchedUsers.value = userList;
       users.value = userList;
-      userStream = FirebaseStorageService.i.getUserStream().listen((data) {
+      userStream = UserRepository.i.getUserStream().listen((data) {
         searchedUsers.value = data;
         users.value = data;
+        viewIndex.value = -1;
       });
     } catch (e) {
       errorDialogWidget(msg: e.toString());
@@ -335,11 +354,11 @@ class DashboardController extends GetxController {
   getUserSubscriptionRecipts() async {
     try {
       userSubscriptionReceipts.value =
-          await FirebaseStorageService.i.getUserSubscriptionReceipt();
-      userSubscriptionReceiptStream = FirebaseStorageService.i
-          .getUserSubscriptionReceiptStream()
-          .listen((data) {
+          await UserRepository.i.getUserSubscriptionReceipt();
+      userSubscriptionReceiptStream =
+          UserRepository.i.getUserSubscriptionReceiptStream().listen((data) {
         userSubscriptionReceipts.value = data;
+        viewIndex.value = -1;
       });
     } catch (e) {
       errorDialogWidget(msg: e.toString());
@@ -464,10 +483,10 @@ class DashboardController extends GetxController {
 
         showLoader();
         if (isEditEnterprise.value) {
-          await FirebaseStorageService.i.editEnterprises(
+          await EnterpriseRepository.i.editEnterprises(
               enterprise: enterprise, docId: enterpriseId.value);
         } else {
-          await FirebaseStorageService.i
+          await EnterpriseRepository.i
               .addEnterprises(enterprise: enterprise, customId: docRef);
         }
         hideLoader();
@@ -533,7 +552,7 @@ class DashboardController extends GetxController {
       viewIndex.value = 0;
       isAddEnterprise.value = false;
       isEditEnterprise.value = false;
-      await FirebaseStorageService.i.deleteEnterprises(docId: docId);
+      await EnterpriseRepository.i.deleteEnterprises(docId: docId);
       hideLoader();
     } catch (e) {
       hideLoader();
@@ -649,8 +668,7 @@ class DashboardController extends GetxController {
                     .parse(rowMap['Updated Timestamp'])
                     .toIso8601String(),
           );
-
-          await FirebaseStorageService.i
+          await EnterpriseRepository.i
               .addEnterprises(enterprise: enterprise, customId: docRef);
         }
       }
@@ -731,11 +749,16 @@ class DashboardController extends GetxController {
   }
 
   reset() {
-    viewIndex.value = -1;
-    currentPage.value = 1;
-    offset.value = 0;
-    searchedEnterprises.value = enterprises;
-    searchedUsers.value = users;
+    if (selectedTabIndex.value == 2 && Get.isRegistered<CircleController>()) {
+      CircleController controller = Get.find<CircleController>();
+      controller.viewIndex.value = -1;
+      controller.currentPage.value = 1;
+      controller.offset.value = 0;
+    } else {
+      viewIndex.value = -1;
+      currentPage.value = 1;
+      offset.value = 0;
+    }
   }
 
   setFilterFields() {
@@ -744,8 +767,15 @@ class DashboardController extends GetxController {
           .expand((e) => e.toJson().keys) // Convert model to Map
           .toSet() // Ensure uniqueness
           .toList();
-    } else {
+    } else if (selectedTabIndex.value == 1) {
       filterFields.value = users
+          .expand((e) => e.toJson().keys) // Convert model to Map
+          .toSet() // Ensure uniqueness
+          .toList();
+    } else if (selectedTabIndex.value == 2 &&
+        Get.isRegistered<CircleController>()) {
+      RxList<CircleModel> circle = Get.find<CircleController>().circle;
+      filterFields.value = circle
           .expand((e) => e.toJson().keys) // Convert model to Map
           .toSet() // Ensure uniqueness
           .toList();
@@ -1031,7 +1061,8 @@ class DashboardController extends GetxController {
     } finally {}
   }
 
-  String enterpriseKeyName(String keyName) {
+  String enterpriseKeyName({int? index}) {
+    String keyName = filterFields[index ?? selectedFilterFieldIndex.value];
     if (keyName == StringConfig.dashboard.mqsEnterprisePOCsKey) {
       return StringConfig.dashboard.mqsEnterprisePOCs;
     } else if (keyName == StringConfig.firebase.mqsEnterpriseCode) {
@@ -1053,7 +1084,8 @@ class DashboardController extends GetxController {
     return "";
   }
 
-  String userKeyName(String keyName) {
+  String userKeyName({int? index}) {
+    String keyName = filterFields[index ?? selectedFilterFieldIndex.value];
     if (keyName == StringConfig.dashboard.email) {
       return StringConfig.dashboard.email;
     } else if (keyName == StringConfig.firebase.firstName) {
@@ -1102,6 +1134,36 @@ class DashboardController extends GetxController {
       return StringConfig.dashboard.userSubscriptionStatus;
     } else if (keyName == StringConfig.dashboard.onboardingDataKey) {
       return StringConfig.dashboard.onboardingData;
+    }
+    return "";
+  }
+
+  String circleKeyName({int? index}) {
+    String keyName = filterFields[index ?? selectedFilterFieldIndex.value];
+    if (keyName == StringConfig.firebase.flagName) {
+      return StringConfig.reporting.flagName;
+    } else if (keyName == StringConfig.firebase.isFlag) {
+      return StringConfig.reporting.isFlag;
+    } else if (keyName == StringConfig.firebase.isMainPost) {
+      return StringConfig.reporting.isMainPost;
+    } else if (keyName == StringConfig.firebase.postContent) {
+      return StringConfig.reporting.postContent;
+    } else if (keyName == StringConfig.firebase.postTime) {
+      return StringConfig.reporting.postTime;
+    } else if (keyName == StringConfig.firebase.postTitle) {
+      return StringConfig.reporting.postTitle;
+    } else if (keyName == StringConfig.firebase.postViews) {
+      return StringConfig.reporting.postViews;
+    } else if (keyName == StringConfig.firebase.userIsGuide) {
+      return StringConfig.reporting.userIsGuide;
+    } else if (keyName == StringConfig.firebase.userId) {
+      return StringConfig.dashboard.userId;
+    } else if (keyName == StringConfig.firebase.userName) {
+      return StringConfig.dashboard.name;
+    } else if (keyName == StringConfig.firebase.hashtag) {
+      return StringConfig.circle.hashTag;
+    } else if (keyName == StringConfig.firebase.postReply) {
+      return StringConfig.reporting.postReplies;
     }
     return "";
   }

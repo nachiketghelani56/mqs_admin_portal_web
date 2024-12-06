@@ -23,9 +23,13 @@ Widget circleDetailWidget({required CircleController circleController}) {
           ),
           SizeConfig.size10.height,
           keyValueRowWidget(
+            key: StringConfig.circle.postId,
+            value: circleController.circleDetail.id ?? "",
+            isFirst: true,
+          ),
+          keyValueRowWidget(
             key: StringConfig.reporting.postTitle,
             value: circleController.circleDetail.postTitle ?? "",
-            isFirst: true,
           ),
           keyValueRowWidget(
             key: StringConfig.reporting.postContent,
@@ -55,6 +59,11 @@ Widget circleDetailWidget({required CircleController circleController}) {
             key: StringConfig.reporting.userIsGuide,
             value: "${circleController.circleDetail.userIsGuide ?? false}",
           ),
+          if (circleController.circleDetail.isMainPost == true)
+            keyValueRowWidget(
+              key: StringConfig.reporting.postReplies,
+              value: "${circleController.circleDetail.postReply?.length ?? 0}",
+            ),
           keyValueRowWidget(
             key: StringConfig.reporting.isFlag,
             value: "${circleController.circleDetail.isFlag ?? false}",

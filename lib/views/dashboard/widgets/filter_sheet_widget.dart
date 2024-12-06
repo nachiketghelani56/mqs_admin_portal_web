@@ -61,14 +61,12 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                           children: [
                             Text(
                               dashboardController.selectedTabIndex.value == 0
-                                  ? dashboardController.enterpriseKeyName(
-                                      dashboardController.filterFields[
-                                          dashboardController
-                                              .selectedFilterFieldIndex.value])
-                                  : dashboardController.userKeyName(
-                                      dashboardController.filterFields[
-                                          dashboardController
-                                              .selectedFilterFieldIndex.value]),
+                                  ? dashboardController.enterpriseKeyName()
+                                  : dashboardController
+                                              .selectedTabIndex.value ==
+                                          1
+                                      ? dashboardController.userKeyName()
+                                      : dashboardController.circleKeyName(),
                               style: FontTextStyleConfig.labelTextStyle
                                   .copyWith(color: ColorConfig.whiteColor),
                             ),
@@ -103,10 +101,10 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                       decoration: FontTextStyleConfig.subOptionDecoration,
                       child: Text(
                         dashboardController.selectedTabIndex.value == 0
-                            ? dashboardController.enterpriseKeyName(
-                                dashboardController.filterFields[i])
-                            : dashboardController.userKeyName(
-                                dashboardController.filterFields[i]),
+                            ? dashboardController.enterpriseKeyName(index: i)
+                            : dashboardController.selectedTabIndex.value == 1
+                                ? dashboardController.userKeyName(index: i)
+                                : dashboardController.circleKeyName(index: i),
                         style: FontTextStyleConfig.tableContentTextStyle,
                       ),
                     ).tap(() {
@@ -361,11 +359,7 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                     onTap: () {
                       if (dashboardController.selectedFilterFieldIndex.value >=
                           0) {
-                        dashboardController.applyFilter(
-                            dashboardController.filterFields[dashboardController
-                                .selectedFilterFieldIndex.value],
-                            dashboardController.rows,
-                            dashboardController.selectedConditionIndex.value);
+                        dashboardController.applyFilter();
                       }
                       Get.back();
                     },

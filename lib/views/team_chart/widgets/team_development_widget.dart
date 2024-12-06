@@ -3,7 +3,7 @@ import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_list.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
-import 'package:mqs_admin_portal_web/models/chart_model.dart';
+import 'package:mqs_admin_portal_web/models/common_chart_model.dart';
 import 'package:mqs_admin_portal_web/views/team_chart/controller/team_chart_controller.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -28,37 +28,21 @@ Widget teamDevelopmentWidget(
                 child: SizedBox(
                   width: SizeConfig.size600,
                   child: SfCartesianChart(
-                    series: <CartesianSeries<ChartModel, String>>[
-                      ColumnSeries(
-                        dataSource: teamChartController.devCharData,
-                        xValueMapper: (ChartModel data, _) => data.x,
-                        yValueMapper: (ChartModel data, _) => data.y1,
-                        width: SizeConfig.size0point8,
-                        spacing: SizeConfig.size0point1,
-                        borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(SizeConfig.size6)),
-                        color: ColorConfig.bullet1Color,
-                      ),
-                      ColumnSeries(
-                        dataSource: teamChartController.devCharData,
-                        xValueMapper: (ChartModel data, _) => data.x,
-                        yValueMapper: (ChartModel data, _) => data.y2,
-                        width: SizeConfig.size0point8,
-                        spacing: SizeConfig.size0point1,
-                        borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(SizeConfig.size6)),
-                        color: ColorConfig.chartColor,
-                      ),
-                      ColumnSeries(
-                        dataSource: teamChartController.devCharData,
-                        xValueMapper: (ChartModel data, _) => data.x,
-                        yValueMapper: (ChartModel data, _) => data.y3,
-                        width: SizeConfig.size0point8,
-                        spacing: SizeConfig.size0point1,
-                        borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(SizeConfig.size6)),
-                        color: ColorConfig.bullet6Color,
-                      ),
+                    series: <CartesianSeries>[
+                      for (String type in teamChartController.allTypes)
+                        ColumnSeries<ChartData, String>(
+                          dataSource: teamChartController.chartData
+                              .where((data) => data.type == type)
+                              .toList(),
+                          xValueMapper: (ChartData data, _) => data.month,
+                          yValueMapper: (ChartData data, _) => data.count,
+                          name: type,
+                          width: SizeConfig.size0point8,
+                          spacing: SizeConfig.size0point1,
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(SizeConfig.size6)),
+                          color: teamChartController.typeColors[type],
+                        ),
                     ],
                     primaryXAxis: CategoryAxis(
                       majorTickLines:

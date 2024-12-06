@@ -10,24 +10,26 @@ class CustomDropDown extends StatelessWidget {
     required this.onChanged,
     required this.label,
     this.value,
+    this.validator,
   });
 
   final List<DropdownMenuItem<dynamic>>? items;
   final Function(dynamic) onChanged;
   final String label;
   final dynamic value;
+  final String? Function(dynamic)? validator;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if(label.isNotEmpty)...[
-        Text(
-          label,
-          style: FontTextStyleConfig.labelTextStyle,
-        ).paddingOnly(left: SizeConfig.size2),
-        SizeConfig.size6.height,
+        if (label.isNotEmpty) ...[
+          Text(
+            label,
+            style: FontTextStyleConfig.labelTextStyle,
+          ).paddingOnly(left: SizeConfig.size2),
+          SizeConfig.size6.height,
         ],
         DropdownButtonFormField(
           items: items,
@@ -37,6 +39,7 @@ class CustomDropDown extends StatelessWidget {
           },
           style: FontTextStyleConfig.textFieldTextStyle
               .copyWith(fontSize: FontSizeConfig.fontSize16),
+          validator: validator,
           icon: const Icon(Icons.keyboard_arrow_down),
           focusColor: ColorConfig.backgroundColor,
           dropdownColor: ColorConfig.backgroundColor,

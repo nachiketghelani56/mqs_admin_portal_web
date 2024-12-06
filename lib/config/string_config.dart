@@ -237,6 +237,18 @@ class Firebase {
   final String code = "code";
   final String enterPriseID = "enterPriseID";
   final String mqsCreatedTimestamp = "mqsCreatedTimestamp";
+  final String flagName = "flag_name";
+  final String isFlag = "isFlag";
+  final String isMainPost = "isMainPost";
+  final String postContent = "post_content";
+  final String postTime = "post_time";
+  final String postTitle = "post_title";
+  final String postViews = "post_view";
+  final String userIsGuide = "userIsGuide";
+  final String userId = "user_id";
+  final String userName = "user_name";
+  final String hashtag = "hashtag";
+  final String postReply = "post_reply";
 }
 
 class CSV {
@@ -390,6 +402,9 @@ class TeamChart {
   final String ofPathways = "# of Pathways";
   final String ofMomentsThatMatter = "# of Moments That Matter";
   final String showMore = "Show more";
+  final String dateMMMYYYY = "MMM, yyyy";
+  final String prac = "PRAC";
+  final String ref = "REF";
 }
 
 class Circle {
@@ -406,4 +421,6 @@ class Circle {
   final String hashTags = "Hashtags";
   final String hashTag = "Hashtag";
   final String enterTag = "Enter tag";
+  final String selectMainPostId = "Select Main Post ID";
+  final String postId = "Post ID";
 }

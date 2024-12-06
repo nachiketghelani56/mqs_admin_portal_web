@@ -18,9 +18,7 @@ Widget homeOptionsWidget(
           onTap: () {
             mqsDashboardController.subMenuIndex.value = i;
             mqsDashboardController.isShowHome.value = true;
-            if (i < 2) {
-              dashboardController.setTabIndex(index: i);
-            }
+            dashboardController.setTabIndex(index: i);
           },
           child: Stack(
             alignment: Alignment.topLeft,

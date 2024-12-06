@@ -72,6 +72,7 @@ Widget addCircleFormWidget({required CircleController circleController}) {
               items: circleController.boolOptions,
               onChanged: (value) {
                 circleController.isMainPost.value = value;
+                circleController.mainPostId.value = "";
               },
             ),
           ),
@@ -88,6 +89,33 @@ Widget addCircleFormWidget({required CircleController circleController}) {
           ),
         ],
       ),
+      if (circleController.circle.isNotEmpty &&
+          !circleController.isMainPost.value) ...[
+        SizeConfig.size34.height,
+        CustomDropDown(
+          label: StringConfig.circle.selectMainPostId,
+          value: circleController.mainPostId.value.isNotEmpty
+              ? circleController.mainPostId.value
+              : null,
+          validator: (p0) => Validator.emptyValidator(
+              p0 ?? "", StringConfig.circle.postId.toLowerCase()),
+          items: circleController.circle
+              .map(
+                (e) => DropdownMenuItem(
+                  value: e.id,
+                  child: Text(
+                    e.id ?? "",
+                    style: FontTextStyleConfig.textFieldTextStyle
+                        .copyWith(fontSize: FontSizeConfig.fontSize16),
+                  ),
+                ),
+              )
+              .toList(),
+          onChanged: (value) {
+            circleController.mainPostId.value = value;
+          },
+        ),
+      ],
     ],
   );
 }

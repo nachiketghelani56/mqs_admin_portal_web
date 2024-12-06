@@ -13,6 +13,8 @@ import 'package:mqs_admin_portal_web/models/circle_model.dart';
 import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/services/firebase_auth_service.dart';
 import 'package:mqs_admin_portal_web/services/firebase_storage_service.dart';
+import 'package:mqs_admin_portal_web/views/circle/repository/circle_repository.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/loader_widget.dart';
 
@@ -35,7 +37,8 @@ class CircleController extends GetxController {
   final TextEditingController flagNameController = TextEditingController();
   final TextEditingController hashtagController = TextEditingController();
   RxList<Hashtag> hashtags = <Hashtag>[].obs;
-  RxBool isMainPost = false.obs,
+  RxString mainPostId = "".obs;
+  RxBool isMainPost = true.obs,
       userIsGuide = false.obs,
       isFlag = false.obs,
       showHashTag = false.obs;
@@ -72,15 +75,18 @@ class CircleController extends GetxController {
 
   getCircle() async {
     try {
-      List<CircleModel> circleList =
-          await FirebaseStorageService.i.getCircles();
+      List<CircleModel> circleList = await CircleRepository.i.getCircles();
       searchedCircle.value = circleList;
       circle.value = circleList;
-      circleStream =
-          FirebaseStorageService.i.getCircleStream().listen((circleList) {
+      circleStream = CircleRepository.i.getCircleStream().listen((circleList) {
         searchedCircle.value = circleList;
         circle.value = circleList;
+        viewIndex.value = -1;
       });
+      // Set filter fields of circle in filter sheet
+      if (Get.isRegistered<DashboardController>()) {
+        Get.find<DashboardController>().setFilterFields();
+      }
     } catch (e) {
       errorDialogWidget(msg: e.toString());
     } finally {}
@@ -92,7 +98,25 @@ class CircleController extends GetxController {
       viewIndex.value = 0;
       isAdd.value = false;
       isEdit.value = false;
-      await FirebaseStorageService.i.deleteCircle(docId: docId);
+      CircleModel model = circle.firstWhere((e) => e.id == docId);
+      if (model.isMainPost == true && (model.postReply?.isNotEmpty ?? false)) {
+        model.postReply?.forEach((e) async {
+          await CircleRepository.i.deleteCircle(docId: e);
+        });
+        await CircleRepository.i.deleteCircle(docId: model.id ?? "");
+      } else if (model.isMainPost == false) {
+        List<CircleModel> mainModel = circle
+            .where((e) =>
+                e.postReply?.where((ele) => ele == docId).isNotEmpty ?? false)
+            .toList();
+        if (mainModel.isNotEmpty) {
+          CircleModel updated = mainModel.first;
+          updated.postReply?.removeWhere((e) => e == docId);
+          await CircleRepository.i
+              .editCircle(docId: updated.id ?? "", circle: updated);
+        }
+      }
+      await CircleRepository.i.deleteCircle(docId: docId);
       hideLoader();
     } catch (e) {
       hideLoader();
@@ -105,7 +129,8 @@ class CircleController extends GetxController {
     postContentController.clear();
     postViewController.clear();
     flagNameController.clear();
-    isMainPost.value = false;
+    isMainPost.value = true;
+    mainPostId.value = "";
     userIsGuide.value = false;
     isFlag.value = false;
     hashtags.clear();
@@ -126,7 +151,7 @@ class CircleController extends GetxController {
     try {
       if (circleFormKey.currentState?.validate() ?? false) {
         final docRef = FirebaseStorageService.i.enterprise.doc().id;
-        final circle = CircleModel(
+        final circleModel = CircleModel(
           id: docRef,
           userId: isAdd.value
               ? FirebaseAuthService.i.user?.uid
@@ -145,15 +170,24 @@ class CircleController extends GetxController {
           postTitle: postTitleController.text,
           postContent: postContentController.text,
           hashtag: hashtags,
-          postReply: [],
+          postReply: isAdd.value ? [] : circleDetail.postReply,
         );
         showLoader();
         if (isEdit.value) {
-          await FirebaseStorageService.i
-              .editCircle(circle: circle, docId: circleDetail.id ?? "");
+          await CircleRepository.i
+              .editCircle(circle: circleModel, docId: circleDetail.id ?? "");
         } else {
-          await FirebaseStorageService.i
-              .addCircle(circle: circle, customId: docRef);
+          await CircleRepository.i
+              .addCircle(circle: circleModel, customId: docRef);
+        }
+        if (!isMainPost.value && mainPostId.value.isNotEmpty) {
+          CircleModel? mainCircle =
+              circle.firstWhereOrNull((e) => e.id == mainPostId.value);
+          mainCircle?.postReply?.add(docRef);
+          if (mainCircle != null) {
+            await CircleRepository.i
+                .editCircle(docId: mainPostId.value, circle: mainCircle);
+          }
         }
         hideLoader();
         clearAllFields();
@@ -226,7 +260,7 @@ class CircleController extends GetxController {
       } else {
         searchedCircle.value = circle
             .where((e) =>
-                (e.postTime ?? "").toLowerCase().contains(query) ||
+                (e.postTitle ?? "").toLowerCase().contains(query) ||
                 (e.postContent ?? "").toLowerCase().contains(query) ||
                 (e.userName ?? "").toLowerCase().contains(query) ||
                 (e.flagName ?? "").toLowerCase().contains(query) ||
@@ -298,10 +332,12 @@ class CircleController extends GetxController {
             postTitle: rowMap[StringConfig.reporting.postTitle].toString(),
             postContent: rowMap[StringConfig.reporting.postContent].toString(),
             hashtag: hashTags,
-            postReply: [],
+            postReply:
+                (jsonDecode(rowMap[StringConfig.reporting.postReplies]) as List)
+                    .map((e) => e.toString())
+                    .toList(),
           );
-          await FirebaseStorageService.i
-              .addCircle(circle: circle, customId: docRef);
+          await CircleRepository.i.addCircle(circle: circle, customId: docRef);
         }
       }
     } catch (e) {
@@ -330,7 +366,7 @@ class CircleController extends GetxController {
             "${model.isMainPost}",
             "${model.isFlag}",
             model.flagName ?? "",
-            "${model.postReply?.length ?? 0}",
+            jsonEncode(model.postReply ?? []),
             jsonEncode(model.hashtag?.map((p) => p.toJson()).toList() ?? []),
           ];
         }),

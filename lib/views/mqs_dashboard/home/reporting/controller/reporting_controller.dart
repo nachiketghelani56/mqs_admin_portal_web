@@ -11,7 +11,8 @@ import 'package:mqs_admin_portal_web/models/chart_model.dart';
 import 'package:mqs_admin_portal_web/models/circle_model.dart';
 import 'package:mqs_admin_portal_web/models/user_iam_model.dart';
 import 'package:mqs_admin_portal_web/models/user_subscription_receipt_model.dart';
-import 'package:mqs_admin_portal_web/services/firebase_storage_service.dart';
+import 'package:mqs_admin_portal_web/views/circle/repository/circle_repository.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/repository/user_repository.dart';
 import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
 
 class ReportingController extends GetxController {
@@ -92,12 +93,12 @@ class ReportingController extends GetxController {
 
   getAuthAndOBSummary() async {
     try {
-      List<UserIAMModel> users = await FirebaseStorageService.i.getUsers();
+      List<UserIAMModel> users = await UserRepository.i.getUsers();
       totalRegisteredUsers.value = users.length;
       activeUsers.value = users.where((e) => e.mqsIsUserActive).length;
       inactiveUsers.value = users.where((e) => !e.mqsIsUserActive).length;
       getOBSummary(users: users);
-      userStream = FirebaseStorageService.i.getUserStream().listen((data) {
+      userStream = UserRepository.i.getUserStream().listen((data) {
         totalRegisteredUsers.value = data.length;
         activeUsers.value = data.where((e) => e.mqsIsUserActive).length;
         inactiveUsers.value = data.where((e) => !e.mqsIsUserActive).length;
@@ -110,7 +111,7 @@ class ReportingController extends GetxController {
 
   filterAuth() async {
     try {
-      List<UserIAMModel> users = await FirebaseStorageService.i.getUsers();
+      List<UserIAMModel> users = await UserRepository.i.getUsers();
       if (authFilter.value == StringConfig.reporting.lastDay) {
         DateTime lastDay = DateTime.now().subtract(const Duration(days: 1));
         totalRegisteredUsers.value = users.where((e) {
@@ -157,7 +158,7 @@ class ReportingController extends GetxController {
 
   exportAuthSummary() async {
     try {
-      List<UserIAMModel> users = await FirebaseStorageService.i.getUsers();
+      List<UserIAMModel> users = await UserRepository.i.getUsers();
       String currentDate =
           DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(DateTime(0));
       List<List<String>> rows = [
@@ -232,9 +233,9 @@ class ReportingController extends GetxController {
 
   getCircleSummary() async {
     try {
-      List<CircleModel> circles = await FirebaseStorageService.i.getCircles();
+      List<CircleModel> circles = await CircleRepository.i.getCircles();
       setCircle(circles);
-      circleStream = FirebaseStorageService.i.getCircleStream().listen((data) {
+      circleStream = CircleRepository.i.getCircleStream().listen((data) {
         setCircle(data);
       });
     } catch (e) {
@@ -252,7 +253,7 @@ class ReportingController extends GetxController {
 
   filterCircle() async {
     try {
-      List<CircleModel> circles = await FirebaseStorageService.i.getCircles();
+      List<CircleModel> circles = await CircleRepository.i.getCircles();
       if (circleFilter.value == StringConfig.reporting.lastDay) {
         DateTime lastDay = DateTime.now().subtract(const Duration(days: 1));
         totalCircles.value = circles.where((e) {
@@ -360,7 +361,7 @@ class ReportingController extends GetxController {
 
   exportCircleSummary() async {
     try {
-      List<CircleModel> circles = await FirebaseStorageService.i.getCircles();
+      List<CircleModel> circles = await CircleRepository.i.getCircles();
       String currentDate =
           DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(DateTime(0));
       List<List<String>> rows = [
@@ -445,16 +446,15 @@ class ReportingController extends GetxController {
   getSubscriptionSummary() async {
     try {
       List<UserSubscriptionReceiptModel> receipt =
-          await FirebaseStorageService.i.getUserSubscriptionReceipt();
+          await UserRepository.i.getUserSubscriptionReceipt();
       activeSubscriptions.value = receipt
           .where((e) =>
               e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
           .length;
       purchasedSubscription.value =
           receipt.where((e) => e.mqsPurchaseID.isNotEmpty).length;
-      userSubscriptionReceiptStream = FirebaseStorageService.i
-          .getUserSubscriptionReceiptStream()
-          .listen((data) {
+      userSubscriptionReceiptStream =
+          UserRepository.i.getUserSubscriptionReceiptStream().listen((data) {
         activeSubscriptions.value = data
             .where((e) =>
                 e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
@@ -470,7 +470,7 @@ class ReportingController extends GetxController {
   exportSubscriptionSummary() async {
     try {
       List<UserSubscriptionReceiptModel> receipt =
-          await FirebaseStorageService.i.getUserSubscriptionReceipt();
+          await UserRepository.i.getUserSubscriptionReceipt();
       List<List<String>> rows = [
         [
           StringConfig.reporting.firebaseUserId,

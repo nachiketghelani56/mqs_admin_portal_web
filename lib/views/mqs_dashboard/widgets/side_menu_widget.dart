@@ -123,9 +123,7 @@ Widget sideMenuWidget(
                                 ],
                               ).tap(() {
                                 mqsDashboardController.subMenuIndex.value = i;
-                                if (index == 0 && [0, 1].contains(i)) {
-                                  dashboardController.setTabIndex(index: i);
-                                }
+                                dashboardController.setTabIndex(index: i);
                               }),
                             );
                           },

@@ -15,15 +15,15 @@ Widget circleTopButtonsWidget(
   return context.width > SizeConfig.size1800
       ? Row(
           children: [
-            // CustomPrefixButton(
-            //   prefixIcon: ImageConfig.filter,
-            //   btnText: StringConfig.dashboard.filter,
-            //   padding: SizeConfig.size15,
-            //   onTap: () {
-            //     scaffoldKey.currentState?.openEndDrawer();
-            //   },
-            // ),
-            // SizeConfig.size12.width,
+            CustomPrefixButton(
+              prefixIcon: ImageConfig.filter,
+              btnText: StringConfig.dashboard.filter,
+              padding: SizeConfig.size15,
+              onTap: () {
+                scaffoldKey.currentState?.openEndDrawer();
+              },
+            ),
+            SizeConfig.size12.width,
             SearchTextField(
               controller: circleController.searchController,
               hintText: StringConfig.dashboard.searchByNameTitle,
