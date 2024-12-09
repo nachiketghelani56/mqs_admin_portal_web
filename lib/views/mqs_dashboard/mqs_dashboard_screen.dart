@@ -9,6 +9,7 @@ import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboar
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/home_screen.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/reporting_screen.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/widgets/side_menu_widget.dart';
+import 'package:mqs_admin_portal_web/views/pathway/pathway_screen.dart';
 import 'package:mqs_admin_portal_web/views/team_chart/team_chart_screen.dart';
 
 class MqsDashboardScreen extends StatelessWidget {
@@ -60,10 +61,14 @@ class MqsDashboardScreen extends StatelessWidget {
                             scaffoldKey: _mqsDashboardController.scaffoldKey);
                       } else if (_mqsDashboardController.subMenuIndex.value ==
                           3) {
-                        return TeamChartScreen(
+                        return PathwayScreen(
                             scaffoldKey: _mqsDashboardController.scaffoldKey);
                       } else if (_mqsDashboardController.subMenuIndex.value ==
                           4) {
+                        return TeamChartScreen(
+                            scaffoldKey: _mqsDashboardController.scaffoldKey);
+                      } else if (_mqsDashboardController.subMenuIndex.value ==
+                          5) {
                         return ReportingScreen(
                             scaffoldKey: _mqsDashboardController.scaffoldKey);
                       } else {

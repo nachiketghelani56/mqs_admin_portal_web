@@ -19,6 +19,10 @@ class HomeController extends GetxController {
       title: StringConfig.dashboard.circle,
     ),
     MenuModel(
+      icon: ImageConfig.userIAM,
+      title: StringConfig.mqsDashboard.pathway,
+    ),
+    MenuModel(
       icon: ImageConfig.teamChart,
       title: StringConfig.teamChart.teamChart,
     ),

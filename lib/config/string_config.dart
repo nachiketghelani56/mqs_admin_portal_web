@@ -13,6 +13,7 @@ class StringConfig {
   static final home = Home();
   static final teamChart = TeamChart();
   static final circle = Circle();
+  static final pathway = Pathway();
 }
 
 class Login {
@@ -184,7 +185,7 @@ class Dashboard {
   final String emailAddressText = "email address";
   final String userInformation = "User Information";
   final String userSubscriptionReceipt = "User Subscription Receipt";
-  final String userSubscription= "User Subscription";
+  final String userSubscription = "User Subscription";
   final String userActive = "User Active";
   final String aboutValueText = "About Value";
   final String countryValueText = "Country Value";
@@ -427,4 +428,38 @@ class Circle {
   final String enterTag = "Enter tag";
   final String selectMainPostId = "Select Main Post ID";
   final String postId = "Post ID";
+}
+
+class Pathway {
+  final String areYouSureYouWantToDeleteThisPathway =
+      "Are you sure you want to delete this pathway ?";
+  final String addPathway = "Add Pathway";
+  final String editPathway = "Edit Pathway";
+  final String pathwayInformation = "Pathway Information";
+  final String pathwayTitle = "Pathway Title";
+  final String pathwayType = "Pathway Type";
+  final String pathwayID = "Pathway ID";
+  final String aboutPathway = "About Pathway";
+  final String learningObj = "Learning Obj";
+  final String moduleCount = "Module Count";
+  final String pathwayCoachInstructions = "Pathway Coach Instructions";
+  final String pathwayDep = "Pathway Dep";
+  final String pathwayDetail = "Pathway Detail";
+  final String pathwayDuration = "Pathway Duration";
+  final String pathwayImage = "Pathway Image";
+  final String pathwayIntroImage = "Pathway Intro Image";
+  final String pathwayLevel = "Pathway Level";
+  final String pathwaySubtitle = "Pathway Subtitle";
+  final String pathwayTileImage = "Pathway Tile Image";
+  final String searchByTitleOrType = "Search by title or type";
+  final String modules = "Modules";
+  final String moduleID = "Module ID";
+  final String moduleTileImage = "Module Tile Image";
+  final String moduleTitle = "Module Title";
+  final String learnActivity = "Learn Activity";
+  final String moduleSubtitle = "Module Subtitle";
+  final String practiceActivity = "Practice Activity";
+  final String activityID = "Activity ID";
+  final String activtyRefID = "Activty Ref ID";
+  final String activityScreenHandoff = "Activity Screen Handoff";
 }

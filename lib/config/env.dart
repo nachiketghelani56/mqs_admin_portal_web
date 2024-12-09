@@ -30,4 +30,10 @@ final class Env {
 
   @EnviedField(varName: 'FBUSERSUBSCRIPTIONRECEIPT', obfuscate: true)
   static String fbUserSubscriptionReceipt = _Env.fbUserSubscriptionReceipt;
+
+  @EnviedField(varName: 'FBPATHWAY', obfuscate: true)
+  static String fbPathway = _Env.fbPathway;
+
+  @EnviedField(varName: 'FBDATABASEID', obfuscate: true)
+  static String fbDatabseId = _Env.fbDatabseId;
 }

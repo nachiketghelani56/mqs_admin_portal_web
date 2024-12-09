@@ -13,6 +13,7 @@ class MqsDashboardController extends GetxController {
         StringConfig.dashboard.enterprise,
         StringConfig.dashboard.users,
         StringConfig.dashboard.circle,
+        StringConfig.mqsDashboard.pathway,
         StringConfig.teamChart.teamChart,
         StringConfig.mqsDashboard.reports,
       ],
