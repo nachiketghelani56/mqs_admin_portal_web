@@ -184,6 +184,7 @@ class Dashboard {
   final String emailAddressText = "email address";
   final String userInformation = "User Information";
   final String userSubscriptionReceipt = "User Subscription Receipt";
+  final String userSubscription= "User Subscription";
   final String userActive = "User Active";
   final String aboutValueText = "About Value";
   final String countryValueText = "Country Value";
@@ -376,6 +377,9 @@ class Reporting {
   final String serverVerificationData = "Server Verification Data";
   final String source = "Source";
   final String transactionId = "Transaction ID";
+  final String userOverview = "Overall Summary";
+  final String noDataAvailable = "No data available";
+  final String error = "Error:";
 }
 
 class Home {

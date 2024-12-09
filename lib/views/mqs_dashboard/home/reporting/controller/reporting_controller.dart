@@ -7,11 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
-import 'package:mqs_admin_portal_web/models/chart_model.dart';
 import 'package:mqs_admin_portal_web/models/circle_model.dart';
+import 'package:mqs_admin_portal_web/models/enterprise_model.dart';
+import 'package:mqs_admin_portal_web/models/reporting_chart_model.dart';
 import 'package:mqs_admin_portal_web/models/user_iam_model.dart';
 import 'package:mqs_admin_portal_web/models/user_subscription_receipt_model.dart';
 import 'package:mqs_admin_portal_web/views/circle/repository/circle_repository.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/repository/enterprise_repository.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/repository/user_repository.dart';
 import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
 
@@ -39,13 +41,6 @@ class ReportingController extends GetxController {
         },
       };
   RxInt optionIndex = 0.obs;
-  RxList<ChartModel> indicatorCharData = [
-    ChartModel(StringConfig.reporting.advocacy, 6),
-    ChartModel(StringConfig.reporting.awareness, 9),
-    ChartModel(StringConfig.reporting.acceptance, 3),
-    ChartModel(StringConfig.reporting.aptitude, 4),
-    ChartModel(StringConfig.reporting.adoption, 8)
-  ].obs;
   RxList<String> filterOpts = [
     StringConfig.reporting.lastDay,
     StringConfig.reporting.lastWeek,
@@ -74,6 +69,12 @@ class ReportingController extends GetxController {
   StreamSubscription<List<CircleModel>>? circleStream;
   StreamSubscription<List<UserSubscriptionReceiptModel>>?
       userSubscriptionReceiptStream;
+  Map<String, Color> totalReport = {
+    StringConfig.dashboard.enterprise: ColorConfig.secondaryColor,
+    StringConfig.dashboard.users: ColorConfig.bullet6Color,
+    StringConfig.dashboard.circle: ColorConfig.dividerColor,
+    StringConfig.dashboard.userSubscription: ColorConfig.card1TextColor,
+  };
 
   @override
   onInit() {
@@ -89,6 +90,37 @@ class ReportingController extends GetxController {
     await circleStream?.cancel();
     await userSubscriptionReceiptStream?.cancel();
     super.onClose();
+  }
+
+  Future<List<ReportingChartModel>> getOverAllData() async {
+    try {
+      List<UserIAMModel> users = await UserRepository.i.getUsers();
+      List<EnterpriseModel> enterpriseList =
+          await EnterpriseRepository.i.getEnterprises();
+      List<CircleModel> circleList = await CircleRepository.i.getCircles();
+
+      List totalStatus =
+          users.where((e) => e.mqsUserSubscriptionStatus == "Active").toList();
+      int totalSubscriptionActivePlan = totalStatus.length;
+      int totalUsers = users.length;
+
+      int totalEnterpriseUsers = enterpriseList.length;
+
+      int totalCircles = circleList.length;
+      return [
+        ReportingChartModel(
+            label: StringConfig.dashboard.enterprise,
+            value: totalEnterpriseUsers),
+        ReportingChartModel(label: StringConfig.dashboard.users, value: totalUsers),
+        ReportingChartModel(label: StringConfig.dashboard.circle, value: totalCircles),
+        ReportingChartModel(
+            label: StringConfig.dashboard.userSubscription,
+            value: totalSubscriptionActivePlan),
+      ];
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+      return [];
+    } finally {}
   }
 
   getAuthAndOBSummary() async {

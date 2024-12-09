@@ -40,11 +40,11 @@ class ReportingScreen extends StatelessWidget {
               circleSummaryWidget(
                   context: context, reportingController: _reportingController),
               SizeConfig.size25.height,
-              wellAboveChartsWidget(
-                  reportingController: _reportingController, context: context),
-              SizeConfig.size25.height,
               subscriptionSummaryWidget(
                   context: context, reportingController: _reportingController),
+              SizeConfig.size25.height,
+              wellAboveChartsWidget(
+                  reportingController: _reportingController, context: context),
               SizeConfig.size50.height,
             ],
           ).paddingSymmetric(horizontal: SizeConfig.size40),
