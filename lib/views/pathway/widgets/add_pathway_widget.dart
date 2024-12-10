@@ -4,6 +4,9 @@ import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/views/pathway/controller/pathway_controller.dart';
+import 'package:mqs_admin_portal_web/views/pathway/widgets/add_pathway_form_widget.dart';
+import 'package:mqs_admin_portal_web/views/pathway/widgets/module_form_widget.dart';
+import 'package:mqs_admin_portal_web/views/pathway/widgets/pathway_dep_form_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_button.dart';
 
 Widget addPathwayWidget(
@@ -27,6 +30,11 @@ Widget addPathwayWidget(
                   .copyWith(fontWeight: FontWeight.w600),
             ),
             SizeConfig.size24.height,
+            addPathwayFormWidget(pathwayController: pathwayController),
+            SizeConfig.size34.height,
+            pathwayDepFormWidget(pathwayController: pathwayController),
+            SizeConfig.size34.height,
+            moduleFormWidget(pathwayController: pathwayController),
             SizeConfig.size34.height,
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
