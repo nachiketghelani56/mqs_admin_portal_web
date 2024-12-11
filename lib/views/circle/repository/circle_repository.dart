@@ -41,20 +41,20 @@ class CircleRepository {
   }
 
   Future<void> editCircle(
-      {required String docId, required CircleModel circle}) async {
+      {required String docId, required CircleModel circleModel}) async {
     try {
-      await FirebaseStorageService.i.circle
+      await circle
           .doc(docId)
-          .set(circle.toJson(), SetOptions(merge: true));
+          .set(circleModel.toJson(), SetOptions(merge: true));
     } catch (e) {
       errorDialogWidget(msg: e.toString());
     }
   }
 
   Future<void> addCircle(
-      {required CircleModel circle, required String customId}) async {
-    await FirebaseStorageService.i.circle.doc(customId).set({
-      ...circle.toJson(),
+      {required CircleModel circleModel, required String customId}) async {
+    await circle.doc(customId).set({
+      ...circleModel.toJson(),
     });
   }
 

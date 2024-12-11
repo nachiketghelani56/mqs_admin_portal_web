@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 class MQSMyQPathwayModel {
+  final String docId;
   final String id;
   final String mqsAboutPathway;
   final String mqsLearningObj;
@@ -16,7 +19,8 @@ class MQSMyQPathwayModel {
   final String mqsPathwayType;
 
   MQSMyQPathwayModel(
-      {required this.id,
+      {required this.docId,
+      required this.id,
       required this.mqsPathwayTitle,
       required this.mqsPathwaySubtitle,
       required this.mqsPathwayType,
@@ -34,6 +38,7 @@ class MQSMyQPathwayModel {
 
   factory MQSMyQPathwayModel.fromJson(Map<String, dynamic> json) {
     return MQSMyQPathwayModel(
+      docId: json['docId'] ?? "",
       id: json['_id'] ?? "",
       mqsPathwayTitle: json['mqsPathwayTitle'] ?? "",
       mqsPathwaySubtitle: json['mqsPathwaySubtitle'] ?? "",
@@ -99,20 +104,23 @@ class MqsPathwayDetail {
 }
 
 class MqsModule {
-  final String id;
-  final String moduleTitle;
-  final String mqsModuleSubtitle;
-  final String moduleTileImage;
-  final List<MqsLearnActivity> mqsLearnActivity;
-  final List<MqsPracticeActivity> mqsPracticeActivity;
+  String id;
+  String moduleTitle;
+  String mqsModuleSubtitle;
+  String moduleTileImage;
+  List<MqsLearnActivity> mqsLearnActivity;
+  List<MqsPracticeActivity> mqsPracticeActivity;
+  Uint8List? image;
 
-  MqsModule(
-      {required this.id,
-      required this.moduleTitle,
-      required this.mqsModuleSubtitle,
-      required this.moduleTileImage,
-      required this.mqsLearnActivity,
-      required this.mqsPracticeActivity});
+  MqsModule({
+    required this.id,
+    required this.moduleTitle,
+    required this.mqsModuleSubtitle,
+    required this.moduleTileImage,
+    required this.mqsLearnActivity,
+    required this.mqsPracticeActivity,
+    this.image,
+  });
 
   factory MqsModule.fromJson(Map<String, dynamic> json) {
     return MqsModule(
@@ -148,14 +156,14 @@ class MqsModule {
 }
 
 class MqsLearnActivity {
-  final String id;
-  final String mqsActivityRefID;
-  final bool mqsActivityScreenHandoff;
-  final List<String> mqsActivitySkill;
-  final String mqsActivityTitle;
-  final String mqsModuleID;
-  final String mqsNavigateToScreen;
-  final MqsLearnActivityDetail? activity;
+  String id;
+  String mqsActivityRefID;
+  bool mqsActivityScreenHandoff;
+  List<String> mqsActivitySkill;
+  String mqsActivityTitle;
+  String mqsModuleID;
+  String mqsNavigateToScreen;
+  MqsLearnActivityDetail? activity;
 
   MqsLearnActivity({
     required this.id,
@@ -199,24 +207,29 @@ class MqsLearnActivity {
 }
 
 class MqsLearnActivityDetail {
-  final String mqsActivityAudioLesson;
-  final String mqsActivityBenefits;
-  final String mqsActivityCoachInstructions;
-  final int mqsActivityDuration;
-  final String mqsActivityLessonDetail;
-  final String mqsActivityReflectionQuestion;
-  final String mqsActivityVideoLesson;
-  final String mqsInfo;
+  String mqsActivityAudioLesson;
+  String mqsActivityBenefits;
+  String mqsActivityCoachInstructions;
+  int mqsActivityDuration;
+  String mqsActivityLessonDetail;
+  String mqsActivityReflectionQuestion;
+  String mqsActivityVideoLesson;
+  String mqsInfo;
+  Uint8List? audio;
+  Uint8List? video;
 
-  MqsLearnActivityDetail(
-      {required this.mqsActivityAudioLesson,
-      required this.mqsActivityBenefits,
-      required this.mqsActivityCoachInstructions,
-      required this.mqsActivityDuration,
-      required this.mqsActivityLessonDetail,
-      required this.mqsActivityReflectionQuestion,
-      required this.mqsActivityVideoLesson,
-      required this.mqsInfo});
+  MqsLearnActivityDetail({
+    required this.mqsActivityAudioLesson,
+    required this.mqsActivityBenefits,
+    required this.mqsActivityCoachInstructions,
+    required this.mqsActivityDuration,
+    required this.mqsActivityLessonDetail,
+    required this.mqsActivityReflectionQuestion,
+    required this.mqsActivityVideoLesson,
+    required this.mqsInfo,
+    this.audio,
+    this.video,
+  });
 
   factory MqsLearnActivityDetail.fromJson(Map<String, dynamic> json) {
     return MqsLearnActivityDetail(
@@ -247,16 +260,16 @@ class MqsLearnActivityDetail {
 }
 
 class MqsPracticeActivity {
-  final String id;
-  final String mqsActivityInstruction;
-  final String mqsActivityRefID;
-  final List<String> mqsActivityReqIcons;
-  final bool mqsActivityScreenHandoff;
-  final List<String> mqsActivitySkill;
-  final String mqsActivityTitle;
-  final String mqsModuleID;
-  final String mqsNavigateToScreen;
-  final MqsPracticeActivityDetail? activity;
+  String id;
+  String mqsActivityInstruction;
+  String mqsActivityRefID;
+  List<String> mqsActivityReqIcons;
+  bool mqsActivityScreenHandoff;
+  List<String> mqsActivitySkill;
+  String mqsActivityTitle;
+  String mqsModuleID;
+  String mqsNavigateToScreen;
+  MqsPracticeActivityDetail? activity;
 
   MqsPracticeActivity(
       {required this.id,
@@ -295,9 +308,9 @@ class MqsPracticeActivity {
       '_id': id,
       'mqsActivityInstruction': mqsActivityInstruction,
       'mqsActivityRefID': mqsActivityRefID,
-      // 'mqsActivityReqIcons': mqsActivityReqIcons,
+      'mqsActivityReqIcons': mqsActivityReqIcons,
       'mqsActivityScreenHandoff': mqsActivityScreenHandoff,
-      // 'mqsActivitySkill': mqsActivitySkill,
+      'mqsActivitySkill': mqsActivitySkill,
       'mqsActivityTitle': mqsActivityTitle,
       'mqsModuleID': mqsModuleID,
       'mqsNavigateToScreen': mqsNavigateToScreen,
@@ -307,26 +320,31 @@ class MqsPracticeActivity {
 }
 
 class MqsPracticeActivityDetail {
-  final String mqsActivityAudioLesson;
-  final String mqsActivityBenefits;
-  final String mqsActivityCoachInstructions;
-  final int mqsActivityDuration;
-  final String mqsActivityLessonDetail;
-  final String mqsActivityReflectionQuestion;
-  final String mqsActivityUI;
-  final String mqsActivityVideoLesson;
-  final String mqsInfo;
+  String mqsActivityAudioLesson;
+  String mqsActivityBenefits;
+  String mqsActivityCoachInstructions;
+  int mqsActivityDuration;
+  String mqsActivityLessonDetail;
+  String mqsActivityReflectionQuestion;
+  String mqsActivityUI;
+  String mqsActivityVideoLesson;
+  String mqsInfo;
+  Uint8List? audio;
+  Uint8List? video;
 
-  MqsPracticeActivityDetail(
-      {required this.mqsActivityAudioLesson,
-      required this.mqsActivityBenefits,
-      required this.mqsActivityCoachInstructions,
-      required this.mqsActivityDuration,
-      required this.mqsActivityLessonDetail,
-      required this.mqsActivityReflectionQuestion,
-      required this.mqsActivityUI,
-      required this.mqsActivityVideoLesson,
-      required this.mqsInfo});
+  MqsPracticeActivityDetail({
+    required this.mqsActivityAudioLesson,
+    required this.mqsActivityBenefits,
+    required this.mqsActivityCoachInstructions,
+    required this.mqsActivityDuration,
+    required this.mqsActivityLessonDetail,
+    required this.mqsActivityReflectionQuestion,
+    required this.mqsActivityUI,
+    required this.mqsActivityVideoLesson,
+    required this.mqsInfo,
+    this.audio,
+    this.video,
+  });
 
   factory MqsPracticeActivityDetail.fromJson(Map<String, dynamic> json) {
     return MqsPracticeActivityDetail(

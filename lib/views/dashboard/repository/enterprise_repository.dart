@@ -33,20 +33,21 @@ class EnterpriseRepository {
   }
 
   Future<void> editEnterprises(
-      {required String docId, required EnterpriseModel enterprise}) async {
+      {required String docId, required EnterpriseModel enterpriseModel}) async {
     try {
-      await FirebaseStorageService.i.enterprise
+      await enterprise
           .doc(docId)
-          .set(enterprise.toJson(), SetOptions(merge: true));
+          .set(enterpriseModel.toJson(), SetOptions(merge: true));
     } catch (e) {
       errorDialogWidget(msg: e.toString());
     }
   }
 
   Future<void> addEnterprises(
-      {required EnterpriseModel enterprise, required String customId}) async {
-    await FirebaseStorageService.i.enterprise.doc(customId).set({
-      ...enterprise.toJson(),
+      {required EnterpriseModel enterpriseModel,
+      required String customId}) async {
+    await enterprise.doc(customId).set({
+      ...enterpriseModel.toJson(),
     });
   }
 

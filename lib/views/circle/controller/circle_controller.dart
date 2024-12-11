@@ -113,7 +113,7 @@ class CircleController extends GetxController {
           CircleModel updated = mainModel.first;
           updated.postReply?.removeWhere((e) => e == docId);
           await CircleRepository.i
-              .editCircle(docId: updated.id ?? "", circle: updated);
+              .editCircle(docId: updated.id ?? "", circleModel: updated);
         }
       }
       await CircleRepository.i.deleteCircle(docId: docId);
@@ -174,11 +174,11 @@ class CircleController extends GetxController {
         );
         showLoader();
         if (isEdit.value) {
-          await CircleRepository.i
-              .editCircle(circle: circleModel, docId: circleDetail.id ?? "");
+          await CircleRepository.i.editCircle(
+              circleModel: circleModel, docId: circleDetail.id ?? "");
         } else {
           await CircleRepository.i
-              .addCircle(circle: circleModel, customId: docRef);
+              .addCircle(circleModel: circleModel, customId: docRef);
         }
         if (!isMainPost.value && mainPostId.value.isNotEmpty) {
           CircleModel? mainCircle =
@@ -186,7 +186,7 @@ class CircleController extends GetxController {
           mainCircle?.postReply?.add(docRef);
           if (mainCircle != null) {
             await CircleRepository.i
-                .editCircle(docId: mainPostId.value, circle: mainCircle);
+                .editCircle(docId: mainPostId.value, circleModel: mainCircle);
           }
         }
         hideLoader();
@@ -337,7 +337,8 @@ class CircleController extends GetxController {
                     .map((e) => e.toString())
                     .toList(),
           );
-          await CircleRepository.i.addCircle(circle: circle, customId: docRef);
+          await CircleRepository.i
+              .addCircle(circleModel: circle, customId: docRef);
         }
       }
     } catch (e) {

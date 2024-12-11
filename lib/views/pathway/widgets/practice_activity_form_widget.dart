@@ -5,6 +5,7 @@ import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
 import 'package:mqs_admin_portal_web/views/pathway/controller/pathway_controller.dart';
+import 'package:mqs_admin_portal_web/views/pathway/widgets/prac_activity_list_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_button.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_drop_down.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_text_field.dart';
@@ -466,13 +467,19 @@ Widget practiceActivityFormWidget(
                   SizedBox(
                     width: SizeConfig.size162,
                     child: CustomButton(
-                      btnText: StringConfig.dashboard.submit,
+                      btnText: pathwayController.editPracActIndex.value >= 0
+                          ? StringConfig.dashboard.update
+                          : StringConfig.dashboard.submit,
                       onTap: () {
                         if (pathwayController.pracActFormKey.currentState
                                 ?.validate() ??
                             false) {
                           pathwayController.showPracActivity.value = false;
-                          pathwayController.addPracActivity();
+                          if (pathwayController.editPracActIndex.value >= 0) {
+                            pathwayController.editPracActivity();
+                          } else {
+                            pathwayController.addPracActivity();
+                          }
                         }
                       },
                     ),
@@ -482,6 +489,7 @@ Widget practiceActivityFormWidget(
             ],
           ),
         ),
+      pracActivityListWidget(pathwayController: pathwayController),
     ],
   );
 }

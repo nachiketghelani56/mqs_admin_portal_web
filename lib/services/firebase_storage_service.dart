@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 
 class FirebaseStorageService {
@@ -15,4 +18,18 @@ class FirebaseStorageService {
       app: _instance.app, databaseId: Env.fbDatabseId);
   CollectionReference get pathway =>
       contentPortalInstance.collection(Env.fbPathway);
+
+  Future<String> uploadFile(
+      {required Uint8List data, String ext = 'jpg'}) async {
+    // Define a unique file name
+    String fileName =
+        '${Env.fbPathway}/${DateTime.now().millisecondsSinceEpoch}.$ext';
+    // Reference to Firebase Storage
+    final storageRef = FirebaseStorage.instance.ref().child(fileName);
+    // Upload the file
+    final uploadTask = await storageRef.putData(data);
+    // Get the download URL
+    final downloadUrl = await uploadTask.ref.getDownloadURL();
+    return downloadUrl;
+  }
 }

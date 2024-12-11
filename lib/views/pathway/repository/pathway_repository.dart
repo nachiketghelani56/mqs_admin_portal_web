@@ -12,8 +12,9 @@ class PathwayRepository {
   Future<List<MQSMyQPathwayModel>> getPathways() async {
     QuerySnapshot<Object?> list = await pathway.get();
     List<MQSMyQPathwayModel> pathwayList = list.docs
-        .map((e) =>
-            MQSMyQPathwayModel.fromJson(e.data() as Map<String, dynamic>))
+        .map((e) => MQSMyQPathwayModel.fromJson(
+            (e.data() as Map<String, dynamic>)
+              ..addEntries([MapEntry("docId", e.id)])))
         .toList();
     return pathwayList;
   }
@@ -21,8 +22,9 @@ class PathwayRepository {
   Stream<List<MQSMyQPathwayModel>> getPathwayStream() {
     return pathway.snapshots().map((snapshot) {
       List<MQSMyQPathwayModel> list = snapshot.docs.map((doc) {
-        MQSMyQPathwayModel model =
-            MQSMyQPathwayModel.fromJson(doc.data() as Map<String, dynamic>);
+        MQSMyQPathwayModel model = MQSMyQPathwayModel.fromJson(
+            (doc.data() as Map<String, dynamic>)
+              ..addEntries([MapEntry("docId", doc.id)]));
         return model;
       }).toList();
       return list;
@@ -30,20 +32,21 @@ class PathwayRepository {
   }
 
   Future<void> editPathway(
-      {required String docId, required MQSMyQPathwayModel pathway}) async {
+      {required String docId, required MQSMyQPathwayModel pathwayModel}) async {
     try {
-      await FirebaseStorageService.i.circle
+      await pathway
           .doc(docId)
-          .set(pathway.toJson(), SetOptions(merge: true));
+          .set(pathwayModel.toJson(), SetOptions(merge: true));
     } catch (e) {
       errorDialogWidget(msg: e.toString());
     }
   }
 
   Future<void> addPathway(
-      {required MQSMyQPathwayModel pathway, required String customId}) async {
-    await FirebaseStorageService.i.circle.doc(customId).set({
-      ...pathway.toJson(),
+      {required MQSMyQPathwayModel pathwayModel,
+      required String customId}) async {
+    await pathway.doc(customId).set({
+      ...pathwayModel.toJson(),
     });
   }
 

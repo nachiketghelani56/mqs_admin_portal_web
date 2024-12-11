@@ -81,8 +81,10 @@ Widget pathwayDetailWidget({required PathwayController pathwayController}) {
             value: "${pathwayController.pathwayDetail.mqsPathwayLevel}",
             isLast: true,
           ),
-          SizeConfig.size34.height,
-          pathwayModulesWidget(pathwayController: pathwayController),
+          if (pathwayController.modules.isNotEmpty) ...[
+            SizeConfig.size34.height,
+            pathwayModulesWidget(pathwayController: pathwayController),
+          ],
         ],
       ),
     ),

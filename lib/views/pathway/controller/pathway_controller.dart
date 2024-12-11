@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
+import 'package:mqs_admin_portal_web/models/menu_option_model.dart';
 import 'package:mqs_admin_portal_web/models/mqs_my_q_pathway_model.dart';
+import 'package:mqs_admin_portal_web/routes/app_routes.dart';
+import 'package:mqs_admin_portal_web/services/firebase_storage_service.dart';
 import 'package:mqs_admin_portal_web/views/pathway/repository/pathway_repository.dart';
 import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/loader_widget.dart';
@@ -24,10 +27,14 @@ class PathwayController extends GetxController {
       showPracActReqIcons = false.obs;
   RxList<MQSMyQPathwayModel> searchedPathway = <MQSMyQPathwayModel>[].obs,
       pathway = <MQSMyQPathwayModel>[].obs;
-  RxInt pageLimit = 10.obs;
-  RxInt offset = 0.obs, currentPage = 1.obs;
+  RxInt pageLimit = 10.obs,
+      offset = 0.obs,
+      currentPage = 1.obs,
+      viewIndex = (-1).obs,
+      editLearnActIndex = (-1).obs,
+      editPracActIndex = (-1).obs,
+      editModuleIndex = (-1).obs;
   int get totalCirclePage => (searchedPathway.length / pageLimit.value).ceil();
-  RxInt viewIndex = (-1).obs;
   MQSMyQPathwayModel get pathwayDetail => searchedPathway[viewIndex.value];
   List<MqsModule> get modules =>
       pathwayDetail.mqsPathwayDetail?.mqsModules ?? [];
@@ -143,6 +150,17 @@ class PathwayController extends GetxController {
           ),
         )
       ];
+  RxList<MenuOptionModel> options = [
+    MenuOptionModel(
+      icon: ImageConfig.edit,
+      title: StringConfig.dashboard.edit,
+    ),
+    MenuOptionModel(
+      icon: ImageConfig.delete,
+      title: StringConfig.dashboard.delete,
+      color: ColorConfig.deleteColor,
+    ),
+  ].obs;
 
   @override
   onInit() {
@@ -260,20 +278,81 @@ class PathwayController extends GetxController {
         mqsActivityTitle: learnActTitleController.text.trim(),
         mqsActivityScreenHandoff: learnActScreenHandoff.value,
         mqsNavigateToScreen: learnActNavigateToScreenController.text.trim(),
-        mqsActivitySkill: [],
+        mqsActivitySkill: learnActSkills,
         activity: MqsLearnActivityDetail(
-          mqsActivityAudioLesson: "",
+          mqsActivityAudioLesson: learnActAudioLessonController.text.trim(),
           mqsActivityBenefits: learnActBenefitsController.text.trim(),
           mqsActivityCoachInstructions:
               learnActCoachInstructionsController.text.trim(),
           mqsActivityDuration: int.parse(learnActDurationController.text),
           mqsActivityLessonDetail: learnActLessonDetailController.text.trim(),
           mqsActivityReflectionQuestion: learnActRefQueController.text.trim(),
-          mqsActivityVideoLesson: "",
+          mqsActivityVideoLesson: learnActVideoLessonController.text.trim(),
           mqsInfo: learnActMqsInfoController.text.trim(),
+          audio: learnAudio.value,
+          video: learnVideo.value,
         ),
       ),
     );
+  }
+
+  setLearnActivtyForm({required int index}) {
+    editLearnActIndex.value = index;
+    learnActIdController.text = mqsLearnActivity[index].id;
+    learnActRefIdController.text = mqsLearnActivity[index].mqsActivityRefID;
+    learnActTitleController.text = mqsLearnActivity[index].mqsActivityTitle;
+    learnActScreenHandoff.value =
+        mqsLearnActivity[index].mqsActivityScreenHandoff;
+    learnActNavigateToScreenController.text =
+        mqsLearnActivity[index].mqsNavigateToScreen;
+    learnActSkills.value =
+        List<String>.from(mqsLearnActivity[index].mqsActivitySkill);
+    learnActAudioLessonController.text =
+        mqsLearnActivity[index].activity?.mqsActivityAudioLesson ?? "";
+    learnActBenefitsController.text =
+        mqsLearnActivity[index].activity?.mqsActivityBenefits ?? "";
+    learnActCoachInstructionsController.text =
+        mqsLearnActivity[index].activity?.mqsActivityCoachInstructions ?? "";
+    learnActDurationController.text =
+        "${mqsLearnActivity[index].activity?.mqsActivityDuration}";
+    learnActLessonDetailController.text =
+        mqsLearnActivity[index].activity?.mqsActivityLessonDetail ?? "";
+    learnActRefQueController.text =
+        mqsLearnActivity[index].activity?.mqsActivityReflectionQuestion ?? "";
+    learnActVideoLessonController.text =
+        mqsLearnActivity[index].activity?.mqsActivityVideoLesson ?? "";
+    learnActMqsInfoController.text =
+        mqsLearnActivity[index].activity?.mqsInfo ?? "";
+    showLearnActivty.value = true;
+  }
+
+  editLearnActivity() {
+    int i = editLearnActIndex.value;
+    mqsLearnActivity[i].id = learnActIdController.text.trim();
+    mqsLearnActivity[i].mqsActivityRefID = learnActRefIdController.text.trim();
+    mqsLearnActivity[i].mqsActivityTitle = learnActTitleController.text.trim();
+    mqsLearnActivity[i].mqsActivityScreenHandoff = learnActScreenHandoff.value;
+    mqsLearnActivity[i].mqsNavigateToScreen =
+        learnActNavigateToScreenController.text.trim();
+    mqsLearnActivity[i].mqsActivitySkill = learnActSkills;
+    mqsLearnActivity[i].activity?.mqsActivityAudioLesson =
+        learnActAudioLessonController.text.trim();
+    mqsLearnActivity[i].activity?.mqsActivityBenefits =
+        learnActBenefitsController.text.trim();
+    mqsLearnActivity[i].activity?.mqsActivityCoachInstructions =
+        learnActCoachInstructionsController.text.trim();
+    mqsLearnActivity[i].activity?.mqsActivityDuration =
+        int.parse(learnActDurationController.text);
+    mqsLearnActivity[i].activity?.mqsActivityLessonDetail =
+        learnActLessonDetailController.text.trim();
+    mqsLearnActivity[i].activity?.mqsActivityReflectionQuestion =
+        learnActRefQueController.text.trim();
+    mqsLearnActivity[i].activity?.mqsActivityVideoLesson =
+        learnActVideoLessonController.text.trim();
+    mqsLearnActivity[i].activity?.mqsInfo =
+        learnActMqsInfoController.text.trim();
+    mqsLearnActivity[i].activity?.audio = learnAudio.value;
+    mqsLearnActivity[i].activity?.video = learnVideo.value;
   }
 
   removeLearnActivity({required int index}) {
@@ -289,23 +368,99 @@ class PathwayController extends GetxController {
         mqsActivityTitle: pracActTitleController.text.trim(),
         mqsActivityScreenHandoff: pracActScreenHandoff.value,
         mqsNavigateToScreen: pracActNavigateToScreenController.text.trim(),
-        mqsActivitySkill: [],
+        mqsActivitySkill: pracActSkills,
         mqsActivityInstruction: pracActInstructionsController.text.trim(),
-        mqsActivityReqIcons: [],
+        mqsActivityReqIcons: pracActReqIcons,
         activity: MqsPracticeActivityDetail(
-          mqsActivityAudioLesson: "",
+          mqsActivityAudioLesson: pracActAudioLessonController.text.trim(),
           mqsActivityBenefits: pracActBenefitsController.text.trim(),
           mqsActivityCoachInstructions:
               pracActCoachInstructionsController.text.trim(),
           mqsActivityDuration: int.parse(pracActDurationController.text),
           mqsActivityLessonDetail: pracActLessonDetailController.text.trim(),
           mqsActivityReflectionQuestion: pracActRefQueController.text.trim(),
-          mqsActivityVideoLesson: "",
+          mqsActivityVideoLesson: pracActVideoLessonController.text.trim(),
           mqsInfo: pracActMqsInfoController.text.trim(),
           mqsActivityUI: pracActUIController.text.trim(),
+          audio: learnAudio.value,
+          video: learnVideo.value,
         ),
       ),
     );
+  }
+
+  setPracActivtyForm({required int index}) {
+    editPracActIndex.value = index;
+    pracActIdController.text = mqsPracticeActivity[index].id;
+    pracActRefIdController.text = mqsPracticeActivity[index].mqsActivityRefID;
+    pracActTitleController.text = mqsPracticeActivity[index].mqsActivityTitle;
+    pracActScreenHandoff.value =
+        mqsPracticeActivity[index].mqsActivityScreenHandoff;
+    pracActNavigateToScreenController.text =
+        mqsPracticeActivity[index].mqsNavigateToScreen;
+    pracActInstructionsController.text =
+        mqsPracticeActivity[index].mqsActivityInstruction;
+    pracActReqIcons.value =
+        List<String>.from(mqsPracticeActivity[index].mqsActivityReqIcons);
+    pracActSkills.value =
+        List<String>.from(mqsPracticeActivity[index].mqsActivitySkill);
+    pracActAudioLessonController.text =
+        mqsPracticeActivity[index].activity?.mqsActivityAudioLesson ?? "";
+    pracActBenefitsController.text =
+        mqsPracticeActivity[index].activity?.mqsActivityBenefits ?? "";
+    pracActCoachInstructionsController.text =
+        mqsPracticeActivity[index].activity?.mqsActivityCoachInstructions ?? "";
+    pracActDurationController.text =
+        "${mqsPracticeActivity[index].activity?.mqsActivityDuration}";
+    pracActLessonDetailController.text =
+        mqsPracticeActivity[index].activity?.mqsActivityLessonDetail ?? "";
+    pracActRefQueController.text =
+        mqsPracticeActivity[index].activity?.mqsActivityReflectionQuestion ??
+            "";
+    pracActVideoLessonController.text =
+        mqsPracticeActivity[index].activity?.mqsActivityVideoLesson ?? "";
+    pracActMqsInfoController.text =
+        mqsPracticeActivity[index].activity?.mqsInfo ?? "";
+    pracActUIController.text =
+        mqsPracticeActivity[index].activity?.mqsActivityUI ?? "";
+    showPracActivity.value = true;
+  }
+
+  editPracActivity() {
+    int i = editPracActIndex.value;
+    mqsPracticeActivity[i].id = pracActIdController.text.trim();
+    mqsPracticeActivity[i].mqsActivityRefID =
+        pracActRefIdController.text.trim();
+    mqsPracticeActivity[i].mqsActivityTitle =
+        pracActTitleController.text.trim();
+    mqsPracticeActivity[i].mqsActivityScreenHandoff =
+        pracActScreenHandoff.value;
+    mqsPracticeActivity[i].mqsNavigateToScreen =
+        pracActNavigateToScreenController.text.trim();
+    mqsPracticeActivity[i].mqsActivityInstruction =
+        pracActInstructionsController.text.trim();
+    mqsPracticeActivity[i].mqsActivityReqIcons = pracActReqIcons;
+    mqsPracticeActivity[i].mqsActivitySkill = pracActSkills;
+    mqsPracticeActivity[i].activity?.mqsActivityAudioLesson =
+        pracActAudioLessonController.text.trim();
+    mqsPracticeActivity[i].activity?.mqsActivityBenefits =
+        pracActBenefitsController.text.trim();
+    mqsPracticeActivity[i].activity?.mqsActivityCoachInstructions =
+        pracActCoachInstructionsController.text.trim();
+    mqsPracticeActivity[i].activity?.mqsActivityDuration =
+        int.parse(pracActDurationController.text);
+    mqsPracticeActivity[i].activity?.mqsActivityLessonDetail =
+        pracActLessonDetailController.text.trim();
+    mqsPracticeActivity[i].activity?.mqsActivityReflectionQuestion =
+        pracActRefQueController.text.trim();
+    mqsPracticeActivity[i].activity?.mqsActivityVideoLesson =
+        pracActVideoLessonController.text.trim();
+    mqsPracticeActivity[i].activity?.mqsInfo =
+        pracActMqsInfoController.text.trim();
+    mqsPracticeActivity[i].activity?.mqsActivityUI =
+        pracActUIController.text.trim();
+    mqsPracticeActivity[i].activity?.audio = pracAudio.value;
+    mqsPracticeActivity[i].activity?.video = pracVideo.value;
   }
 
   removePracActivity({required int index}) {
@@ -319,42 +474,38 @@ class PathwayController extends GetxController {
         moduleTitle: moduleTitleController.text.trim(),
         mqsModuleSubtitle: moduleSubtitleController.text.trim(),
         moduleTileImage: "",
-        mqsLearnActivity: [
-          // MqsLearnActivity(
-          //   id: learnActIdController.text.trim(),
-          //   mqsActivityRefID: mqsActivityRefID,
-          //   mqsModuleID: mqsModuleID,
-          //   mqsActivityTitle: mqsActivityTitle,
-          //   mqsActivityScreenHandoff: mqsActivityScreenHandoff,
-          //   mqsNavigateToScreen: mqsNavigateToScreen,
-          //   mqsActivitySkill: mqsActivitySkill,
-          //   activity: activity,
-          // ),
-        ],
-        mqsPracticeActivity: [
-          // MqsPracticeActivity(
-          //   id: id,
-          //   mqsActivityInstruction: mqsActivityInstruction,
-          //   mqsActivityRefID: mqsActivityRefID,
-          //   mqsActivityReqIcons: mqsActivityReqIcons,
-          //   mqsActivityScreenHandoff: mqsActivityScreenHandoff,
-          //   mqsActivitySkill: mqsActivitySkill,
-          //   mqsActivityTitle: mqsActivityTitle,
-          //   mqsModuleID: mqsModuleID,
-          //   mqsNavigateToScreen: mqsNavigateToScreen,
-          //   activity: activity,
-          // )
-        ],
+        mqsLearnActivity: mqsLearnActivity,
+        mqsPracticeActivity: mqsPracticeActivity,
+        image: moduleTileImage.value,
       ),
     );
   }
 
+  setModuleForm({required int index}) {
+    editModuleIndex.value = index;
+    moduleIdController.text = mqsModules[index].id;
+    moduleTitleController.text = mqsModules[index].moduleTitle;
+    moduleSubtitleController.text = mqsModules[index].mqsModuleSubtitle;
+    moduleTileImage.value = mqsModules[index].image ?? Uint8List(0);
+    mqsLearnActivity.value =
+        List<MqsLearnActivity>.from(mqsModules[index].mqsLearnActivity);
+    mqsPracticeActivity.value =
+        List<MqsPracticeActivity>.from(mqsModules[index].mqsPracticeActivity);
+    showModules.value = true;
+  }
+
+  editModule() {
+    int i = editModuleIndex.value;
+    mqsModules[i].id = moduleIdController.text.trim();
+    mqsModules[i].moduleTitle = moduleTitleController.text.trim();
+    mqsModules[i].mqsModuleSubtitle = moduleSubtitleController.text.trim();
+    mqsModules[i].image = moduleTileImage.value;
+    mqsModules[i].mqsLearnActivity = mqsLearnActivity;
+    mqsModules[i].mqsPracticeActivity = mqsPracticeActivity;
+  }
+
   removeModule({required int index}) {
-    try {
-      mqsModules.removeAt(index);
-    } catch (e) {
-      errorDialogWidget(msg: e.toString());
-    } finally {}
+    mqsModules.removeAt(index);
   }
 
   getMaxOffset() {
@@ -412,12 +563,15 @@ class PathwayController extends GetxController {
   }
 
   clearModuleFields() {
+    showModules.value = false;
     moduleIdController.clear();
     moduleTitleController.clear();
     moduleSubtitleController.clear();
     moduleTileImage.value = Uint8List(0);
+    mqsModules.clear();
     clearLearnActivityFields();
     clearPracActivityFields();
+    editModuleIndex.value = -1;
   }
 
   clearLearnActivityFields() {
@@ -426,6 +580,7 @@ class PathwayController extends GetxController {
     learnActTitleController.clear();
     learnActNavigateToScreenController.clear();
     learnActRefIdController.clear();
+    learnActRefQueController.clear();
     learnActAudioLessonController.clear();
     learnActBenefitsController.clear();
     learnActCoachInstructionsController.clear();
@@ -436,6 +591,9 @@ class PathwayController extends GetxController {
     learnAudio.value = Uint8List(0);
     learnVideo.value = Uint8List(0);
     learnActScreenHandoff.value = false;
+    learnActSkills.clear();
+    mqsLearnActivity.clear();
+    editLearnActIndex.value = -1;
   }
 
   clearPracActivityFields() {
@@ -445,6 +603,7 @@ class PathwayController extends GetxController {
     pracActRefIdController.clear();
     pracActTitleController.clear();
     pracActNavigateToScreenController.clear();
+    pracActInstructionsController.clear();
     pracActAudioLessonController.clear();
     pracActBenefitsController.clear();
     pracActCoachInstructionsController.clear();
@@ -457,11 +616,124 @@ class PathwayController extends GetxController {
     pracAudio.value = Uint8List(0);
     pracVideo.value = Uint8List(0);
     pracActScreenHandoff.value = false;
+    pracActSkills.clear();
+    pracActReqIcons.clear();
+    mqsPracticeActivity.clear();
+    editPracActIndex.value = -1;
+  }
+
+  // Store module tile images to firebase and set URL to parameter
+  uploadModuleTileImages() async {
+    try {
+      for (int i = 0; i < mqsModules.length; i++) {
+        if (mqsModules[i].image != null) {
+          String url = await FirebaseStorageService.i
+              .uploadFile(data: mqsModules[i].image!);
+          mqsModules[i].moduleTileImage = url;
+        }
+      }
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    } finally {}
+  }
+
+  // Store learn activity audio and video to firebase and set URL to parameter
+  uploadLearnActAudioVideo() async {
+    try {
+      for (int i = 0; i < mqsLearnActivity.length; i++) {
+        if (mqsLearnActivity[i].activity?.audio != null) {
+          String url = await FirebaseStorageService.i.uploadFile(
+              data: mqsLearnActivity[i].activity!.audio!, ext: 'mp3');
+          mqsLearnActivity[i].activity?.mqsActivityAudioLesson = url;
+        }
+        if (mqsLearnActivity[i].activity?.video != null) {
+          String url = await FirebaseStorageService.i.uploadFile(
+              data: mqsLearnActivity[i].activity!.video!, ext: 'mp4');
+          mqsLearnActivity[i].activity?.mqsActivityVideoLesson = url;
+        }
+      }
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    } finally {}
+  }
+
+  // Store practice activity audio and video to firebase and set URL to parameter
+  uploadPracActAudioVideo() async {
+    try {
+      for (int i = 0; i < mqsPracticeActivity.length; i++) {
+        if (mqsPracticeActivity[i].activity?.audio != null) {
+          String url = await FirebaseStorageService.i.uploadFile(
+              data: mqsPracticeActivity[i].activity!.audio!, ext: 'mp3');
+          mqsPracticeActivity[i].activity?.mqsActivityAudioLesson = url;
+        }
+        if (mqsPracticeActivity[i].activity?.video != null) {
+          String url = await FirebaseStorageService.i.uploadFile(
+              data: mqsPracticeActivity[i].activity!.video!, ext: 'mp4');
+          mqsPracticeActivity[i].activity?.mqsActivityVideoLesson = url;
+        }
+      }
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    } finally {}
   }
 
   addPathway() async {
     try {
-      if (pathwayFormKey.currentState?.validate() ?? false) {}
+      if (pathwayFormKey.currentState?.validate() ?? false) {
+        final docRef = FirebaseStorageService.i.pathway.doc().id;
+        showLoader();
+        String pathwayImageURL = "",
+            pathwayIntroImageURL = "",
+            pathwayTileImageURL = "";
+        if (pathwayImage.value.isNotEmpty) {
+          pathwayImageURL = await FirebaseStorageService.i
+              .uploadFile(data: pathwayImage.value);
+        }
+        if (pathwayIntroImage.value.isNotEmpty) {
+          pathwayIntroImageURL = await FirebaseStorageService.i
+              .uploadFile(data: pathwayIntroImage.value);
+        }
+        if (pathwayIntroImage.value.isNotEmpty) {
+          pathwayTileImageURL = await FirebaseStorageService.i
+              .uploadFile(data: pathwayTileImage.value);
+        }
+        await uploadModuleTileImages();
+        await uploadLearnActAudioVideo();
+        await uploadPracActAudioVideo();
+        final pathwayModel = MQSMyQPathwayModel(
+          docId: docRef,
+          id: idController.text.trim(),
+          mqsPathwayTitle: titleController.text.trim(),
+          mqsPathwaySubtitle: subtitleController.text.trim(),
+          mqsPathwayType: selectedPathwayType.value,
+          mqsAboutPathway: aboutPathwayController.text.trim(),
+          mqsLearningObj: learningObjController.text.trim(),
+          mqsPathwayCoachInstructions: coachInstructionsController.text.trim(),
+          mqsPathwayImage: pathwayImageURL,
+          mqsModuleCount: mqsModules.length,
+          mqsPathwayDuration: durationController.text.trim(),
+          mqsPathwayLevel: int.parse(levelController.text),
+          mqsPathwayIntroImage: pathwayIntroImageURL,
+          mqsPathwayTileImage: pathwayTileImageURL,
+          mqsPathwayDep: pathwayDep,
+          mqsPathwayDetail: MqsPathwayDetail(mqsModules: mqsModules),
+        );
+
+        if (isEdit.value) {
+          await PathwayRepository.i.editPathway(
+              pathwayModel: pathwayModel, docId: pathwayDetail.docId);
+        } else {
+          await PathwayRepository.i
+              .addPathway(pathwayModel: pathwayModel, customId: docRef);
+        }
+        hideLoader();
+        clearAllFields();
+        isAdd.value = false;
+        isEdit.value = false;
+        if (Get.currentRoute == AppRoutes.addPathway) {
+          Get.back();
+        }
+      }
     } catch (e) {
       hideLoader();
       errorDialogWidget(msg: e.toString());
@@ -474,6 +746,7 @@ class PathwayController extends GetxController {
       viewIndex.value = 0;
       isAdd.value = false;
       isEdit.value = false;
+      await PathwayRepository.i.deletePathway(docId: docId);
       hideLoader();
     } catch (e) {
       hideLoader();

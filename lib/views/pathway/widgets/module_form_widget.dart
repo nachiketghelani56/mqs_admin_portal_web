@@ -5,6 +5,7 @@ import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
 import 'package:mqs_admin_portal_web/views/pathway/controller/pathway_controller.dart';
 import 'package:mqs_admin_portal_web/views/pathway/widgets/learn_activty_form_widget.dart';
+import 'package:mqs_admin_portal_web/views/pathway/widgets/module_list_widget.dart';
 import 'package:mqs_admin_portal_web/views/pathway/widgets/practice_activity_form_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_button.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_image_field.dart';
@@ -91,13 +92,19 @@ Widget moduleFormWidget({required PathwayController pathwayController}) {
                   SizedBox(
                     width: SizeConfig.size162,
                     child: CustomButton(
-                      btnText: StringConfig.dashboard.submit,
+                      btnText: pathwayController.editModuleIndex.value >= 0
+                          ? StringConfig.dashboard.update
+                          : StringConfig.dashboard.submit,
                       onTap: () {
                         if (pathwayController.moduleFormKey.currentState
                                 ?.validate() ??
                             false) {
                           pathwayController.showModules.value = false;
-                          pathwayController.addModule();
+                          if (pathwayController.editModuleIndex.value >= 0) {
+                            pathwayController.editModule();
+                          } else {
+                            pathwayController.addModule();
+                          }
                         }
                       },
                     ),
@@ -107,6 +114,7 @@ Widget moduleFormWidget({required PathwayController pathwayController}) {
             ],
           ),
         ),
+      moduleListWidget(pathwayController: pathwayController),
     ],
   );
 }

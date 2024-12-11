@@ -70,7 +70,7 @@ Widget pathwayTableRowWidget({
                 pathwayDeleteDialogWidget(
                   context: context,
                   pathwayController: pathwayController,
-                  docId: "",
+                  docId: pathwayController.searchedPathway[index].docId,
                 );
               }),
             ],

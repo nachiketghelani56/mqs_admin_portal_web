@@ -484,10 +484,10 @@ class DashboardController extends GetxController {
         showLoader();
         if (isEditEnterprise.value) {
           await EnterpriseRepository.i.editEnterprises(
-              enterprise: enterprise, docId: enterpriseId.value);
+              enterpriseModel: enterprise, docId: enterpriseId.value);
         } else {
           await EnterpriseRepository.i
-              .addEnterprises(enterprise: enterprise, customId: docRef);
+              .addEnterprises(enterpriseModel: enterprise, customId: docRef);
         }
         hideLoader();
         clearAllFields();
@@ -669,7 +669,7 @@ class DashboardController extends GetxController {
                     .toIso8601String(),
           );
           await EnterpriseRepository.i
-              .addEnterprises(enterprise: enterprise, customId: docRef);
+              .addEnterprises(enterpriseModel: enterprise, customId: docRef);
         }
       }
     } catch (e) {

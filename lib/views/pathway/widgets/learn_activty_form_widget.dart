@@ -5,6 +5,7 @@ import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
 import 'package:mqs_admin_portal_web/views/pathway/controller/pathway_controller.dart';
+import 'package:mqs_admin_portal_web/views/pathway/widgets/learn_activity_list_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_button.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_drop_down.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_text_field.dart';
@@ -342,13 +343,19 @@ Widget learnActivityFormWidget({required PathwayController pathwayController}) {
                   SizedBox(
                     width: SizeConfig.size162,
                     child: CustomButton(
-                      btnText: StringConfig.dashboard.submit,
+                      btnText: pathwayController.editLearnActIndex.value >= 0
+                          ? StringConfig.dashboard.update
+                          : StringConfig.dashboard.submit,
                       onTap: () {
                         if (pathwayController.learnActFormKey.currentState
                                 ?.validate() ??
                             false) {
                           pathwayController.showLearnActivty.value = false;
-                          pathwayController.addLearnActivity();
+                          if (pathwayController.editLearnActIndex.value >= 0) {
+                            pathwayController.editLearnActivity();
+                          } else {
+                            pathwayController.addLearnActivity();
+                          }
                         }
                       },
                     ),
@@ -358,6 +365,7 @@ Widget learnActivityFormWidget({required PathwayController pathwayController}) {
             ],
           ),
         ),
+      learnActivityListWidget(pathwayController: pathwayController),
     ],
   );
 }
