@@ -23,7 +23,7 @@ class FirebaseStorageService {
       {required Uint8List data, String ext = 'jpg'}) async {
     // Define a unique file name
     String fileName =
-        '${Env.fbPathway}/${DateTime.now().millisecondsSinceEpoch}.$ext';
+        '${Env.fbPathway}_test/${DateTime.now().millisecondsSinceEpoch}.$ext';
     // Reference to Firebase Storage
     final storageRef = FirebaseStorage.instance.ref().child(fileName);
     // Upload the file
@@ -31,5 +31,15 @@ class FirebaseStorageService {
     // Get the download URL
     final downloadUrl = await uploadTask.ref.getDownloadURL();
     return downloadUrl;
+  }
+
+  Future<void> deleteFile({required String downloadURL}) async {
+    Uri uri = Uri.parse(downloadURL);
+    // Get file path from download URL
+    String fullPath = uri.pathSegments.last.split("?").first;
+    // Reference to the file in Firebase Storage
+    final storageRef = FirebaseStorage.instance.ref().child(fullPath);
+    // Delete the file
+    await storageRef.delete();
   }
 }

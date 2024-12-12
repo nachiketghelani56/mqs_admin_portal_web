@@ -56,9 +56,13 @@ Widget pathwayTableRowWidget({
                 ImageConfig.edit,
                 height: SizeConfig.size24,
               ).tap(() {
+                pathwayController.clearAllFields();
                 pathwayController.viewIndex.value = index;
                 pathwayController.isAdd.value = false;
                 pathwayController.isEdit.value = true;
+                pathwayController.showPathwayDep.value = false;
+                pathwayController.showModules.value = false;
+                pathwayController.setPathwayForm();
                 if (context.width < SizeConfig.size1500) {
                   Get.toNamed(AppRoutes.addPathway);
                 }
@@ -67,6 +71,7 @@ Widget pathwayTableRowWidget({
                 ImageConfig.delete,
                 height: SizeConfig.size24,
               ).tap(() {
+                pathwayController.viewIndex.value = index;
                 pathwayDeleteDialogWidget(
                   context: context,
                   pathwayController: pathwayController,

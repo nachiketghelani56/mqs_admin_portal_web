@@ -11,7 +11,9 @@ import 'package:mqs_admin_portal_web/widgets/custom_drop_down.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_text_field.dart';
 import 'package:mqs_admin_portal_web/widgets/title_widget.dart';
 
-Widget learnActivityFormWidget({required PathwayController pathwayController}) {
+Widget learnActivityFormWidget(
+    {required PathwayController pathwayController,
+    required BuildContext context}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -30,6 +32,7 @@ Widget learnActivityFormWidget({required PathwayController pathwayController}) {
             children: [
               SizeConfig.size30.height,
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: CustomTextField(
@@ -56,6 +59,7 @@ Widget learnActivityFormWidget({required PathwayController pathwayController}) {
               ),
               SizeConfig.size34.height,
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: CustomTextField(
@@ -83,6 +87,7 @@ Widget learnActivityFormWidget({required PathwayController pathwayController}) {
               ),
               SizeConfig.size34.height,
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: CustomTextField(
@@ -112,6 +117,7 @@ Widget learnActivityFormWidget({required PathwayController pathwayController}) {
               ),
               SizeConfig.size34.height,
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: CustomTextField(
@@ -143,6 +149,7 @@ Widget learnActivityFormWidget({required PathwayController pathwayController}) {
               ),
               SizeConfig.size34.height,
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: CustomTextField(
@@ -173,6 +180,7 @@ Widget learnActivityFormWidget({required PathwayController pathwayController}) {
               ),
               SizeConfig.size34.height,
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: CustomTextField(
@@ -180,10 +188,6 @@ Widget learnActivityFormWidget({required PathwayController pathwayController}) {
                           pathwayController.learnActAudioLessonController,
                       label: StringConfig.pathway.activityAudioLesson,
                       hintText: StringConfig.pathway.chooseAudio,
-                      validator: (p0) => Validator.emptyValidator(
-                          p0 ?? "",
-                          StringConfig.pathway.activityAudioLesson
-                              .toLowerCase()),
                       readOnly: true,
                       onTap: () async {
                         Map<String, Uint8List?> audio =
@@ -204,10 +208,6 @@ Widget learnActivityFormWidget({required PathwayController pathwayController}) {
                           pathwayController.learnActVideoLessonController,
                       label: StringConfig.pathway.activityVideoLesson,
                       hintText: StringConfig.pathway.chooseVideo,
-                      validator: (p0) => Validator.emptyValidator(
-                          p0 ?? "",
-                          StringConfig.pathway.activityVideoLesson
-                              .toLowerCase()),
                       readOnly: true,
                       onTap: () async {
                         Map<String, Uint8List?> video =
@@ -224,13 +224,68 @@ Widget learnActivityFormWidget({required PathwayController pathwayController}) {
                 ],
               ),
               SizeConfig.size34.height,
-              CustomDropDown(
-                label: StringConfig.pathway.activityScreenHandoff,
-                value: pathwayController.learnActScreenHandoff.value,
-                items: pathwayController.boolOptions,
-                onChanged: (value) {
-                  pathwayController.learnActScreenHandoff.value = value;
-                },
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: CustomDropDown(
+                      label: StringConfig.pathway.activityStatus,
+                      value: pathwayController.learnActStatus.value,
+                      items: pathwayController.boolOptions,
+                      onChanged: (value) {
+                        pathwayController.learnActStatus.value = value;
+                      },
+                    ),
+                  ),
+                  SizeConfig.size15.width,
+                  Expanded(
+                    child: CustomDropDown(
+                      label: StringConfig.pathway.addToFav,
+                      value: pathwayController.learnActAddToFav.value,
+                      items: pathwayController.boolOptions,
+                      onChanged: (value) {
+                        pathwayController.learnActAddToFav.value = value;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              SizeConfig.size34.height,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: CustomTextField(
+                      controller:
+                          pathwayController.learnActCompletionDateController,
+                      label: StringConfig.pathway.activityCompletionDate,
+                      hintText: StringConfig.pathway.enter +
+                          StringConfig.pathway.completionDate.toLowerCase(),
+                      validator: (p0) => Validator.emptyValidator(p0 ?? "",
+                          StringConfig.pathway.completionDate.toLowerCase()),
+                      readOnly: true,
+                      onTap: () async {
+                        DateTime? pickedDate =
+                            await pathwayController.pickDate(context: context);
+                        if (pickedDate != null) {
+                          pathwayController.learnActCompletionDateController
+                              .text = pickedDate.toIso8601String();
+                        }
+                      },
+                    ),
+                  ),
+                  SizeConfig.size15.width,
+                  Expanded(
+                    child: CustomDropDown(
+                      label: StringConfig.pathway.activityScreenHandoff,
+                      value: pathwayController.learnActScreenHandoff.value,
+                      items: pathwayController.boolOptions,
+                      onChanged: (value) {
+                        pathwayController.learnActScreenHandoff.value = value;
+                      },
+                    ),
+                  ),
+                ],
               ),
               SizeConfig.size34.height,
               titleWidget(
@@ -335,6 +390,7 @@ Widget learnActivityFormWidget({required PathwayController pathwayController}) {
                       btnText: StringConfig.dashboard.cancel,
                       onTap: () {
                         pathwayController.showLearnActivty.value = false;
+                        pathwayController.showLearnActSkills.value = false;
                       },
                       isSelected: false,
                     ),
@@ -351,6 +407,7 @@ Widget learnActivityFormWidget({required PathwayController pathwayController}) {
                                 ?.validate() ??
                             false) {
                           pathwayController.showLearnActivty.value = false;
+                          pathwayController.showLearnActSkills.value = false;
                           if (pathwayController.editLearnActIndex.value >= 0) {
                             pathwayController.editLearnActivity();
                           } else {

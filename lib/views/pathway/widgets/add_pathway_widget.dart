@@ -34,7 +34,8 @@ Widget addPathwayWidget(
             SizeConfig.size34.height,
             pathwayDepFormWidget(pathwayController: pathwayController),
             SizeConfig.size34.height,
-            moduleFormWidget(pathwayController: pathwayController),
+            moduleFormWidget(
+                pathwayController: pathwayController, context: context),
             SizeConfig.size34.height,
             Row(
               mainAxisAlignment: MainAxisAlignment.end,

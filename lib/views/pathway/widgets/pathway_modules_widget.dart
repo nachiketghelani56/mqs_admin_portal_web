@@ -76,6 +76,16 @@ Widget pathwayModulesWidget({required PathwayController pathwayController}) {
                         key: StringConfig.pathway.moduleTileImage,
                         value: pathwayController.modules[i].moduleTileImage,
                         isImage: true,
+                      ),
+                      keyValueRowWidget(
+                        key: StringConfig.pathway.moduleStatus,
+                        value:
+                            "${pathwayController.modules[i].mqsPWModuleStatus}",
+                      ),
+                      keyValueRowWidget(
+                        key: StringConfig.pathway.completionDate,
+                        value: pathwayController
+                            .modules[i].mqsModuleCompletionDate,
                         isLast: true,
                       ),
                     ],

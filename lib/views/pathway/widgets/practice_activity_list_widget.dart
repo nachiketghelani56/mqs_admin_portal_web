@@ -3,7 +3,8 @@ import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/views/pathway/controller/pathway_controller.dart';
 
-Widget pracActivityListWidget({required PathwayController pathwayController}) {
+Widget practiceActivityListWidget(
+    {required PathwayController pathwayController}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [

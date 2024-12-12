@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -11,11 +12,13 @@ class CustomImageField extends StatelessWidget {
     required this.label,
     required this.onTap,
     required this.image,
+    this.imageURL = "",
   });
 
   final String label;
   final Function onTap;
   final Uint8List image;
+  final String imageURL;
 
   @override
   Widget build(BuildContext context) {
@@ -35,21 +38,32 @@ class CustomImageField extends StatelessWidget {
               borderRadius: BorderRadius.circular(SizeConfig.size12),
             ),
             padding: const EdgeInsets.all(SizeConfig.size10),
-            child: image.isNotEmpty
-                ? Image.memory(image)
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.upload,
-                        color: ColorConfig.primaryColor,
+            child: imageURL.isNotEmpty
+                ? CachedNetworkImage(
+                    imageUrl: imageURL,
+                    placeholder: (context, url) => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    errorWidget: (context, url, error) => const Icon(
+                      Icons.error,
+                      color: ColorConfig.primaryColor,
+                    ),
+                  )
+                : image.isNotEmpty
+                    ? Image.memory(image)
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.upload,
+                            color: ColorConfig.primaryColor,
+                          ),
+                          Text(
+                            StringConfig.pathway.uploadImage,
+                            style: FontTextStyleConfig.labelTextStyle,
+                          ),
+                        ],
                       ),
-                      Text(
-                        StringConfig.pathway.uploadImage,
-                        style: FontTextStyleConfig.labelTextStyle,
-                      ),
-                    ],
-                  ),
           ).tap(() {
             onTap();
           }),

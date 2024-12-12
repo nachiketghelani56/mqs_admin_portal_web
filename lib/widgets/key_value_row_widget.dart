@@ -41,7 +41,10 @@ Widget keyValueRowWidget(
                           placeholder: (context, url) => const Center(
                             child: CircularProgressIndicator(),
                           ),
-                          errorWidget: (context, url, error) => Container(),
+                          errorWidget: (context, url, error) => const Icon(
+                            Icons.error,
+                            color: ColorConfig.primaryColor,
+                          ),
                           fit: BoxFit.cover,
                           height: SizeConfig.size100,
                           width: SizeConfig.size100,

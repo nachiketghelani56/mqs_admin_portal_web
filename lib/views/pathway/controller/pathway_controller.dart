@@ -62,6 +62,8 @@ class PathwayController extends GetxController {
   final TextEditingController moduleTitleController = TextEditingController();
   final TextEditingController moduleSubtitleController =
       TextEditingController();
+  final TextEditingController moduleCompletionDateController =
+      TextEditingController();
   final TextEditingController learnActIdController = TextEditingController();
   final TextEditingController learnActRefIdController = TextEditingController();
   final TextEditingController learnActTitleController = TextEditingController();
@@ -85,6 +87,8 @@ class PathwayController extends GetxController {
   final TextEditingController learnActMqsInfoController =
       TextEditingController();
   final TextEditingController learnActSkillController = TextEditingController();
+  final TextEditingController learnActCompletionDateController =
+      TextEditingController();
   final TextEditingController pracActIdController = TextEditingController();
   final TextEditingController pracActInstructionsController =
       TextEditingController();
@@ -111,7 +115,15 @@ class PathwayController extends GetxController {
   final TextEditingController pracActSkillController = TextEditingController();
   final TextEditingController pracActReqIconController =
       TextEditingController();
+  final TextEditingController pracActCompletionDateController =
+      TextEditingController();
   RxString selectedPathwayType = "".obs;
+  RxBool pathwayStatus = false.obs,
+      moduleStatus = false.obs,
+      learnActStatus = false.obs,
+      learnActAddToFav = false.obs,
+      pracActStatus = false.obs,
+      pracActAddToFav = false.obs;
   List<String> get pathwayTypes => [
         StringConfig.pathway.fundamentals,
         StringConfig.pathway.humanQualities,
@@ -129,6 +141,10 @@ class PathwayController extends GetxController {
       learnVideo = Uint8List(0).obs,
       pracAudio = Uint8List(0).obs,
       pracVideo = Uint8List(0).obs;
+  RxString pathwayImageURL = "".obs,
+      pathwayIntroImageURL = "".obs,
+      pathwayTileImageURL = "".obs,
+      moduleTileImageURL = "".obs;
   RxList<MqsModule> mqsModules = <MqsModule>[].obs;
   RxList<MqsLearnActivity> mqsLearnActivity = <MqsLearnActivity>[].obs;
   RxList<MqsPracticeActivity> mqsPracticeActivity = <MqsPracticeActivity>[].obs;
@@ -201,6 +217,21 @@ class PathwayController extends GetxController {
 
   removePathwayDep({required int index}) {
     pathwayDep.removeAt(index);
+  }
+
+  Future<DateTime?> pickDate({required BuildContext context}) async {
+    try {
+      return await showDatePicker(
+        initialEntryMode: DatePickerEntryMode.calendar,
+        context: context,
+        firstDate: DateTime(0),
+        lastDate: DateTime(3000),
+        initialDate: DateTime.now(),
+      );
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    } finally {}
+    return null;
   }
 
   Future<Uint8List?> pickImage() async {
@@ -279,6 +310,9 @@ class PathwayController extends GetxController {
         mqsActivityScreenHandoff: learnActScreenHandoff.value,
         mqsNavigateToScreen: learnActNavigateToScreenController.text.trim(),
         mqsActivitySkill: learnActSkills,
+        mqsActivityStatus: learnActStatus.value,
+        addToFav: learnActAddToFav.value,
+        mqsActivityCompletionDate: learnActCompletionDateController.text,
         activity: MqsLearnActivityDetail(
           mqsActivityAudioLesson: learnActAudioLessonController.text.trim(),
           mqsActivityBenefits: learnActBenefitsController.text.trim(),
@@ -289,8 +323,8 @@ class PathwayController extends GetxController {
           mqsActivityReflectionQuestion: learnActRefQueController.text.trim(),
           mqsActivityVideoLesson: learnActVideoLessonController.text.trim(),
           mqsInfo: learnActMqsInfoController.text.trim(),
-          audio: learnAudio.value,
-          video: learnVideo.value,
+          audio: learnAudio.value.isNotEmpty ? learnAudio.value : null,
+          video: learnVideo.value.isNotEmpty ? learnVideo.value : null,
         ),
       ),
     );
@@ -305,6 +339,10 @@ class PathwayController extends GetxController {
         mqsLearnActivity[index].mqsActivityScreenHandoff;
     learnActNavigateToScreenController.text =
         mqsLearnActivity[index].mqsNavigateToScreen;
+    learnActAddToFav.value = mqsLearnActivity[index].addToFav;
+    learnActStatus.value = mqsLearnActivity[index].mqsActivityStatus;
+    learnActCompletionDateController.text =
+        mqsLearnActivity[index].mqsActivityCompletionDate;
     learnActSkills.value =
         List<String>.from(mqsLearnActivity[index].mqsActivitySkill);
     learnActAudioLessonController.text =
@@ -334,6 +372,10 @@ class PathwayController extends GetxController {
     mqsLearnActivity[i].mqsActivityScreenHandoff = learnActScreenHandoff.value;
     mqsLearnActivity[i].mqsNavigateToScreen =
         learnActNavigateToScreenController.text.trim();
+    mqsLearnActivity[i].addToFav = learnActAddToFav.value;
+    mqsLearnActivity[i].mqsActivityCompletionDate =
+        learnActCompletionDateController.text;
+    mqsLearnActivity[i].mqsActivityStatus = learnActStatus.value;
     mqsLearnActivity[i].mqsActivitySkill = learnActSkills;
     mqsLearnActivity[i].activity?.mqsActivityAudioLesson =
         learnActAudioLessonController.text.trim();
@@ -351,8 +393,10 @@ class PathwayController extends GetxController {
         learnActVideoLessonController.text.trim();
     mqsLearnActivity[i].activity?.mqsInfo =
         learnActMqsInfoController.text.trim();
-    mqsLearnActivity[i].activity?.audio = learnAudio.value;
-    mqsLearnActivity[i].activity?.video = learnVideo.value;
+    mqsLearnActivity[i].activity?.audio =
+        learnAudio.value.isNotEmpty ? learnAudio.value : null;
+    mqsLearnActivity[i].activity?.video =
+        learnVideo.value.isNotEmpty ? learnVideo.value : null;
   }
 
   removeLearnActivity({required int index}) {
@@ -371,6 +415,9 @@ class PathwayController extends GetxController {
         mqsActivitySkill: pracActSkills,
         mqsActivityInstruction: pracActInstructionsController.text.trim(),
         mqsActivityReqIcons: pracActReqIcons,
+        addToFav: pracActAddToFav.value,
+        mqsActivityCompletionDate: pracActCompletionDateController.text,
+        mqsActivityStatus: pracActStatus.value,
         activity: MqsPracticeActivityDetail(
           mqsActivityAudioLesson: pracActAudioLessonController.text.trim(),
           mqsActivityBenefits: pracActBenefitsController.text.trim(),
@@ -382,8 +429,8 @@ class PathwayController extends GetxController {
           mqsActivityVideoLesson: pracActVideoLessonController.text.trim(),
           mqsInfo: pracActMqsInfoController.text.trim(),
           mqsActivityUI: pracActUIController.text.trim(),
-          audio: learnAudio.value,
-          video: learnVideo.value,
+          audio: pracAudio.value.isNotEmpty ? pracAudio.value : null,
+          video: pracVideo.value.isNotEmpty ? pracVideo.value : null,
         ),
       ),
     );
@@ -398,6 +445,10 @@ class PathwayController extends GetxController {
         mqsPracticeActivity[index].mqsActivityScreenHandoff;
     pracActNavigateToScreenController.text =
         mqsPracticeActivity[index].mqsNavigateToScreen;
+    pracActAddToFav.value = mqsPracticeActivity[index].addToFav;
+    pracActStatus.value = mqsPracticeActivity[index].mqsActivityStatus;
+    pracActCompletionDateController.text =
+        mqsPracticeActivity[index].mqsActivityCompletionDate;
     pracActInstructionsController.text =
         mqsPracticeActivity[index].mqsActivityInstruction;
     pracActReqIcons.value =
@@ -439,6 +490,10 @@ class PathwayController extends GetxController {
         pracActNavigateToScreenController.text.trim();
     mqsPracticeActivity[i].mqsActivityInstruction =
         pracActInstructionsController.text.trim();
+    mqsPracticeActivity[i].addToFav = pracActAddToFav.value;
+    mqsPracticeActivity[i].mqsActivityStatus = pracActStatus.value;
+    mqsPracticeActivity[i].mqsActivityCompletionDate =
+        pracActCompletionDateController.text;
     mqsPracticeActivity[i].mqsActivityReqIcons = pracActReqIcons;
     mqsPracticeActivity[i].mqsActivitySkill = pracActSkills;
     mqsPracticeActivity[i].activity?.mqsActivityAudioLesson =
@@ -459,8 +514,10 @@ class PathwayController extends GetxController {
         pracActMqsInfoController.text.trim();
     mqsPracticeActivity[i].activity?.mqsActivityUI =
         pracActUIController.text.trim();
-    mqsPracticeActivity[i].activity?.audio = pracAudio.value;
-    mqsPracticeActivity[i].activity?.video = pracVideo.value;
+    mqsPracticeActivity[i].activity?.audio =
+        pracAudio.value.isNotEmpty ? pracAudio.value : null;
+    mqsPracticeActivity[i].activity?.video =
+        pracVideo.value.isNotEmpty ? pracVideo.value : null;
   }
 
   removePracActivity({required int index}) {
@@ -476,7 +533,9 @@ class PathwayController extends GetxController {
         moduleTileImage: "",
         mqsLearnActivity: mqsLearnActivity,
         mqsPracticeActivity: mqsPracticeActivity,
-        image: moduleTileImage.value,
+        mqsModuleCompletionDate: moduleCompletionDateController.text,
+        mqsPWModuleStatus: moduleStatus.value,
+        image: moduleTileImage.value.isNotEmpty ? moduleTileImage.value : null,
       ),
     );
   }
@@ -486,7 +545,11 @@ class PathwayController extends GetxController {
     moduleIdController.text = mqsModules[index].id;
     moduleTitleController.text = mqsModules[index].moduleTitle;
     moduleSubtitleController.text = mqsModules[index].mqsModuleSubtitle;
+    moduleCompletionDateController.text =
+        mqsModules[index].mqsModuleCompletionDate;
+    moduleStatus.value = mqsModules[index].mqsPWModuleStatus;
     moduleTileImage.value = mqsModules[index].image ?? Uint8List(0);
+    moduleTileImageURL.value = mqsModules[index].moduleTileImage;
     mqsLearnActivity.value =
         List<MqsLearnActivity>.from(mqsModules[index].mqsLearnActivity);
     mqsPracticeActivity.value =
@@ -499,7 +562,10 @@ class PathwayController extends GetxController {
     mqsModules[i].id = moduleIdController.text.trim();
     mqsModules[i].moduleTitle = moduleTitleController.text.trim();
     mqsModules[i].mqsModuleSubtitle = moduleSubtitleController.text.trim();
-    mqsModules[i].image = moduleTileImage.value;
+    mqsModules[i].mqsModuleCompletionDate = moduleCompletionDateController.text;
+    mqsModules[i].mqsPWModuleStatus = moduleStatus.value;
+    mqsModules[i].image =
+        moduleTileImage.value.isNotEmpty ? moduleTileImage.value : null;
     mqsModules[i].mqsLearnActivity = mqsLearnActivity;
     mqsModules[i].mqsPracticeActivity = mqsPracticeActivity;
   }
@@ -549,6 +615,7 @@ class PathwayController extends GetxController {
     titleController.clear();
     subtitleController.clear();
     selectedPathwayType.value = "";
+    pathwayStatus.value = false;
     aboutPathwayController.clear();
     learningObjController.clear();
     coachInstructionsController.clear();
@@ -557,6 +624,9 @@ class PathwayController extends GetxController {
     pathwayImage.value = Uint8List(0);
     pathwayIntroImage.value = Uint8List(0);
     pathwayTileImage.value = Uint8List(0);
+    pathwayImageURL.value = "";
+    pathwayIntroImageURL.value = "";
+    pathwayTileImageURL.value = "";
     showModules.value = false;
     pathwayDep.clear();
     clearModuleFields();
@@ -567,6 +637,9 @@ class PathwayController extends GetxController {
     moduleIdController.clear();
     moduleTitleController.clear();
     moduleSubtitleController.clear();
+    moduleCompletionDateController.clear();
+    moduleStatus.value = false;
+    moduleTileImageURL.value = "";
     moduleTileImage.value = Uint8List(0);
     mqsModules.clear();
     clearLearnActivityFields();
@@ -576,9 +649,13 @@ class PathwayController extends GetxController {
 
   clearLearnActivityFields() {
     showLearnActivty.value = false;
+    showLearnActSkills.value = false;
     learnActIdController.clear();
     learnActTitleController.clear();
     learnActNavigateToScreenController.clear();
+    learnActAddToFav.value = false;
+    learnActStatus.value = false;
+    learnActCompletionDateController.clear();
     learnActRefIdController.clear();
     learnActRefQueController.clear();
     learnActAudioLessonController.clear();
@@ -598,11 +675,16 @@ class PathwayController extends GetxController {
 
   clearPracActivityFields() {
     showPracActivity.value = false;
+    showPracActSkills.value = false;
+    showPracActReqIcons.value = false;
     pracActIdController.clear();
     pracActCoachInstructionsController.clear();
     pracActRefIdController.clear();
     pracActTitleController.clear();
     pracActNavigateToScreenController.clear();
+    pracActAddToFav.value = false;
+    pracActStatus.value = false;
+    pracActCompletionDateController.clear();
     pracActInstructionsController.clear();
     pracActAudioLessonController.clear();
     pracActBenefitsController.clear();
@@ -682,19 +764,19 @@ class PathwayController extends GetxController {
       if (pathwayFormKey.currentState?.validate() ?? false) {
         final docRef = FirebaseStorageService.i.pathway.doc().id;
         showLoader();
-        String pathwayImageURL = "",
-            pathwayIntroImageURL = "",
-            pathwayTileImageURL = "";
+        String pathwayImgURL = pathwayImageURL.value,
+            pathwayIntroImgURL = pathwayIntroImageURL.value,
+            pathwayTileImgURL = pathwayTileImageURL.value;
         if (pathwayImage.value.isNotEmpty) {
-          pathwayImageURL = await FirebaseStorageService.i
+          pathwayImgURL = await FirebaseStorageService.i
               .uploadFile(data: pathwayImage.value);
         }
         if (pathwayIntroImage.value.isNotEmpty) {
-          pathwayIntroImageURL = await FirebaseStorageService.i
+          pathwayIntroImgURL = await FirebaseStorageService.i
               .uploadFile(data: pathwayIntroImage.value);
         }
-        if (pathwayIntroImage.value.isNotEmpty) {
-          pathwayTileImageURL = await FirebaseStorageService.i
+        if (pathwayTileImage.value.isNotEmpty) {
+          pathwayTileImgURL = await FirebaseStorageService.i
               .uploadFile(data: pathwayTileImage.value);
         }
         await uploadModuleTileImages();
@@ -709,16 +791,16 @@ class PathwayController extends GetxController {
           mqsAboutPathway: aboutPathwayController.text.trim(),
           mqsLearningObj: learningObjController.text.trim(),
           mqsPathwayCoachInstructions: coachInstructionsController.text.trim(),
-          mqsPathwayImage: pathwayImageURL,
+          mqsPathwayImage: pathwayImgURL,
           mqsModuleCount: mqsModules.length,
           mqsPathwayDuration: durationController.text.trim(),
           mqsPathwayLevel: int.parse(levelController.text),
-          mqsPathwayIntroImage: pathwayIntroImageURL,
-          mqsPathwayTileImage: pathwayTileImageURL,
+          mqsPathwayIntroImage: pathwayIntroImgURL,
+          mqsPathwayTileImage: pathwayTileImgURL,
           mqsPathwayDep: pathwayDep,
           mqsPathwayDetail: MqsPathwayDetail(mqsModules: mqsModules),
+          mqsPathwayStatus: pathwayStatus.value,
         );
-
         if (isEdit.value) {
           await PathwayRepository.i.editPathway(
               pathwayModel: pathwayModel, docId: pathwayDetail.docId);
@@ -740,13 +822,80 @@ class PathwayController extends GetxController {
     } finally {}
   }
 
+  setPathwayForm() async {
+    idController.text = pathwayDetail.id;
+    titleController.text = pathwayDetail.mqsPathwayTitle;
+    subtitleController.text = pathwayDetail.mqsPathwaySubtitle;
+    selectedPathwayType.value = pathwayDetail.mqsPathwayType;
+    pathwayStatus.value = pathwayDetail.mqsPathwayStatus;
+    pathwayImageURL.value = pathwayDetail.mqsPathwayImage;
+    pathwayIntroImageURL.value = pathwayDetail.mqsPathwayIntroImage;
+    pathwayTileImageURL.value = pathwayDetail.mqsPathwayTileImage;
+    aboutPathwayController.text = pathwayDetail.mqsAboutPathway;
+    learningObjController.text = pathwayDetail.mqsLearningObj;
+    coachInstructionsController.text =
+        pathwayDetail.mqsPathwayCoachInstructions;
+    durationController.text = pathwayDetail.mqsPathwayDuration;
+    levelController.text = pathwayDetail.mqsPathwayLevel.toString();
+    pathwayDep.value = pathwayDetail.mqsPathwayDep;
+    mqsModules.value = modules;
+  }
+
+  deleteStorageFiles() async {
+    try {
+      if (pathwayDetail.mqsPathwayImage.isNotEmpty) {
+        await FirebaseStorageService.i
+            .deleteFile(downloadURL: pathwayDetail.mqsPathwayImage);
+      }
+      if (pathwayDetail.mqsPathwayIntroImage.isNotEmpty) {
+        await FirebaseStorageService.i
+            .deleteFile(downloadURL: pathwayDetail.mqsPathwayIntroImage);
+      }
+      if (pathwayDetail.mqsPathwayTileImage.isNotEmpty) {
+        await FirebaseStorageService.i
+            .deleteFile(downloadURL: pathwayDetail.mqsPathwayTileImage);
+      }
+      for (MqsModule e in modules) {
+        if (e.moduleTileImage.isNotEmpty) {
+          await FirebaseStorageService.i
+              .deleteFile(downloadURL: e.moduleTileImage);
+        }
+        // Delete audio and video files of all learn activities
+        for (MqsLearnActivity action in e.mqsLearnActivity) {
+          if ((action.activity?.mqsActivityAudioLesson ?? "").isNotEmpty) {
+            await FirebaseStorageService.i.deleteFile(
+                downloadURL: action.activity?.mqsActivityAudioLesson ?? "");
+          }
+          if ((action.activity?.mqsActivityVideoLesson ?? "").isNotEmpty) {
+            await FirebaseStorageService.i.deleteFile(
+                downloadURL: action.activity?.mqsActivityVideoLesson ?? "");
+          }
+        }
+        // Delete audio and video files of all practice activities
+        for (MqsPracticeActivity action in e.mqsPracticeActivity) {
+          if ((action.activity?.mqsActivityAudioLesson ?? "").isNotEmpty) {
+            await FirebaseStorageService.i.deleteFile(
+                downloadURL: action.activity?.mqsActivityAudioLesson ?? "");
+          }
+          if ((action.activity?.mqsActivityVideoLesson ?? "").isNotEmpty) {
+            await FirebaseStorageService.i.deleteFile(
+                downloadURL: action.activity?.mqsActivityVideoLesson ?? "");
+          }
+        }
+      }
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    } finally {}
+  }
+
   deletePathway({required String docId}) async {
     try {
       showLoader();
-      viewIndex.value = 0;
       isAdd.value = false;
       isEdit.value = false;
+      await deleteStorageFiles();
       await PathwayRepository.i.deletePathway(docId: docId);
+      viewIndex.value = 0;
       hideLoader();
     } catch (e) {
       hideLoader();

@@ -5,14 +5,15 @@ import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
 import 'package:mqs_admin_portal_web/views/pathway/controller/pathway_controller.dart';
-import 'package:mqs_admin_portal_web/views/pathway/widgets/prac_activity_list_widget.dart';
+import 'package:mqs_admin_portal_web/views/pathway/widgets/practice_activity_list_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_button.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_drop_down.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_text_field.dart';
 import 'package:mqs_admin_portal_web/widgets/title_widget.dart';
 
 Widget practiceActivityFormWidget(
-    {required PathwayController pathwayController}) {
+    {required PathwayController pathwayController,
+    required BuildContext context}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -31,6 +32,7 @@ Widget practiceActivityFormWidget(
             children: [
               SizeConfig.size30.height,
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: CustomTextField(
@@ -57,6 +59,7 @@ Widget practiceActivityFormWidget(
               ),
               SizeConfig.size34.height,
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: CustomTextField(
@@ -87,6 +90,7 @@ Widget practiceActivityFormWidget(
               ),
               SizeConfig.size34.height,
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: CustomTextField(
@@ -114,6 +118,7 @@ Widget practiceActivityFormWidget(
               ),
               SizeConfig.size34.height,
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: CustomTextField(
@@ -145,6 +150,7 @@ Widget practiceActivityFormWidget(
               ),
               SizeConfig.size34.height,
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: CustomTextField(
@@ -178,6 +184,7 @@ Widget practiceActivityFormWidget(
               ),
               SizeConfig.size34.height,
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: CustomTextField(
@@ -204,6 +211,7 @@ Widget practiceActivityFormWidget(
               ),
               SizeConfig.size34.height,
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: CustomTextField(
@@ -211,10 +219,6 @@ Widget practiceActivityFormWidget(
                           pathwayController.pracActAudioLessonController,
                       label: StringConfig.pathway.activityAudioLesson,
                       hintText: StringConfig.pathway.chooseAudio,
-                      validator: (p0) => Validator.emptyValidator(
-                          p0 ?? "",
-                          StringConfig.pathway.activityAudioLesson
-                              .toLowerCase()),
                       readOnly: true,
                       onTap: () async {
                         Map<String, Uint8List?> audio =
@@ -235,10 +239,6 @@ Widget practiceActivityFormWidget(
                           pathwayController.pracActVideoLessonController,
                       label: StringConfig.pathway.activityVideoLesson,
                       hintText: StringConfig.pathway.chooseVideo,
-                      validator: (p0) => Validator.emptyValidator(
-                          p0 ?? "",
-                          StringConfig.pathway.activityVideoLesson
-                              .toLowerCase()),
                       readOnly: true,
                       onTap: () async {
                         Map<String, Uint8List?> video =
@@ -255,13 +255,68 @@ Widget practiceActivityFormWidget(
                 ],
               ),
               SizeConfig.size34.height,
-              CustomDropDown(
-                label: StringConfig.pathway.activityScreenHandoff,
-                value: pathwayController.pracActScreenHandoff.value,
-                items: pathwayController.boolOptions,
-                onChanged: (value) {
-                  pathwayController.pracActScreenHandoff.value = value;
-                },
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: CustomDropDown(
+                      label: StringConfig.pathway.activityStatus,
+                      value: pathwayController.pracActStatus.value,
+                      items: pathwayController.boolOptions,
+                      onChanged: (value) {
+                        pathwayController.pracActStatus.value = value;
+                      },
+                    ),
+                  ),
+                  SizeConfig.size15.width,
+                  Expanded(
+                    child: CustomDropDown(
+                      label: StringConfig.pathway.addToFav,
+                      value: pathwayController.pracActAddToFav.value,
+                      items: pathwayController.boolOptions,
+                      onChanged: (value) {
+                        pathwayController.pracActAddToFav.value = value;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              SizeConfig.size34.height,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: CustomTextField(
+                      controller:
+                          pathwayController.pracActCompletionDateController,
+                      label: StringConfig.pathway.activityCompletionDate,
+                      hintText: StringConfig.pathway.enter +
+                          StringConfig.pathway.completionDate.toLowerCase(),
+                      validator: (p0) => Validator.emptyValidator(p0 ?? "",
+                          StringConfig.pathway.completionDate.toLowerCase()),
+                      readOnly: true,
+                      onTap: () async {
+                        DateTime? pickedDate =
+                            await pathwayController.pickDate(context: context);
+                        if (pickedDate != null) {
+                          pathwayController.pracActCompletionDateController
+                              .text = pickedDate.toIso8601String();
+                        }
+                      },
+                    ),
+                  ),
+                  SizeConfig.size15.width,
+                  Expanded(
+                    child: CustomDropDown(
+                      label: StringConfig.pathway.activityScreenHandoff,
+                      value: pathwayController.learnActScreenHandoff.value,
+                      items: pathwayController.boolOptions,
+                      onChanged: (value) {
+                        pathwayController.learnActScreenHandoff.value = value;
+                      },
+                    ),
+                  ),
+                ],
               ),
               SizeConfig.size34.height,
               titleWidget(
@@ -459,6 +514,8 @@ Widget practiceActivityFormWidget(
                       btnText: StringConfig.dashboard.cancel,
                       onTap: () {
                         pathwayController.showPracActivity.value = false;
+                        pathwayController.showPracActSkills.value = false;
+                        pathwayController.showPracActReqIcons.value = false;
                       },
                       isSelected: false,
                     ),
@@ -475,6 +532,8 @@ Widget practiceActivityFormWidget(
                                 ?.validate() ??
                             false) {
                           pathwayController.showPracActivity.value = false;
+                          pathwayController.showPracActSkills.value = false;
+                          pathwayController.showPracActReqIcons.value = false;
                           if (pathwayController.editPracActIndex.value >= 0) {
                             pathwayController.editPracActivity();
                           } else {
@@ -489,7 +548,7 @@ Widget practiceActivityFormWidget(
             ],
           ),
         ),
-      pracActivityListWidget(pathwayController: pathwayController),
+      practiceActivityListWidget(pathwayController: pathwayController),
     ],
   );
 }

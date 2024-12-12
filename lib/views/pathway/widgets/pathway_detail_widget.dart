@@ -77,6 +77,10 @@ Widget pathwayDetailWidget({required PathwayController pathwayController}) {
             value: pathwayController.pathwayDetail.mqsPathwayDuration,
           ),
           keyValueRowWidget(
+            key: StringConfig.pathway.pathwayStatus,
+            value: "${pathwayController.pathwayDetail.mqsPathwayStatus}",
+          ),
+          keyValueRowWidget(
             key: StringConfig.pathway.pathwayLevel,
             value: "${pathwayController.pathwayDetail.mqsPathwayLevel}",
             isLast: true,

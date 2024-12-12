@@ -63,12 +63,23 @@ Widget addPathwayFormWidget({required PathwayController pathwayController}) {
         },
       ),
       SizeConfig.size34.height,
+      CustomDropDown(
+        label: StringConfig.pathway.pathwayStatus,
+        value: pathwayController.pathwayStatus.value,
+        items: pathwayController.boolOptions,
+        onChanged: (value) {
+          pathwayController.pathwayStatus.value = value;
+        },
+      ),
+      SizeConfig.size34.height,
       CustomImageField(
         image: pathwayController.pathwayImage.value,
+        imageURL: pathwayController.pathwayImageURL.value,
         label: StringConfig.pathway.pathwayImage,
         onTap: () async {
           Uint8List? image = await pathwayController.pickImage();
           if (image != null) {
+            pathwayController.pathwayImageURL.value = "";
             pathwayController.pathwayImage.value = image;
           }
         },
@@ -76,10 +87,12 @@ Widget addPathwayFormWidget({required PathwayController pathwayController}) {
       SizeConfig.size34.height,
       CustomImageField(
         image: pathwayController.pathwayIntroImage.value,
+        imageURL: pathwayController.pathwayIntroImageURL.value,
         label: StringConfig.pathway.pathwayIntroImage,
         onTap: () async {
           Uint8List? image = await pathwayController.pickImage();
           if (image != null) {
+            pathwayController.pathwayIntroImageURL.value = "";
             pathwayController.pathwayIntroImage.value = image;
           }
         },
@@ -87,10 +100,12 @@ Widget addPathwayFormWidget({required PathwayController pathwayController}) {
       SizeConfig.size34.height,
       CustomImageField(
         image: pathwayController.pathwayTileImage.value,
+        imageURL: pathwayController.pathwayTileImageURL.value,
         label: StringConfig.pathway.pathwayTileImage,
         onTap: () async {
           Uint8List? image = await pathwayController.pickImage();
           if (image != null) {
+            pathwayController.pathwayTileImageURL.value = "";
             pathwayController.pathwayTileImage.value = image;
           }
         },
@@ -121,6 +136,7 @@ Widget addPathwayFormWidget({required PathwayController pathwayController}) {
       ),
       SizeConfig.size34.height,
       Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: CustomTextField(

@@ -497,4 +497,10 @@ class Pathway {
   final String activityReqIcon = "Activty Request Icon";
   final String chooseAudio = "Choose Audio";
   final String chooseVideo = "Choose Video";
+  final String pathwayStatus = "Pathway Status";
+  final String moduleStatus = "Module Status";
+  final String completionDate = "Completion Date";
+  final String addToFav = "Add to Fav";
+  final String activityStatus = "Activity Status";
+  final String activityCompletionDate = "Activity Completion Date";
 }

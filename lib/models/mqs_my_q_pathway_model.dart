@@ -13,6 +13,7 @@ class MQSMyQPathwayModel {
   final String mqsPathwayImage;
   final String mqsPathwayIntroImage;
   final int mqsPathwayLevel;
+  final bool mqsPathwayStatus;
   final String mqsPathwaySubtitle;
   final String mqsPathwayTileImage;
   final String mqsPathwayTitle;
@@ -31,6 +32,7 @@ class MQSMyQPathwayModel {
       required this.mqsModuleCount,
       required this.mqsPathwayDuration,
       required this.mqsPathwayLevel,
+      required this.mqsPathwayStatus,
       required this.mqsPathwayIntroImage,
       required this.mqsPathwayTileImage,
       required this.mqsPathwayDep,
@@ -50,6 +52,7 @@ class MQSMyQPathwayModel {
       mqsModuleCount: json['mqsModuleCount'] ?? 0,
       mqsPathwayDuration: json['mqsPathwayDuration'] ?? "",
       mqsPathwayLevel: json['mqsPathwayLevel'] ?? 0,
+      mqsPathwayStatus: json['mqsPathwayStatus'] ?? false,
       mqsPathwayIntroImage: json['mqsPathwayIntroImage'] ?? "",
       mqsPathwayTileImage: json['mqsPathwayTileImage'] ?? "",
       mqsPathwayDep:
@@ -72,6 +75,7 @@ class MQSMyQPathwayModel {
       'mqsPathwayImage': mqsPathwayImage,
       'mqsPathwayIntroImage': mqsPathwayIntroImage,
       'mqsPathwayLevel': mqsPathwayLevel,
+      'mqsPathwayStatus': mqsPathwayStatus,
       'mqsPathwaySubtitle': mqsPathwaySubtitle,
       'mqsPathwayTileImage': mqsPathwayTileImage,
       'mqsPathwayTitle': mqsPathwayTitle,
@@ -110,6 +114,8 @@ class MqsModule {
   String moduleTileImage;
   List<MqsLearnActivity> mqsLearnActivity;
   List<MqsPracticeActivity> mqsPracticeActivity;
+  String mqsModuleCompletionDate;
+  bool mqsPWModuleStatus;
   Uint8List? image;
 
   MqsModule({
@@ -119,6 +125,8 @@ class MqsModule {
     required this.moduleTileImage,
     required this.mqsLearnActivity,
     required this.mqsPracticeActivity,
+    required this.mqsModuleCompletionDate,
+    required this.mqsPWModuleStatus,
     this.image,
   });
 
@@ -138,6 +146,8 @@ class MqsModule {
               .map((e) => MqsPracticeActivity.fromJson(e))
               .toList()
           : [],
+      mqsModuleCompletionDate: json['mqsModuleCompletionDate'] ?? "",
+      mqsPWModuleStatus: json['mqsPWModuleStatus'] ?? false,
     );
   }
 
@@ -151,6 +161,8 @@ class MqsModule {
       'mqsModuleSubtitle': mqsModuleSubtitle,
       'mqsPracticeActivity':
           mqsPracticeActivity.map((module) => module.toJson()).toList(),
+      'mqsModuleCompletionDate': mqsModuleCompletionDate,
+      'mqsPWModuleStatus': mqsPWModuleStatus,
     };
   }
 }
@@ -163,6 +175,9 @@ class MqsLearnActivity {
   String mqsActivityTitle;
   String mqsModuleID;
   String mqsNavigateToScreen;
+  bool mqsActivityStatus;
+  String mqsActivityCompletionDate;
+  bool addToFav;
   MqsLearnActivityDetail? activity;
 
   MqsLearnActivity({
@@ -173,6 +188,9 @@ class MqsLearnActivity {
     required this.mqsActivityScreenHandoff,
     required this.mqsNavigateToScreen,
     required this.mqsActivitySkill,
+    required this.mqsActivityStatus,
+    required this.addToFav,
+    required this.mqsActivityCompletionDate,
     required this.activity,
   });
 
@@ -189,6 +207,9 @@ class MqsLearnActivity {
           ? MqsLearnActivityDetail.fromJson(json['Activity'])
           : null,
       mqsActivityTitle: json['mqsActivityTitle'] ?? "",
+      mqsActivityStatus: json['mqsActivityStatus'] ?? false,
+      addToFav: json['addToFav'] ?? false,
+      mqsActivityCompletionDate: json['mqsActivityCompletionDate'] ?? "",
     );
   }
 
@@ -202,6 +223,9 @@ class MqsLearnActivity {
       'mqsModuleID': mqsModuleID,
       'mqsNavigateToScreen': mqsNavigateToScreen,
       'Activity': activity?.toJson(),
+      'mqsActivityStatus': mqsActivityStatus,
+      'addToFav': addToFav,
+      'mqsActivityCompletionDate': mqsActivityCompletionDate,
     };
   }
 }
@@ -269,19 +293,26 @@ class MqsPracticeActivity {
   String mqsActivityTitle;
   String mqsModuleID;
   String mqsNavigateToScreen;
+  bool mqsActivityStatus;
+  String mqsActivityCompletionDate;
+  bool addToFav;
   MqsPracticeActivityDetail? activity;
 
-  MqsPracticeActivity(
-      {required this.id,
-      required this.mqsActivityInstruction,
-      required this.mqsActivityRefID,
-      required this.mqsActivityReqIcons,
-      required this.mqsActivityScreenHandoff,
-      required this.mqsActivitySkill,
-      required this.mqsActivityTitle,
-      required this.mqsModuleID,
-      required this.mqsNavigateToScreen,
-      required this.activity});
+  MqsPracticeActivity({
+    required this.id,
+    required this.mqsActivityInstruction,
+    required this.mqsActivityRefID,
+    required this.mqsActivityReqIcons,
+    required this.mqsActivityScreenHandoff,
+    required this.mqsActivitySkill,
+    required this.mqsActivityTitle,
+    required this.mqsModuleID,
+    required this.mqsNavigateToScreen,
+    required this.activity,
+    required this.addToFav,
+    required this.mqsActivityCompletionDate,
+    required this.mqsActivityStatus,
+  });
 
   factory MqsPracticeActivity.fromJson(Map<String, dynamic> json) {
     return MqsPracticeActivity(
@@ -300,6 +331,9 @@ class MqsPracticeActivity {
       activity: json['Activity'] != null
           ? MqsPracticeActivityDetail.fromJson(json['Activity'])
           : null,
+      addToFav: json['addToFav'] ?? false,
+      mqsActivityCompletionDate: json['mqsActivityCompletionDate'] ?? "",
+      mqsActivityStatus: json['mqsActivityStatus'] ?? false,
     );
   }
 
@@ -315,6 +349,9 @@ class MqsPracticeActivity {
       'mqsModuleID': mqsModuleID,
       'mqsNavigateToScreen': mqsNavigateToScreen,
       'Activity': activity?.toJson(),
+      'addToFav': addToFav,
+      'mqsActivityCompletionDate': mqsActivityCompletionDate,
+      'mqsActivityStatus': mqsActivityStatus,
     };
   }
 }
