@@ -251,6 +251,22 @@ class Firebase {
   final String userName = "user_name";
   final String hashtag = "hashtag";
   final String postReply = "post_reply";
+  final String id = "_id";
+  final String mqsAboutPathway = "mqsAboutPathway";
+  final String mqsLearningObj = "mqsLearningObj";
+  final String mqsModuleCount = "mqsModuleCount";
+  final String mqsPathwayCoachInstructions = "mqsPathwayCoachInstructions";
+  final String mqsPathwayDep = "mqsPathwayDep";
+  final String mqsPathwayDuration = "mqsPathwayDuration";
+  final String mqsPathwayImage = "mqsPathwayImage";
+  final String mqsPathwayIntroImage = "mqsPathwayIntroImage";
+  final String mqsPathwayLevel = "mqsPathwayLevel";
+  final String mqsPathwayStatus = "mqsPathwayStatus";
+  final String mqsPathwaySubtitle = "mqsPathwaySubtitle";
+  final String mqsPathwayTileImage = "mqsPathwayTileImage";
+  final String mqsPathwayTitle = "mqsPathwayTitle";
+  final String mqsPathwayType = "mqsPathwayType";
+  final String mqsPathwayDetail = "mqsPathwayDetail";
 }
 
 class CSV {
@@ -503,4 +519,5 @@ class Pathway {
   final String addToFav = "Add to Fav";
   final String activityStatus = "Activity Status";
   final String activityCompletionDate = "Activity Completion Date";
+  final String activityInstruction = "Activty Instruction";
 }

@@ -66,7 +66,12 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                                               .selectedTabIndex.value ==
                                           1
                                       ? dashboardController.userKeyName()
-                                      : dashboardController.circleKeyName(),
+                                      : dashboardController
+                                                  .selectedTabIndex.value ==
+                                              2
+                                          ? dashboardController.circleKeyName()
+                                          : dashboardController
+                                              .pathwayKeyName(),
                               style: FontTextStyleConfig.labelTextStyle
                                   .copyWith(color: ColorConfig.whiteColor),
                             ),
@@ -104,7 +109,12 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                             ? dashboardController.enterpriseKeyName(index: i)
                             : dashboardController.selectedTabIndex.value == 1
                                 ? dashboardController.userKeyName(index: i)
-                                : dashboardController.circleKeyName(index: i),
+                                : dashboardController.selectedTabIndex.value ==
+                                        2
+                                    ? dashboardController.circleKeyName(
+                                        index: i)
+                                    : dashboardController.pathwayKeyName(
+                                        index: i),
                         style: FontTextStyleConfig.tableContentTextStyle,
                       ),
                     ).tap(() {

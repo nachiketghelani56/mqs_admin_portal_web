@@ -11,6 +11,7 @@ import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/models/circle_model.dart';
 import 'package:mqs_admin_portal_web/models/enterprise_model.dart';
 import 'package:mqs_admin_portal_web/models/menu_option_model.dart';
+import 'package:mqs_admin_portal_web/models/mqs_my_q_pathway_model.dart';
 import 'package:mqs_admin_portal_web/models/row_input_model.dart';
 import 'package:mqs_admin_portal_web/models/user_iam_model.dart';
 import 'package:mqs_admin_portal_web/models/user_subscription_receipt_model.dart';
@@ -20,6 +21,8 @@ import 'package:mqs_admin_portal_web/views/circle/controller/circle_controller.d
 import 'package:mqs_admin_portal_web/views/circle/repository/circle_repository.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/repository/enterprise_repository.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/repository/user_repository.dart';
+import 'package:mqs_admin_portal_web/views/pathway/controller/pathway_controller.dart';
+import 'package:mqs_admin_portal_web/views/pathway/repository/pathway_repository.dart';
 import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/loader_widget.dart';
 import 'package:uuid/uuid.dart';
@@ -221,6 +224,10 @@ class DashboardController extends GetxController {
         Get.find<CircleController>().searchedCircle.value =
             await CircleRepository.i.fetchCircleFilteredData(
                 field, filters, condition, isAsc.value);
+      } else if (selectedTabIndex.value == 3) {
+        Get.find<PathwayController>().searchedPathway.value =
+            await PathwayRepository.i.fetchPathwayFilteredData(
+                field, filters, condition, isAsc.value);
       }
     } catch (e) {
       errorDialogWidget(msg: e.toString());
@@ -262,6 +269,9 @@ class DashboardController extends GetxController {
     if (selectedTabIndex.value == 2) {
       CircleController controller = Get.find<CircleController>();
       controller.searchedCircle.value = controller.circle;
+    } else if (selectedTabIndex.value == 3) {
+      PathwayController controller = Get.find<PathwayController>();
+      controller.searchedPathway.value = controller.pathway;
     } else {
       searchedEnterprises.value = enterprises;
       searchedUsers.value = users;
@@ -754,6 +764,12 @@ class DashboardController extends GetxController {
       controller.viewIndex.value = -1;
       controller.currentPage.value = 1;
       controller.offset.value = 0;
+    } else if (selectedTabIndex.value == 3 &&
+        Get.isRegistered<PathwayController>()) {
+      PathwayController controller = Get.find<PathwayController>();
+      controller.viewIndex.value = -1;
+      controller.currentPage.value = 1;
+      controller.offset.value = 0;
     } else {
       viewIndex.value = -1;
       currentPage.value = 1;
@@ -776,6 +792,14 @@ class DashboardController extends GetxController {
         Get.isRegistered<CircleController>()) {
       RxList<CircleModel> circle = Get.find<CircleController>().circle;
       filterFields.value = circle
+          .expand((e) => e.toJson().keys) // Convert model to Map
+          .toSet() // Ensure uniqueness
+          .toList();
+    } else if (selectedTabIndex.value == 3 &&
+        Get.isRegistered<PathwayController>()) {
+      RxList<MQSMyQPathwayModel> pathway =
+          Get.find<PathwayController>().pathway;
+      filterFields.value = pathway
           .expand((e) => e.toJson().keys) // Convert model to Map
           .toSet() // Ensure uniqueness
           .toList();
@@ -1164,6 +1188,44 @@ class DashboardController extends GetxController {
       return StringConfig.circle.hashTag;
     } else if (keyName == StringConfig.firebase.postReply) {
       return StringConfig.reporting.postReplies;
+    }
+    return "";
+  }
+
+  String pathwayKeyName({int? index}) {
+    String keyName = filterFields[index ?? selectedFilterFieldIndex.value];
+    if (keyName == StringConfig.firebase.id) {
+      return StringConfig.pathway.pathwayID;
+    } else if (keyName == StringConfig.firebase.mqsAboutPathway) {
+      return StringConfig.pathway.aboutPathway;
+    } else if (keyName == StringConfig.firebase.mqsLearningObj) {
+      return StringConfig.pathway.learningObj;
+    } else if (keyName == StringConfig.firebase.mqsModuleCount) {
+      return StringConfig.pathway.moduleCount;
+    } else if (keyName == StringConfig.firebase.mqsPathwayCoachInstructions) {
+      return StringConfig.pathway.pathwayCoachInstructions;
+    } else if (keyName == StringConfig.firebase.mqsPathwayDep) {
+      return StringConfig.pathway.pathwayDep;
+    } else if (keyName == StringConfig.firebase.mqsPathwayDuration) {
+      return StringConfig.pathway.pathwayDuration;
+    } else if (keyName == StringConfig.firebase.mqsPathwayImage) {
+      return StringConfig.pathway.pathwayImage;
+    } else if (keyName == StringConfig.firebase.mqsPathwayIntroImage) {
+      return StringConfig.pathway.pathwayIntroImage;
+    } else if (keyName == StringConfig.firebase.mqsPathwayLevel) {
+      return StringConfig.pathway.pathwayLevel;
+    } else if (keyName == StringConfig.firebase.mqsPathwayStatus) {
+      return StringConfig.pathway.pathwayStatus;
+    } else if (keyName == StringConfig.firebase.mqsPathwaySubtitle) {
+      return StringConfig.pathway.pathwaySubtitle;
+    } else if (keyName == StringConfig.firebase.mqsPathwayTileImage) {
+      return StringConfig.pathway.pathwayTileImage;
+    } else if (keyName == StringConfig.firebase.mqsPathwayTitle) {
+      return StringConfig.pathway.pathwayTitle;
+    } else if (keyName == StringConfig.firebase.mqsPathwayType) {
+      return StringConfig.pathway.pathwayType;
+    } else if (keyName == StringConfig.firebase.mqsPathwayDetail) {
+      return StringConfig.pathway.pathwayDetail;
     }
     return "";
   }

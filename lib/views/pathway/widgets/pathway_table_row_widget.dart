@@ -47,7 +47,7 @@ Widget pathwayTableRowWidget({
                 pathwayController.isEdit.value = false;
                 pathwayController.viewIndex.value = index;
                 pathwayController.showModules.value = false;
-                pathwayController.moduleIndexes.clear();
+                pathwayController.moduleIndex.value = -1;
                 if (context.width < SizeConfig.size1500) {
                   Get.toNamed(AppRoutes.pathwayDetail);
                 }

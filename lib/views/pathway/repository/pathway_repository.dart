@@ -61,7 +61,7 @@ class PathwayRepository {
     if (filter.isEmpty) {
       query = query.orderBy(fieldKey, descending: !isAsc);
     }
-    List<MQSMyQPathwayModel> circleList = await getPathways();
+    List<MQSMyQPathwayModel> pathwayList = await getPathways();
     for (Map<String, dynamic> filter in filter) {
       String field = filter['field'];
       dynamic condition = filter['condition'];
@@ -119,10 +119,9 @@ class PathwayRepository {
                         : value.toString())
                 .orderBy(field, descending: !isAsc);
             break;
-
           case 'array-contains-any': // Array contains any
             if (!allRes.contains(value)) {
-              allRes.addAll(circleList.where((MQSMyQPathwayModel e) {
+              allRes.addAll(pathwayList.where((MQSMyQPathwayModel e) {
                 Map<String, dynamic> json =
                     e.toJson(); // Convert object to JSON
                 String? fieldValue =

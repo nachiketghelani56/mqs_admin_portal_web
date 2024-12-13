@@ -65,13 +65,13 @@ Widget practiceActivityFormWidget(
                     child: CustomTextField(
                       controller:
                           pathwayController.pracActInstructionsController,
-                      label: StringConfig.pathway.activityCoachInstructions,
+                      label: StringConfig.pathway.activityInstruction,
                       hintText: StringConfig.pathway.enter +
-                          StringConfig.pathway.activityCoachInstructions
+                          StringConfig.pathway.activityInstruction
                               .toLowerCase(),
                       validator: (p0) => Validator.emptyValidator(
                           p0 ?? "",
-                          StringConfig.pathway.activityCoachInstructions
+                          StringConfig.pathway.activityInstruction
                               .toLowerCase()),
                     ),
                   ),

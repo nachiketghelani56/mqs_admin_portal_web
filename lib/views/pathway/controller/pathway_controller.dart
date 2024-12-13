@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -8,6 +11,7 @@ import 'package:mqs_admin_portal_web/models/menu_option_model.dart';
 import 'package:mqs_admin_portal_web/models/mqs_my_q_pathway_model.dart';
 import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/services/firebase_storage_service.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/pathway/repository/pathway_repository.dart';
 import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/loader_widget.dart';
@@ -47,7 +51,9 @@ class PathwayController extends GetxController {
   final GlobalKey<FormState> learnActSkillFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> pracActSkillFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> pracActReqIconFormKey = GlobalKey<FormState>();
-  RxList<int> moduleIndexes = <int>[].obs;
+  RxInt moduleIndex = (-1).obs,
+      learnActIndex = (-1).obs,
+      pracActIndex = (-1).obs;
   final TextEditingController idController = TextEditingController();
   final TextEditingController aboutPathwayController = TextEditingController();
   final TextEditingController learningObjController = TextEditingController();
@@ -202,9 +208,9 @@ class PathwayController extends GetxController {
         viewIndex.value = -1;
       });
       // Set filter fields of pathway in filter sheet
-      // if (Get.isRegistered<DashboardController>()) {
-      //   Get.find<DashboardController>().setFilterFields();
-      // }
+      if (Get.isRegistered<DashboardController>()) {
+        Get.find<DashboardController>().setFilterFields();
+      }
     } catch (e) {
       errorDialogWidget(msg: e.toString());
     } finally {}
@@ -629,6 +635,7 @@ class PathwayController extends GetxController {
     pathwayTileImageURL.value = "";
     showModules.value = false;
     pathwayDep.clear();
+    mqsModules.clear();
     clearModuleFields();
   }
 
@@ -641,7 +648,8 @@ class PathwayController extends GetxController {
     moduleStatus.value = false;
     moduleTileImageURL.value = "";
     moduleTileImage.value = Uint8List(0);
-    mqsModules.clear();
+    mqsLearnActivity.clear();
+    mqsPracticeActivity.clear();
     clearLearnActivityFields();
     clearPracActivityFields();
     editModuleIndex.value = -1;
@@ -669,7 +677,6 @@ class PathwayController extends GetxController {
     learnVideo.value = Uint8List(0);
     learnActScreenHandoff.value = false;
     learnActSkills.clear();
-    mqsLearnActivity.clear();
     editLearnActIndex.value = -1;
   }
 
@@ -700,7 +707,6 @@ class PathwayController extends GetxController {
     pracActScreenHandoff.value = false;
     pracActSkills.clear();
     pracActReqIcons.clear();
-    mqsPracticeActivity.clear();
     editPracActIndex.value = -1;
   }
 
@@ -841,59 +847,55 @@ class PathwayController extends GetxController {
     mqsModules.value = modules;
   }
 
-  deleteStorageFiles() async {
-    try {
-      if (pathwayDetail.mqsPathwayImage.isNotEmpty) {
-        await FirebaseStorageService.i
-            .deleteFile(downloadURL: pathwayDetail.mqsPathwayImage);
-      }
-      if (pathwayDetail.mqsPathwayIntroImage.isNotEmpty) {
-        await FirebaseStorageService.i
-            .deleteFile(downloadURL: pathwayDetail.mqsPathwayIntroImage);
-      }
-      if (pathwayDetail.mqsPathwayTileImage.isNotEmpty) {
-        await FirebaseStorageService.i
-            .deleteFile(downloadURL: pathwayDetail.mqsPathwayTileImage);
-      }
-      for (MqsModule e in modules) {
-        if (e.moduleTileImage.isNotEmpty) {
-          await FirebaseStorageService.i
-              .deleteFile(downloadURL: e.moduleTileImage);
-        }
-        // Delete audio and video files of all learn activities
-        for (MqsLearnActivity action in e.mqsLearnActivity) {
-          if ((action.activity?.mqsActivityAudioLesson ?? "").isNotEmpty) {
-            await FirebaseStorageService.i.deleteFile(
-                downloadURL: action.activity?.mqsActivityAudioLesson ?? "");
-          }
-          if ((action.activity?.mqsActivityVideoLesson ?? "").isNotEmpty) {
-            await FirebaseStorageService.i.deleteFile(
-                downloadURL: action.activity?.mqsActivityVideoLesson ?? "");
-          }
-        }
-        // Delete audio and video files of all practice activities
-        for (MqsPracticeActivity action in e.mqsPracticeActivity) {
-          if ((action.activity?.mqsActivityAudioLesson ?? "").isNotEmpty) {
-            await FirebaseStorageService.i.deleteFile(
-                downloadURL: action.activity?.mqsActivityAudioLesson ?? "");
-          }
-          if ((action.activity?.mqsActivityVideoLesson ?? "").isNotEmpty) {
-            await FirebaseStorageService.i.deleteFile(
-                downloadURL: action.activity?.mqsActivityVideoLesson ?? "");
-          }
-        }
-      }
-    } catch (e) {
-      errorDialogWidget(msg: e.toString());
-    } finally {}
-  }
+  // deleteStorageFiles() async {
+  //   if (pathwayDetail.mqsPathwayImage.isNotEmpty) {
+  //     await FirebaseStorageService.i
+  //         .deleteFile(downloadURL: pathwayDetail.mqsPathwayImage);
+  //   }
+  //   if (pathwayDetail.mqsPathwayIntroImage.isNotEmpty) {
+  //     await FirebaseStorageService.i
+  //         .deleteFile(downloadURL: pathwayDetail.mqsPathwayIntroImage);
+  //   }
+  //   if (pathwayDetail.mqsPathwayTileImage.isNotEmpty) {
+  //     await FirebaseStorageService.i
+  //         .deleteFile(downloadURL: pathwayDetail.mqsPathwayTileImage);
+  //   }
+  //   for (MqsModule e in modules) {
+  //     if (e.moduleTileImage.isNotEmpty) {
+  //       await FirebaseStorageService.i
+  //           .deleteFile(downloadURL: e.moduleTileImage);
+  //     }
+  //     // Delete audio and video files of all learn activities
+  //     for (MqsLearnActivity action in e.mqsLearnActivity) {
+  //       if ((action.activity?.mqsActivityAudioLesson ?? "").isNotEmpty) {
+  //         await FirebaseStorageService.i.deleteFile(
+  //             downloadURL: action.activity?.mqsActivityAudioLesson ?? "");
+  //       }
+  //       if ((action.activity?.mqsActivityVideoLesson ?? "").isNotEmpty) {
+  //         await FirebaseStorageService.i.deleteFile(
+  //             downloadURL: action.activity?.mqsActivityVideoLesson ?? "");
+  //       }
+  //     }
+  //     // Delete audio and video files of all practice activities
+  //     for (MqsPracticeActivity action in e.mqsPracticeActivity) {
+  //       if ((action.activity?.mqsActivityAudioLesson ?? "").isNotEmpty) {
+  //         await FirebaseStorageService.i.deleteFile(
+  //             downloadURL: action.activity?.mqsActivityAudioLesson ?? "");
+  //       }
+  //       if ((action.activity?.mqsActivityVideoLesson ?? "").isNotEmpty) {
+  //         await FirebaseStorageService.i.deleteFile(
+  //             downloadURL: action.activity?.mqsActivityVideoLesson ?? "");
+  //       }
+  //     }
+  //   }
+  // }
 
   deletePathway({required String docId}) async {
     try {
       showLoader();
       isAdd.value = false;
       isEdit.value = false;
-      await deleteStorageFiles();
+      // await deleteStorageFiles();
       await PathwayRepository.i.deletePathway(docId: docId);
       viewIndex.value = 0;
       hideLoader();
@@ -927,14 +929,124 @@ class PathwayController extends GetxController {
   }
 
   importPathway() async {
-    try {} catch (e) {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+          allowMultiple: false,
+          type: FileType.custom,
+          allowedExtensions: ['csv']);
+      if (result != null) {
+        String csvData = utf8.decode(result.files.single.bytes ?? []);
+        List<List<dynamic>> rows = const CsvToListConverter().convert(csvData);
+        if (rows.isEmpty) {
+          return;
+        }
+        List<String> headers = rows[0].map((e) => e.toString()).toList();
+        for (int i = 1; i < rows.length; i++) {
+          Map<String, dynamic> rowMap = {
+            for (int j = 0; j < headers.length; j++) headers[j]: rows[i][j]
+          };
+          final docRef = FirebaseStorageService.i.enterprise.doc().id;
+          MQSMyQPathwayModel pathwayModel = MQSMyQPathwayModel(
+            docId: docRef,
+            id: rowMap[StringConfig.pathway.pathwayID].toString(),
+            mqsPathwayTitle:
+                rowMap[StringConfig.pathway.pathwayTitle].toString(),
+            mqsPathwaySubtitle:
+                rowMap[StringConfig.pathway.pathwaySubtitle].toString(),
+            mqsPathwayType: rowMap[StringConfig.pathway.pathwayType].toString(),
+            mqsAboutPathway:
+                rowMap[StringConfig.pathway.aboutPathway].toString(),
+            mqsLearningObj: rowMap[StringConfig.pathway.learningObj].toString(),
+            mqsPathwayCoachInstructions:
+                rowMap[StringConfig.pathway.pathwayCoachInstructions]
+                    .toString(),
+            mqsPathwayImage:
+                rowMap[StringConfig.pathway.pathwayImage].toString(),
+            mqsModuleCount: rowMap[StringConfig.pathway.moduleCount],
+            mqsPathwayDuration:
+                rowMap[StringConfig.pathway.pathwayDuration].toString(),
+            mqsPathwayLevel: rowMap[StringConfig.pathway.pathwayLevel],
+            mqsPathwayStatus: rowMap[StringConfig.pathway.pathwayStatus]
+                    .toString()
+                    .toLowerCase() ==
+                StringConfig.dashboard.trueText.toLowerCase(),
+            mqsPathwayIntroImage:
+                rowMap[StringConfig.pathway.pathwayIntroImage].toString(),
+            mqsPathwayTileImage:
+                rowMap[StringConfig.pathway.pathwayTileImage].toString(),
+            mqsPathwayDep:
+                rowMap[StringConfig.pathway.pathwayDep].toString().split(", "),
+            mqsPathwayDetail: MqsPathwayDetail(
+              mqsModules:
+                  (jsonDecode(rowMap[StringConfig.pathway.modules]) as List)
+                      .map((e) => MqsModule.fromJson(e))
+                      .toList(),
+            ),
+          );
+          await PathwayRepository.i
+              .addPathway(pathwayModel: pathwayModel, customId: docRef);
+        }
+      }
+    } catch (e) {
       hideLoader();
       errorDialogWidget(msg: e.toString());
     }
   }
 
   exportPathway() async {
-    try {} catch (e) {
+    try {
+      List<List<String>> rows = [
+        [
+          StringConfig.pathway.pathwayID,
+          StringConfig.pathway.pathwayTitle,
+          StringConfig.pathway.pathwaySubtitle,
+          StringConfig.pathway.pathwayType,
+          StringConfig.pathway.aboutPathway,
+          StringConfig.pathway.learningObj,
+          StringConfig.pathway.moduleCount,
+          StringConfig.pathway.pathwayCoachInstructions,
+          StringConfig.pathway.pathwayDep,
+          StringConfig.pathway.pathwayDuration,
+          StringConfig.pathway.pathwayImage,
+          StringConfig.pathway.pathwayIntroImage,
+          StringConfig.pathway.pathwayTileImage,
+          StringConfig.pathway.pathwayLevel,
+          StringConfig.pathway.pathwayStatus,
+          StringConfig.pathway.modules,
+        ],
+        ...pathway.map((model) {
+          return [
+            model.id,
+            model.mqsPathwayTitle,
+            model.mqsPathwaySubtitle,
+            model.mqsPathwayType,
+            model.mqsAboutPathway,
+            model.mqsLearningObj,
+            "${model.mqsModuleCount}",
+            model.mqsPathwayCoachInstructions,
+            model.mqsPathwayDep.join(", "),
+            model.mqsPathwayDuration,
+            model.mqsPathwayImage,
+            model.mqsPathwayIntroImage,
+            model.mqsPathwayTileImage,
+            "${model.mqsPathwayLevel}",
+            "${model.mqsPathwayStatus}",
+            jsonEncode(model.mqsPathwayDetail?.mqsModules
+                    .map((p) => p.toJson())
+                    .toList() ??
+                []),
+          ];
+        }),
+      ];
+      String csvData = const ListToCsvConverter().convert(rows);
+      Uint8List bytes = Uint8List.fromList(utf8.encode(csvData));
+      await FileSaver.instance.saveFile(
+        bytes: bytes,
+        ext: "csv",
+        mimeType: MimeType.csv,
+        name: StringConfig.pathway.pathwayInformation,
+      );
+    } catch (e) {
       errorDialogWidget(msg: e.toString());
     } finally {}
   }
