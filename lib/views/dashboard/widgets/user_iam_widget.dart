@@ -14,7 +14,8 @@ import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboar
 Widget userIAMWidget(
     {required DashboardController dashboardController,
     required MqsDashboardController mqsDashboardController,
-    required BuildContext context}) {
+    required BuildContext context,
+    Widget? filterWidget}) {
   return Row(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -30,6 +31,7 @@ Widget userIAMWidget(
                   dashboardController: dashboardController,
                   context: context,
                   mqsDashboardController: mqsDashboardController,
+                  filterWidget: filterWidget,
                 ),
                 SizeConfig.size26.height,
                 dashboardController.searchedUsers.isEmpty

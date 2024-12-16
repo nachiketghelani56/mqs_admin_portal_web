@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/views/add_circle/add_circle_screen.dart';
 import 'package:mqs_admin_portal_web/views/add_enterprise/add_enterprise_screen.dart';
 import 'package:mqs_admin_portal_web/views/add_pathway/add_pathway_screen.dart';
+import 'package:mqs_admin_portal_web/views/auth_summary/auth_summary_screen.dart';
 import 'package:mqs_admin_portal_web/views/circle_detail/circle_detail_screen.dart';
 import 'package:mqs_admin_portal_web/views/enterprise_detail/enterprise_detail_screen.dart';
 import 'package:mqs_admin_portal_web/views/login/login_screen.dart';
@@ -20,6 +21,7 @@ class AppRoutes {
   static const String addCircle = "/add_circle";
   static const String pathwayDetail = "/pathway_detail";
   static const String addPathway = "/add_pathway";
+  static const String authSummary = "/auth_summary";
 
   static List<GetPage> get pages => [
         GetPage(name: AppRoutes.login, page: () => LoginScreen()),
@@ -37,5 +39,6 @@ class AppRoutes {
         GetPage(
             name: AppRoutes.pathwayDetail, page: () => PathwayDetailScreen()),
         GetPage(name: AppRoutes.addPathway, page: () => AddPathwayScreen()),
+        GetPage(name: AppRoutes.authSummary, page: () => AuthSummaryScreen()),
       ];
 }

@@ -207,6 +207,7 @@ class Dashboard {
   final String mqsEmployeeList = "mqsEmployeeList";
   final String mqsEnterprisePOCsSubscriptionDetails =
       "mqsEnterprisePOCsSubscriptionDetails";
+  final String skipOnboarding = "Skip Onboarding";
 }
 
 class RefExp {

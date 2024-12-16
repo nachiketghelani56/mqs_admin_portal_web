@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
+import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
+import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/controller/reporting_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/widgets/custom_range_dialog.dart';
-import 'package:mqs_admin_portal_web/widgets/custom_icon_button.dart';
 
 Widget authSummaryWidget(
     {required BuildContext context,
     required ReportingController reportingController}) {
   return Container(
+    height: SizeConfig.size343,
     padding: const EdgeInsets.all(SizeConfig.size24),
     decoration: FontTextStyleConfig.cardDecoration,
     child: Column(
@@ -23,12 +25,6 @@ Widget authSummaryWidget(
                   '${StringConfig.reporting.authSummary} ${reportingController.authFilter.value.isNotEmpty ? "(${reportingController.authFilter.value})" : ""}',
                   style: FontTextStyleConfig.cardTitleTextStyle,
                 ),
-              ),
-              CustomIconButton(
-                icon: ImageConfig.export,
-                onTap: () {
-                  reportingController.exportAuthSummary();
-                },
               ),
               PopupMenuButton(
                 icon: Container(
@@ -91,6 +87,7 @@ Widget authSummaryWidget(
           children: [
             Expanded(
               child: Container(
+                padding: const EdgeInsets.all(SizeConfig.size10),
                 height: SizeConfig.size202,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(SizeConfig.size12),
@@ -110,17 +107,23 @@ Widget authSummaryWidget(
                       StringConfig.reporting.totalRegisteredUsers,
                       textAlign: TextAlign.center,
                       style: FontTextStyleConfig.cardSubTextStyle.copyWith(
-                          fontSize: context.width < SizeConfig.size600
-                              ? FontSizeConfig.fontSize18
-                              : null),
+                        fontSize: context.width > SizeConfig.size1800
+                            ? FontSizeConfig.fontSize18
+                            : null,
+                      ),
                     ),
                   ],
                 ),
-              ),
+              ).tap(() {
+                reportingController.filterAuth(
+                    type: StringConfig.reporting.totalRegisteredUsers);
+                Get.toNamed(AppRoutes.authSummary);
+              }),
             ),
-            SizeConfig.size34.width,
+            SizeConfig.size20.width,
             Expanded(
               child: Container(
+                padding: const EdgeInsets.all(SizeConfig.size10),
                 height: SizeConfig.size202,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(SizeConfig.size12),
@@ -141,17 +144,23 @@ Widget authSummaryWidget(
                       StringConfig.reporting.activeUsers,
                       textAlign: TextAlign.center,
                       style: FontTextStyleConfig.cardSubTextStyle.copyWith(
-                          fontSize: context.width < SizeConfig.size600
-                              ? FontSizeConfig.fontSize18
-                              : null),
+                        fontSize: context.width > SizeConfig.size1800
+                            ? FontSizeConfig.fontSize18
+                            : null,
+                      ),
                     ),
                   ],
                 ),
-              ),
+              ).tap(() {
+                reportingController.filterAuth(
+                    type: StringConfig.reporting.activeUsers);
+                Get.toNamed(AppRoutes.authSummary);
+              }),
             ),
-            SizeConfig.size34.width,
+            SizeConfig.size20.width,
             Expanded(
               child: Container(
+                padding: const EdgeInsets.all(SizeConfig.size10),
                 height: SizeConfig.size202,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(SizeConfig.size12),
@@ -172,13 +181,18 @@ Widget authSummaryWidget(
                       StringConfig.reporting.inactiveUsers,
                       textAlign: TextAlign.center,
                       style: FontTextStyleConfig.cardSubTextStyle.copyWith(
-                          fontSize: context.width < SizeConfig.size600
-                              ? FontSizeConfig.fontSize18
-                              : null),
+                        fontSize: context.width > SizeConfig.size1800
+                            ? FontSizeConfig.fontSize18
+                            : null,
+                      ),
                     ),
                   ],
                 ),
-              ),
+              ).tap(() {
+                reportingController.filterAuth(
+                    type: StringConfig.reporting.inactiveUsers);
+                Get.toNamed(AppRoutes.authSummary);
+              }),
             ),
           ],
         ),

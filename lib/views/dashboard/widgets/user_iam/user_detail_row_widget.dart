@@ -70,6 +70,11 @@ Widget userDetailRowWidget({required DashboardController dashboardController}) {
             "${dashboardController.userDetail.pronounsValue.toString().capitalize}",
       ),
       keyValueRowWidget(
+        key: StringConfig.dashboard.skipOnboarding,
+        value:
+            "${dashboardController.userDetail.mqsSkipOnboarding.toString().capitalize}",
+      ),
+      keyValueRowWidget(
         key: StringConfig.dashboard.isRegister,
         value: dashboardController.userDetail.isRegister,
         isLast: true,

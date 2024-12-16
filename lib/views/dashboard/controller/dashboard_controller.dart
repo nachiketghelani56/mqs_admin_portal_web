@@ -754,6 +754,8 @@ class DashboardController extends GetxController {
   setTabIndex({required int index}) {
     selectedTabIndex.value = index;
     searchController.clear();
+    searchedUsers.value = users;
+    searchedEnterprises.value = enterprises;
     reset();
     setFilterFields();
   }
@@ -997,7 +999,7 @@ class DashboardController extends GetxController {
       String currentDate =
           DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(DateTime(0));
       List<List<String>> rows = [
-        ...users.map((model) {
+        ...searchedUsers.map((model) {
           return [
             model.email,
             model.firstName,
