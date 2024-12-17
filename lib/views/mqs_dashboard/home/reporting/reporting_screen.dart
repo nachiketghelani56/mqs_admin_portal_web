@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mqs_admin_portal_web/views/circle/controller/circle_controller.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/controller/home_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/controller/reporting_controller.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
@@ -19,7 +21,9 @@ class ReportingScreen extends StatelessWidget {
       Get.put(ReportingController());
   final GlobalKey<ScaffoldState> scaffoldKey;
   final HomeController _homeController = Get.put(HomeController());
-
+  final CircleController _circleController = Get.put(CircleController());
+  final DashboardController _dashboardController =
+  Get.put(DashboardController());
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -42,10 +46,10 @@ class ReportingScreen extends StatelessWidget {
                   reportingController: _reportingController, context: context),
               SizeConfig.size25.height,
               circleSummaryWidget(
-                  context: context, reportingController: _reportingController),
+                  context: context, reportingController: _reportingController,circleController:_circleController),
               SizeConfig.size25.height,
               subscriptionSummaryWidget(
-                  context: context, reportingController: _reportingController),
+                  context: context, reportingController: _reportingController,dashboardController:_dashboardController),
               SizeConfig.size25.height,
               wellAboveChartsWidget(
                   reportingController: _reportingController, context: context),

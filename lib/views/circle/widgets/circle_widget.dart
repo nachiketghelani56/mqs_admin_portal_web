@@ -10,11 +10,15 @@ import 'package:mqs_admin_portal_web/views/circle/widgets/circle_table_bottom_wi
 import 'package:mqs_admin_portal_web/views/circle/widgets/circle_table_row_widget.dart';
 import 'package:mqs_admin_portal_web/views/circle/widgets/circle_table_title_widget.dart';
 import 'package:mqs_admin_portal_web/views/circle/widgets/circle_top_buttons_widget.dart';
+import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/controller/reporting_controller.dart';
 
-Widget circleWidget(
-    {required BuildContext context,
-    required CircleController circleController,
-    required GlobalKey<ScaffoldState> scaffoldKey}) {
+Widget circleWidget({
+  required BuildContext context,
+  required CircleController circleController,
+  ReportingController? reportingController,
+  required GlobalKey<ScaffoldState> scaffoldKey,
+  Widget? filterWidget,
+}) {
   return Obx(
     () => Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,6 +35,8 @@ Widget circleWidget(
                     circleController: circleController,
                     scaffoldKey: scaffoldKey,
                     context: context,
+                    reportingController: reportingController,
+                    filterWidget: filterWidget,
                   ),
                   SizeConfig.size26.height,
                   circleController.searchedCircle.isEmpty

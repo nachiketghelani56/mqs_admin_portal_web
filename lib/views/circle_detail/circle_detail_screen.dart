@@ -7,7 +7,7 @@ import 'package:mqs_admin_portal_web/views/circle/widgets/circle_detail_widget.d
 class CircleDetailScreen extends StatelessWidget {
   CircleDetailScreen({super.key});
 
-  final CircleController _circleController = Get.find();
+final CircleController _circleController = Get.put(CircleController());
 
   @override
   Widget build(BuildContext context) {

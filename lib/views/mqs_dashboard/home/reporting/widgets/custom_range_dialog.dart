@@ -28,36 +28,108 @@ customRangeDialog(
                 ),
                 SizeConfig.size25.height,
                 CustomTextField(
-                  controller: reportingController.startDateController,
+                  controller: type == StringConfig.reporting.circleSummary
+                      ? reportingController.startCircleDateController
+                      : type == StringConfig.reporting.circleTypeSummary
+                          ? reportingController.startCircleTypeDateController
+                          : type ==
+                                  StringConfig.reporting.subscriptionTypeSummary
+                              ? reportingController
+                                  .startSubscriptionTypeDateController
+                              : reportingController.startDateController,
                   label: StringConfig.reporting.startDate,
                   suffixIcon: ImageConfig.calendar,
                   readOnly: true,
                   validator: (p0) => Validator.emptyValidator(
                       p0 ?? "", StringConfig.reporting.startDate),
                   onTap: () async {
-                    reportingController.startDateController.text =
-                        await reportingController.pickDate(context: context);
+                    if (type == StringConfig.reporting.circleSummary) {
+                      reportingController.startCircleDateController.text =
+                          await reportingController.pickDate(context: context);
+                    } else if (type ==
+                        StringConfig.reporting.circleTypeSummary) {
+                      reportingController.startCircleTypeDateController.text =
+                          await reportingController.pickDate(context: context);
+                    } else if (type ==
+                        StringConfig.reporting.subscriptionTypeSummary) {
+                      reportingController
+                              .startSubscriptionTypeDateController.text =
+                          await reportingController.pickDate(context: context);
+                    } else {
+                      reportingController.startDateController.text =
+                          await reportingController.pickDate(context: context);
+                    }
                   },
                   onSuffixIconTap: () async {
-                    reportingController.startDateController.text =
-                        await reportingController.pickDate(context: context);
+                    if (type == StringConfig.reporting.circleSummary) {
+                      reportingController.startCircleDateController.text =
+                          await reportingController.pickDate(context: context);
+                    } else if (type ==
+                        StringConfig.reporting.circleTypeSummary) {
+                      reportingController.startCircleTypeDateController.text =
+                          await reportingController.pickDate(context: context);
+                    } else if (type ==
+                        StringConfig.reporting.subscriptionTypeSummary) {
+                      reportingController
+                              .startSubscriptionTypeDateController.text =
+                          await reportingController.pickDate(context: context);
+                    } else {
+                      reportingController.startDateController.text =
+                          await reportingController.pickDate(context: context);
+                    }
                   },
                 ),
                 SizeConfig.size10.height,
                 CustomTextField(
-                  controller: reportingController.endDateController,
+                  controller: type == StringConfig.reporting.circleSummary
+                      ? reportingController.endCircleDateController
+                      : type == StringConfig.reporting.circleTypeSummary
+                          ? reportingController.endCircleTypeDateController
+                          : type ==
+                                  StringConfig.reporting.subscriptionTypeSummary
+                              ? reportingController
+                                  .endSubscriptionTypeDateController
+                              : reportingController.endDateController,
                   label: StringConfig.reporting.endDate,
                   suffixIcon: ImageConfig.calendar,
                   readOnly: true,
                   validator: (p0) => Validator.emptyValidator(
                       p0 ?? "", StringConfig.reporting.endDate),
                   onTap: () async {
-                    reportingController.endDateController.text =
-                        await reportingController.pickDate(context: context);
+                    if (type == StringConfig.reporting.circleSummary) {
+                      reportingController.endCircleDateController.text =
+                          await reportingController.pickDate(context: context);
+                    } else if (type ==
+                        StringConfig.reporting.circleTypeSummary) {
+                      reportingController.endCircleTypeDateController.text =
+                          await reportingController.pickDate(context: context);
+                    } else if (type ==
+                        StringConfig.reporting.subscriptionTypeSummary) {
+                      reportingController
+                              .endSubscriptionTypeDateController.text =
+                          await reportingController.pickDate(context: context);
+                    } else {
+                      reportingController.endDateController.text =
+                          await reportingController.pickDate(context: context);
+                    }
                   },
                   onSuffixIconTap: () async {
-                    reportingController.endDateController.text =
-                        await reportingController.pickDate(context: context);
+                    if (type == StringConfig.reporting.circleSummary) {
+                      reportingController.endCircleDateController.text =
+                          await reportingController.pickDate(context: context);
+                    } else if (type ==
+                        StringConfig.reporting.circleTypeSummary) {
+                      reportingController.endCircleTypeDateController.text =
+                          await reportingController.pickDate(context: context);
+                    } else if (type ==
+                        StringConfig.reporting.subscriptionTypeSummary) {
+                      reportingController
+                              .endSubscriptionTypeDateController.text =
+                          await reportingController.pickDate(context: context);
+                    } else {
+                      reportingController.endDateController.text =
+                          await reportingController.pickDate(context: context);
+                    }
                   },
                 ),
                 SizeConfig.size25.height,
@@ -88,8 +160,24 @@ customRangeDialog(
                             } else if (type ==
                                 StringConfig.reporting.circleSummary) {
                               reportingController.circleFilter.value =
-                                  '${reportingController.startDateController.text} - ${reportingController.endDateController.text}';
+                                  '${reportingController.startCircleDateController.text} - ${reportingController.endCircleDateController.text}';
                               reportingController.filterCircle();
+                            } else if (type ==
+                                StringConfig.reporting.circleTypeSummary) {
+                              reportingController.circleFilterType.value =
+                                  '${reportingController.startCircleTypeDateController.text} - ${reportingController.endCircleTypeDateController.text}';
+                              reportingController.filterCircleType();
+                            } else if (type ==
+                                StringConfig.reporting.subscriptionSummary) {
+                              reportingController.subscriptionFilter.value =
+                                  '${reportingController.startDateController.text} - ${reportingController.endDateController.text}';
+                              reportingController.filterSubscription();
+                            } else if (type ==
+                                StringConfig
+                                    .reporting.subscriptionTypeSummary) {
+                              reportingController.subscriptionFilterType.value =
+                                  '${reportingController.startSubscriptionTypeDateController.text} - ${reportingController.endSubscriptionTypeDateController.text}';
+                              reportingController.filterSubscriptionType();
                             } else if (type ==
                                 StringConfig.reporting.onboardingSummary) {
                               reportingController.obFilter.value =

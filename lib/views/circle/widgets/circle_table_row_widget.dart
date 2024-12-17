@@ -50,29 +50,32 @@ Widget circleTableRowWidget({
                   Get.toNamed(AppRoutes.circleDetail);
                 }
               }),
-              Image.asset(
-                ImageConfig.edit,
-                height: SizeConfig.size24,
-              ).tap(() {
-                circleController.viewIndex.value = index;
-                circleController.isAdd.value = false;
-                circleController.isEdit.value = true;
-                circleController.showHashTag.value = false;
-                circleController.setCircleForm();
-                if (context.width < SizeConfig.size1500) {
-                  Get.toNamed(AppRoutes.addCircle);
-                }
-              }),
-              Image.asset(
-                ImageConfig.delete,
-                height: SizeConfig.size24,
-              ).tap(() {
-                circleDeleteDialogWidget(
-                  context: context,
-                  circleController: circleController,
-                  docId: circleController.searchedCircle[index].id ?? "",
-                );
-              }),
+              if (!Get.currentRoute.startsWith(AppRoutes.circleSummaryDetailScreen)) ...[
+                Image.asset(
+                  ImageConfig.edit,
+                  height: SizeConfig.size24,
+                ).tap(() {
+                  circleController.viewIndex.value = index;
+                  circleController.isAdd.value = false;
+                  circleController.isEdit.value = true;
+                  circleController.showHashTag.value = false;
+                  circleController.setCircleForm();
+                  if (context.width < SizeConfig.size1500) {
+                    Get.toNamed(AppRoutes.addCircle);
+                  }
+                }),
+                Image.asset(
+                  ImageConfig.delete,
+                  height: SizeConfig.size24,
+                ).tap(() {
+                  circleDeleteDialogWidget(
+                    context: context,
+                    circleController: circleController,
+                    docId: circleController.searchedCircle[index].id ?? "",
+                  );
+                }),
+              ],
+
             ],
           ),
         ),

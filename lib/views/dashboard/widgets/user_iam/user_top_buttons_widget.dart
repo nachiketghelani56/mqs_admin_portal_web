@@ -19,7 +19,9 @@ Widget userTopButtonsWidget(
       ? Row(
           children: [
             if (!Get.currentRoute.startsWith(AppRoutes.authSummary) &&
-                !Get.currentRoute.startsWith(AppRoutes.obSummary)) ...[
+                !Get.currentRoute.startsWith(AppRoutes.obSummary)&&
+                !Get.currentRoute
+                    .startsWith(AppRoutes.subscriptionSummaryDetailScreen)) ...[
               CustomPrefixButton(
                 prefixIcon: ImageConfig.filter,
                 btnText: StringConfig.dashboard.filter,
@@ -35,7 +37,14 @@ Widget userTopButtonsWidget(
               controller: dashboardController.searchController,
               hintText: StringConfig.dashboard.searchByNameEmail,
               onChanged: (p0) {
-                dashboardController.searchUser();
+
+                if (Get.currentRoute
+                    .startsWith(AppRoutes.subscriptionSummaryDetailScreen))
+                {
+                  dashboardController.searchUser(status: "type");
+                }else{
+                  dashboardController.searchUser();
+                }
               },
             ),
             const Spacer(),
@@ -43,7 +52,13 @@ Widget userTopButtonsWidget(
             CustomIconButton(
               icon: ImageConfig.export,
               onTap: () {
-                dashboardController.exportUserIAM();
+                if (Get.currentRoute
+                    .startsWith(AppRoutes.subscriptionSummaryDetailScreen)){
+                  dashboardController.exportUserIAM(status: "type");
+                }else{
+                  dashboardController.exportUserIAM();
+                }
+
               },
             ),
             if (filterWidget != null) ...[
@@ -55,7 +70,9 @@ Widget userTopButtonsWidget(
       : Row(
           children: [
             if (!Get.currentRoute.startsWith(AppRoutes.authSummary) &&
-                !Get.currentRoute.startsWith(AppRoutes.obSummary)) ...[
+                !Get.currentRoute.startsWith(AppRoutes.obSummary)&&
+                !Get.currentRoute
+                    .startsWith(AppRoutes.subscriptionSummaryDetailScreen)) ...[
               CustomIconButton(
                 icon: ImageConfig.filter,
                 onTap: () {
@@ -69,7 +86,13 @@ Widget userTopButtonsWidget(
               controller: dashboardController.searchController,
               hintText: StringConfig.dashboard.searchByNameEmail,
               onChanged: (p0) {
-                dashboardController.searchUser();
+                if (Get.currentRoute
+                    .startsWith(AppRoutes.subscriptionSummaryDetailScreen))
+                {
+                  dashboardController.searchUser(status: "type");
+                }else{
+                  dashboardController.searchUser();
+                }
               },
             ),
             const Spacer(),
@@ -77,7 +100,12 @@ Widget userTopButtonsWidget(
             CustomIconButton(
               icon: ImageConfig.export,
               onTap: () {
-                dashboardController.exportUserIAM();
+                if (Get.currentRoute
+                    .startsWith(AppRoutes.subscriptionSummaryDetailScreen)){
+                  dashboardController.exportUserIAM(status: "type");
+                }else{
+                  dashboardController.exportUserIAM();
+                }
               },
             ),
             if (filterWidget != null) ...[

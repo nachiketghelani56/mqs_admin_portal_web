@@ -348,10 +348,13 @@ class Reporting {
   final String july = "July";
   final String authSummary = "Authentication Summary";
   final String totalRegisteredUsers = "Total Registered Users";
+  final String totalCircles = "Total Circles";
   final String activeUsers = "Active Users";
   final String inactiveUsers = "Inactive Users";
+  final String activeSubscription = "Active Subscription";
+  final String purchasedSubscription = "Purchased Subscription";
   final String circleSummary = "Circle Summary";
-  final String totalCircles = "Total Circles";
+  final String circleTypeSummary = "Circle Type Summary";
   final String featuredCircles = "Featured Cirlces";
   final String flaggedCircles = "Flagged Cirlces";
   final String lastDay = "Last day";
@@ -384,6 +387,7 @@ class Reporting {
   final String obWOL = "OB WOL";
   final String users = "Users";
   final String subscriptionSummary = "Subscription Summary";
+  final String subscriptionTypeSummary = "Subscription Type Summary";
   final String active = "Active";
   final String purchased = "Purchased";
   final String cancelled = "Cancelled";
@@ -398,6 +402,7 @@ class Reporting {
   final String userOverview = "Overall Summary";
   final String noDataAvailable = "No data available";
   final String error = "Error:";
+  final String pendingSubscription = "A summary of your subscription details will be available soon.";
 }
 
 class Home {

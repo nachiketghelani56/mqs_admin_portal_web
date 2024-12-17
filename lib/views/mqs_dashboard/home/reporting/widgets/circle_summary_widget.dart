@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
+import 'package:mqs_admin_portal_web/routes/app_routes.dart';
+import 'package:mqs_admin_portal_web/views/circle/controller/circle_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/controller/reporting_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/widgets/custom_range_dialog.dart';
-import 'package:mqs_admin_portal_web/widgets/custom_icon_button.dart';
 
 Widget circleSummaryWidget(
     {required BuildContext context,
-    required ReportingController reportingController}) {
+    required ReportingController reportingController,
+    required CircleController circleController}) {
   return Container(
     padding: const EdgeInsets.all(SizeConfig.size24),
     decoration: FontTextStyleConfig.cardDecoration,
@@ -23,12 +25,6 @@ Widget circleSummaryWidget(
                   '${StringConfig.reporting.circleSummary} ${reportingController.circleFilter.value.isNotEmpty ? "(${reportingController.circleFilter.value})" : ""}',
                   style: FontTextStyleConfig.cardTitleTextStyle,
                 ),
-              ),
-              CustomIconButton(
-                icon: ImageConfig.export,
-                onTap: () {
-                  reportingController.exportCircleSummary();
-                },
               ),
               PopupMenuButton(
                 icon: Container(
@@ -45,8 +41,8 @@ Widget circleSummaryWidget(
                 ),
                 onSelected: (value) {
                   if (value == StringConfig.reporting.customRange) {
-                    reportingController.startDateController.clear();
-                    reportingController.endDateController.clear();
+                    reportingController.startCircleDateController.clear();
+                    reportingController.endCircleDateController.clear();
                     customRangeDialog(
                       context: context,
                       reportingController: reportingController,
@@ -90,93 +86,117 @@ Widget circleSummaryWidget(
         Row(
           children: [
             Expanded(
-              child: Container(
-                height: SizeConfig.size202,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(SizeConfig.size12),
-                  color: ColorConfig.card1Color,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Obx(
-                      () => Text(
-                        '${reportingController.totalCircles.value}',
-                        style: FontTextStyleConfig.cardMainTextStyle,
+              child: GestureDetector(
+                onTap: () {
+                  reportingController.filterCircle(
+                      type: StringConfig.reporting.totalCircles);
+                  reportingController.circleFilterType.value = '';
+                  Get.toNamed(AppRoutes.circleSummaryDetailScreen);
+                },
+                child: Container(
+                  height: SizeConfig.size202,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(SizeConfig.size12),
+                    color: ColorConfig.card1Color,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Obx(
+                        () => Text(
+                          '${reportingController.totalCircles.value}',
+                          style: FontTextStyleConfig.cardMainTextStyle,
+                        ),
                       ),
-                    ),
-                    SizeConfig.size12.height,
-                    Text(
-                      StringConfig.reporting.totalCircles,
-                      textAlign: TextAlign.center,
-                      style: FontTextStyleConfig.cardSubTextStyle.copyWith(
-                          fontSize: context.width < SizeConfig.size600
-                              ? FontSizeConfig.fontSize18
-                              : null),
-                    ),
-                  ],
+                      SizeConfig.size12.height,
+                      Text(
+                        StringConfig.reporting.totalCircles,
+                        textAlign: TextAlign.center,
+                        style: FontTextStyleConfig.cardSubTextStyle.copyWith(
+                            fontSize: context.width < SizeConfig.size600
+                                ? FontSizeConfig.fontSize18
+                                : null),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
             SizeConfig.size34.width,
             Expanded(
-              child: Container(
-                height: SizeConfig.size202,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(SizeConfig.size12),
-                  color: ColorConfig.card2Color,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Obx(
-                      () => Text(
-                        '${reportingController.featuredCircles.value}',
-                        style: FontTextStyleConfig.cardMainTextStyle
-                            .copyWith(color: ColorConfig.card2TextColor),
+              child: GestureDetector(
+                onTap: () {
+                  reportingController.filterCircle(
+                      type: StringConfig.reporting.featuredCircles);
+                  reportingController.circleFilterType.value = '';
+                  Get.toNamed(AppRoutes.circleSummaryDetailScreen);
+                },
+                child: Container(
+                  height: SizeConfig.size202,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(SizeConfig.size12),
+                    color: ColorConfig.card2Color,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Obx(
+                        () => Text(
+                          '${reportingController.featuredCircles.value}',
+                          style: FontTextStyleConfig.cardMainTextStyle
+                              .copyWith(color: ColorConfig.card2TextColor),
+                        ),
                       ),
-                    ),
-                    SizeConfig.size12.height,
-                    Text(
-                      StringConfig.reporting.featuredCircles,
-                      textAlign: TextAlign.center,
-                      style: FontTextStyleConfig.cardSubTextStyle.copyWith(
-                          fontSize: context.width < SizeConfig.size600
-                              ? FontSizeConfig.fontSize18
-                              : null),
-                    ),
-                  ],
+                      SizeConfig.size12.height,
+                      Text(
+                        StringConfig.reporting.featuredCircles,
+                        textAlign: TextAlign.center,
+                        style: FontTextStyleConfig.cardSubTextStyle.copyWith(
+                            fontSize: context.width < SizeConfig.size600
+                                ? FontSizeConfig.fontSize18
+                                : null),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
             SizeConfig.size34.width,
             Expanded(
-              child: Container(
-                height: SizeConfig.size202,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(SizeConfig.size12),
-                  color: ColorConfig.card3Color,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Obx(
-                      () => Text(
-                        '${reportingController.flaggedCircles.value}',
-                        style: FontTextStyleConfig.cardMainTextStyle
-                            .copyWith(color: ColorConfig.card3TextColor),
+              child: GestureDetector(
+                onTap: () {
+                  reportingController.filterCircle(
+                      type: StringConfig.reporting.flaggedCircles);
+                  reportingController.circleFilterType.value = '';
+                  Get.toNamed(AppRoutes.circleSummaryDetailScreen);
+                },
+                child: Container(
+                  height: SizeConfig.size202,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(SizeConfig.size12),
+                    color: ColorConfig.card3Color,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Obx(
+                        () => Text(
+                          '${reportingController.flaggedCircles.value}',
+                          style: FontTextStyleConfig.cardMainTextStyle
+                              .copyWith(color: ColorConfig.card3TextColor),
+                        ),
                       ),
-                    ),
-                    SizeConfig.size12.height,
-                    Text(
-                      StringConfig.reporting.flaggedCircles,
-                      textAlign: TextAlign.center,
-                      style: FontTextStyleConfig.cardSubTextStyle.copyWith(
-                          fontSize: context.width < SizeConfig.size600
-                              ? FontSizeConfig.fontSize18
-                              : null),
-                    ),
-                  ],
+                      SizeConfig.size12.height,
+                      Text(
+                        StringConfig.reporting.flaggedCircles,
+                        textAlign: TextAlign.center,
+                        style: FontTextStyleConfig.cardSubTextStyle.copyWith(
+                            fontSize: context.width < SizeConfig.size600
+                                ? FontSizeConfig.fontSize18
+                                : null),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

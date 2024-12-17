@@ -21,7 +21,8 @@ import 'package:mqs_admin_portal_web/widgets/loader_widget.dart';
 class CircleController extends GetxController {
   final TextEditingController searchController = TextEditingController();
   RxList<CircleModel> searchedCircle = <CircleModel>[].obs,
-      circle = <CircleModel>[].obs;
+      circle = <CircleModel>[].obs,
+      searchCircleType = <CircleModel>[].obs;
   RxInt pageLimit = 10.obs;
   RxInt offset = 0.obs, currentPage = 1.obs;
   int get totalCirclePage => (searchedCircle.length / pageLimit.value).ceil();
@@ -251,23 +252,37 @@ class CircleController extends GetxController {
     offset.value = 0;
   }
 
-  searchCircle() {
+  searchCircle({String? status}) {
     try {
       reset();
       String query = searchController.text.trim().toLowerCase();
       if (query.isEmpty) {
-        searchedCircle.value = circle;
+        searchedCircle.value =
+        status=="type"  ? searchCircleType : circle;
       } else {
-        searchedCircle.value = circle
-            .where((e) =>
-                (e.postTitle ?? "").toLowerCase().contains(query) ||
-                (e.postContent ?? "").toLowerCase().contains(query) ||
-                (e.userName ?? "").toLowerCase().contains(query) ||
-                (e.flagName ?? "").toLowerCase().contains(query) ||
-                (e.hashtag?.any((ele) =>
-                        (ele.name ?? "").toLowerCase().contains(query)) ??
-                    false))
-            .toList();
+        if ( status=="type" ) {
+          searchedCircle.value = searchCircleType
+              .where((e) =>
+                  (e.postTitle ?? "").toLowerCase().contains(query) ||
+                  (e.postContent ?? "").toLowerCase().contains(query) ||
+                  (e.userName ?? "").toLowerCase().contains(query) ||
+                  (e.flagName ?? "").toLowerCase().contains(query) ||
+                  (e.hashtag?.any((ele) =>
+                          (ele.name ?? "").toLowerCase().contains(query)) ??
+                      false))
+              .toList();
+        } else {
+          searchedCircle.value = circle
+              .where((e) =>
+                  (e.postTitle ?? "").toLowerCase().contains(query) ||
+                  (e.postContent ?? "").toLowerCase().contains(query) ||
+                  (e.userName ?? "").toLowerCase().contains(query) ||
+                  (e.flagName ?? "").toLowerCase().contains(query) ||
+                  (e.hashtag?.any((ele) =>
+                          (ele.name ?? "").toLowerCase().contains(query)) ??
+                      false))
+              .toList();
+        }
       }
     } catch (e) {
       errorDialogWidget(msg: e.toString());
@@ -347,31 +362,58 @@ class CircleController extends GetxController {
     }
   }
 
-  exportCircle() async {
+  exportCircle({String? status}) async {
     try {
       String currentDate =
           DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(DateTime(0));
-      List<List<String>> rows = [
-        ...circle.map((model) {
-          return [
-            model.userId ?? "",
-            model.userName ?? "",
-            model.postTitle ?? "",
-            model.postContent ?? "",
-            (model.postTime ?? "").isNotEmpty
-                ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
+      List<List<String>> rows =[];
+      if(status =="type")
+        {
+           rows = [
+            ...searchCircleType.map((model) {
+              return [
+                model.userId ?? "",
+                model.userName ?? "",
+                model.postTitle ?? "",
+                model.postContent ?? "",
+                (model.postTime ?? "").isNotEmpty
+                    ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
                     .format(DateTime.parse(model.postTime ?? ""))
-                : "",
-            "${model.postView ?? 0}",
-            "${model.userIsGuide}",
-            "${model.isMainPost}",
-            "${model.isFlag}",
-            model.flagName ?? "",
-            jsonEncode(model.postReply ?? []),
-            jsonEncode(model.hashtag?.map((p) => p.toJson()).toList() ?? []),
+                    : "",
+                "${model.postView ?? 0}",
+                "${model.userIsGuide}",
+                "${model.isMainPost}",
+                "${model.isFlag}",
+                model.flagName ?? "",
+                jsonEncode(model.postReply ?? []),
+                jsonEncode(model.hashtag?.map((p) => p.toJson()).toList() ?? []),
+              ];
+            }),
           ];
-        }),
-      ];
+        }else{
+       rows = [
+          ...circle.map((model) {
+            return [
+              model.userId ?? "",
+              model.userName ?? "",
+              model.postTitle ?? "",
+              model.postContent ?? "",
+              (model.postTime ?? "").isNotEmpty
+                  ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
+                  .format(DateTime.parse(model.postTime ?? ""))
+                  : "",
+              "${model.postView ?? 0}",
+              "${model.userIsGuide}",
+              "${model.isMainPost}",
+              "${model.isFlag}",
+              model.flagName ?? "",
+              jsonEncode(model.postReply ?? []),
+              jsonEncode(model.hashtag?.map((p) => p.toJson()).toList() ?? []),
+            ];
+          }),
+        ];
+      }
+
       rows.sort((a, b) => DateFormat(StringConfig.dashboard.dateYYYYMMDD)
           .parse(b[4].isNotEmpty ? b[4] : currentDate)
           .compareTo(DateFormat(StringConfig.dashboard.dateYYYYMMDD)
