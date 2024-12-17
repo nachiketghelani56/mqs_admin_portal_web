@@ -12,6 +12,7 @@ import 'package:mqs_admin_portal_web/models/enterprise_model.dart';
 import 'package:mqs_admin_portal_web/models/reporting_chart_model.dart';
 import 'package:mqs_admin_portal_web/models/user_iam_model.dart';
 import 'package:mqs_admin_portal_web/models/user_subscription_receipt_model.dart';
+import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/views/circle/repository/circle_repository.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/repository/enterprise_repository.dart';
@@ -77,6 +78,7 @@ class ReportingController extends GetxController {
     StringConfig.dashboard.userSubscription: ColorConfig.card1TextColor,
   };
   RxString authtype = StringConfig.reporting.totalRegisteredUsers.obs;
+  RxString obtype = StringConfig.reporting.completed.obs;
 
   @override
   onInit() {
@@ -133,13 +135,43 @@ class ReportingController extends GetxController {
       endDateController.clear();
       final DashboardController dashboardController = Get.find();
       List<UserIAMModel> users = await UserRepository.i.getUsers();
-      dashboardController.searchedUsers.value = users;
-      if (authtype.value == StringConfig.reporting.activeUsers) {
-        dashboardController.searchedUsers.value =
-            users.where((e) => e.mqsIsUserActive).toList();
-      } else if (authtype.value == StringConfig.reporting.inactiveUsers) {
-        dashboardController.searchedUsers.value =
-            users.where((e) => !e.mqsIsUserActive).toList();
+      if (Get.currentRoute.startsWith(AppRoutes.authSummary)) {
+        dashboardController.searchedUsers.value = users;
+        if (authtype.value == StringConfig.reporting.activeUsers) {
+          dashboardController.searchedUsers.value =
+              users.where((e) => e.mqsIsUserActive).toList();
+        } else if (authtype.value == StringConfig.reporting.inactiveUsers) {
+          dashboardController.searchedUsers.value =
+              users.where((e) => !e.mqsIsUserActive).toList();
+        }
+      }
+      if (Get.currentRoute.startsWith(AppRoutes.obSummary)) {
+        dashboardController.searchedUsers.value = users
+            .where((e) =>
+                e.onboardingModel.checkInValue.isNotEmpty &&
+                e.onboardingModel.demoGraphicValue.isNotEmpty &&
+                e.onboardingModel.scenesValue.isNotEmpty)
+            .toList();
+        if (obtype.value == StringConfig.reporting.skipped) {
+          dashboardController.searchedUsers.value =
+              users.where((e) => e.mqsSkipOnboarding).toList();
+        } else if (obtype.value == StringConfig.reporting.partialCompletion) {
+          List<UserIAMModel> completed = users
+              .where((e) =>
+                  e.onboardingModel.checkInValue.isNotEmpty &&
+                  e.onboardingModel.demoGraphicValue.isNotEmpty &&
+                  e.onboardingModel.scenesValue.isNotEmpty)
+              .toList();
+          List<UserIAMModel> empty = users
+              .where((e) =>
+                  e.onboardingModel.checkInValue.isEmpty &&
+                  e.onboardingModel.demoGraphicValue.isEmpty &&
+                  e.onboardingModel.scenesValue.isEmpty)
+              .toList();
+          dashboardController.searchedUsers.value = users
+              .where((e) => !completed.contains(e) && !empty.contains(e))
+              .toList();
+        }
       }
       totalRegisteredUsers.value = users.length;
       activeUsers.value = users.where((e) => e.mqsIsUserActive).length;
@@ -226,7 +258,90 @@ class ReportingController extends GetxController {
     } finally {}
   }
 
-  filterOnboarding() async {}
+  filterOnboarding({String? type}) async {
+    try {
+      if (type != null) {
+        obtype.value = type;
+      }
+      final DashboardController dashboardController = Get.find();
+      List<UserIAMModel> users = await UserRepository.i.getUsers();
+      if (obFilter.value == StringConfig.reporting.lastDay) {
+        DateTime lastDay = DateTime.now().subtract(const Duration(days: 1));
+        users = users.where((e) {
+          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp);
+          return createdTime.day == lastDay.day &&
+              createdTime.month == lastDay.month &&
+              createdTime.year == lastDay.year;
+        }).toList();
+      } else if (obFilter.value == StringConfig.reporting.lastWeek) {
+        DateTime lastWeek = DateTime.now().subtract(const Duration(days: 7));
+        DateTime start =
+            lastWeek.subtract(Duration(days: DateTime.now().weekday - 1));
+        DateTime startDate = DateTime(start.year, start.month, start.day);
+        DateTime end = lastWeek
+            .add(Duration(days: DateTime.daysPerWeek - lastWeek.weekday));
+        DateTime endDate = DateTime(end.year, end.month, end.day, 24);
+        users = users.where((e) {
+          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp);
+          return createdTime.isAfter(startDate) &&
+              createdTime.isBefore(endDate);
+        }).toList();
+      } else if (obFilter.value == StringConfig.reporting.lastMonth) {
+        DateTime lastMonth = DateTime.now().subtract(const Duration(days: 30));
+        users = users.where((e) {
+          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp);
+          return createdTime.month == lastMonth.month &&
+              createdTime.year == lastMonth.year;
+        }).toList();
+      } else if (startDateController.text.isNotEmpty &&
+          endDateController.text.isNotEmpty) {
+        DateTime start =
+            DateFormat('dd/MM/yyyy').parse(startDateController.text);
+        DateTime endDate =
+            DateFormat('dd/MM/yyyy').parse(endDateController.text);
+        DateTime end = DateTime(endDate.year, endDate.month, endDate.day, 24);
+        users = users.where((e) {
+          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp);
+          return createdTime.isAfter(start) && createdTime.isBefore(end);
+        }).toList();
+      }
+      getOBSummary(users: users);
+      dashboardController.reset();
+      dashboardController.searchedUsers.value = users
+          .where((e) =>
+              e.onboardingModel.checkInValue.isNotEmpty &&
+              e.onboardingModel.demoGraphicValue.isNotEmpty &&
+              e.onboardingModel.scenesValue.isNotEmpty)
+          .toList();
+      if (obtype.value == StringConfig.reporting.skipped) {
+        dashboardController.searchedUsers.value =
+            users.where((e) => e.mqsSkipOnboarding).toList();
+      } else if (obtype.value == StringConfig.reporting.partialCompletion) {
+        List<UserIAMModel> completed = users
+            .where((e) =>
+                e.onboardingModel.checkInValue.isNotEmpty &&
+                e.onboardingModel.demoGraphicValue.isNotEmpty &&
+                e.onboardingModel.scenesValue.isNotEmpty)
+            .toList();
+        List<UserIAMModel> empty = users
+            .where((e) =>
+                e.onboardingModel.checkInValue.isEmpty &&
+                e.onboardingModel.demoGraphicValue.isEmpty &&
+                e.onboardingModel.scenesValue.isEmpty)
+            .toList();
+        dashboardController.searchedUsers.value = users
+            .where((e) => !completed.contains(e) && !empty.contains(e))
+            .toList();
+      }
+      if (dashboardController.searchedUsers.isEmpty) {
+        dashboardController.viewIndex.value = -1;
+      } else {
+        dashboardController.viewIndex.value = 0;
+      }
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    } finally {}
+  }
 
   exportAuthSummary() async {
     try {
@@ -501,8 +616,15 @@ class ReportingController extends GetxController {
           .length;
       skippedOBUsers.value =
           users.where((e) => e.mqsSkipOnboarding).toList().length;
+      int empty = users
+          .where((e) =>
+              e.onboardingModel.checkInValue.isEmpty &&
+              e.onboardingModel.demoGraphicValue.isEmpty &&
+              e.onboardingModel.scenesValue.isEmpty)
+          .toList()
+          .length;
       partialCompletedOBUsers.value =
-          users.length - (completedOBUsers.value + skippedOBUsers.value);
+          users.length - (completedOBUsers.value + empty);
       completedOB.value = completedOBUsers.value / users.length;
       skippedOB.value = skippedOBUsers.value / users.length;
       partialCompletedOB.value = partialCompletedOBUsers.value / users.length;

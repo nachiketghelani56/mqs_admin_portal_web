@@ -1,22 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
-import 'package:mqs_admin_portal_web/extensions/ext_on_list.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/controller/reporting_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/widgets/custom_range_dialog.dart';
+import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/widgets/ob_options_widget.dart';
 
 Widget obSummaryWidget(
     {required ReportingController reportingController,
     required BuildContext context}) {
-  double size = context.width < SizeConfig.size600
-      ? SizeConfig.size90
-      : SizeConfig.size124;
+  double size = context.width > SizeConfig.size1500
+      ? SizeConfig.size202
+      : context.width > SizeConfig.size700
+          ? SizeConfig.size150
+          : SizeConfig.size100;
+  double stroke = context.width > SizeConfig.size1500
+      ? SizeConfig.size30
+      : context.width > SizeConfig.size700
+          ? SizeConfig.size20
+          : SizeConfig.size15;
   return Container(
     height: context.width < SizeConfig.size1100
         ? SizeConfig.size498
-        : SizeConfig.size343,
+        : SizeConfig.size380,
     padding: const EdgeInsets.all(SizeConfig.size24),
     decoration: FontTextStyleConfig.cardDecoration,
     child: Column(
@@ -55,7 +62,7 @@ Widget obSummaryWidget(
                     );
                   } else {
                     reportingController.obFilter.value = value;
-                    reportingController.filterAuth();
+                    reportingController.filterOnboarding();
                   }
                 },
                 itemBuilder: (context) {
@@ -89,12 +96,11 @@ Widget obSummaryWidget(
             ],
           ),
         ),
-        SizeConfig.size20.height,
         Expanded(
           child: Row(
             children: [
               Expanded(
-                flex: SizeConfig.size2.toInt(),
+                flex: SizeConfig.size3.toInt(),
                 child: Obx(
                   () => Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -103,8 +109,10 @@ Widget obSummaryWidget(
                         height: size,
                         width: size,
                         child: CircularProgressIndicator(
-                          value: reportingController.completedOB.value,
-                          strokeWidth: SizeConfig.size20,
+                          value: reportingController.completedOB.value.isNaN
+                              ? SizeConfig.size0
+                              : reportingController.completedOB.value,
+                          strokeWidth: stroke,
                           color: ColorConfig.card3TextColor,
                           backgroundColor: ColorConfig.card3Color,
                         ),
@@ -113,8 +121,11 @@ Widget obSummaryWidget(
                         height: size,
                         width: size,
                         child: CircularProgressIndicator(
-                          value: reportingController.partialCompletedOB.value,
-                          strokeWidth: SizeConfig.size20,
+                          value: reportingController
+                                  .partialCompletedOB.value.isNaN
+                              ? SizeConfig.size0
+                              : reportingController.partialCompletedOB.value,
+                          strokeWidth: stroke,
                           color: ColorConfig.card2TextColor,
                           backgroundColor: ColorConfig.card2Color,
                         ),
@@ -123,8 +134,10 @@ Widget obSummaryWidget(
                         height: size,
                         width: size,
                         child: CircularProgressIndicator(
-                          value: reportingController.skippedOB.value,
-                          strokeWidth: SizeConfig.size20,
+                          value: reportingController.skippedOB.value.isNaN
+                              ? SizeConfig.size0
+                              : reportingController.skippedOB.value,
+                          strokeWidth: stroke,
                           color: ColorConfig.card1TextColor,
                           backgroundColor: ColorConfig.card1Color,
                         ),
@@ -140,41 +153,8 @@ Widget obSummaryWidget(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ...reportingController.circleChartOpts
-                          .map(
-                            (key, value) => MapEntry(
-                              key,
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Container(
-                                    height: SizeConfig.size4,
-                                    width: SizeConfig.size14,
-                                    decoration: BoxDecoration(
-                                      color: value.entries.first.key,
-                                      borderRadius: BorderRadius.circular(
-                                          SizeConfig.size11),
-                                    ),
-                                  ),
-                                  SizeConfig.size8.width,
-                                  Flexible(
-                                    child: Obx(
-                                      () => Text(
-                                        '$key (${value.entries.first.value.value} ${StringConfig.reporting.users})',
-                                        style: FontTextStyleConfig.dateTextStyle
-                                            .copyWith(
-                                                color:
-                                                    ColorConfig.cardTitleColor),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                          .values
-                          .toList()
-                          .separator(SizeConfig.size24.height),
+                      ...obOptionsWidget(
+                          reportingController: reportingController),
                     ],
                   ),
                 ),
@@ -183,39 +163,7 @@ Widget obSummaryWidget(
           ),
         ),
         if (context.width < SizeConfig.size1100)
-          ...reportingController.circleChartOpts
-              .map(
-                (key, value) => MapEntry(
-                  key,
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        height: SizeConfig.size4,
-                        width: SizeConfig.size14,
-                        decoration: BoxDecoration(
-                          color: value.entries.first.key,
-                          borderRadius:
-                              BorderRadius.circular(SizeConfig.size11),
-                        ),
-                      ),
-                      SizeConfig.size8.width,
-                      Flexible(
-                        child: Obx(
-                          () => Text(
-                            '$key (${value.entries.first.value.value} ${StringConfig.reporting.users})',
-                            style: FontTextStyleConfig.dateTextStyle
-                                .copyWith(color: ColorConfig.cardTitleColor),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-              .values
-              .toList()
-              .separator(SizeConfig.size24.height),
+          ...obOptionsWidget(reportingController: reportingController),
       ],
     ),
   );

@@ -106,11 +106,7 @@ Widget authSummaryWidget(
                     Text(
                       StringConfig.reporting.totalRegisteredUsers,
                       textAlign: TextAlign.center,
-                      style: FontTextStyleConfig.cardSubTextStyle.copyWith(
-                        fontSize: context.width > SizeConfig.size1800
-                            ? FontSizeConfig.fontSize18
-                            : null,
-                      ),
+                      style: FontTextStyleConfig.cardSubTextStyle.copyWith(),
                     ),
                   ],
                 ),
@@ -143,11 +139,7 @@ Widget authSummaryWidget(
                     Text(
                       StringConfig.reporting.activeUsers,
                       textAlign: TextAlign.center,
-                      style: FontTextStyleConfig.cardSubTextStyle.copyWith(
-                        fontSize: context.width > SizeConfig.size1800
-                            ? FontSizeConfig.fontSize18
-                            : null,
-                      ),
+                      style: FontTextStyleConfig.cardSubTextStyle.copyWith(),
                     ),
                   ],
                 ),
@@ -180,11 +172,7 @@ Widget authSummaryWidget(
                     Text(
                       StringConfig.reporting.inactiveUsers,
                       textAlign: TextAlign.center,
-                      style: FontTextStyleConfig.cardSubTextStyle.copyWith(
-                        fontSize: context.width > SizeConfig.size1800
-                            ? FontSizeConfig.fontSize18
-                            : null,
-                      ),
+                      style: FontTextStyleConfig.cardSubTextStyle.copyWith(),
                     ),
                   ],
                 ),

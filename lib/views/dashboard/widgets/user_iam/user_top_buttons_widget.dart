@@ -18,7 +18,8 @@ Widget userTopButtonsWidget(
   return context.width > SizeConfig.size1800
       ? Row(
           children: [
-            if (!Get.currentRoute.startsWith(AppRoutes.authSummary)) ...[
+            if (!Get.currentRoute.startsWith(AppRoutes.authSummary) &&
+                !Get.currentRoute.startsWith(AppRoutes.obSummary)) ...[
               CustomPrefixButton(
                 prefixIcon: ImageConfig.filter,
                 btnText: StringConfig.dashboard.filter,
@@ -53,14 +54,17 @@ Widget userTopButtonsWidget(
         )
       : Row(
           children: [
-            CustomIconButton(
-              icon: ImageConfig.filter,
-              onTap: () {
-                mqsDashboardController.scaffoldKey.currentState
-                    ?.openEndDrawer();
-              },
-            ),
-            SizeConfig.size12.width,
+            if (!Get.currentRoute.startsWith(AppRoutes.authSummary) &&
+                !Get.currentRoute.startsWith(AppRoutes.obSummary)) ...[
+              CustomIconButton(
+                icon: ImageConfig.filter,
+                onTap: () {
+                  mqsDashboardController.scaffoldKey.currentState
+                      ?.openEndDrawer();
+                },
+              ),
+              SizeConfig.size12.width,
+            ],
             SearchTextField(
               controller: dashboardController.searchController,
               hintText: StringConfig.dashboard.searchByNameEmail,
@@ -76,6 +80,10 @@ Widget userTopButtonsWidget(
                 dashboardController.exportUserIAM();
               },
             ),
+            if (filterWidget != null) ...[
+              SizeConfig.size12.width,
+              filterWidget
+            ],
           ],
         );
 }

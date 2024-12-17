@@ -14,6 +14,7 @@ class SizeConfig {
   static const double size462 = 462;
   static const double size444 = 444;
   static const double size406 = 406;
+  static const double size380 = 380;
   static const double size343 = 343;
   static const double size319 = 319;
   static const double size271 = 271;
