@@ -46,6 +46,7 @@ class ReportingController extends GetxController {
       };
   RxInt optionIndex = 0.obs;
   RxList<String> filterOpts = [
+    StringConfig.reporting.today,
     StringConfig.reporting.lastDay,
     StringConfig.reporting.lastWeek,
     StringConfig.reporting.lastMonth,
@@ -230,8 +231,18 @@ class ReportingController extends GetxController {
         authtype.value = type;
       }
       final DashboardController dashboardController = Get.find();
-      List<UserIAMModel> users = await UserRepository.i.getUsers();
-      if (filterType == StringConfig.reporting.lastDay) {
+      List<UserIAMModel> users = isDetailView
+          ? dashboardController.users
+          : await UserRepository.i.getUsers();
+      if (filterType == StringConfig.reporting.today) {
+        DateTime today = DateTime.now();
+        users = users.where((e) {
+          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp);
+          return createdTime.day == today.day &&
+              createdTime.month == today.month &&
+              createdTime.year == today.year;
+        }).toList();
+      } else if (filterType == StringConfig.reporting.lastDay) {
         DateTime lastDay = DateTime.now().subtract(const Duration(days: 1));
         users = users.where((e) {
           DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp);
@@ -272,29 +283,29 @@ class ReportingController extends GetxController {
           return createdTime.isAfter(start) && createdTime.isBefore(end);
         }).toList();
       }
+      dashboardController.reset();
+      dashboardController.searchedUsers.value = users;
+      dashboardController.searchUserType.value = users;
       if (!isDetailView) {
         totalRegisteredUsers.value = users.length;
         activeUsers.value = users.where((e) => e.mqsIsUserActive).length;
         inactiveUsers.value = users.where((e) => !e.mqsIsUserActive).length;
-      }
-      dashboardController.reset();
-      dashboardController.searchedUsers.value = users;
-      dashboardController.users.value = users;
-      dashboardController.searchUserType.value = users;
-      if (authtype.value == StringConfig.reporting.activeUsers) {
-        dashboardController.searchedUsers.value =
-            users.where((e) => e.mqsIsUserActive).toList();
-        dashboardController.users.value =
-            users.where((e) => e.mqsIsUserActive).toList();
-        dashboardController.searchUserType.value =
-            users.where((e) => e.mqsIsUserActive).toList();
-      } else if (authtype.value == StringConfig.reporting.inactiveUsers) {
-        dashboardController.searchedUsers.value =
-            users.where((e) => !e.mqsIsUserActive).toList();
-        dashboardController.users.value =
-            users.where((e) => !e.mqsIsUserActive).toList();
-        dashboardController.searchUserType.value =
-            users.where((e) => !e.mqsIsUserActive).toList();
+        dashboardController.users.value = users;
+        if (authtype.value == StringConfig.reporting.activeUsers) {
+          dashboardController.searchedUsers.value =
+              users.where((e) => e.mqsIsUserActive).toList();
+          dashboardController.users.value =
+              users.where((e) => e.mqsIsUserActive).toList();
+          dashboardController.searchUserType.value =
+              users.where((e) => e.mqsIsUserActive).toList();
+        } else if (authtype.value == StringConfig.reporting.inactiveUsers) {
+          dashboardController.searchedUsers.value =
+              users.where((e) => !e.mqsIsUserActive).toList();
+          dashboardController.users.value =
+              users.where((e) => !e.mqsIsUserActive).toList();
+          dashboardController.searchUserType.value =
+              users.where((e) => !e.mqsIsUserActive).toList();
+        }
       }
       if (dashboardController.searchedUsers.isEmpty &&
           dashboardController.users.isNotEmpty) {
@@ -316,8 +327,18 @@ class ReportingController extends GetxController {
         obtype.value = type;
       }
       final DashboardController dashboardController = Get.find();
-      List<UserIAMModel> users = await UserRepository.i.getUsers();
-      if (filterType == StringConfig.reporting.lastDay) {
+      List<UserIAMModel> users = isDetailView
+          ? dashboardController.users
+          : await UserRepository.i.getUsers();
+      if (filterType == StringConfig.reporting.today) {
+        DateTime today = DateTime.now();
+        users = users.where((e) {
+          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp);
+          return createdTime.day == today.day &&
+              createdTime.month == today.month &&
+              createdTime.year == today.year;
+        }).toList();
+      } else if (filterType == StringConfig.reporting.lastDay) {
         DateTime lastDay = DateTime.now().subtract(const Duration(days: 1));
         users = users.where((e) {
           DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp);
@@ -358,17 +379,8 @@ class ReportingController extends GetxController {
           return createdTime.isAfter(start) && createdTime.isBefore(end);
         }).toList();
       }
-      if (!isDetailView) {
-        getOBSummary(users: users);
-      }
       dashboardController.reset();
       dashboardController.searchedUsers.value = users
-          .where((e) =>
-              e.onboardingModel.checkInValue.isNotEmpty &&
-              e.onboardingModel.demoGraphicValue.isNotEmpty &&
-              e.onboardingModel.scenesValue.isNotEmpty)
-          .toList();
-      dashboardController.users.value = users
           .where((e) =>
               e.onboardingModel.checkInValue.isNotEmpty &&
               e.onboardingModel.demoGraphicValue.isNotEmpty &&
@@ -380,35 +392,45 @@ class ReportingController extends GetxController {
               e.onboardingModel.demoGraphicValue.isNotEmpty &&
               e.onboardingModel.scenesValue.isNotEmpty)
           .toList();
-      if (obtype.value == StringConfig.reporting.skipped) {
-        dashboardController.searchedUsers.value =
-            users.where((e) => e.mqsSkipOnboarding).toList();
-        dashboardController.users.value =
-            users.where((e) => e.mqsSkipOnboarding).toList();
-        dashboardController.searchUserType.value =
-            users.where((e) => e.mqsSkipOnboarding).toList();
-      } else if (obtype.value == StringConfig.reporting.partialCompletion) {
-        List<UserIAMModel> completed = users
+      if (!isDetailView) {
+        getOBSummary(users: users);
+        dashboardController.users.value = users
             .where((e) =>
                 e.onboardingModel.checkInValue.isNotEmpty &&
                 e.onboardingModel.demoGraphicValue.isNotEmpty &&
                 e.onboardingModel.scenesValue.isNotEmpty)
             .toList();
-        List<UserIAMModel> empty = users
-            .where((e) =>
-                e.onboardingModel.checkInValue.isEmpty &&
-                e.onboardingModel.demoGraphicValue.isEmpty &&
-                e.onboardingModel.scenesValue.isEmpty)
-            .toList();
-        dashboardController.searchedUsers.value = users
-            .where((e) => !completed.contains(e) && !empty.contains(e))
-            .toList();
-        dashboardController.users.value = users
-            .where((e) => !completed.contains(e) && !empty.contains(e))
-            .toList();
-        dashboardController.searchUserType.value = users
-            .where((e) => !completed.contains(e) && !empty.contains(e))
-            .toList();
+
+        if (obtype.value == StringConfig.reporting.skipped) {
+          dashboardController.searchedUsers.value =
+              users.where((e) => e.mqsSkipOnboarding).toList();
+          dashboardController.users.value =
+              users.where((e) => e.mqsSkipOnboarding).toList();
+          dashboardController.searchUserType.value =
+              users.where((e) => e.mqsSkipOnboarding).toList();
+        } else if (obtype.value == StringConfig.reporting.partialCompletion) {
+          List<UserIAMModel> completed = users
+              .where((e) =>
+                  e.onboardingModel.checkInValue.isNotEmpty &&
+                  e.onboardingModel.demoGraphicValue.isNotEmpty &&
+                  e.onboardingModel.scenesValue.isNotEmpty)
+              .toList();
+          List<UserIAMModel> empty = users
+              .where((e) =>
+                  e.onboardingModel.checkInValue.isEmpty &&
+                  e.onboardingModel.demoGraphicValue.isEmpty &&
+                  e.onboardingModel.scenesValue.isEmpty)
+              .toList();
+          dashboardController.searchedUsers.value = users
+              .where((e) => !completed.contains(e) && !empty.contains(e))
+              .toList();
+          dashboardController.users.value = users
+              .where((e) => !completed.contains(e) && !empty.contains(e))
+              .toList();
+          dashboardController.searchUserType.value = users
+              .where((e) => !completed.contains(e) && !empty.contains(e))
+              .toList();
+        }
       }
       if (dashboardController.searchedUsers.isEmpty &&
           dashboardController.users.isNotEmpty) {
@@ -546,7 +568,16 @@ class ReportingController extends GetxController {
       }
 
       List<CircleModel> circles = await CircleRepository.i.getCircles();
-      if (circleFilter.value == StringConfig.reporting.lastDay) {
+      if (circleFilter.value == StringConfig.reporting.today) {
+        DateTime today = DateTime.now();
+        circles = circles.where((e) {
+          DateTime postTime =
+              DateTime.parse(e.postTime ?? DateTime.now().toIso8601String());
+          return postTime.day == today.day &&
+              postTime.month == today.month &&
+              postTime.year == today.year;
+        }).toList();
+      } else if (circleFilter.value == StringConfig.reporting.lastDay) {
         DateTime lastDay = DateTime.now().subtract(const Duration(days: 1));
         circles = circles.where((e) {
           DateTime postTime =
@@ -694,8 +725,15 @@ class ReportingController extends GetxController {
       List<UserSubscriptionReceiptModel> receipt =
           await UserRepository.i.getUserSubscriptionReceipt();
       List<UserIAMModel> users = await UserRepository.i.getUsers();
-
-      if (subscriptionFilter.value == StringConfig.reporting.lastDay) {
+      if (subscriptionFilter.value == StringConfig.reporting.today) {
+        DateTime today = DateTime.now();
+        users = users.where((e) {
+          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp);
+          return postTime.day == today.day &&
+              postTime.month == today.month &&
+              postTime.year == today.year;
+        }).toList();
+      } else if (subscriptionFilter.value == StringConfig.reporting.lastDay) {
         DateTime lastDay = DateTime.now().subtract(const Duration(days: 1));
 
         users = users.where((e) {

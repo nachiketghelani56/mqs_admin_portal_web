@@ -39,7 +39,8 @@ Widget userTopButtonsWidget(
               onChanged: (p0) {
                 if (Get.currentRoute.startsWith(
                         AppRoutes.subscriptionSummaryDetailScreen) ||
-                    Get.currentRoute.startsWith(AppRoutes.authSummary)) {
+                    Get.currentRoute.startsWith(AppRoutes.authSummary) ||
+                    Get.currentRoute.startsWith(AppRoutes.obSummary)) {
                   dashboardController.searchUser(status: "type");
                 } else {
                   dashboardController.searchUser();
@@ -82,7 +83,8 @@ Widget userTopButtonsWidget(
               onChanged: (p0) {
                 if (Get.currentRoute.startsWith(
                         AppRoutes.subscriptionSummaryDetailScreen) ||
-                    Get.currentRoute.startsWith(AppRoutes.authSummary)) {
+                    Get.currentRoute.startsWith(AppRoutes.authSummary) ||
+                    Get.currentRoute.startsWith(AppRoutes.obSummary)) {
                   dashboardController.searchUser(status: "type");
                 } else {
                   dashboardController.searchUser();

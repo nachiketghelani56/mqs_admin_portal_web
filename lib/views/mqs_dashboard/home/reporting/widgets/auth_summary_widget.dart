@@ -13,9 +13,7 @@ Widget authSummaryWidget(
     required ReportingController reportingController,
     required DashboardController dashboardController}) {
   return Container(
-    height: SizeConfig.size343,
     padding: const EdgeInsets.all(SizeConfig.size24),
-    decoration: FontTextStyleConfig.cardDecoration,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -52,7 +50,9 @@ Widget authSummaryWidget(
                     );
                   } else {
                     reportingController.authFilter.value = value;
+                    reportingController.obFilter.value = value;
                     reportingController.filterAuth(filterType: value);
+                    reportingController.filterOnboarding(filterType: value);
                   }
                 },
                 itemBuilder: (context) {
@@ -76,7 +76,7 @@ Widget authSummaryWidget(
                     reportingController.startDateController.clear();
                     reportingController.endDateController.clear();
                     reportingController.authFilter.value = '';
-                    reportingController.getAuthAndOBSummary();
+                    reportingController.getAuthAndOBSummary(isOB: true);
                   },
                   icon: const Icon(
                     Icons.refresh,

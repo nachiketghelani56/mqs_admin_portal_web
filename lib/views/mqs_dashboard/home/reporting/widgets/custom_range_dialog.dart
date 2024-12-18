@@ -162,12 +162,22 @@ customRangeDialog(
                                     filterType:
                                         reportingController.detailFilter.value,
                                     isDetailView: isDetailView);
+                                reportingController.filterOnboarding(
+                                    filterType:
+                                        reportingController.detailFilter.value,
+                                    isDetailView: isDetailView);
                               } else {
                                 reportingController.authFilter.value =
                                     '${reportingController.startDateController.text} - ${reportingController.endDateController.text}';
                                 reportingController.filterAuth(
                                     filterType:
                                         reportingController.authFilter.value,
+                                    isDetailView: isDetailView);
+                                reportingController.obFilter.value =
+                                    '${reportingController.startDateController.text} - ${reportingController.endDateController.text}';
+                                reportingController.filterOnboarding(
+                                    filterType:
+                                        reportingController.obFilter.value,
                                     isDetailView: isDetailView);
                               }
                             } else if (type ==
@@ -191,24 +201,25 @@ customRangeDialog(
                               reportingController.subscriptionFilterType.value =
                                   '${reportingController.startSubscriptionTypeDateController.text} - ${reportingController.endSubscriptionTypeDateController.text}';
                               reportingController.filterSubscriptionType();
-                            } else if (type ==
-                                StringConfig.reporting.onboardingSummary) {
-                              if (isDetailView) {
-                                reportingController.detailFilter.value =
-                                    '${reportingController.startDateController.text} - ${reportingController.endDateController.text}';
-                                reportingController.filterOnboarding(
-                                    filterType:
-                                        reportingController.detailFilter.value,
-                                    isDetailView: isDetailView);
-                              } else {
-                                reportingController.obFilter.value =
-                                    '${reportingController.startDateController.text} - ${reportingController.endDateController.text}';
-                                reportingController.filterOnboarding(
-                                    filterType:
-                                        reportingController.obFilter.value,
-                                    isDetailView: isDetailView);
-                              }
                             }
+                            // else if (type ==
+                            //     StringConfig.reporting.onboardingSummary) {
+                            //   if (isDetailView) {
+                            //     reportingController.detailFilter.value =
+                            //         '${reportingController.startDateController.text} - ${reportingController.endDateController.text}';
+                            //     reportingController.filterOnboarding(
+                            //         filterType:
+                            //             reportingController.detailFilter.value,
+                            //         isDetailView: isDetailView);
+                            //   } else {
+                            //     reportingController.obFilter.value =
+                            //         '${reportingController.startDateController.text} - ${reportingController.endDateController.text}';
+                            //     reportingController.filterOnboarding(
+                            //         filterType:
+                            //             reportingController.obFilter.value,
+                            //         isDetailView: isDetailView);
+                            //   }
+                            // }
                           }
                         },
                       ),

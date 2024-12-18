@@ -358,6 +358,7 @@ class Reporting {
   final String circleTypeSummary = "Circle Type Summary";
   final String featuredCircles = "Featured Cirlces";
   final String flaggedCircles = "Flagged Cirlces";
+  final String today = "Today";
   final String lastDay = "Last day";
   final String lastWeek = "Last week";
   final String lastMonth = "Last month";

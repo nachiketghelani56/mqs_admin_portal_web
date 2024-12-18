@@ -350,16 +350,18 @@ class DashboardController extends GetxController {
 
   getUsers() async {
     try {
-      List<UserIAMModel> userList = await UserRepository.i.getUsers();
-      searchedUsers.value = userList;
-      users.value = userList;
-      searchUserType.value = userList;
-      userStream = UserRepository.i.getUserStream().listen((data) {
-        searchedUsers.value = data;
-        searchUserType.value = data;
-        users.value = data;
-        viewIndex.value = -1;
-      });
+      if (!FirebaseAuthService.i.isMarketingUser) {
+        List<UserIAMModel> userList = await UserRepository.i.getUsers();
+        searchedUsers.value = userList;
+        users.value = userList;
+        searchUserType.value = userList;
+        userStream = UserRepository.i.getUserStream().listen((data) {
+          searchedUsers.value = data;
+          searchUserType.value = data;
+          users.value = data;
+          viewIndex.value = -1;
+        });
+      }
     } catch (e) {
       errorDialogWidget(msg: e.toString());
     } finally {}

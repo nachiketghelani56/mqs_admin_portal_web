@@ -22,7 +22,7 @@ class FirebaseStorageService {
       {required Uint8List data, String ext = 'jpg'}) async {
     // Define a unique file name
     String fileName =
-        '${Env.fbPathway}_test/${DateTime.now().millisecondsSinceEpoch}.$ext';
+        '${Env.fbPathway}/${DateTime.now().millisecondsSinceEpoch}.$ext';
     // Reference to Firebase Storage
     final storageRef = FirebaseStorage.instance.ref().child(fileName);
     // Upload the file
