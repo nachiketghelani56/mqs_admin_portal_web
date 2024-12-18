@@ -9,7 +9,8 @@ import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/widgets/
 
 Widget obSummaryWidget(
     {required ReportingController reportingController,
-    required BuildContext context}) {
+    required BuildContext context,
+    required DashboardController dashboardController}) {
   double size = context.width > SizeConfig.size1500
       ? SizeConfig.size202
       : context.width > SizeConfig.size700
@@ -62,7 +63,7 @@ Widget obSummaryWidget(
                     );
                   } else {
                     reportingController.obFilter.value = value;
-                    reportingController.filterOnboarding();
+                    reportingController.filterOnboarding(filterType: value);
                   }
                 },
                 itemBuilder: (context) {
@@ -83,6 +84,8 @@ Widget obSummaryWidget(
               if (reportingController.obFilter.isNotEmpty)
                 IconButton(
                   onPressed: () {
+                    reportingController.startDateController.clear();
+                    reportingController.endDateController.clear();
                     final DashboardController dashboardController = Get.find();
                     reportingController.obFilter.value = '';
                     reportingController.getOBSummary(
@@ -154,7 +157,9 @@ Widget obSummaryWidget(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ...obOptionsWidget(
-                          reportingController: reportingController),
+                        reportingController: reportingController,
+                        dashboardController: dashboardController,
+                      ),
                     ],
                   ),
                 ),
@@ -163,7 +168,10 @@ Widget obSummaryWidget(
           ),
         ),
         if (context.width < SizeConfig.size1100)
-          ...obOptionsWidget(reportingController: reportingController),
+          ...obOptionsWidget(
+            reportingController: reportingController,
+            dashboardController: dashboardController,
+          ),
       ],
     ),
   );

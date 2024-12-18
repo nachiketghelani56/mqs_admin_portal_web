@@ -9,7 +9,8 @@ import 'package:mqs_admin_portal_web/widgets/custom_text_field.dart';
 customRangeDialog(
     {required BuildContext context,
     required ReportingController reportingController,
-    required String type}) {
+    required String type,
+    bool isDetailView = false}) {
   showDialog(
     context: context,
     builder: (context) {
@@ -154,9 +155,21 @@ customRangeDialog(
                               false) {
                             Get.back();
                             if (type == StringConfig.reporting.authSummary) {
-                              reportingController.authFilter.value =
-                                  '${reportingController.startDateController.text} - ${reportingController.endDateController.text}';
-                              reportingController.filterAuth();
+                              if (isDetailView) {
+                                reportingController.detailFilter.value =
+                                    '${reportingController.startDateController.text} - ${reportingController.endDateController.text}';
+                                reportingController.filterAuth(
+                                    filterType:
+                                        reportingController.detailFilter.value,
+                                    isDetailView: isDetailView);
+                              } else {
+                                reportingController.authFilter.value =
+                                    '${reportingController.startDateController.text} - ${reportingController.endDateController.text}';
+                                reportingController.filterAuth(
+                                    filterType:
+                                        reportingController.authFilter.value,
+                                    isDetailView: isDetailView);
+                              }
                             } else if (type ==
                                 StringConfig.reporting.circleSummary) {
                               reportingController.circleFilter.value =
@@ -180,9 +193,21 @@ customRangeDialog(
                               reportingController.filterSubscriptionType();
                             } else if (type ==
                                 StringConfig.reporting.onboardingSummary) {
-                              reportingController.obFilter.value =
-                                  '${reportingController.startDateController.text} - ${reportingController.endDateController.text}';
-                              reportingController.filterOnboarding();
+                              if (isDetailView) {
+                                reportingController.detailFilter.value =
+                                    '${reportingController.startDateController.text} - ${reportingController.endDateController.text}';
+                                reportingController.filterOnboarding(
+                                    filterType:
+                                        reportingController.detailFilter.value,
+                                    isDetailView: isDetailView);
+                              } else {
+                                reportingController.obFilter.value =
+                                    '${reportingController.startDateController.text} - ${reportingController.endDateController.text}';
+                                reportingController.filterOnboarding(
+                                    filterType:
+                                        reportingController.obFilter.value,
+                                    isDetailView: isDetailView);
+                              }
                             }
                           }
                         },

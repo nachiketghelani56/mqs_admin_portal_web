@@ -4,12 +4,14 @@ import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
 import 'package:mqs_admin_portal_web/routes/app_routes.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/controller/reporting_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/widgets/custom_range_dialog.dart';
 
 Widget authSummaryWidget(
     {required BuildContext context,
-    required ReportingController reportingController}) {
+    required ReportingController reportingController,
+    required DashboardController dashboardController}) {
   return Container(
     height: SizeConfig.size343,
     padding: const EdgeInsets.all(SizeConfig.size24),
@@ -50,7 +52,7 @@ Widget authSummaryWidget(
                     );
                   } else {
                     reportingController.authFilter.value = value;
-                    reportingController.filterAuth();
+                    reportingController.filterAuth(filterType: value);
                   }
                 },
                 itemBuilder: (context) {
@@ -71,6 +73,8 @@ Widget authSummaryWidget(
               if (reportingController.authFilter.isNotEmpty)
                 IconButton(
                   onPressed: () {
+                    reportingController.startDateController.clear();
+                    reportingController.endDateController.clear();
                     reportingController.authFilter.value = '';
                     reportingController.getAuthAndOBSummary();
                   },
@@ -111,8 +115,11 @@ Widget authSummaryWidget(
                   ],
                 ),
               ).tap(() {
+                reportingController.detailFilter.value = '';
                 reportingController.filterAuth(
-                    type: StringConfig.reporting.totalRegisteredUsers);
+                    type: StringConfig.reporting.totalRegisteredUsers,
+                    filterType: reportingController.authFilter.value);
+                dashboardController.searchController.clear();
                 Get.toNamed(AppRoutes.authSummary);
               }),
             ),
@@ -144,8 +151,11 @@ Widget authSummaryWidget(
                   ],
                 ),
               ).tap(() {
+                reportingController.detailFilter.value = '';
                 reportingController.filterAuth(
-                    type: StringConfig.reporting.activeUsers);
+                    type: StringConfig.reporting.activeUsers,
+                    filterType: reportingController.authFilter.value);
+                dashboardController.searchController.clear();
                 Get.toNamed(AppRoutes.authSummary);
               }),
             ),
@@ -177,8 +187,11 @@ Widget authSummaryWidget(
                   ],
                 ),
               ).tap(() {
+                reportingController.detailFilter.value = '';
                 reportingController.filterAuth(
-                    type: StringConfig.reporting.inactiveUsers);
+                    type: StringConfig.reporting.inactiveUsers,
+                    filterType: reportingController.authFilter.value);
+                dashboardController.searchController.clear();
                 Get.toNamed(AppRoutes.authSummary);
               }),
             ),

@@ -16,6 +16,7 @@ import 'package:mqs_admin_portal_web/models/row_input_model.dart';
 import 'package:mqs_admin_portal_web/models/user_iam_model.dart';
 import 'package:mqs_admin_portal_web/models/user_subscription_receipt_model.dart';
 import 'package:mqs_admin_portal_web/routes/app_routes.dart';
+import 'package:mqs_admin_portal_web/services/firebase_auth_service.dart';
 import 'package:mqs_admin_portal_web/services/firebase_storage_service.dart';
 import 'package:mqs_admin_portal_web/views/circle/controller/circle_controller.dart';
 import 'package:mqs_admin_portal_web/views/circle/repository/circle_repository.dart';
@@ -136,7 +137,8 @@ class DashboardController extends GetxController {
       editMqsEntPOCIndex = RxInt(-1),
       editMqsTeamIndex = RxInt(-1);
   RxList<UserIAMModel> searchedUsers = <UserIAMModel>[].obs,
-      users = <UserIAMModel>[].obs,searchUserType = <UserIAMModel>[].obs;
+      users = <UserIAMModel>[].obs,
+      searchUserType = <UserIAMModel>[].obs;
   UserIAMModel get userDetail => searchedUsers[viewIndex.value];
   RxInt pageLimit = 10.obs;
   RxInt offset = 0.obs, currentPage = 1.obs;
@@ -351,8 +353,10 @@ class DashboardController extends GetxController {
       List<UserIAMModel> userList = await UserRepository.i.getUsers();
       searchedUsers.value = userList;
       users.value = userList;
+      searchUserType.value = userList;
       userStream = UserRepository.i.getUserStream().listen((data) {
         searchedUsers.value = data;
+        searchUserType.value = data;
         users.value = data;
         viewIndex.value = -1;
       });
@@ -752,7 +756,11 @@ class DashboardController extends GetxController {
   }
 
   setTabIndex({required int index}) {
-    selectedTabIndex.value = index;
+    if (FirebaseAuthService.i.isMarketingUser) {
+      selectedTabIndex.value = 1;
+    } else {
+      selectedTabIndex.value = index;
+    }
     searchController.clear();
     searchedUsers.value = users;
     searchedEnterprises.value = enterprises;
@@ -819,7 +827,7 @@ class DashboardController extends GetxController {
   getMaxOffset() {
     int rem = (selectedTabIndex.value == 0
             ? searchedEnterprises.length
-            : searchedUsers.length) %
+            : (searchedUsers.length)) %
         pageLimit.value;
     if (rem != 0 &&
         currentPage.value ==
@@ -1002,80 +1010,45 @@ class DashboardController extends GetxController {
     }
   }
 
-  exportUserIAM({String? status}) async {
+  exportUserIAM() async {
     try {
       String currentDate =
           DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(DateTime(0));
-      List<List<String>> rows=[];
-      if(status =="type"){
-       rows = [
-          ...searchedUsers.map((model) {
-            return [
-              model.email,
-              model.firstName,
-              model.lastName,
-              model.mqsCreatedTimestamp.isNotEmpty
-                  ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
-                  .format(DateTime.parse(model.mqsCreatedTimestamp))
-                  : "",
-              "${model.isEnterpriseUser}",
-              model.isFirebaseUserId,
-              model.isMongoDBUserId,
-              model.mqsSubscriptionActivePlan,
-              model.mqsUserSubscriptionStatus,
-              model.mqsSubscriptionPlatform,
-              model.mqsExpiryDate.isNotEmpty
-                  ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
-                  .format(DateTime.parse(model.mqsExpiryDate))
-                  : "",
-              jsonEncode(model.onboardingModel.checkInValue
-                  .map((e) => e.toJson())
-                  .toList()),
-              jsonEncode(model.onboardingModel.demoGraphicValue
-                  .map((e) => e.toJson())
-                  .toList()),
-              jsonEncode(model.onboardingModel.scenesValue
-                  .map((e) => e.toJson())
-                  .toList()),
-              jsonEncode(model.onboardingModel.wOLValue.toJson()),
-            ];
-          }),
-        ];
-      }else{
-         rows = [
-          ...searchedUsers.map((model) {
-            return [
-              model.email,
-              model.firstName,
-              model.lastName,
-              model.mqsCreatedTimestamp.isNotEmpty
-                  ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
-                  .format(DateTime.parse(model.mqsCreatedTimestamp))
-                  : "",
-              "${model.isEnterpriseUser}",
-              model.isFirebaseUserId,
-              model.isMongoDBUserId,
-              model.mqsSubscriptionActivePlan,
-              model.mqsUserSubscriptionStatus,
-              model.mqsSubscriptionPlatform,
-              model.mqsExpiryDate.isNotEmpty
-                  ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
-                  .format(DateTime.parse(model.mqsExpiryDate))
-                  : "",
-              jsonEncode(model.onboardingModel.checkInValue
-                  .map((e) => e.toJson())
-                  .toList()),
-              jsonEncode(model.onboardingModel.demoGraphicValue
-                  .map((e) => e.toJson())
-                  .toList()),
-              jsonEncode(model.onboardingModel.scenesValue
-                  .map((e) => e.toJson())
-                  .toList()),
-              jsonEncode(model.onboardingModel.wOLValue.toJson()),
-            ];
-          }),
-        ];
-      }
+      List<List<String>> rows = [];
+
+      rows = [
+        ...searchedUsers.map((model) {
+          return [
+            model.email,
+            model.firstName,
+            model.lastName,
+            model.mqsCreatedTimestamp.isNotEmpty
+                ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
+                    .format(DateTime.parse(model.mqsCreatedTimestamp))
+                : "",
+            "${model.isEnterpriseUser}",
+            model.isFirebaseUserId,
+            model.isMongoDBUserId,
+            model.mqsSubscriptionActivePlan,
+            model.mqsUserSubscriptionStatus,
+            model.mqsSubscriptionPlatform,
+            model.mqsExpiryDate.isNotEmpty
+                ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
+                    .format(DateTime.parse(model.mqsExpiryDate))
+                : "",
+            jsonEncode(model.onboardingModel.checkInValue
+                .map((e) => e.toJson())
+                .toList()),
+            jsonEncode(model.onboardingModel.demoGraphicValue
+                .map((e) => e.toJson())
+                .toList()),
+            jsonEncode(model.onboardingModel.scenesValue
+                .map((e) => e.toJson())
+                .toList()),
+            jsonEncode(model.onboardingModel.wOLValue.toJson()),
+          ];
+        }),
+      ];
 
       rows.sort((a, b) => DateFormat(StringConfig.dashboard.dateYYYYMMDD)
           .parse(b[3].isNotEmpty ? b[3] : currentDate)
@@ -1119,11 +1092,9 @@ class DashboardController extends GetxController {
       reset();
       String query = searchController.text.trim().toLowerCase();
       if (query.isEmpty) {
-
-
-        searchedUsers.value =status=="type"? searchUserType : users;
+        searchedUsers.value = status == "type" ? searchUserType : users;
       } else {
-        if (status=="type") {
+        if (status == "type") {
           searchedUsers.value = searchUserType.where((e) {
             return e.email.toLowerCase().contains(query) ||
                 e.firstName.toLowerCase().contains(query) ||
@@ -1138,8 +1109,6 @@ class DashboardController extends GetxController {
                 e.loginWith.toLowerCase().contains(query);
           }).toList();
         }
-
-
       }
     } catch (e) {
       errorDialogWidget(msg: e.toString());

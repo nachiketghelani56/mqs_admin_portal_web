@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
+import 'package:mqs_admin_portal_web/services/firebase_auth_service.dart';
 import 'package:mqs_admin_portal_web/views/circle/circle_screen.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/dashboard_screen.dart';
@@ -46,7 +47,12 @@ class MqsDashboardScreen extends StatelessWidget {
                 child: Obx(
                   () {
                     if (_mqsDashboardController.menuIndex.value == 0) {
-                      if (_mqsDashboardController.subMenuIndex.value == 0) {
+                      if (_mqsDashboardController.subMenuIndex.value == 0 &&
+                          FirebaseAuthService.i.isMarketingUser) {
+                        return ReportingScreen(
+                            scaffoldKey: _mqsDashboardController.scaffoldKey);
+                      } else if (_mqsDashboardController.subMenuIndex.value ==
+                          0) {
                         return DashboardScreen(
                             scaffoldKey: _mqsDashboardController.scaffoldKey);
                       } else if (_mqsDashboardController.subMenuIndex.value ==

@@ -49,9 +49,13 @@ class CircleSummaryDetailScreen extends StatelessWidget {
                       width: SizeConfig.size22,
                     ),
                   ),
+                  onOpened: () {
+                    _circleController.searchController.clear();
+                  },
                   onSelected: (value) {
                     if (value == StringConfig.reporting.customRange) {
-                      _reportingController.startCircleTypeDateController.clear();
+                      _reportingController.startCircleTypeDateController
+                          .clear();
                       _reportingController.endCircleTypeDateController.clear();
                       customRangeDialog(
                         context: context,
@@ -67,23 +71,27 @@ class CircleSummaryDetailScreen extends StatelessWidget {
                   itemBuilder: (context) {
                     return [
                       for (int i = 0;
-                          i < (_reportingController.filterOpts.length ?? 0);
+                          i < (_reportingController.filterOpts.length);
                           i++)
                         PopupMenuItem(
                           value: _reportingController.filterOpts[i],
                           child: Text(
-                            _reportingController.filterOpts[i] ?? "",
+                            _reportingController.filterOpts[i],
                             style: FontTextStyleConfig.fieldTextStyle,
                           ),
                         ),
                     ];
                   },
                 ),
-                if (_reportingController.circleFilterType.isNotEmpty ?? false)
+                if (_reportingController.circleFilterType.isNotEmpty)
                   IconButton(
                     onPressed: () {
+                      _circleController.searchController.clear();
                       _reportingController.circleFilterType.value = '';
-                      _circleController.searchedCircle.value = _circleController.circle;
+                      _circleController.searchedCircle.value =
+                          _circleController.circle;
+                      _circleController.searchCircleType.value =
+                          _circleController.circle;
                     },
                     icon: const Icon(
                       Icons.refresh,

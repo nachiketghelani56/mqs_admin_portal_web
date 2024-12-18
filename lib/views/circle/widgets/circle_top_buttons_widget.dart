@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
@@ -37,13 +36,11 @@ Widget circleTopButtonsWidget({
               hintText: StringConfig.dashboard.searchByNameTitle,
               onChanged: (p0) {
                 if (Get.currentRoute
-                    .startsWith(AppRoutes.circleSummaryDetailScreen))
-                  {
-                    circleController.searchCircle(status: "type");
-                  }else{
+                    .startsWith(AppRoutes.circleSummaryDetailScreen)) {
+                  circleController.searchCircle(status: "type");
+                } else {
                   circleController.searchCircle();
                 }
-
               },
             ),
             const Spacer(),
@@ -61,14 +58,9 @@ Widget circleTopButtonsWidget({
             CustomIconButton(
               icon: ImageConfig.export,
               onTap: () {
+                circleController.searchController.clear();
 
-                if (Get.currentRoute
-                    .startsWith(AppRoutes.circleSummaryDetailScreen)){
-                  circleController.exportCircle(status: "type");
-                }else{
-                  circleController.exportCircle();
-                }
-
+                circleController.exportCircle();
               },
             ),
             if (filterWidget != null) ...[
@@ -112,10 +104,9 @@ Widget circleTopButtonsWidget({
               hintText: StringConfig.dashboard.searchByNameTitle,
               onChanged: (p0) {
                 if (Get.currentRoute
-                    .startsWith(AppRoutes.circleSummaryDetailScreen))
-                {
+                    .startsWith(AppRoutes.circleSummaryDetailScreen)) {
                   circleController.searchCircle(status: "type");
-                }else{
+                } else {
                   circleController.searchCircle();
                 }
               },
@@ -134,12 +125,9 @@ Widget circleTopButtonsWidget({
             CustomIconButton(
               icon: ImageConfig.export,
               onTap: () {
-                if (Get.currentRoute
-                    .startsWith(AppRoutes.circleSummaryDetailScreen)){
-                  circleController.exportCircle(status: "type");
-                }else{
-                  circleController.exportCircle();
-                }
+                circleController.searchController.clear();
+
+                circleController.exportCircle();
               },
             ),
             if (filterWidget != null) ...[

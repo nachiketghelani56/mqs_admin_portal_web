@@ -90,9 +90,11 @@ Widget subscriptionSummaryWidget(
             Expanded(
               child: GestureDetector(
                 onTap: () {
+
                   reportingController.filterSubscription(
                       type: StringConfig.reporting.activeSubscription);
                   reportingController.subscriptionFilterType.value="";
+                  dashboardController.searchController.clear();
                   Get.toNamed(AppRoutes.subscriptionSummaryDetailScreen);
                 },
                 child: Container(
@@ -131,6 +133,7 @@ Widget subscriptionSummaryWidget(
                   reportingController.filterSubscription(
                       type: StringConfig.reporting.purchasedSubscription);
                   reportingController.subscriptionFilterType.value="";
+                  dashboardController.searchController.clear();
                   Get.toNamed(AppRoutes.subscriptionSummaryDetailScreen);
                 },
                 child: Container(

@@ -91,6 +91,7 @@ Widget circleSummaryWidget(
                   reportingController.filterCircle(
                       type: StringConfig.reporting.totalCircles);
                   reportingController.circleFilterType.value = '';
+                  circleController.searchController.clear();
                   Get.toNamed(AppRoutes.circleSummaryDetailScreen);
                 },
                 child: Container(
@@ -129,6 +130,7 @@ Widget circleSummaryWidget(
                   reportingController.filterCircle(
                       type: StringConfig.reporting.featuredCircles);
                   reportingController.circleFilterType.value = '';
+                  circleController.searchController.clear();
                   Get.toNamed(AppRoutes.circleSummaryDetailScreen);
                 },
                 child: Container(
@@ -168,6 +170,7 @@ Widget circleSummaryWidget(
                   reportingController.filterCircle(
                       type: StringConfig.reporting.flaggedCircles);
                   reportingController.circleFilterType.value = '';
+                  circleController.searchController.clear();
                   Get.toNamed(AppRoutes.circleSummaryDetailScreen);
                 },
                 child: Container(

@@ -1,4 +1,5 @@
 import 'package:mqs_admin_portal_web/routes/app_routes.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/controller/reporting_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,7 +8,8 @@ import 'package:mqs_admin_portal_web/extensions/ext_on_list.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 
 Iterable<Widget> obOptionsWidget(
-    {required ReportingController reportingController}) {
+    {required ReportingController reportingController,
+    required DashboardController dashboardController}) {
   return reportingController.circleChartOpts
       .map(
         (key, value) => MapEntry(
@@ -15,7 +17,10 @@ Iterable<Widget> obOptionsWidget(
           Obx(
             () => TextButton.icon(
               onPressed: () {
-                reportingController.filterOnboarding(type: key);
+                reportingController.detailFilter.value = '';
+                reportingController.filterOnboarding(
+                    type: key, filterType: reportingController.obFilter.value);
+                dashboardController.searchController.clear();
                 Get.toNamed(AppRoutes.obSummary);
               },
               label: Text(

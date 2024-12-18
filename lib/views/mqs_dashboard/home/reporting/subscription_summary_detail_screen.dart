@@ -49,10 +49,15 @@ class SubscriptionSummaryDetailScreen extends StatelessWidget {
                       width: SizeConfig.size22,
                     ),
                   ),
+                  onOpened: () {
+                    _dashboardController.searchController.clear();
+                  },
                   onSelected: (value) {
                     if (value == StringConfig.reporting.customRange) {
-                      reportingController.startSubscriptionTypeDateController.clear();
-                      reportingController.endSubscriptionTypeDateController.clear();
+                      reportingController.startSubscriptionTypeDateController
+                          .clear();
+                      reportingController.endSubscriptionTypeDateController
+                          .clear();
                       customRangeDialog(
                         context: context,
                         reportingController: reportingController,
@@ -81,8 +86,12 @@ class SubscriptionSummaryDetailScreen extends StatelessWidget {
                 if (reportingController.subscriptionFilterType.isNotEmpty)
                   IconButton(
                     onPressed: () {
+                      _dashboardController.searchController.clear();
                       reportingController.subscriptionFilterType.value = '';
-                      _dashboardController.searchedUsers.value = _dashboardController.users;
+                      _dashboardController.searchedUsers.value =
+                          _dashboardController.users;
+                      _dashboardController.searchUserType.value =
+                          _dashboardController.users;
                     },
                     icon: const Icon(
                       Icons.refresh,

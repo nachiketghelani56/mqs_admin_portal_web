@@ -79,8 +79,10 @@ class CircleController extends GetxController {
       List<CircleModel> circleList = await CircleRepository.i.getCircles();
       searchedCircle.value = circleList;
       circle.value = circleList;
+      searchCircleType.value = circleList;
       circleStream = CircleRepository.i.getCircleStream().listen((circleList) {
         searchedCircle.value = circleList;
+        searchCircleType.value = circleList;
         circle.value = circleList;
         viewIndex.value = -1;
       });
@@ -257,10 +259,9 @@ class CircleController extends GetxController {
       reset();
       String query = searchController.text.trim().toLowerCase();
       if (query.isEmpty) {
-        searchedCircle.value =
-        status=="type"  ? searchCircleType : circle;
+        searchedCircle.value = status == "type" ? searchCircleType : circle;
       } else {
-        if ( status=="type" ) {
+        if (status == "type") {
           searchedCircle.value = searchCircleType
               .where((e) =>
                   (e.postTitle ?? "").toLowerCase().contains(query) ||
@@ -362,57 +363,33 @@ class CircleController extends GetxController {
     }
   }
 
-  exportCircle({String? status}) async {
+  exportCircle() async {
     try {
       String currentDate =
           DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(DateTime(0));
-      List<List<String>> rows =[];
-      if(status =="type")
-        {
-           rows = [
-            ...searchCircleType.map((model) {
-              return [
-                model.userId ?? "",
-                model.userName ?? "",
-                model.postTitle ?? "",
-                model.postContent ?? "",
-                (model.postTime ?? "").isNotEmpty
-                    ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
+      List<List<String>> rows = [];
+
+      rows = [
+        ...searchedCircle.map((model) {
+          return [
+            model.userId ?? "",
+            model.userName ?? "",
+            model.postTitle ?? "",
+            model.postContent ?? "",
+            (model.postTime ?? "").isNotEmpty
+                ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
                     .format(DateTime.parse(model.postTime ?? ""))
-                    : "",
-                "${model.postView ?? 0}",
-                "${model.userIsGuide}",
-                "${model.isMainPost}",
-                "${model.isFlag}",
-                model.flagName ?? "",
-                jsonEncode(model.postReply ?? []),
-                jsonEncode(model.hashtag?.map((p) => p.toJson()).toList() ?? []),
-              ];
-            }),
+                : "",
+            "${model.postView ?? 0}",
+            "${model.userIsGuide}",
+            "${model.isMainPost}",
+            "${model.isFlag}",
+            model.flagName ?? "",
+            jsonEncode(model.postReply ?? []),
+            jsonEncode(model.hashtag?.map((p) => p.toJson()).toList() ?? []),
           ];
-        }else{
-       rows = [
-          ...circle.map((model) {
-            return [
-              model.userId ?? "",
-              model.userName ?? "",
-              model.postTitle ?? "",
-              model.postContent ?? "",
-              (model.postTime ?? "").isNotEmpty
-                  ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
-                  .format(DateTime.parse(model.postTime ?? ""))
-                  : "",
-              "${model.postView ?? 0}",
-              "${model.userIsGuide}",
-              "${model.isMainPost}",
-              "${model.isFlag}",
-              model.flagName ?? "",
-              jsonEncode(model.postReply ?? []),
-              jsonEncode(model.hashtag?.map((p) => p.toJson()).toList() ?? []),
-            ];
-          }),
-        ];
-      }
+        }),
+      ];
 
       rows.sort((a, b) => DateFormat(StringConfig.dashboard.dateYYYYMMDD)
           .parse(b[4].isNotEmpty ? b[4] : currentDate)

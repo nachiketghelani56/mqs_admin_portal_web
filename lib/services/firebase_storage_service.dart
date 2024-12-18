@@ -14,10 +14,9 @@ class FirebaseStorageService {
   CollectionReference get userSubscriptionReceipt =>
       _instance.collection(Env.fbUserSubscriptionReceipt);
 
-  FirebaseFirestore get contentPortalInstance => FirebaseFirestore.instanceFor(
-      app: _instance.app, databaseId: Env.fbDatabseId);
-  CollectionReference get pathway =>
-      contentPortalInstance.collection(Env.fbPathway);
+  // FirebaseFirestore get contentPortalInstance => FirebaseFirestore.instanceFor(
+  //     app: _instance.app, databaseId: Env.fbDatabseId);
+  CollectionReference get pathway => _instance.collection(Env.fbPathway);
 
   Future<String> uploadFile(
       {required Uint8List data, String ext = 'jpg'}) async {

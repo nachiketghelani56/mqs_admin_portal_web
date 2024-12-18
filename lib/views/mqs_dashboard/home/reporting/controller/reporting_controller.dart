@@ -51,10 +51,14 @@ class ReportingController extends GetxController {
     StringConfig.reporting.lastMonth,
     StringConfig.reporting.customRange,
   ].obs;
-  RxString circleFilter = ''.obs,circleFilterType = ''.obs,
+  RxString circleFilter = ''.obs,
+      circleFilterType = ''.obs,
       authFilter = ''.obs,
       obFilter = ''.obs,
-      subscriptionFilter = ''.obs,subscriptionFilterType = ''.obs;
+      subscriptionFilter = ''.obs,
+      subscriptionFilterType = ''.obs,
+      detailFilter = ''.obs;
+
   RxInt totalRegisteredUsers = 0.obs,
       activeUsers = 0.obs,
       inactiveUsers = 0.obs,
@@ -68,14 +72,17 @@ class ReportingController extends GetxController {
       purchasedSubscription = 0.obs;
   final TextEditingController startDateController = TextEditingController();
   final TextEditingController endDateController = TextEditingController();
-  final TextEditingController startSubscriptionTypeDateController = TextEditingController();
-  final TextEditingController endSubscriptionTypeDateController= TextEditingController();
+  final TextEditingController startSubscriptionTypeDateController =
+      TextEditingController();
+  final TextEditingController endSubscriptionTypeDateController =
+      TextEditingController();
   final TextEditingController startCircleDateController =
       TextEditingController();
   final TextEditingController endCircleDateController = TextEditingController();
   final TextEditingController startCircleTypeDateController =
-  TextEditingController();
-  final TextEditingController endCircleTypeDateController = TextEditingController();
+      TextEditingController();
+  final TextEditingController endCircleTypeDateController =
+      TextEditingController();
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   RxDouble completedOB = 0.0.obs,
@@ -101,7 +108,7 @@ class ReportingController extends GetxController {
 
   @override
   onInit() {
-    getAuthAndOBSummary();
+    getAuthAndOBSummary(isOB: true);
     getCircleSummary();
     getSubscriptionSummary();
     super.onInit();
@@ -148,7 +155,7 @@ class ReportingController extends GetxController {
     } finally {}
   }
 
-  getAuthAndOBSummary() async {
+  getAuthAndOBSummary({bool isOB = false}) async {
     try {
       startDateController.clear();
       endDateController.clear();
@@ -192,30 +199,39 @@ class ReportingController extends GetxController {
               .toList();
         }
       }
+      dashboardController.searchUserType.value = users;
       totalRegisteredUsers.value = users.length;
       activeUsers.value = users.where((e) => e.mqsIsUserActive).length;
       inactiveUsers.value = users.where((e) => !e.mqsIsUserActive).length;
-      getOBSummary(users: users);
+      if (isOB) {
+        getOBSummary(users: users);
+      }
       userStream = UserRepository.i.getUserStream().listen((data) {
         authFilter.value = '';
         totalRegisteredUsers.value = data.length;
         activeUsers.value = data.where((e) => e.mqsIsUserActive).length;
         inactiveUsers.value = data.where((e) => !e.mqsIsUserActive).length;
-        getOBSummary(users: data);
+        if (isOB) {
+          obFilter.value = '';
+          getOBSummary(users: data);
+        }
       });
     } catch (e) {
       errorDialogWidget(msg: e.toString());
     } finally {}
   }
 
-  filterAuth({String? type}) async {
+  filterAuth(
+      {String? type,
+      bool isDetailView = false,
+      required String filterType}) async {
     try {
       if (type != null) {
         authtype.value = type;
       }
       final DashboardController dashboardController = Get.find();
       List<UserIAMModel> users = await UserRepository.i.getUsers();
-      if (authFilter.value == StringConfig.reporting.lastDay) {
+      if (filterType == StringConfig.reporting.lastDay) {
         DateTime lastDay = DateTime.now().subtract(const Duration(days: 1));
         users = users.where((e) {
           DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp);
@@ -223,7 +239,7 @@ class ReportingController extends GetxController {
               createdTime.month == lastDay.month &&
               createdTime.year == lastDay.year;
         }).toList();
-      } else if (authFilter.value == StringConfig.reporting.lastWeek) {
+      } else if (filterType == StringConfig.reporting.lastWeek) {
         DateTime lastWeek = DateTime.now().subtract(const Duration(days: 7));
         DateTime start =
             lastWeek.subtract(Duration(days: DateTime.now().weekday - 1));
@@ -236,7 +252,7 @@ class ReportingController extends GetxController {
           return createdTime.isAfter(startDate) &&
               createdTime.isBefore(endDate);
         }).toList();
-      } else if (authFilter.value == StringConfig.reporting.lastMonth) {
+      } else if (filterType == StringConfig.reporting.lastMonth) {
         DateTime lastMonth = DateTime.now().subtract(const Duration(days: 30));
         users = users.where((e) {
           DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp);
@@ -244,7 +260,8 @@ class ReportingController extends GetxController {
               createdTime.year == lastMonth.year;
         }).toList();
       } else if (startDateController.text.isNotEmpty &&
-          endDateController.text.isNotEmpty) {
+          endDateController.text.isNotEmpty &&
+          filterType.isNotEmpty) {
         DateTime start =
             DateFormat('dd/MM/yyyy').parse(startDateController.text);
         DateTime endDate =
@@ -255,19 +272,32 @@ class ReportingController extends GetxController {
           return createdTime.isAfter(start) && createdTime.isBefore(end);
         }).toList();
       }
-      totalRegisteredUsers.value = users.length;
-      activeUsers.value = users.where((e) => e.mqsIsUserActive).length;
-      inactiveUsers.value = users.where((e) => !e.mqsIsUserActive).length;
+      if (!isDetailView) {
+        totalRegisteredUsers.value = users.length;
+        activeUsers.value = users.where((e) => e.mqsIsUserActive).length;
+        inactiveUsers.value = users.where((e) => !e.mqsIsUserActive).length;
+      }
       dashboardController.reset();
       dashboardController.searchedUsers.value = users;
+      dashboardController.users.value = users;
+      dashboardController.searchUserType.value = users;
       if (authtype.value == StringConfig.reporting.activeUsers) {
         dashboardController.searchedUsers.value =
+            users.where((e) => e.mqsIsUserActive).toList();
+        dashboardController.users.value =
+            users.where((e) => e.mqsIsUserActive).toList();
+        dashboardController.searchUserType.value =
             users.where((e) => e.mqsIsUserActive).toList();
       } else if (authtype.value == StringConfig.reporting.inactiveUsers) {
         dashboardController.searchedUsers.value =
             users.where((e) => !e.mqsIsUserActive).toList();
+        dashboardController.users.value =
+            users.where((e) => !e.mqsIsUserActive).toList();
+        dashboardController.searchUserType.value =
+            users.where((e) => !e.mqsIsUserActive).toList();
       }
-      if (dashboardController.searchedUsers.isEmpty) {
+      if (dashboardController.searchedUsers.isEmpty &&
+          dashboardController.users.isNotEmpty) {
         dashboardController.viewIndex.value = -1;
       } else {
         dashboardController.viewIndex.value = 0;
@@ -277,14 +307,17 @@ class ReportingController extends GetxController {
     } finally {}
   }
 
-  filterOnboarding({String? type}) async {
+  filterOnboarding(
+      {String? type,
+      bool isDetailView = false,
+      required String filterType}) async {
     try {
       if (type != null) {
         obtype.value = type;
       }
       final DashboardController dashboardController = Get.find();
       List<UserIAMModel> users = await UserRepository.i.getUsers();
-      if (obFilter.value == StringConfig.reporting.lastDay) {
+      if (filterType == StringConfig.reporting.lastDay) {
         DateTime lastDay = DateTime.now().subtract(const Duration(days: 1));
         users = users.where((e) {
           DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp);
@@ -292,7 +325,7 @@ class ReportingController extends GetxController {
               createdTime.month == lastDay.month &&
               createdTime.year == lastDay.year;
         }).toList();
-      } else if (obFilter.value == StringConfig.reporting.lastWeek) {
+      } else if (filterType == StringConfig.reporting.lastWeek) {
         DateTime lastWeek = DateTime.now().subtract(const Duration(days: 7));
         DateTime start =
             lastWeek.subtract(Duration(days: DateTime.now().weekday - 1));
@@ -305,7 +338,7 @@ class ReportingController extends GetxController {
           return createdTime.isAfter(startDate) &&
               createdTime.isBefore(endDate);
         }).toList();
-      } else if (obFilter.value == StringConfig.reporting.lastMonth) {
+      } else if (filterType == StringConfig.reporting.lastMonth) {
         DateTime lastMonth = DateTime.now().subtract(const Duration(days: 30));
         users = users.where((e) {
           DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp);
@@ -313,7 +346,8 @@ class ReportingController extends GetxController {
               createdTime.year == lastMonth.year;
         }).toList();
       } else if (startDateController.text.isNotEmpty &&
-          endDateController.text.isNotEmpty) {
+          endDateController.text.isNotEmpty &&
+          filterType.isNotEmpty) {
         DateTime start =
             DateFormat('dd/MM/yyyy').parse(startDateController.text);
         DateTime endDate =
@@ -324,7 +358,9 @@ class ReportingController extends GetxController {
           return createdTime.isAfter(start) && createdTime.isBefore(end);
         }).toList();
       }
-      getOBSummary(users: users);
+      if (!isDetailView) {
+        getOBSummary(users: users);
+      }
       dashboardController.reset();
       dashboardController.searchedUsers.value = users
           .where((e) =>
@@ -332,8 +368,24 @@ class ReportingController extends GetxController {
               e.onboardingModel.demoGraphicValue.isNotEmpty &&
               e.onboardingModel.scenesValue.isNotEmpty)
           .toList();
+      dashboardController.users.value = users
+          .where((e) =>
+              e.onboardingModel.checkInValue.isNotEmpty &&
+              e.onboardingModel.demoGraphicValue.isNotEmpty &&
+              e.onboardingModel.scenesValue.isNotEmpty)
+          .toList();
+      dashboardController.searchUserType.value = users
+          .where((e) =>
+              e.onboardingModel.checkInValue.isNotEmpty &&
+              e.onboardingModel.demoGraphicValue.isNotEmpty &&
+              e.onboardingModel.scenesValue.isNotEmpty)
+          .toList();
       if (obtype.value == StringConfig.reporting.skipped) {
         dashboardController.searchedUsers.value =
+            users.where((e) => e.mqsSkipOnboarding).toList();
+        dashboardController.users.value =
+            users.where((e) => e.mqsSkipOnboarding).toList();
+        dashboardController.searchUserType.value =
             users.where((e) => e.mqsSkipOnboarding).toList();
       } else if (obtype.value == StringConfig.reporting.partialCompletion) {
         List<UserIAMModel> completed = users
@@ -351,8 +403,15 @@ class ReportingController extends GetxController {
         dashboardController.searchedUsers.value = users
             .where((e) => !completed.contains(e) && !empty.contains(e))
             .toList();
+        dashboardController.users.value = users
+            .where((e) => !completed.contains(e) && !empty.contains(e))
+            .toList();
+        dashboardController.searchUserType.value = users
+            .where((e) => !completed.contains(e) && !empty.contains(e))
+            .toList();
       }
-      if (dashboardController.searchedUsers.isEmpty) {
+      if (dashboardController.searchedUsers.isEmpty &&
+          dashboardController.users.isNotEmpty) {
         dashboardController.viewIndex.value = -1;
       } else {
         dashboardController.viewIndex.value = 0;
@@ -539,15 +598,20 @@ class ReportingController extends GetxController {
       _circleController.reset();
       _circleController.searchedCircle.value = circles;
       _circleController.circle.value = circles;
+      _circleController.searchCircleType.value = circles;
       if (circleType.value == StringConfig.reporting.featuredCircles) {
         _circleController.searchedCircle.value =
             circles.where((element) => element.userIsGuide == true).toList();
         _circleController.circle.value =
             circles.where((element) => element.userIsGuide == true).toList();
+        _circleController.searchCircleType.value =
+            circles.where((element) => element.userIsGuide == true).toList();
       } else if (circleType.value == StringConfig.reporting.flaggedCircles) {
         _circleController.searchedCircle.value =
             circles.where((element) => element.isFlag == true).toList();
         _circleController.circle.value =
+            circles.where((element) => element.isFlag == true).toList();
+        _circleController.searchCircleType.value =
             circles.where((element) => element.isFlag == true).toList();
       }
       if (_circleController.searchedCircle.isEmpty &&
@@ -560,15 +624,16 @@ class ReportingController extends GetxController {
       errorDialogWidget(msg: e.toString());
     } finally {}
   }
+
   filterCircleType({String? type}) async {
     try {
-      List<CircleModel> circles =_circleController.circle;
-      List<CircleModel> filterCircles =[];
+      List<CircleModel> circles = _circleController.circle;
+      List<CircleModel> filterCircles = [];
       if (circleFilterType.value == StringConfig.reporting.lastDay) {
         DateTime lastDay = DateTime.now().subtract(const Duration(days: 1));
         filterCircles = circles.where((e) {
           DateTime postTime =
-          DateTime.parse(e.postTime ?? DateTime.now().toIso8601String());
+              DateTime.parse(e.postTime ?? DateTime.now().toIso8601String());
           return postTime.day == lastDay.day &&
               postTime.month == lastDay.month &&
               postTime.year == lastDay.year;
@@ -576,44 +641,41 @@ class ReportingController extends GetxController {
       } else if (circleFilterType.value == StringConfig.reporting.lastWeek) {
         DateTime lastWeek = DateTime.now().subtract(const Duration(days: 7));
         DateTime start =
-        lastWeek.subtract(Duration(days: DateTime.now().weekday - 1));
+            lastWeek.subtract(Duration(days: DateTime.now().weekday - 1));
         DateTime startDate = DateTime(start.year, start.month, start.day);
         DateTime end = lastWeek
             .add(Duration(days: DateTime.daysPerWeek - lastWeek.weekday));
         DateTime endDate = DateTime(end.year, end.month, end.day, 24);
         filterCircles = circles.where((e) {
           DateTime postTime =
-          DateTime.parse(e.postTime ?? DateTime.now().toIso8601String());
+              DateTime.parse(e.postTime ?? DateTime.now().toIso8601String());
           return postTime.isAfter(startDate) && postTime.isBefore(endDate);
         }).toList();
       } else if (circleFilterType.value == StringConfig.reporting.lastMonth) {
         DateTime lastMonth = DateTime.now().subtract(const Duration(days: 30));
         filterCircles = circles.where((e) {
           DateTime postTime =
-          DateTime.parse(e.postTime ?? DateTime.now().toIso8601String());
+              DateTime.parse(e.postTime ?? DateTime.now().toIso8601String());
           return postTime.month == lastMonth.month &&
               postTime.year == lastMonth.year;
         }).toList();
       } else if (startCircleTypeDateController.text.isNotEmpty &&
           endCircleTypeDateController.text.isNotEmpty) {
         DateTime start =
-        DateFormat('dd/MM/yyyy').parse(startCircleTypeDateController.text);
+            DateFormat('dd/MM/yyyy').parse(startCircleTypeDateController.text);
         DateTime endDate =
-        DateFormat('dd/MM/yyyy').parse(endCircleTypeDateController.text);
+            DateFormat('dd/MM/yyyy').parse(endCircleTypeDateController.text);
         DateTime end = DateTime(endDate.year, endDate.month, endDate.day, 24);
         filterCircles = circles.where((e) {
           DateTime postTime =
-          DateTime.parse(e.postTime ?? DateTime.now().toIso8601String());
+              DateTime.parse(e.postTime ?? DateTime.now().toIso8601String());
           return postTime.isAfter(start) && postTime.isBefore(end);
         }).toList();
       }
       _circleController.reset();
       _circleController.searchedCircle.value = filterCircles;
       _circleController.searchCircleType.value = filterCircles;
-
-
-
-      if (_circleController.searchedCircle.isEmpty ) {
+      if (_circleController.searchedCircle.isEmpty) {
         _circleController.viewIndex.value = -1;
       } else {
         _circleController.viewIndex.value = 0;
@@ -693,6 +755,7 @@ class ReportingController extends GetxController {
 
       _dashboardController.reset();
       _dashboardController.searchedUsers.value = users;
+      _dashboardController.searchUserType.value = users;
       _dashboardController.users.value = users;
       if (subscriptionType.value == StringConfig.reporting.activeSubscription) {
         List activeRec = receipt
@@ -705,6 +768,10 @@ class ReportingController extends GetxController {
               firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
         }).toList();
         _dashboardController.users.value = users.where((localItem) {
+          return activeRec.any((firebaseItem) =>
+              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+        }).toList();
+        _dashboardController.searchUserType.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
               firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
         }).toList();
@@ -721,8 +788,13 @@ class ReportingController extends GetxController {
           return purchasedRec.any((firebaseItem) =>
               firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
         }).toList();
+        _dashboardController.searchUserType.value = users.where((localItem) {
+          return purchasedRec.any((firebaseItem) =>
+              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+        }).toList();
       }
-      if (_dashboardController.searchedUsers.isEmpty &&   _dashboardController.users.isEmpty) {
+      if (_dashboardController.searchedUsers.isEmpty &&
+          _dashboardController.users.isEmpty) {
         _dashboardController.viewIndex.value = -1;
       } else {
         _dashboardController.viewIndex.value = 0;
@@ -731,24 +803,24 @@ class ReportingController extends GetxController {
       errorDialogWidget(msg: e.toString());
     } finally {}
   }
+
   filterSubscriptionType({String? type}) async {
     try {
       List<UserIAMModel> users = _dashboardController.users;
-      List<UserIAMModel> filterUsers =[];
-
+      List<UserIAMModel> filterUsers = [];
       if (subscriptionFilterType.value == StringConfig.reporting.lastDay) {
         DateTime lastDay = DateTime.now().subtract(const Duration(days: 1));
-
         filterUsers = users.where((e) {
           DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp);
           return postTime.day == lastDay.day &&
               postTime.month == lastDay.month &&
               postTime.year == lastDay.year;
         }).toList();
-      } else if (subscriptionFilterType.value == StringConfig.reporting.lastWeek) {
+      } else if (subscriptionFilterType.value ==
+          StringConfig.reporting.lastWeek) {
         DateTime lastWeek = DateTime.now().subtract(const Duration(days: 7));
         DateTime start =
-        lastWeek.subtract(Duration(days: DateTime.now().weekday - 1));
+            lastWeek.subtract(Duration(days: DateTime.now().weekday - 1));
         DateTime startDate = DateTime(start.year, start.month, start.day);
         DateTime end = lastWeek
             .add(Duration(days: DateTime.daysPerWeek - lastWeek.weekday));
@@ -757,7 +829,8 @@ class ReportingController extends GetxController {
           DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp);
           return postTime.isAfter(startDate) && postTime.isBefore(endDate);
         }).toList();
-      } else if (subscriptionFilterType.value == StringConfig.reporting.lastMonth) {
+      } else if (subscriptionFilterType.value ==
+          StringConfig.reporting.lastMonth) {
         DateTime lastMonth = DateTime.now().subtract(const Duration(days: 30));
         filterUsers = users.where((e) {
           DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp);
@@ -766,21 +839,19 @@ class ReportingController extends GetxController {
         }).toList();
       } else if (startSubscriptionTypeDateController.text.isNotEmpty &&
           endSubscriptionTypeDateController.text.isNotEmpty) {
-        DateTime start =
-        DateFormat('dd/MM/yyyy').parse(startSubscriptionTypeDateController.text);
-        DateTime endDate =
-        DateFormat('dd/MM/yyyy').parse(endSubscriptionTypeDateController.text);
+        DateTime start = DateFormat('dd/MM/yyyy')
+            .parse(startSubscriptionTypeDateController.text);
+        DateTime endDate = DateFormat('dd/MM/yyyy')
+            .parse(endSubscriptionTypeDateController.text);
         DateTime end = DateTime(endDate.year, endDate.month, endDate.day, 24);
         filterUsers = users.where((e) {
           DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp);
           return postTime.isAfter(start) && postTime.isBefore(end);
         }).toList();
       }
-
       _dashboardController.reset();
       _dashboardController.searchedUsers.value = filterUsers;
       _dashboardController.searchUserType.value = filterUsers;
-
       if (_dashboardController.searchedUsers.isEmpty) {
         _dashboardController.viewIndex.value = -1;
       } else {

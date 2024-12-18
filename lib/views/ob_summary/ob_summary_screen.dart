@@ -42,6 +42,9 @@ class OBSummaryScreen extends StatelessWidget {
                       width: SizeConfig.size22,
                     ),
                   ),
+                  onOpened: () {
+                    _dashboardController.searchController.clear();
+                  },
                   onSelected: (value) {
                     if (value == StringConfig.reporting.customRange) {
                       reportingController.startDateController.clear();
@@ -50,10 +53,12 @@ class OBSummaryScreen extends StatelessWidget {
                         context: context,
                         reportingController: reportingController,
                         type: StringConfig.reporting.onboardingSummary,
+                        isDetailView: true,
                       );
                     } else {
-                      reportingController.obFilter.value = value;
-                      reportingController.filterOnboarding();
+                      reportingController.detailFilter.value = value;
+                      reportingController.filterOnboarding(
+                          filterType: value, isDetailView: true);
                     }
                   },
                   itemBuilder: (context) {
@@ -71,11 +76,14 @@ class OBSummaryScreen extends StatelessWidget {
                     ];
                   },
                 ),
-                if (reportingController.obFilter.isNotEmpty)
+                if (reportingController.detailFilter.isNotEmpty)
                   IconButton(
                     onPressed: () {
-                      reportingController.obFilter.value = '';
-                      reportingController.getAuthAndOBSummary();
+                      reportingController.startDateController.clear();
+                      reportingController.endDateController.clear();
+                      reportingController.detailFilter.value = '';
+                      reportingController.filterOnboarding(
+                          filterType: '', isDetailView: true);
                     },
                     icon: const Icon(
                       Icons.refresh,

@@ -22,6 +22,7 @@ class Login {
   final String emailID = "Email ID";
   final String password = "Password";
   final String login = "Login";
+  final String marketingEmail = "marketing@gmail.com";
 }
 
 class Dashboard {
@@ -402,7 +403,8 @@ class Reporting {
   final String userOverview = "Overall Summary";
   final String noDataAvailable = "No data available";
   final String error = "Error:";
-  final String pendingSubscription = "A summary of your subscription details will be available soon.";
+  final String pendingSubscription =
+      "A summary of your subscription details will be available soon.";
 }
 
 class Home {

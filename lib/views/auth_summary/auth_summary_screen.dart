@@ -10,9 +10,12 @@ import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/widgets/
 class AuthSummaryScreen extends StatelessWidget {
   AuthSummaryScreen({super.key});
 
-  final DashboardController _dashboardController = Get.find();
-  final MqsDashboardController _mqsDashboardController = Get.find();
-  final ReportingController reportingController = Get.find();
+  final DashboardController _dashboardController =
+      Get.put(DashboardController());
+  final MqsDashboardController _mqsDashboardController =
+      Get.put(MqsDashboardController());
+  final ReportingController reportingController =
+      Get.put(ReportingController());
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +45,9 @@ class AuthSummaryScreen extends StatelessWidget {
                       width: SizeConfig.size22,
                     ),
                   ),
+                  onOpened: () {
+                    _dashboardController.searchController.clear();
+                  },
                   onSelected: (value) {
                     if (value == StringConfig.reporting.customRange) {
                       reportingController.startDateController.clear();
@@ -50,10 +56,12 @@ class AuthSummaryScreen extends StatelessWidget {
                         context: context,
                         reportingController: reportingController,
                         type: StringConfig.reporting.authSummary,
+                        isDetailView: true,
                       );
                     } else {
-                      reportingController.authFilter.value = value;
-                      reportingController.filterAuth();
+                      reportingController.detailFilter.value = value;
+                      reportingController.filterAuth(
+                          filterType: value, isDetailView: true);
                     }
                   },
                   itemBuilder: (context) {
@@ -71,11 +79,15 @@ class AuthSummaryScreen extends StatelessWidget {
                     ];
                   },
                 ),
-                if (reportingController.authFilter.isNotEmpty)
+                if (reportingController.detailFilter.isNotEmpty)
                   IconButton(
                     onPressed: () {
-                      reportingController.authFilter.value = '';
-                      reportingController.getAuthAndOBSummary();
+                      _dashboardController.searchController.clear();
+                      reportingController.startDateController.clear();
+                      reportingController.endDateController.clear();
+                      reportingController.detailFilter.value = '';
+                      reportingController.filterAuth(
+                          filterType: '', isDetailView: true);
                     },
                     icon: const Icon(
                       Icons.refresh,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
-import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/views/pathway/controller/pathway_controller.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_icon_button.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_prefix_button.dart';
@@ -46,20 +45,20 @@ Widget pathwayTopButtonsWidget(
                 pathwayController.exportPathway();
               },
             ),
-            SizeConfig.size12.width,
-            CustomPrefixButton(
-              prefixIcon: ImageConfig.add,
-              padding: SizeConfig.size15,
-              btnText: StringConfig.pathway.addPathway,
-              onTap: () {
-                pathwayController.isEdit.value = false;
-                pathwayController.isAdd.value = true;
-                pathwayController.clearAllFields();
-                if (context.width < SizeConfig.size1500) {
-                  Get.toNamed(AppRoutes.addPathway);
-                }
-              },
-            ),
+            // SizeConfig.size12.width,
+            // CustomPrefixButton(
+            //   prefixIcon: ImageConfig.add,
+            //   padding: SizeConfig.size15,
+            //   btnText: StringConfig.pathway.addPathway,
+            //   onTap: () {
+            //     pathwayController.isEdit.value = false;
+            //     pathwayController.isAdd.value = true;
+            //     pathwayController.clearAllFields();
+            //     if (context.width < SizeConfig.size1500) {
+            //       Get.toNamed(AppRoutes.addPathway);
+            //     }
+            //   },
+            // ),
           ],
         )
       : Row(
@@ -92,18 +91,18 @@ Widget pathwayTopButtonsWidget(
                 pathwayController.exportPathway();
               },
             ),
-            SizeConfig.size12.width,
-            CustomIconButton(
-              icon: ImageConfig.add,
-              onTap: () {
-                pathwayController.isEdit.value = false;
-                pathwayController.isAdd.value = true;
-                pathwayController.clearAllFields();
-                if (context.width < SizeConfig.size1500) {
-                  Get.toNamed(AppRoutes.addPathway);
-                }
-              },
-            ),
+            // SizeConfig.size12.width,
+            // CustomIconButton(
+            //   icon: ImageConfig.add,
+            //   onTap: () {
+            //     pathwayController.isEdit.value = false;
+            //     pathwayController.isAdd.value = true;
+            //     pathwayController.clearAllFields();
+            //     if (context.width < SizeConfig.size1500) {
+            //       Get.toNamed(AppRoutes.addPathway);
+            //     }
+            //   },
+            // ),
           ],
         );
 }

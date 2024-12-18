@@ -23,7 +23,7 @@ class ReportingScreen extends StatelessWidget {
   final HomeController _homeController = Get.put(HomeController());
   final CircleController _circleController = Get.put(CircleController());
   final DashboardController _dashboardController =
-  Get.put(DashboardController());
+      Get.put(DashboardController());
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -40,19 +40,33 @@ class ReportingScreen extends StatelessWidget {
                   reportingController: _reportingController, context: context),
               SizeConfig.size25.height,
               authSummaryWidget(
-                  context: context, reportingController: _reportingController),
+                context: context,
+                reportingController: _reportingController,
+                dashboardController: _dashboardController,
+              ),
               SizeConfig.size34.height,
               obSummaryWidget(
-                  reportingController: _reportingController, context: context),
+                reportingController: _reportingController,
+                context: context,
+                dashboardController: _dashboardController,
+              ),
               SizeConfig.size25.height,
               circleSummaryWidget(
-                  context: context, reportingController: _reportingController,circleController:_circleController),
+                context: context,
+                reportingController: _reportingController,
+                circleController: _circleController,
+              ),
               SizeConfig.size25.height,
               subscriptionSummaryWidget(
-                  context: context, reportingController: _reportingController,dashboardController:_dashboardController),
+                context: context,
+                reportingController: _reportingController,
+                dashboardController: _dashboardController,
+              ),
               SizeConfig.size25.height,
               wellAboveChartsWidget(
-                  reportingController: _reportingController, context: context),
+                reportingController: _reportingController,
+                context: context,
+              ),
               SizeConfig.size50.height,
             ],
           ).paddingSymmetric(horizontal: SizeConfig.size40),
