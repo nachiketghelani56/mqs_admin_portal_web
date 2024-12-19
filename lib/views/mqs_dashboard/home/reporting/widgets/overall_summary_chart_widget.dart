@@ -6,7 +6,7 @@ import 'package:mqs_admin_portal_web/models/reporting_chart_model.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/controller/reporting_controller.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-Widget wellAboveIndicatorsWidget(
+Widget overallSummaryChartWidget(
     {required ReportingController reportingController,
     required BuildContext context}) {
   reportingController.getOverAllData();
@@ -52,9 +52,7 @@ Widget wellAboveIndicatorsWidget(
                       return Center(
                           child: Text(StringConfig.reporting.noDataAvailable));
                     }
-
                     final List<ReportingChartModel>? metrics = snapshot.data;
-
                     return SfCartesianChart(
                       primaryXAxis: CategoryAxis(
                         majorTickLines:
@@ -79,12 +77,13 @@ Widget wellAboveIndicatorsWidget(
                       tooltipBehavior: TooltipBehavior(
                         enable: true,
                       ),
-
                       series: [
                         ColumnSeries<ReportingChartModel, String>(
                           dataSource: metrics,
-                          xValueMapper: (ReportingChartModel data, _) => data.label,
-                          yValueMapper: (ReportingChartModel data, _) => data.value,
+                          xValueMapper: (ReportingChartModel data, _) =>
+                              data.label,
+                          yValueMapper: (ReportingChartModel data, _) =>
+                              data.value,
                           name: '',
                           width: SizeConfig.size0point3,
                           pointColorMapper: (ReportingChartModel data, _) {

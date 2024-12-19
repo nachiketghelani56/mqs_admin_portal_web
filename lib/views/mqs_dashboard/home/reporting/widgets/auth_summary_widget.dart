@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
-import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/controller/reporting_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/widgets/custom_range_dialog.dart';
@@ -120,7 +119,8 @@ Widget authSummaryWidget(
                     type: StringConfig.reporting.totalRegisteredUsers,
                     filterType: reportingController.authFilter.value);
                 dashboardController.searchController.clear();
-                Get.toNamed(AppRoutes.authSummary);
+                reportingController.reportType.value =
+                    StringConfig.reporting.totalRegisteredUsers;
               }),
             ),
             SizeConfig.size20.width,
@@ -156,7 +156,8 @@ Widget authSummaryWidget(
                     type: StringConfig.reporting.activeUsers,
                     filterType: reportingController.authFilter.value);
                 dashboardController.searchController.clear();
-                Get.toNamed(AppRoutes.authSummary);
+                reportingController.reportType.value =
+                    StringConfig.reporting.activeUsers;
               }),
             ),
             SizeConfig.size20.width,
@@ -192,7 +193,8 @@ Widget authSummaryWidget(
                     type: StringConfig.reporting.inactiveUsers,
                     filterType: reportingController.authFilter.value);
                 dashboardController.searchController.clear();
-                Get.toNamed(AppRoutes.authSummary);
+                reportingController.reportType.value =
+                    StringConfig.reporting.inactiveUsers;
               }),
             ),
           ],

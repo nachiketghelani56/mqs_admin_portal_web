@@ -22,6 +22,7 @@ import 'package:mqs_admin_portal_web/views/circle/controller/circle_controller.d
 import 'package:mqs_admin_portal_web/views/circle/repository/circle_repository.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/repository/enterprise_repository.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/repository/user_repository.dart';
+import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/controller/reporting_controller.dart';
 import 'package:mqs_admin_portal_web/views/pathway/controller/pathway_controller.dart';
 import 'package:mqs_admin_portal_web/views/pathway/repository/pathway_repository.dart';
 import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
@@ -106,7 +107,6 @@ class DashboardController extends GetxController {
     StringConfig.dashboard.arrayContainingAny,
   ].obs;
   RxInt selectedConditionIndex = RxInt(-1);
-
   RxList<String> booleanValues = [
     StringConfig.dashboard.trueText.toLowerCase(),
     StringConfig.dashboard.falseText.toLowerCase()
@@ -162,6 +162,7 @@ class DashboardController extends GetxController {
   StreamSubscription<List<UserIAMModel>>? userStream;
   StreamSubscription<List<UserSubscriptionReceiptModel>>?
       userSubscriptionReceiptStream;
+  RxBool enterpriseLoader = false.obs, userLoader = false.obs;
 
   @override
   onInit() {
@@ -333,6 +334,7 @@ class DashboardController extends GetxController {
 
   getEnterprises() async {
     try {
+      enterpriseLoader.value = true;
       List<EnterpriseModel> enterpriseList =
           await EnterpriseRepository.i.getEnterprises();
       searchedEnterprises.value = enterpriseList;
@@ -345,12 +347,15 @@ class DashboardController extends GetxController {
       });
     } catch (e) {
       errorDialogWidget(msg: e.toString());
-    } finally {}
+    } finally {
+      enterpriseLoader.value = false;
+    }
   }
 
   getUsers() async {
     try {
       if (!FirebaseAuthService.i.isMarketingUser) {
+        userLoader.value = true;
         List<UserIAMModel> userList = await UserRepository.i.getUsers();
         searchedUsers.value = userList;
         users.value = userList;
@@ -364,7 +369,9 @@ class DashboardController extends GetxController {
       }
     } catch (e) {
       errorDialogWidget(msg: e.toString());
-    } finally {}
+    } finally {
+      userLoader.value = false;
+    }
   }
 
   getUserSubscriptionRecipts() async {
@@ -768,6 +775,12 @@ class DashboardController extends GetxController {
     searchedEnterprises.value = enterprises;
     reset();
     setFilterFields();
+    if (Get.isRegistered<ReportingController>()) {
+      Get.find<ReportingController>().reportType.value = '';
+    }
+    if (!FirebaseAuthService.i.isMarketingUser && index == 1) {
+      getUsers();
+    }
   }
 
   reset() {
@@ -776,7 +789,6 @@ class DashboardController extends GetxController {
       viewIndex.value = -1;
       currentPage.value = 1;
       offset.value = 0;
-      getUsers();
     } else if (selectedTabIndex.value == 2 &&
         Get.isRegistered<CircleController>()) {
       CircleController controller = Get.find<CircleController>();

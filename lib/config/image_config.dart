@@ -24,6 +24,7 @@ class ImageConfig {
   static const String filterNew = "assets/icons/filter_new.png";
   static const String home = "assets/icons/home.png";
   static const String notification = "assets/icons/notification.png";
+  static const String back = "assets/icons/back.png";
   static const String profile = "assets/icons/profile.png";
   static const String settings = "assets/icons/settings.png";
   static const String communication = "assets/icons/communication.png";

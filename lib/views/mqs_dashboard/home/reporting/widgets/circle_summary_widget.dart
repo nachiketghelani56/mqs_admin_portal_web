@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
-import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/views/circle/controller/circle_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/controller/reporting_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/widgets/custom_range_dialog.dart';
@@ -92,7 +91,8 @@ Widget circleSummaryWidget(
                       type: StringConfig.reporting.totalCircles);
                   reportingController.circleFilterType.value = '';
                   circleController.searchController.clear();
-                  Get.toNamed(AppRoutes.circleSummaryDetailScreen);
+                  reportingController.reportType.value =
+                      StringConfig.reporting.totalCircles;
                 },
                 child: Container(
                   height: SizeConfig.size202,
@@ -131,7 +131,8 @@ Widget circleSummaryWidget(
                       type: StringConfig.reporting.featuredCircles);
                   reportingController.circleFilterType.value = '';
                   circleController.searchController.clear();
-                  Get.toNamed(AppRoutes.circleSummaryDetailScreen);
+                  reportingController.reportType.value =
+                      StringConfig.reporting.featuredCircles;
                 },
                 child: Container(
                   height: SizeConfig.size202,
@@ -171,7 +172,8 @@ Widget circleSummaryWidget(
                       type: StringConfig.reporting.flaggedCircles);
                   reportingController.circleFilterType.value = '';
                   circleController.searchController.clear();
-                  Get.toNamed(AppRoutes.circleSummaryDetailScreen);
+                  reportingController.reportType.value =
+                      StringConfig.reporting.flaggedCircles;
                 },
                 child: Container(
                   height: SizeConfig.size202,

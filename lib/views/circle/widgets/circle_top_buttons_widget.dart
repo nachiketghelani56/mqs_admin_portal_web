@@ -14,13 +14,13 @@ Widget circleTopButtonsWidget({
   ReportingController? reportingController,
   required GlobalKey<ScaffoldState> scaffoldKey,
   required BuildContext context,
+  bool isReport = false,
   Widget? filterWidget,
 }) {
   return context.width > SizeConfig.size1800
       ? Row(
           children: [
-            if (!Get.currentRoute
-                .startsWith(AppRoutes.circleSummaryDetailScreen)) ...[
+            if (!isReport) ...[
               CustomPrefixButton(
                 prefixIcon: ImageConfig.filter,
                 btnText: StringConfig.dashboard.filter,
@@ -31,21 +31,20 @@ Widget circleTopButtonsWidget({
               ),
               SizeConfig.size12.width,
             ],
-            SearchTextField(
-              controller: circleController.searchController,
-              hintText: StringConfig.dashboard.searchByNameTitle,
-              onChanged: (p0) {
-                if (Get.currentRoute
-                    .startsWith(AppRoutes.circleSummaryDetailScreen)) {
-                  circleController.searchCircle(status: "type");
-                } else {
-                  circleController.searchCircle();
-                }
-              },
-            ),
+            if (!(isReport && circleController.circle.isEmpty))
+              SearchTextField(
+                controller: circleController.searchController,
+                hintText: StringConfig.dashboard.searchByNameTitle,
+                onChanged: (p0) {
+                  if (isReport) {
+                    circleController.searchCircle(status: "type");
+                  } else {
+                    circleController.searchCircle();
+                  }
+                },
+              ),
             const Spacer(),
-            if (!Get.currentRoute
-                .startsWith(AppRoutes.circleSummaryDetailScreen)) ...[
+            if (!isReport) ...[
               SizeConfig.size12.width,
               CustomIconButton(
                 icon: ImageConfig.import,
@@ -55,20 +54,19 @@ Widget circleTopButtonsWidget({
               ),
               SizeConfig.size12.width,
             ],
-            CustomIconButton(
-              icon: ImageConfig.export,
-              onTap: () {
-                circleController.searchController.clear();
-
-                circleController.exportCircle();
-              },
-            ),
+            if (!(isReport && circleController.circle.isEmpty))
+              CustomIconButton(
+                icon: ImageConfig.export,
+                onTap: () {
+                  circleController.searchController.clear();
+                  circleController.exportCircle();
+                },
+              ),
             if (filterWidget != null) ...[
               SizeConfig.size12.width,
               filterWidget
             ],
-            if (!Get.currentRoute
-                .startsWith(AppRoutes.circleSummaryDetailScreen)) ...[
+            if (!isReport) ...[
               SizeConfig.size12.width,
               CustomPrefixButton(
                 prefixIcon: ImageConfig.add,
@@ -89,8 +87,7 @@ Widget circleTopButtonsWidget({
         )
       : Row(
           children: [
-            if (!Get.currentRoute
-                .startsWith(AppRoutes.circleSummaryDetailScreen)) ...[
+            if (!isReport) ...[
               CustomIconButton(
                 icon: ImageConfig.filter,
                 onTap: () {
@@ -99,21 +96,20 @@ Widget circleTopButtonsWidget({
               ),
               SizeConfig.size12.width,
             ],
-            SearchTextField(
-              controller: circleController.searchController,
-              hintText: StringConfig.dashboard.searchByNameTitle,
-              onChanged: (p0) {
-                if (Get.currentRoute
-                    .startsWith(AppRoutes.circleSummaryDetailScreen)) {
-                  circleController.searchCircle(status: "type");
-                } else {
-                  circleController.searchCircle();
-                }
-              },
-            ),
+            if (!(isReport && circleController.circle.isEmpty))
+              SearchTextField(
+                controller: circleController.searchController,
+                hintText: StringConfig.dashboard.searchByNameTitle,
+                onChanged: (p0) {
+                  if (isReport) {
+                    circleController.searchCircle(status: "type");
+                  } else {
+                    circleController.searchCircle();
+                  }
+                },
+              ),
             const Spacer(),
-            if (!Get.currentRoute
-                .startsWith(AppRoutes.circleSummaryDetailScreen)) ...[
+            if (!isReport) ...[
               CustomIconButton(
                 icon: ImageConfig.import,
                 onTap: () {
@@ -122,20 +118,19 @@ Widget circleTopButtonsWidget({
               ),
               SizeConfig.size12.width,
             ],
-            CustomIconButton(
-              icon: ImageConfig.export,
-              onTap: () {
-                circleController.searchController.clear();
-
-                circleController.exportCircle();
-              },
-            ),
+            if (!(isReport && circleController.circle.isEmpty))
+              CustomIconButton(
+                icon: ImageConfig.export,
+                onTap: () {
+                  circleController.searchController.clear();
+                  circleController.exportCircle();
+                },
+              ),
             if (filterWidget != null) ...[
               SizeConfig.size12.width,
               filterWidget
             ],
-            if (!Get.currentRoute
-                .startsWith(AppRoutes.circleSummaryDetailScreen)) ...[
+            if (!isReport) ...[
               SizeConfig.size12.width,
               CustomIconButton(
                 icon: ImageConfig.add,

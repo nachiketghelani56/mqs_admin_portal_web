@@ -9,7 +9,9 @@ import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/widgets/profile_me
 Widget homeHeaderWidget(
     {required HomeController homeController,
     required BuildContext context,
-    required GlobalKey<ScaffoldState> scaffoldKey}) {
+    required GlobalKey<ScaffoldState> scaffoldKey,
+    bool showBack = false,
+    Function? onBackTap}) {
   return Container(
     padding: const EdgeInsets.symmetric(
         horizontal: SizeConfig.size40, vertical: SizeConfig.size15),
@@ -31,6 +33,16 @@ Widget homeHeaderWidget(
               ),
               SizeConfig.size10.width,
             ],
+            if (showBack)
+              Image.asset(
+                ImageConfig.back,
+                height: SizeConfig.size44,
+                width: SizeConfig.size44,
+              ).tap(() {
+                if (onBackTap != null) {
+                  onBackTap();
+                }
+              }),
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,

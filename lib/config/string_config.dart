@@ -406,6 +406,10 @@ class Reporting {
   final String error = "Error:";
   final String pendingSubscription =
       "A summary of your subscription details will be available soon.";
+  final String signUpLifeCycle = "Sign up Life Cycle";
+  final String acCreated = "A/C Created";
+  final String onboradingCompleted = "Onboarding Completed";
+  final String subscribed = "Subscribed";
 }
 
 class Home {

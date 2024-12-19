@@ -183,6 +183,7 @@ class PathwayController extends GetxController {
       color: ColorConfig.deleteColor,
     ),
   ].obs;
+  RxBool pathwayLoader = false.obs;
 
   @override
   onInit() {
@@ -198,6 +199,7 @@ class PathwayController extends GetxController {
 
   getPathway() async {
     try {
+      pathwayLoader.value = true;
       List<MQSMyQPathwayModel> pathwayList =
           await PathwayRepository.i.getPathways();
       searchedPathway.value = pathwayList;
@@ -213,7 +215,9 @@ class PathwayController extends GetxController {
       }
     } catch (e) {
       errorDialogWidget(msg: e.toString());
-    } finally {}
+    } finally {
+      pathwayLoader.value = false;
+    }
   }
 
   addPathwayDep() {

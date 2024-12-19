@@ -43,6 +43,7 @@ class CircleController extends GetxController {
       userIsGuide = false.obs,
       isFlag = false.obs,
       showHashTag = false.obs;
+  RxBool circleLoader = false.obs;
   List<DropdownMenuItem> get boolOptions => [
         DropdownMenuItem(
           value: true,
@@ -76,6 +77,7 @@ class CircleController extends GetxController {
 
   getCircle() async {
     try {
+      circleLoader.value = true;
       List<CircleModel> circleList = await CircleRepository.i.getCircles();
       searchedCircle.value = circleList;
       circle.value = circleList;
@@ -92,7 +94,9 @@ class CircleController extends GetxController {
       }
     } catch (e) {
       errorDialogWidget(msg: e.toString());
-    } finally {}
+    } finally {
+      circleLoader.value = false;
+    }
   }
 
   deleteCircle({required String docId}) async {

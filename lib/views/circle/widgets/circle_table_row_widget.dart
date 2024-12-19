@@ -11,6 +11,7 @@ Widget circleTableRowWidget({
   required bool isSelected,
   required BuildContext context,
   required int index,
+  bool isReport = false,
 }) {
   return Container(
     height: SizeConfig.size76,
@@ -50,7 +51,7 @@ Widget circleTableRowWidget({
                   Get.toNamed(AppRoutes.circleDetail);
                 }
               }),
-              if (!Get.currentRoute.startsWith(AppRoutes.circleSummaryDetailScreen)) ...[
+              if (!isReport) ...[
                 Image.asset(
                   ImageConfig.edit,
                   height: SizeConfig.size24,
@@ -75,7 +76,6 @@ Widget circleTableRowWidget({
                   );
                 }),
               ],
-
             ],
           ),
         ),

@@ -7,12 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
+import 'package:mqs_admin_portal_web/models/chart_model.dart';
 import 'package:mqs_admin_portal_web/models/circle_model.dart';
 import 'package:mqs_admin_portal_web/models/enterprise_model.dart';
 import 'package:mqs_admin_portal_web/models/reporting_chart_model.dart';
 import 'package:mqs_admin_portal_web/models/user_iam_model.dart';
 import 'package:mqs_admin_portal_web/models/user_subscription_receipt_model.dart';
-import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/views/circle/controller/circle_controller.dart';
 import 'package:mqs_admin_portal_web/views/circle/repository/circle_repository.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
@@ -58,8 +58,8 @@ class ReportingController extends GetxController {
       obFilter = ''.obs,
       subscriptionFilter = ''.obs,
       subscriptionFilterType = ''.obs,
-      detailFilter = ''.obs;
-
+      detailFilter = ''.obs,
+      reportType = ''.obs;
   RxInt totalRegisteredUsers = 0.obs,
       activeUsers = 0.obs,
       inactiveUsers = 0.obs,
@@ -84,7 +84,6 @@ class ReportingController extends GetxController {
       TextEditingController();
   final TextEditingController endCircleTypeDateController =
       TextEditingController();
-
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   RxDouble completedOB = 0.0.obs,
       partialCompletedOB = 0.0.obs,
@@ -106,12 +105,20 @@ class ReportingController extends GetxController {
   final CircleController _circleController = Get.put(CircleController());
   final DashboardController _dashboardController =
       Get.put(DashboardController());
+  Map<String, Color> get singUpChartOpts => {
+        StringConfig.reporting.acCreated: ColorConfig.secondaryColor,
+        StringConfig.reporting.onboradingCompleted: ColorConfig.bullet6Color,
+        StringConfig.reporting.subscribed: ColorConfig.dividerColor,
+        StringConfig.reporting.cancelled: ColorConfig.card1TextColor,
+      };
+  RxList<ChartModel> signUpLifeCycleChartData = <ChartModel>[].obs;
 
   @override
   onInit() {
     getAuthAndOBSummary(isOB: true);
     getCircleSummary();
     getSubscriptionSummary();
+    getSignUpLifeCyleChartData();
     super.onInit();
   }
 
@@ -162,43 +169,40 @@ class ReportingController extends GetxController {
       endDateController.clear();
       final DashboardController dashboardController = Get.find();
       List<UserIAMModel> users = await UserRepository.i.getUsers();
-      if (Get.currentRoute.startsWith(AppRoutes.authSummary)) {
+      if (reportType.value == StringConfig.reporting.totalRegisteredUsers) {
         dashboardController.searchedUsers.value = users;
-        if (authtype.value == StringConfig.reporting.activeUsers) {
-          dashboardController.searchedUsers.value =
-              users.where((e) => e.mqsIsUserActive).toList();
-        } else if (authtype.value == StringConfig.reporting.inactiveUsers) {
-          dashboardController.searchedUsers.value =
-              users.where((e) => !e.mqsIsUserActive).toList();
-        }
-      }
-      if (Get.currentRoute.startsWith(AppRoutes.obSummary)) {
+      } else if (reportType.value == StringConfig.reporting.activeUsers) {
+        dashboardController.searchedUsers.value =
+            users.where((e) => e.mqsIsUserActive).toList();
+      } else if (reportType.value == StringConfig.reporting.inactiveUsers) {
+        dashboardController.searchedUsers.value =
+            users.where((e) => !e.mqsIsUserActive).toList();
+      } else if (reportType.value == StringConfig.reporting.completed) {
         dashboardController.searchedUsers.value = users
             .where((e) =>
                 e.onboardingModel.checkInValue.isNotEmpty &&
                 e.onboardingModel.demoGraphicValue.isNotEmpty &&
                 e.onboardingModel.scenesValue.isNotEmpty)
             .toList();
-        if (obtype.value == StringConfig.reporting.skipped) {
-          dashboardController.searchedUsers.value =
-              users.where((e) => e.mqsSkipOnboarding).toList();
-        } else if (obtype.value == StringConfig.reporting.partialCompletion) {
-          List<UserIAMModel> completed = users
-              .where((e) =>
-                  e.onboardingModel.checkInValue.isNotEmpty &&
-                  e.onboardingModel.demoGraphicValue.isNotEmpty &&
-                  e.onboardingModel.scenesValue.isNotEmpty)
-              .toList();
-          List<UserIAMModel> empty = users
-              .where((e) =>
-                  e.onboardingModel.checkInValue.isEmpty &&
-                  e.onboardingModel.demoGraphicValue.isEmpty &&
-                  e.onboardingModel.scenesValue.isEmpty)
-              .toList();
-          dashboardController.searchedUsers.value = users
-              .where((e) => !completed.contains(e) && !empty.contains(e))
-              .toList();
-        }
+      } else if (reportType.value == StringConfig.reporting.skipped) {
+        dashboardController.searchedUsers.value =
+            users.where((e) => e.mqsSkipOnboarding).toList();
+      } else if (reportType.value == StringConfig.reporting.partialCompletion) {
+        List<UserIAMModel> completed = users
+            .where((e) =>
+                e.onboardingModel.checkInValue.isNotEmpty &&
+                e.onboardingModel.demoGraphicValue.isNotEmpty &&
+                e.onboardingModel.scenesValue.isNotEmpty)
+            .toList();
+        List<UserIAMModel> empty = users
+            .where((e) =>
+                e.onboardingModel.checkInValue.isEmpty &&
+                e.onboardingModel.demoGraphicValue.isEmpty &&
+                e.onboardingModel.scenesValue.isEmpty)
+            .toList();
+        dashboardController.searchedUsers.value = users
+            .where((e) => !completed.contains(e) && !empty.contains(e))
+            .toList();
       }
       dashboardController.searchUserType.value = users;
       totalRegisteredUsers.value = users.length;
@@ -1205,5 +1209,62 @@ class ReportingController extends GetxController {
       return DateFormat('dd/MM/yyyy').format(date);
     }
     return "";
+  }
+
+  getSignUpLifeCyleChartData() async {
+    try {
+      signUpLifeCycleChartData.clear();
+      List<UserIAMModel> users = await UserRepository.i.getUsers();
+      List<UserSubscriptionReceiptModel> userSubscription =
+          await UserRepository.i.getUserSubscriptionReceipt();
+      users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp)
+          .compareTo(DateTime.parse(b.mqsCreatedTimestamp)));
+      // Use a set to ensure uniqueness
+      final uniqueMonths = <String>{};
+      for (var point in users) {
+        // Format month-year for uniqueness
+        final monthYear =
+            "${DateTime.parse(point.mqsCreatedTimestamp).year}-${DateTime.parse(point.mqsCreatedTimestamp).month.toString().padLeft(2, '0')}";
+        uniqueMonths.add(monthYear);
+      }
+      // Convert to a sorted list (optional)
+      final sortedMonths = uniqueMonths.toList()..sort();
+      for (String x in sortedMonths) {
+        int year = int.parse(x.split('-').first);
+        int month = int.parse(x.split('-').last);
+        double y1 = users
+            .where((e) =>
+                DateTime.parse(e.mqsCreatedTimestamp).month == month &&
+                DateTime.parse(e.mqsCreatedTimestamp).year == year)
+            .length
+            .toDouble();
+        double y2 = users
+            .where((e) =>
+                DateTime.parse(e.mqsCreatedTimestamp).month == month &&
+                DateTime.parse(e.mqsCreatedTimestamp).year == year &&
+                e.onboardingModel.checkInValue.isNotEmpty &&
+                e.onboardingModel.demoGraphicValue.isNotEmpty &&
+                e.onboardingModel.scenesValue.isNotEmpty)
+            .length
+            .toDouble();
+        double y3 = users
+            .where((e) =>
+                DateTime.parse(e.mqsCreatedTimestamp).month == month &&
+                DateTime.parse(e.mqsCreatedTimestamp).year == year &&
+                e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+            .length
+            .toDouble();
+        signUpLifeCycleChartData.add(ChartModel(x, y1, y2: y2, y3: y3));
+      }
+      // signUpLifeCycleChartData.value = [
+      //   ChartModel('2016', 25, y2: 20, y3: 15, y4: 18),
+      //   ChartModel('2017', 12, y2: 18, y3: 10, y4: 20),
+      //   ChartModel('2018', 24, y2: 30, y3: 23, y4: 17),
+      //   ChartModel('2019', 18, y2: 5, y3: 11, y4: 10),
+      //   ChartModel('2020', 30, y2: 26, y3: 14, y4: 12),
+      // ];
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    } finally {}
   }
 }

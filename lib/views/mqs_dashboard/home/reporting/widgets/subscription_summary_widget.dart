@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
-import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/controller/reporting_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/widgets/custom_range_dialog.dart';
@@ -90,12 +89,12 @@ Widget subscriptionSummaryWidget(
             Expanded(
               child: GestureDetector(
                 onTap: () {
-
                   reportingController.filterSubscription(
                       type: StringConfig.reporting.activeSubscription);
-                  reportingController.subscriptionFilterType.value="";
+                  reportingController.subscriptionFilterType.value = "";
                   dashboardController.searchController.clear();
-                  Get.toNamed(AppRoutes.subscriptionSummaryDetailScreen);
+                  reportingController.reportType.value =
+                      StringConfig.reporting.activeSubscription;
                 },
                 child: Container(
                   height: SizeConfig.size202,
@@ -132,9 +131,10 @@ Widget subscriptionSummaryWidget(
                 onTap: () {
                   reportingController.filterSubscription(
                       type: StringConfig.reporting.purchasedSubscription);
-                  reportingController.subscriptionFilterType.value="";
+                  reportingController.subscriptionFilterType.value = "";
                   dashboardController.searchController.clear();
-                  Get.toNamed(AppRoutes.subscriptionSummaryDetailScreen);
+                  reportingController.reportType.value =
+                      StringConfig.reporting.purchasedSubscription;
                 },
                 child: Container(
                   height: SizeConfig.size202,
