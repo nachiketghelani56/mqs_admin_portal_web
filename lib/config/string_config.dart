@@ -358,6 +358,10 @@ class Reporting {
   final String circleTypeSummary = "Circle Type Summary";
   final String featuredCircles = "Featured Cirlces";
   final String flaggedCircles = "Flagged Cirlces";
+  final String year = "Year";
+  final String month = "Month";
+  final String week = "Week";
+  final String day = "Day";
   final String today = "Today";
   final String lastDay = "Last day";
   final String lastWeek = "Last week";
@@ -406,10 +410,11 @@ class Reporting {
   final String error = "Error:";
   final String pendingSubscription =
       "A summary of your subscription details will be available soon.";
-  final String signUpLifeCycle = "Sign up Life Cycle";
-  final String acCreated = "A/C Created";
+  final String signUpLifeCycle = "Sign Up Life Cycle";
+  final String userRegistered = "User Registered";
   final String onboradingCompleted = "Onboarding Completed";
   final String subscribed = "Subscribed";
+  final String subscriptionExpired = "Subscription Expired";
 }
 
 class Home {

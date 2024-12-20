@@ -52,7 +52,11 @@ class ReportingScreen extends StatelessWidget {
                 StringConfig.reporting.partialCompletion,
                 StringConfig.reporting.skipped,
                 StringConfig.reporting.activeSubscription,
-                StringConfig.reporting.purchasedSubscription
+                StringConfig.reporting.purchasedSubscription,
+                StringConfig.reporting.userRegistered,
+                StringConfig.reporting.onboradingCompleted,
+                StringConfig.reporting.subscribed,
+                StringConfig.reporting.subscriptionExpired,
               ].contains(_reportingController.reportType.value)) {
                 return Column(
                   children: [

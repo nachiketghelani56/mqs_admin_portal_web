@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
-import 'package:mqs_admin_portal_web/models/chart_model.dart';
 import 'package:mqs_admin_portal_web/models/circle_model.dart';
 import 'package:mqs_admin_portal_web/models/enterprise_model.dart';
+import 'package:mqs_admin_portal_web/models/line_chart_model.dart';
 import 'package:mqs_admin_portal_web/models/reporting_chart_model.dart';
 import 'package:mqs_admin_portal_web/models/user_iam_model.dart';
 import 'package:mqs_admin_portal_web/models/user_subscription_receipt_model.dart';
@@ -51,6 +51,12 @@ class ReportingController extends GetxController {
     StringConfig.reporting.lastWeek,
     StringConfig.reporting.lastMonth,
     StringConfig.reporting.customRange,
+  ].obs;
+  RxList<String> chartOpts = [
+    StringConfig.reporting.year,
+    StringConfig.reporting.month,
+    StringConfig.reporting.week,
+    StringConfig.reporting.day,
   ].obs;
   RxString circleFilter = ''.obs,
       circleFilterType = ''.obs,
@@ -106,19 +112,21 @@ class ReportingController extends GetxController {
   final DashboardController _dashboardController =
       Get.put(DashboardController());
   Map<String, Color> get singUpChartOpts => {
-        StringConfig.reporting.acCreated: ColorConfig.secondaryColor,
+        StringConfig.reporting.userRegistered: ColorConfig.secondaryColor,
         StringConfig.reporting.onboradingCompleted: ColorConfig.bullet6Color,
         StringConfig.reporting.subscribed: ColorConfig.dividerColor,
+        StringConfig.reporting.subscriptionExpired: ColorConfig.chartColor,
         StringConfig.reporting.cancelled: ColorConfig.card1TextColor,
       };
-  RxList<ChartModel> signUpLifeCycleChartData = <ChartModel>[].obs;
+  RxList<LineChartModel> signUpChartData = <LineChartModel>[].obs;
+  RxString signUpChartFilter = StringConfig.reporting.month.obs;
 
   @override
   onInit() {
     getAuthAndOBSummary(isOB: true);
     getCircleSummary();
     getSubscriptionSummary();
-    getSignUpLifeCyleChartData();
+    getMonthWiseSignUpChart();
     super.onInit();
   }
 
@@ -1211,12 +1219,70 @@ class ReportingController extends GetxController {
     return "";
   }
 
-  getSignUpLifeCyleChartData() async {
+  getYearWiseSignUpChart() async {
     try {
-      signUpLifeCycleChartData.clear();
+      signUpChartData.clear();
       List<UserIAMModel> users = await UserRepository.i.getUsers();
-      List<UserSubscriptionReceiptModel> userSubscription =
+      List<UserSubscriptionReceiptModel> receipt =
           await UserRepository.i.getUserSubscriptionReceipt();
+      List<UserSubscriptionReceiptModel> activeRec = receipt
+          .where((e) =>
+              e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+          .toList();
+      users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp)
+          .compareTo(DateTime.parse(b.mqsCreatedTimestamp)));
+      List<int> uniqueYears = (users
+              .map((data) => (DateTime.parse(data.mqsCreatedTimestamp)).year)
+              .toList()
+            ..addAll((receipt.where((e) => e.mqsExpiryDate.isNotEmpty))
+                .map((data) => (DateTime.parse(data.mqsExpiryDate)).year)))
+          .toSet()
+          .toList()
+        ..sort();
+      for (int year in uniqueYears) {
+        double y1 = users
+            .where((e) => DateTime.parse(e.mqsCreatedTimestamp).year == year)
+            .length
+            .toDouble();
+        double y2 = users
+            .where((e) =>
+                DateTime.parse(e.mqsCreatedTimestamp).year == year &&
+                e.onboardingModel.checkInValue.isNotEmpty &&
+                e.onboardingModel.demoGraphicValue.isNotEmpty &&
+                e.onboardingModel.scenesValue.isNotEmpty)
+            .length
+            .toDouble();
+        double y3 = users
+            .where((e) =>
+                DateTime.parse(e.mqsCreatedTimestamp).year == year &&
+                activeRec
+                    .any((test) => test.isFirebaseUserID == e.isFirebaseUserId))
+            .length
+            .toDouble();
+        double y4 = receipt
+            .where((e) =>
+                e.mqsExpiryDate.isNotEmpty &&
+                DateTime.parse(e.mqsExpiryDate).year == year)
+            .length
+            .toDouble();
+        signUpChartData
+            .add(LineChartModel(DateTime(year), y1, y2: y2, y3: y3, y4: y4));
+      }
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    } finally {}
+  }
+
+  getMonthWiseSignUpChart() async {
+    try {
+      signUpChartData.clear();
+      List<UserIAMModel> users = await UserRepository.i.getUsers();
+      List<UserSubscriptionReceiptModel> receipt =
+          await UserRepository.i.getUserSubscriptionReceipt();
+      List<UserSubscriptionReceiptModel> activeRec = receipt
+          .where((e) =>
+              e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+          .toList();
       users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp)
           .compareTo(DateTime.parse(b.mqsCreatedTimestamp)));
       // Use a set to ensure uniqueness
@@ -1227,9 +1293,13 @@ class ReportingController extends GetxController {
             "${DateTime.parse(point.mqsCreatedTimestamp).year}-${DateTime.parse(point.mqsCreatedTimestamp).month.toString().padLeft(2, '0')}";
         uniqueMonths.add(monthYear);
       }
-      // Convert to a sorted list (optional)
-      final sortedMonths = uniqueMonths.toList()..sort();
-      for (String x in sortedMonths) {
+      for (var point in (receipt.where((e) => e.mqsExpiryDate.isNotEmpty))) {
+        // Format month-year for uniqueness
+        final monthYear =
+            "${DateTime.parse(point.mqsExpiryDate).year}-${DateTime.parse(point.mqsExpiryDate).month.toString().padLeft(2, '0')}";
+        uniqueMonths.add(monthYear);
+      }
+      for (String x in uniqueMonths) {
         int year = int.parse(x.split('-').first);
         int month = int.parse(x.split('-').last);
         double y1 = users
@@ -1251,18 +1321,255 @@ class ReportingController extends GetxController {
             .where((e) =>
                 DateTime.parse(e.mqsCreatedTimestamp).month == month &&
                 DateTime.parse(e.mqsCreatedTimestamp).year == year &&
-                e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+                activeRec
+                    .any((test) => test.isFirebaseUserID == e.isFirebaseUserId))
             .length
             .toDouble();
-        signUpLifeCycleChartData.add(ChartModel(x, y1, y2: y2, y3: y3));
+        double y4 = receipt
+            .where((e) =>
+                e.mqsExpiryDate.isNotEmpty &&
+                DateTime.parse(e.mqsExpiryDate).month == month &&
+                DateTime.parse(e.mqsExpiryDate).year == year)
+            .length
+            .toDouble();
+        signUpChartData.add(
+            LineChartModel(DateTime(year, month), y1, y2: y2, y3: y3, y4: y4));
       }
-      // signUpLifeCycleChartData.value = [
-      //   ChartModel('2016', 25, y2: 20, y3: 15, y4: 18),
-      //   ChartModel('2017', 12, y2: 18, y3: 10, y4: 20),
-      //   ChartModel('2018', 24, y2: 30, y3: 23, y4: 17),
-      //   ChartModel('2019', 18, y2: 5, y3: 11, y4: 10),
-      //   ChartModel('2020', 30, y2: 26, y3: 14, y4: 12),
-      // ];
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    } finally {}
+  }
+
+  int getWeekNumber(DateTime date) {
+    final firstDayOfYear = DateTime(date.year, 1, 1);
+    final daysOffset = firstDayOfYear.weekday - DateTime.monday;
+    final firstMonday = firstDayOfYear.add(Duration(days: -daysOffset));
+    final difference = date.difference(firstMonday).inDays;
+    return (difference / 7).ceil() + 1;
+  }
+
+  DateTime getDateFromWeekNumber(int year, int weekNumber) {
+    // Start of the year
+    DateTime firstDayOfYear = DateTime(year, 1, 1);
+    // Calculate the offset to the first day of the week (e.g., Monday)
+    int daysOffset = (firstDayOfYear.weekday - DateTime.monday) % 7;
+    // Calculate the start of the first week
+    DateTime firstWeekStart =
+        firstDayOfYear.subtract(Duration(days: daysOffset));
+    // Calculate the desired week's start date
+    DateTime weekStartDate =
+        firstWeekStart.add(Duration(days: (weekNumber - 1) * 7));
+    return weekStartDate;
+  }
+
+  getWeekWiseSignUpChart() async {
+    try {
+      signUpChartData.clear();
+      List<UserIAMModel> users = await UserRepository.i.getUsers();
+      List<UserSubscriptionReceiptModel> receipt =
+          await UserRepository.i.getUserSubscriptionReceipt();
+      List<UserSubscriptionReceiptModel> activeRec = receipt
+          .where((e) =>
+              e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+          .toList();
+      users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp)
+          .compareTo(DateTime.parse(b.mqsCreatedTimestamp)));
+      final groupedData = <String, List<UserIAMModel>>{};
+      for (var dataPoint in users) {
+        DateTime date = DateTime.parse(dataPoint.mqsCreatedTimestamp);
+        final weekNumber = getWeekNumber(date);
+        groupedData
+            .putIfAbsent('$weekNumber-${date.year}', () => [])
+            .add(dataPoint);
+      }
+      final groupedReceiptData = <String, List<UserSubscriptionReceiptModel>>{};
+      for (var dataPoint
+          in (receipt.where((e) => e.mqsExpiryDate.isNotEmpty))) {
+        DateTime date = DateTime.parse(dataPoint.mqsExpiryDate);
+        final weekNumber = getWeekNumber(date);
+        groupedReceiptData
+            .putIfAbsent('$weekNumber-${date.year}', () => [])
+            .add(dataPoint);
+      }
+      final merged = (groupedData.keys.toList()
+            ..addAll(groupedReceiptData.keys))
+          .toSet()
+          .toList();
+      for (var data in merged) {
+        List<MapEntry<String, List<UserIAMModel>>> userElement =
+            groupedData.entries.where((e) => e.key == data).toList();
+        List<MapEntry<String, List<UserSubscriptionReceiptModel>>>
+            receiptElement =
+            groupedReceiptData.entries.where((e) => e.key == data).toList();
+        int year = int.parse(data.split('-').last);
+        int weekNumber = int.parse(data.split('-').first);
+        DateTime date = getDateFromWeekNumber(year, weekNumber);
+        double y1 = 0, y2 = 0, y3 = 0, y4 = 0;
+        if (userElement.isNotEmpty) {
+          y1 = userElement.first.value.length.toDouble();
+          y2 = userElement.first.value
+              .where((e) =>
+                  e.onboardingModel.checkInValue.isNotEmpty &&
+                  e.onboardingModel.demoGraphicValue.isNotEmpty &&
+                  e.onboardingModel.scenesValue.isNotEmpty)
+              .length
+              .toDouble();
+          y3 = userElement.first.value
+              .where((e) => activeRec
+                  .any((test) => test.isFirebaseUserID == e.isFirebaseUserId))
+              .length
+              .toDouble();
+        }
+        if (receiptElement.isNotEmpty) {
+          y4 = receiptElement.first.value.length.toDouble();
+        }
+        signUpChartData.add(LineChartModel(date, y1, y2: y2, y3: y3, y4: y4));
+      }
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    } finally {}
+  }
+
+  getDayWiseSignUpChart() async {
+    try {
+      signUpChartData.clear();
+      List<UserIAMModel> users = await UserRepository.i.getUsers();
+      List<UserSubscriptionReceiptModel> receipt =
+          await UserRepository.i.getUserSubscriptionReceipt();
+      List<UserSubscriptionReceiptModel> activeRec = receipt
+          .where((e) =>
+              e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+          .toList();
+      users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp)
+          .compareTo(DateTime.parse(b.mqsCreatedTimestamp)));
+      List<DateTime> uniqueDays = (users
+              .map((data) => DateTime(
+                  DateTime.parse(data.mqsCreatedTimestamp).year,
+                  DateTime.parse(data.mqsCreatedTimestamp).month,
+                  DateTime.parse(data.mqsCreatedTimestamp).day))
+              .toList()
+            ..addAll((receipt.where((e) => e.mqsExpiryDate.isNotEmpty)).map(
+                (data) => DateTime(
+                    DateTime.parse(data.mqsExpiryDate).year,
+                    DateTime.parse(data.mqsExpiryDate).month,
+                    DateTime.parse(data.mqsExpiryDate).day))))
+          .toSet()
+          .toList();
+      for (DateTime date in uniqueDays) {
+        double y1 = users
+            .where((e) =>
+                DateTime.parse(e.mqsCreatedTimestamp).month == date.month &&
+                DateTime.parse(e.mqsCreatedTimestamp).year == date.year &&
+                DateTime.parse(e.mqsCreatedTimestamp).day == date.day)
+            .length
+            .toDouble();
+        double y2 = users
+            .where((e) =>
+                DateTime.parse(e.mqsCreatedTimestamp).month == date.month &&
+                DateTime.parse(e.mqsCreatedTimestamp).year == date.year &&
+                DateTime.parse(e.mqsCreatedTimestamp).day == date.day &&
+                e.onboardingModel.checkInValue.isNotEmpty &&
+                e.onboardingModel.demoGraphicValue.isNotEmpty &&
+                e.onboardingModel.scenesValue.isNotEmpty)
+            .length
+            .toDouble();
+        double y3 = users
+            .where((e) =>
+                DateTime.parse(e.mqsCreatedTimestamp).month == date.month &&
+                DateTime.parse(e.mqsCreatedTimestamp).year == date.year &&
+                DateTime.parse(e.mqsCreatedTimestamp).day == date.day &&
+                activeRec
+                    .any((test) => test.isFirebaseUserID == e.isFirebaseUserId))
+            .length
+            .toDouble();
+        double y4 = receipt
+            .where((e) =>
+                e.mqsExpiryDate.isNotEmpty &&
+                DateTime.parse(e.mqsExpiryDate).month == date.month &&
+                DateTime.parse(e.mqsExpiryDate).year == date.year &&
+                DateTime.parse(e.mqsExpiryDate).day == date.day)
+            .length
+            .toDouble();
+        signUpChartData.add(LineChartModel(
+            DateTime(date.year, date.month, date.day), y1,
+            y2: y2, y3: y3, y4: y4));
+      }
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    } finally {}
+  }
+
+  filterSignUp() async {
+    try {
+      final DashboardController dashboardController = Get.find();
+      List<UserIAMModel> users = await UserRepository.i.getUsers();
+      List<UserSubscriptionReceiptModel> receipt =
+          await UserRepository.i.getUserSubscriptionReceipt();
+      dashboardController.reset();
+      if (reportType.value == StringConfig.reporting.userRegistered) {
+        dashboardController.searchedUsers.value = users;
+        dashboardController.searchUserType.value = users;
+        dashboardController.users.value = users;
+      } else if (reportType.value ==
+          StringConfig.reporting.onboradingCompleted) {
+        dashboardController.searchedUsers.value = users
+            .where((e) =>
+                e.onboardingModel.checkInValue.isNotEmpty &&
+                e.onboardingModel.demoGraphicValue.isNotEmpty &&
+                e.onboardingModel.scenesValue.isNotEmpty)
+            .toList();
+        dashboardController.searchUserType.value = users
+            .where((e) =>
+                e.onboardingModel.checkInValue.isNotEmpty &&
+                e.onboardingModel.demoGraphicValue.isNotEmpty &&
+                e.onboardingModel.scenesValue.isNotEmpty)
+            .toList();
+        dashboardController.users.value = users
+            .where((e) =>
+                e.onboardingModel.checkInValue.isNotEmpty &&
+                e.onboardingModel.demoGraphicValue.isNotEmpty &&
+                e.onboardingModel.scenesValue.isNotEmpty)
+            .toList();
+      } else if (reportType.value == StringConfig.reporting.subscribed) {
+        List<UserSubscriptionReceiptModel> activeRec = receipt
+            .where((e) =>
+                e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+            .toList();
+        dashboardController.searchedUsers.value = users.where((localItem) {
+          return activeRec.any((firebaseItem) =>
+              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+        }).toList();
+        dashboardController.searchUserType.value = users.where((localItem) {
+          return activeRec.any((firebaseItem) =>
+              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+        }).toList();
+        dashboardController.users.value = users.where((localItem) {
+          return activeRec.any((firebaseItem) =>
+              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+        }).toList();
+      } else if (reportType.value ==
+          StringConfig.reporting.subscriptionExpired) {
+        List<UserSubscriptionReceiptModel> activeRec =
+            receipt.where((e) => e.mqsExpiryDate.isNotEmpty).toList();
+        dashboardController.searchedUsers.value = users.where((localItem) {
+          return activeRec.any((firebaseItem) =>
+              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+        }).toList();
+        dashboardController.searchUserType.value = users.where((localItem) {
+          return activeRec.any((firebaseItem) =>
+              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+        }).toList();
+        dashboardController.users.value = users.where((localItem) {
+          return activeRec.any((firebaseItem) =>
+              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+        }).toList();
+      }
+      if (dashboardController.searchedUsers.isEmpty &&
+          dashboardController.users.isNotEmpty) {
+        dashboardController.viewIndex.value = -1;
+      } else {
+        dashboardController.viewIndex.value = 0;
+      }
     } catch (e) {
       errorDialogWidget(msg: e.toString());
     } finally {}

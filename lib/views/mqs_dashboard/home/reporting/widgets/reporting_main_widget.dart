@@ -45,8 +45,11 @@ Widget reportingMainWidget(
           reportingController: reportingController,
           context: context,
         ),
-        // SizeConfig.size25.height,
-        // signUpLifeCycleChartWidget(reportingController: reportingController),
+        SizeConfig.size25.height,
+        signUpLifeCycleChartWidget(
+          reportingController: reportingController,
+          context: context,
+        ),
         SizeConfig.size30.height,
       ],
     ),
