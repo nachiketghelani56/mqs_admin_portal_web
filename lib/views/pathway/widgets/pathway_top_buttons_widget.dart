@@ -32,13 +32,13 @@ Widget pathwayTopButtonsWidget(
             ),
             const Spacer(),
             SizeConfig.size12.width,
-            CustomIconButton(
-              icon: ImageConfig.import,
-              onTap: () {
-                pathwayController.importPathway();
-              },
-            ),
-            SizeConfig.size12.width,
+            // CustomIconButton(
+            //   icon: ImageConfig.import,
+            //   onTap: () {
+            //     pathwayController.importPathway();
+            //   },
+            // ),
+            // SizeConfig.size12.width,
             CustomIconButton(
               icon: ImageConfig.export,
               onTap: () {
@@ -78,13 +78,13 @@ Widget pathwayTopButtonsWidget(
               },
             ),
             const Spacer(),
-            CustomIconButton(
-              icon: ImageConfig.import,
-              onTap: () {
-                pathwayController.importPathway();
-              },
-            ),
-            SizeConfig.size12.width,
+            // CustomIconButton(
+            //   icon: ImageConfig.import,
+            //   onTap: () {
+            //     pathwayController.importPathway();
+            //   },
+            // ),
+            // SizeConfig.size12.width,
             CustomIconButton(
               icon: ImageConfig.export,
               onTap: () {

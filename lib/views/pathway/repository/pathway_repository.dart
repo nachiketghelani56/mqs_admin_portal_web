@@ -45,9 +45,12 @@ class PathwayRepository {
   Future<void> addPathway(
       {required MQSMyQPathwayModel pathwayModel,
       required String customId}) async {
-    await pathway.doc(customId).set({
+    await pathway.add({
       ...pathwayModel.toJson(),
     });
+    // await pathway.doc(customId).set({
+    //   ...pathwayModel.toJson(),
+    // });
   }
 
   Future deletePathway({required String docId}) async {

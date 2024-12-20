@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -10,6 +8,8 @@ import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/models/menu_option_model.dart';
 import 'package:mqs_admin_portal_web/models/mqs_my_q_pathway_model.dart';
 import 'package:mqs_admin_portal_web/routes/app_routes.dart';
+import 'package:mqs_admin_portal_web/services/firebase_model_export_service.dart';
+import 'package:mqs_admin_portal_web/services/firebase_model_import_service.dart';
 import 'package:mqs_admin_portal_web/services/firebase_storage_service.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/pathway/repository/pathway_repository.dart';
@@ -767,6 +767,7 @@ class PathwayController extends GetxController {
     } catch (e) {
       errorDialogWidget(msg: e.toString());
     } finally {}
+
   }
 
   addPathway() async {
@@ -934,57 +935,49 @@ class PathwayController extends GetxController {
 
   importPathway() async {
     try {
-      final result = await FilePicker.platform.pickFiles(
-          allowMultiple: false,
-          type: FileType.custom,
-          allowedExtensions: ['csv']);
-      if (result != null) {
-        String csvData = utf8.decode(result.files.single.bytes ?? []);
-        List<List<dynamic>> rows = const CsvToListConverter().convert(csvData);
-        if (rows.isEmpty) {
-          return;
-        }
+      List<List<dynamic>> rows = await FirebaseModelImportService.i.importCSV();
+      if(rows.isNotEmpty){
         List<String> headers = rows[0].map((e) => e.toString()).toList();
         for (int i = 1; i < rows.length; i++) {
           Map<String, dynamic> rowMap = {
             for (int j = 0; j < headers.length; j++) headers[j]: rows[i][j]
           };
-          final docRef = FirebaseStorageService.i.enterprise.doc().id;
+          final docRef = FirebaseStorageService.i.pathway.doc().id;
           MQSMyQPathwayModel pathwayModel = MQSMyQPathwayModel(
             docId: docRef,
             id: rowMap[StringConfig.pathway.pathwayID].toString(),
             mqsPathwayTitle:
-                rowMap[StringConfig.pathway.pathwayTitle].toString(),
+            rowMap[StringConfig.pathway.pathwayTitle].toString(),
             mqsPathwaySubtitle:
-                rowMap[StringConfig.pathway.pathwaySubtitle].toString(),
+            rowMap[StringConfig.pathway.pathwaySubtitle].toString(),
             mqsPathwayType: rowMap[StringConfig.pathway.pathwayType].toString(),
             mqsAboutPathway:
-                rowMap[StringConfig.pathway.aboutPathway].toString(),
+            rowMap[StringConfig.pathway.aboutPathway].toString(),
             mqsLearningObj: rowMap[StringConfig.pathway.learningObj].toString(),
             mqsPathwayCoachInstructions:
-                rowMap[StringConfig.pathway.pathwayCoachInstructions]
-                    .toString(),
+            rowMap[StringConfig.pathway.pathwayCoachInstructions]
+                .toString(),
             mqsPathwayImage:
-                rowMap[StringConfig.pathway.pathwayImage].toString(),
+            rowMap[StringConfig.pathway.pathwayImage].toString(),
             mqsModuleCount: rowMap[StringConfig.pathway.moduleCount],
             mqsPathwayDuration:
-                rowMap[StringConfig.pathway.pathwayDuration].toString(),
+            rowMap[StringConfig.pathway.pathwayDuration].toString(),
             mqsPathwayLevel: rowMap[StringConfig.pathway.pathwayLevel],
             mqsPathwayStatus: rowMap[StringConfig.pathway.pathwayStatus]
-                    .toString()
-                    .toLowerCase() ==
+                .toString()
+                .toLowerCase() ==
                 StringConfig.dashboard.trueText.toLowerCase(),
             mqsPathwayIntroImage:
-                rowMap[StringConfig.pathway.pathwayIntroImage].toString(),
+            rowMap[StringConfig.pathway.pathwayIntroImage].toString(),
             mqsPathwayTileImage:
-                rowMap[StringConfig.pathway.pathwayTileImage].toString(),
+            rowMap[StringConfig.pathway.pathwayTileImage].toString(),
             mqsPathwayDep:
-                rowMap[StringConfig.pathway.pathwayDep].toString().split(", "),
+            rowMap[StringConfig.pathway.pathwayDep].toString().split(", "),
             mqsPathwayDetail: MqsPathwayDetail(
               mqsModules:
-                  (jsonDecode(rowMap[StringConfig.pathway.modules]) as List)
-                      .map((e) => MqsModule.fromJson(e))
-                      .toList(),
+              (jsonDecode(rowMap[StringConfig.pathway.modules]) as List)
+                  .map((e) => MqsModule.fromJson(e))
+                  .toList(),
             ),
           );
           await PathwayRepository.i
@@ -994,7 +987,7 @@ class PathwayController extends GetxController {
     } catch (e) {
       hideLoader();
       errorDialogWidget(msg: e.toString());
-    }
+    } finally {}
   }
 
   exportPathway() async {
@@ -1036,20 +1029,13 @@ class PathwayController extends GetxController {
             "${model.mqsPathwayLevel}",
             "${model.mqsPathwayStatus}",
             jsonEncode(model.mqsPathwayDetail?.mqsModules
-                    .map((p) => p.toJson())
-                    .toList() ??
+                .map((p) => p.toJson())
+                .toList() ??
                 []),
           ];
         }),
       ];
-      String csvData = const ListToCsvConverter().convert(rows);
-      Uint8List bytes = Uint8List.fromList(utf8.encode(csvData));
-      await FileSaver.instance.saveFile(
-        bytes: bytes,
-        ext: "csv",
-        mimeType: MimeType.csv,
-        name: StringConfig.pathway.pathwayInformation,
-      );
+      await FirebaseModelExportService.i.uploadFileToCSV(fileName: StringConfig.pathway.pathwayInformation, rows: rows);
     } catch (e) {
       errorDialogWidget(msg: e.toString());
     } finally {}

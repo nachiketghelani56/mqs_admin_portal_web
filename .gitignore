@@ -141,3 +141,6 @@ app.*.symbols
 
 # Other Generated Files
 *.g.dart
+
+# Ignoring the generated env.g.dart file
+env.g.dart
