@@ -7,11 +7,13 @@ import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/models/menu_option_model.dart';
 import 'package:mqs_admin_portal_web/models/mqs_my_q_pathway_model.dart';
+import 'package:mqs_admin_portal_web/models/user_iam_model.dart';
 import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/services/firebase_model_export_service.dart';
 import 'package:mqs_admin_portal_web/services/firebase_model_import_service.dart';
 import 'package:mqs_admin_portal_web/services/firebase_storage_service.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/repository/user_repository.dart';
 import 'package:mqs_admin_portal_web/views/pathway/repository/pathway_repository.dart';
 import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/loader_widget.dart';
@@ -63,6 +65,8 @@ class PathwayController extends GetxController {
   final TextEditingController levelController = TextEditingController();
   final TextEditingController subtitleController = TextEditingController();
   final TextEditingController titleController = TextEditingController();
+  final TextEditingController pathwayCompletionDateController =
+      TextEditingController();
   final TextEditingController pathwayDepController = TextEditingController();
   final TextEditingController moduleIdController = TextEditingController();
   final TextEditingController moduleTitleController = TextEditingController();
@@ -123,7 +127,7 @@ class PathwayController extends GetxController {
       TextEditingController();
   final TextEditingController pracActCompletionDateController =
       TextEditingController();
-  RxString selectedPathwayType = "".obs;
+  RxString selectedPathwayType = "".obs, selectedUserID = "".obs;
   RxBool pathwayStatus = false.obs,
       moduleStatus = false.obs,
       learnActStatus = false.obs,
@@ -135,6 +139,7 @@ class PathwayController extends GetxController {
         StringConfig.pathway.humanQualities,
         StringConfig.pathway.situations
       ];
+  RxList<UserIAMModel> users = <UserIAMModel>[].obs;
   RxList<String> pathwayDep = <String>[].obs,
       learnActSkills = <String>[].obs,
       pracActSkills = <String>[].obs,
@@ -184,16 +189,19 @@ class PathwayController extends GetxController {
     ),
   ].obs;
   RxBool pathwayLoader = false.obs;
+  StreamSubscription<List<UserIAMModel>>? userStream;
 
   @override
   onInit() {
     getPathway();
+    getUsers();
     super.onInit();
   }
 
   @override
   void onClose() async {
     await pathwayStream?.cancel();
+    await userStream?.cancel();
     super.onClose();
   }
 
@@ -218,6 +226,17 @@ class PathwayController extends GetxController {
     } finally {
       pathwayLoader.value = false;
     }
+  }
+
+  getUsers() async {
+    try {
+      users.value = await UserRepository.i.getUsers();
+      userStream = UserRepository.i.getUserStream().listen((data) {
+        users.value = data;
+      });
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    } finally {}
   }
 
   addPathwayDep() {
@@ -624,7 +643,9 @@ class PathwayController extends GetxController {
     idController.clear();
     titleController.clear();
     subtitleController.clear();
+    pathwayCompletionDateController.clear();
     selectedPathwayType.value = "";
+    selectedUserID.value = "";
     pathwayStatus.value = false;
     aboutPathwayController.clear();
     learningObjController.clear();
@@ -767,7 +788,6 @@ class PathwayController extends GetxController {
     } catch (e) {
       errorDialogWidget(msg: e.toString());
     } finally {}
-
   }
 
   addPathway() async {
@@ -811,6 +831,9 @@ class PathwayController extends GetxController {
           mqsPathwayDep: pathwayDep,
           mqsPathwayDetail: MqsPathwayDetail(mqsModules: mqsModules),
           mqsPathwayStatus: pathwayStatus.value,
+          mqsPathwayCompletionDate: pathwayCompletionDateController.text,
+          mqsPathwayID: idController.text.trim(),
+          mqsUserID: selectedUserID.value,
         );
         if (isEdit.value) {
           await PathwayRepository.i.editPathway(
@@ -837,7 +860,13 @@ class PathwayController extends GetxController {
     idController.text = pathwayDetail.id;
     titleController.text = pathwayDetail.mqsPathwayTitle;
     subtitleController.text = pathwayDetail.mqsPathwaySubtitle;
+    pathwayCompletionDateController.text =
+        pathwayDetail.mqsPathwayCompletionDate;
     selectedPathwayType.value = pathwayDetail.mqsPathwayType;
+    selectedUserID.value =
+        users.any((e) => e.isFirebaseUserId == pathwayDetail.mqsUserID)
+            ? pathwayDetail.mqsUserID
+            : "";
     pathwayStatus.value = pathwayDetail.mqsPathwayStatus;
     pathwayImageURL.value = pathwayDetail.mqsPathwayImage;
     pathwayIntroImageURL.value = pathwayDetail.mqsPathwayIntroImage;
@@ -848,8 +877,8 @@ class PathwayController extends GetxController {
         pathwayDetail.mqsPathwayCoachInstructions;
     durationController.text = pathwayDetail.mqsPathwayDuration;
     levelController.text = pathwayDetail.mqsPathwayLevel.toString();
-    pathwayDep.value = pathwayDetail.mqsPathwayDep;
-    mqsModules.value = modules;
+    pathwayDep.value = List.from(pathwayDetail.mqsPathwayDep);
+    mqsModules.value = List.from(modules);
   }
 
   // deleteStorageFiles() async {
@@ -936,7 +965,7 @@ class PathwayController extends GetxController {
   importPathway() async {
     try {
       List<List<dynamic>> rows = await FirebaseModelImportService.i.importCSV();
-      if(rows.isNotEmpty){
+      if (rows.isNotEmpty) {
         List<String> headers = rows[0].map((e) => e.toString()).toList();
         for (int i = 1; i < rows.length; i++) {
           Map<String, dynamic> rowMap = {
@@ -945,40 +974,44 @@ class PathwayController extends GetxController {
           final docRef = FirebaseStorageService.i.pathway.doc().id;
           MQSMyQPathwayModel pathwayModel = MQSMyQPathwayModel(
             docId: docRef,
-            id: rowMap[StringConfig.pathway.pathwayID].toString(),
+            id: rowMap[StringConfig.pathway.id].toString(),
             mqsPathwayTitle:
-            rowMap[StringConfig.pathway.pathwayTitle].toString(),
+                rowMap[StringConfig.pathway.pathwayTitle].toString(),
             mqsPathwaySubtitle:
-            rowMap[StringConfig.pathway.pathwaySubtitle].toString(),
+                rowMap[StringConfig.pathway.pathwaySubtitle].toString(),
             mqsPathwayType: rowMap[StringConfig.pathway.pathwayType].toString(),
             mqsAboutPathway:
-            rowMap[StringConfig.pathway.aboutPathway].toString(),
+                rowMap[StringConfig.pathway.aboutPathway].toString(),
             mqsLearningObj: rowMap[StringConfig.pathway.learningObj].toString(),
             mqsPathwayCoachInstructions:
-            rowMap[StringConfig.pathway.pathwayCoachInstructions]
-                .toString(),
+                rowMap[StringConfig.pathway.pathwayCoachInstructions]
+                    .toString(),
+            mqsPathwayCompletionDate:
+                rowMap[StringConfig.pathway.completionDate].toString(),
+            mqsPathwayID: rowMap[StringConfig.pathway.pathwayID].toString(),
             mqsPathwayImage:
-            rowMap[StringConfig.pathway.pathwayImage].toString(),
+                rowMap[StringConfig.pathway.pathwayImage].toString(),
             mqsModuleCount: rowMap[StringConfig.pathway.moduleCount],
             mqsPathwayDuration:
-            rowMap[StringConfig.pathway.pathwayDuration].toString(),
+                rowMap[StringConfig.pathway.pathwayDuration].toString(),
             mqsPathwayLevel: rowMap[StringConfig.pathway.pathwayLevel],
             mqsPathwayStatus: rowMap[StringConfig.pathway.pathwayStatus]
-                .toString()
-                .toLowerCase() ==
+                    .toString()
+                    .toLowerCase() ==
                 StringConfig.dashboard.trueText.toLowerCase(),
             mqsPathwayIntroImage:
-            rowMap[StringConfig.pathway.pathwayIntroImage].toString(),
+                rowMap[StringConfig.pathway.pathwayIntroImage].toString(),
             mqsPathwayTileImage:
-            rowMap[StringConfig.pathway.pathwayTileImage].toString(),
+                rowMap[StringConfig.pathway.pathwayTileImage].toString(),
             mqsPathwayDep:
-            rowMap[StringConfig.pathway.pathwayDep].toString().split(", "),
+                rowMap[StringConfig.pathway.pathwayDep].toString().split(", "),
             mqsPathwayDetail: MqsPathwayDetail(
               mqsModules:
-              (jsonDecode(rowMap[StringConfig.pathway.modules]) as List)
-                  .map((e) => MqsModule.fromJson(e))
-                  .toList(),
+                  (jsonDecode(rowMap[StringConfig.pathway.modules]) as List)
+                      .map((e) => MqsModule.fromJson(e))
+                      .toList(),
             ),
+            mqsUserID: rowMap[StringConfig.pathway.userId].toString(),
           );
           await PathwayRepository.i
               .addPathway(pathwayModel: pathwayModel, customId: docRef);
@@ -994,7 +1027,7 @@ class PathwayController extends GetxController {
     try {
       List<List<String>> rows = [
         [
-          StringConfig.pathway.pathwayID,
+          StringConfig.pathway.id,
           StringConfig.pathway.pathwayTitle,
           StringConfig.pathway.pathwaySubtitle,
           StringConfig.pathway.pathwayType,
@@ -1002,6 +1035,8 @@ class PathwayController extends GetxController {
           StringConfig.pathway.learningObj,
           StringConfig.pathway.moduleCount,
           StringConfig.pathway.pathwayCoachInstructions,
+          StringConfig.pathway.completionDate,
+          StringConfig.pathway.pathwayID,
           StringConfig.pathway.pathwayDep,
           StringConfig.pathway.pathwayDuration,
           StringConfig.pathway.pathwayImage,
@@ -1010,6 +1045,7 @@ class PathwayController extends GetxController {
           StringConfig.pathway.pathwayLevel,
           StringConfig.pathway.pathwayStatus,
           StringConfig.pathway.modules,
+          StringConfig.pathway.userId,
         ],
         ...pathway.map((model) {
           return [
@@ -1021,6 +1057,8 @@ class PathwayController extends GetxController {
             model.mqsLearningObj,
             "${model.mqsModuleCount}",
             model.mqsPathwayCoachInstructions,
+            model.mqsPathwayCompletionDate,
+            model.mqsPathwayID,
             model.mqsPathwayDep.join(", "),
             model.mqsPathwayDuration,
             model.mqsPathwayImage,
@@ -1029,13 +1067,15 @@ class PathwayController extends GetxController {
             "${model.mqsPathwayLevel}",
             "${model.mqsPathwayStatus}",
             jsonEncode(model.mqsPathwayDetail?.mqsModules
-                .map((p) => p.toJson())
-                .toList() ??
+                    .map((p) => p.toJson())
+                    .toList() ??
                 []),
+            model.mqsUserID,
           ];
         }),
       ];
-      await FirebaseModelExportService.i.uploadFileToCSV(fileName: StringConfig.pathway.pathwayInformation, rows: rows);
+      await FirebaseModelExportService.i.uploadFileToCSV(
+          fileName: StringConfig.pathway.pathwayInformation, rows: rows);
     } catch (e) {
       errorDialogWidget(msg: e.toString());
     } finally {}

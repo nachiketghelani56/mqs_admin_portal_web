@@ -3,7 +3,7 @@ import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
-import 'package:mqs_admin_portal_web/widgets/key_value_row_widget.dart';
+import 'package:mqs_admin_portal_web/widgets/key_value_warpper_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/title_widget.dart';
 
 Widget mqsEnterprisePOCsWidget(
@@ -15,43 +15,43 @@ Widget mqsEnterprisePOCsWidget(
         showArrowIcon: false,
       ),
       SizeConfig.size10.height,
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         isFirst: true,
         key: StringConfig.dashboard.name,
         value: dashboardController
             .enterpriseDetail.mqsEnterprisePOCs.mqsEnterpriseName,
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.dashboard.email,
         value: dashboardController
             .enterpriseDetail.mqsEnterprisePOCs.mqsEnterpriseEmail,
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.dashboard.address,
         value: dashboardController
             .enterpriseDetail.mqsEnterprisePOCs.mqsEnterpriseAddress,
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.dashboard.phoneNumber,
         value: dashboardController
             .enterpriseDetail.mqsEnterprisePOCs.mqsEnterprisePhoneNumber,
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.dashboard.type,
         value: dashboardController
             .enterpriseDetail.mqsEnterprisePOCs.mqsEnterpriseType,
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.dashboard.website,
         value: dashboardController
             .enterpriseDetail.mqsEnterprisePOCs.mqsEnterpriseWebsite,
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.dashboard.pinCodeText,
         value: dashboardController
             .enterpriseDetail.mqsEnterprisePOCs.mqsEnterprisePincode,
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         isLast: true,
         key: StringConfig.dashboard.signedUp,
         value:

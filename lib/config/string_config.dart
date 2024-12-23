@@ -472,6 +472,7 @@ class Pathway {
   final String pathwayInformation = "Pathway Information";
   final String pathwayTitle = "Pathway Title";
   final String pathwayType = "Pathway Type";
+  final String id = "ID";
   final String pathwayID = "Pathway ID";
   final String aboutPathway = "About Pathway";
   final String learningObj = "Learning Obj";
@@ -538,4 +539,7 @@ class Pathway {
   final String activityStatus = "Activity Status";
   final String activityCompletionDate = "Activity Completion Date";
   final String activityInstruction = "Activty Instruction";
+  final String showMore = " Show more";
+  final String showLess = " Show less";
+  final String userId = " User Id";
 }

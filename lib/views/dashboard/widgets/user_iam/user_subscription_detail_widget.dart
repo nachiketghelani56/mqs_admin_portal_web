@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
-import 'package:mqs_admin_portal_web/widgets/key_value_row_widget.dart';
+import 'package:mqs_admin_portal_web/widgets/key_value_warpper_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/title_widget.dart';
 
 Widget userSubscriptionDetailWidget(
@@ -15,34 +15,34 @@ Widget userSubscriptionDetailWidget(
         showArrowIcon: false,
       ),
       SizeConfig.size10.height,
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.reporting.subscriptionStatus,
         value: dashboardController
                 .userSubscriptionDetail?.mqsUserSubscriptionStatus ??
             "",
         isFirst: true,
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.reporting.subscriptionActivePlan,
         value: dashboardController
                 .userSubscriptionDetail?.mqsSubscriptionActivePlan ??
             "",
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.reporting.subscriptionPlatform,
         value: dashboardController
                 .userSubscriptionDetail?.mqsSubscriptionPlatform ??
             "",
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.reporting.source,
         value: dashboardController.userSubscriptionDetail?.mqsSource ?? "",
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.reporting.packageName,
         value: dashboardController.userSubscriptionDetail?.mqsPackageName ?? "",
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.reporting.expiryDate,
         value: (dashboardController.userSubscriptionDetail?.mqsExpiryDate ?? "")
                 .isNotEmpty

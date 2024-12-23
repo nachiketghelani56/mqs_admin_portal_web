@@ -30,7 +30,8 @@ Widget addPathwayWidget(
                   .copyWith(fontWeight: FontWeight.w600),
             ),
             SizeConfig.size24.height,
-            addPathwayFormWidget(pathwayController: pathwayController),
+            addPathwayFormWidget(
+                pathwayController: pathwayController, context: context),
             SizeConfig.size34.height,
             pathwayDepFormWidget(pathwayController: pathwayController),
             SizeConfig.size34.height,
@@ -46,7 +47,7 @@ Widget addPathwayWidget(
                     onTap: () {
                       pathwayController.isEdit.value = false;
                       pathwayController.isAdd.value = false;
-                      if (Get.currentRoute == AppRoutes.addCircle) {
+                      if (Get.currentRoute == AppRoutes.addPathway) {
                         Get.back();
                       }
                     },

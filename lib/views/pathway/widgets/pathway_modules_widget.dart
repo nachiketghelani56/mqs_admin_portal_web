@@ -6,7 +6,7 @@ import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
 import 'package:mqs_admin_portal_web/views/pathway/controller/pathway_controller.dart';
 import 'package:mqs_admin_portal_web/views/pathway/widgets/learn_activity_detail_widget.dart';
 import 'package:mqs_admin_portal_web/views/pathway/widgets/practice_activity_detail_widget.dart';
-import 'package:mqs_admin_portal_web/widgets/key_value_row_widget.dart';
+import 'package:mqs_admin_portal_web/widgets/key_value_warpper_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/title_widget.dart';
 
 Widget pathwayModulesWidget({required PathwayController pathwayController}) {
@@ -65,30 +65,68 @@ Widget pathwayModulesWidget({required PathwayController pathwayController}) {
                   child: Column(
                     children: [
                       SizeConfig.size12.height,
-                      keyValueRowWidget(
+                      keyValueWrapperWidget(
                         key: StringConfig.pathway.moduleID,
                         value: pathwayController.modules[i].id,
                         isFirst: true,
                       ),
-                      keyValueRowWidget(
+                      keyValueWrapperWidget(
                         key: StringConfig.pathway.moduleTitle,
                         value: pathwayController.modules[i].moduleTitle,
                       ),
-                      keyValueRowWidget(
+                      keyValueWrapperWidget(
                         key: StringConfig.pathway.moduleSubtitle,
                         value: pathwayController.modules[i].mqsModuleSubtitle,
                       ),
-                      keyValueRowWidget(
-                        key: StringConfig.pathway.moduleTileImage,
-                        value: pathwayController.modules[i].moduleTileImage,
-                        isImage: true,
-                      ),
-                      keyValueRowWidget(
+                      if (pathwayController
+                          .modules[i].moduleTileImage.isNotEmpty)
+                        keyValueWrapperWidget(
+                          key: StringConfig.pathway.moduleTileImage,
+                          value: pathwayController.modules[i].moduleTileImage,
+                          isImage: true,
+                        ),
+                      keyValueWrapperWidget(
                         key: StringConfig.pathway.moduleStatus,
                         value:
                             "${pathwayController.modules[i].mqsPWModuleStatus}",
                       ),
-                      keyValueRowWidget(
+                      if (pathwayController
+                          .modules[i].mqsLearnActivity.isNotEmpty)
+                        keyValueWrapperWidget(
+                          key: StringConfig.pathway.learnActivity,
+                          widget: Icon(
+                            pathwayController.showLearnActivty.value
+                                ? Icons.keyboard_arrow_down
+                                : Icons.keyboard_arrow_right,
+                            color: ColorConfig.primaryColor,
+                          ).centerRight,
+                          onTap: () {
+                            pathwayController.showLearnActivty.value =
+                                !pathwayController.showLearnActivty.value;
+                            pathwayController.learnActIndex.value = -1;
+                          },
+                          child: learnActivityDetailWidget(
+                              pathwayController: pathwayController, index: i),
+                        ),
+                      if (pathwayController
+                          .modules[i].mqsPracticeActivity.isNotEmpty)
+                        keyValueWrapperWidget(
+                          key: StringConfig.pathway.practiceActivity,
+                          widget: Icon(
+                            pathwayController.showPracActivity.value
+                                ? Icons.keyboard_arrow_down
+                                : Icons.keyboard_arrow_right,
+                            color: ColorConfig.primaryColor,
+                          ).centerRight,
+                          onTap: () {
+                            pathwayController.showPracActivity.value =
+                                !pathwayController.showPracActivity.value;
+                            pathwayController.pracActIndex.value = -1;
+                          },
+                          child: practiceActivityDetailWidget(
+                              pathwayController: pathwayController, index: i),
+                        ),
+                      keyValueWrapperWidget(
                         key: StringConfig.pathway.completionDate,
                         value: pathwayController
                                 .modules[i].mqsModuleCompletionDate.isNotEmpty
@@ -97,39 +135,7 @@ Widget pathwayModulesWidget({required PathwayController pathwayController}) {
                                     .modules[i].mqsModuleCompletionDate))
                             : pathwayController
                                 .modules[i].mqsModuleCompletionDate,
-                      ),
-                      keyValueRowWidget(
-                        key: StringConfig.pathway.learnActivity,
-                        widget: Icon(
-                          pathwayController.showLearnActivty.value
-                              ? Icons.keyboard_arrow_down
-                              : Icons.keyboard_arrow_right,
-                          color: ColorConfig.primaryColor,
-                        ).centerRight,
-                        onTap: () {
-                          pathwayController.showLearnActivty.value =
-                              !pathwayController.showLearnActivty.value;
-                          pathwayController.learnActIndex.value = -1;
-                        },
-                        child: learnActivityDetailWidget(
-                            pathwayController: pathwayController, index: i),
-                      ),
-                      keyValueRowWidget(
-                        key: StringConfig.pathway.practiceActivity,
-                        widget: Icon(
-                          pathwayController.showPracActivity.value
-                              ? Icons.keyboard_arrow_down
-                              : Icons.keyboard_arrow_right,
-                          color: ColorConfig.primaryColor,
-                        ).centerRight,
                         isLast: true,
-                        onTap: () {
-                          pathwayController.showPracActivity.value =
-                              !pathwayController.showPracActivity.value;
-                          pathwayController.pracActIndex.value = -1;
-                        },
-                        child: practiceActivityDetailWidget(
-                            pathwayController: pathwayController, index: i),
                       ),
                     ],
                   ),

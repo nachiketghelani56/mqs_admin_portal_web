@@ -18,25 +18,32 @@ class MQSMyQPathwayModel {
   final String mqsPathwayTileImage;
   final String mqsPathwayTitle;
   final String mqsPathwayType;
+  final String mqsPathwayCompletionDate;
+  final String mqsPathwayID;
+  final String mqsUserID;
 
-  MQSMyQPathwayModel(
-      {required this.docId,
-      required this.id,
-      required this.mqsPathwayTitle,
-      required this.mqsPathwaySubtitle,
-      required this.mqsPathwayType,
-      required this.mqsAboutPathway,
-      required this.mqsLearningObj,
-      required this.mqsPathwayCoachInstructions,
-      required this.mqsPathwayImage,
-      required this.mqsModuleCount,
-      required this.mqsPathwayDuration,
-      required this.mqsPathwayLevel,
-      required this.mqsPathwayStatus,
-      required this.mqsPathwayIntroImage,
-      required this.mqsPathwayTileImage,
-      required this.mqsPathwayDep,
-      required this.mqsPathwayDetail});
+  MQSMyQPathwayModel({
+    required this.docId,
+    required this.id,
+    required this.mqsPathwayTitle,
+    required this.mqsPathwaySubtitle,
+    required this.mqsPathwayType,
+    required this.mqsAboutPathway,
+    required this.mqsLearningObj,
+    required this.mqsPathwayCoachInstructions,
+    required this.mqsPathwayImage,
+    required this.mqsModuleCount,
+    required this.mqsPathwayDuration,
+    required this.mqsPathwayLevel,
+    required this.mqsPathwayStatus,
+    required this.mqsPathwayIntroImage,
+    required this.mqsPathwayTileImage,
+    required this.mqsPathwayDep,
+    required this.mqsPathwayDetail,
+    required this.mqsPathwayCompletionDate,
+    required this.mqsPathwayID,
+    required this.mqsUserID,
+  });
 
   factory MQSMyQPathwayModel.fromJson(Map<String, dynamic> json) {
     return MQSMyQPathwayModel(
@@ -60,6 +67,9 @@ class MQSMyQPathwayModel {
       mqsPathwayDetail: json['mqsPathwayDetail'] != null
           ? MqsPathwayDetail.fromJson(json['mqsPathwayDetail'])
           : null,
+      mqsPathwayCompletionDate: json['mqsPathwayCompletionDate'] ?? "",
+      mqsPathwayID: json['mqsPathwayID'] ?? "",
+      mqsUserID: json['mqsUserID'] ?? "",
     );
   }
 
@@ -81,6 +91,9 @@ class MQSMyQPathwayModel {
       'mqsPathwayTitle': mqsPathwayTitle,
       'mqsPathwayType': mqsPathwayType,
       'mqsLearningObj': mqsLearningObj,
+      'mqsPathwayCompletionDate': mqsPathwayCompletionDate,
+      'mqsPathwayID': mqsPathwayID,
+      'mqsUserID': mqsUserID,
     };
   }
 }

@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:mqs_admin_portal_web/views/pathway/controller/pathway_controller.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
-import 'package:mqs_admin_portal_web/widgets/key_value_row_widget.dart';
+import 'package:mqs_admin_portal_web/widgets/key_value_warpper_widget.dart';
 
 Widget? practiceActivityDetailWidget(
     {required PathwayController pathwayController, required int index}) {
@@ -44,49 +44,49 @@ Widget? practiceActivityDetailWidget(
                 }
               }),
               if (pathwayController.pracActIndex.value == j) ...[
-                keyValueRowWidget(
+                keyValueWrapperWidget(
                   key: StringConfig.pathway.activityTitle,
                   value: pathwayController
                       .modules[index].mqsPracticeActivity[j].mqsActivityTitle,
                 ),
-                keyValueRowWidget(
+                keyValueWrapperWidget(
                   key: StringConfig.pathway.activtyRefID,
                   value: pathwayController
                       .modules[index].mqsPracticeActivity[j].mqsActivityRefID,
                 ),
-                keyValueRowWidget(
+                keyValueWrapperWidget(
                   key: StringConfig.pathway.activityInstruction,
                   value: pathwayController.modules[index].mqsPracticeActivity[j]
                       .mqsActivityInstruction,
                 ),
-                keyValueRowWidget(
+                keyValueWrapperWidget(
                   key: StringConfig.pathway.activityScreenHandoff,
                   value:
                       "${pathwayController.modules[index].mqsPracticeActivity[j].mqsActivityScreenHandoff}",
                 ),
-                keyValueRowWidget(
+                keyValueWrapperWidget(
                   key: StringConfig.pathway.activitySkills,
                   value: pathwayController
                       .modules[index].mqsPracticeActivity[j].mqsActivitySkill
                       .join(", "),
                 ),
-                keyValueRowWidget(
+                keyValueWrapperWidget(
                   key: StringConfig.pathway.activityReqIcons,
                   value: pathwayController
                       .modules[index].mqsPracticeActivity[j].mqsActivityReqIcons
                       .join(", "),
                 ),
-                keyValueRowWidget(
+                keyValueWrapperWidget(
                   key: StringConfig.pathway.navigateToScreen,
                   value: pathwayController.modules[index].mqsPracticeActivity[j]
                       .mqsNavigateToScreen,
                 ),
-                keyValueRowWidget(
+                keyValueWrapperWidget(
                   key: StringConfig.pathway.activityStatus,
                   value:
                       "${pathwayController.modules[index].mqsPracticeActivity[j].mqsActivityStatus}",
                 ),
-                keyValueRowWidget(
+                keyValueWrapperWidget(
                   key: StringConfig.pathway.completionDate,
                   value: pathwayController.modules[index].mqsPracticeActivity[j]
                           .mqsActivityCompletionDate.isNotEmpty
@@ -98,53 +98,53 @@ Widget? practiceActivityDetailWidget(
                       : pathwayController.modules[index].mqsPracticeActivity[j]
                           .mqsActivityCompletionDate,
                 ),
-                keyValueRowWidget(
+                keyValueWrapperWidget(
                   key: StringConfig.pathway.addToFav,
                   value:
                       "${pathwayController.modules[index].mqsPracticeActivity[j].addToFav}",
                 ),
-                keyValueRowWidget(
+                keyValueWrapperWidget(
                   key: StringConfig.pathway.activityAudioLesson,
                   value: pathwayController.modules[index].mqsPracticeActivity[j]
                           .activity?.mqsActivityAudioLesson ??
                       "",
                 ),
-                keyValueRowWidget(
+                keyValueWrapperWidget(
                   key: StringConfig.pathway.activityBenefits,
                   value: pathwayController.modules[index].mqsPracticeActivity[j]
                           .activity?.mqsActivityBenefits ??
                       "",
                 ),
-                keyValueRowWidget(
+                keyValueWrapperWidget(
                   key: StringConfig.pathway.activityCoachInstructions,
                   value: pathwayController.modules[index].mqsPracticeActivity[j]
                           .activity?.mqsActivityCoachInstructions ??
                       "",
                 ),
-                keyValueRowWidget(
+                keyValueWrapperWidget(
                   key: StringConfig.pathway.activityDuration,
                   value:
                       "${pathwayController.modules[index].mqsPracticeActivity[j].activity?.mqsActivityDuration}",
                 ),
-                keyValueRowWidget(
+                keyValueWrapperWidget(
                   key: StringConfig.pathway.activityLessonDetail,
                   value: pathwayController.modules[index].mqsPracticeActivity[j]
                           .activity?.mqsActivityLessonDetail ??
                       "",
                 ),
-                keyValueRowWidget(
+                keyValueWrapperWidget(
                   key: StringConfig.pathway.activityReflectionQuestion,
                   value: pathwayController.modules[index].mqsPracticeActivity[j]
                           .activity?.mqsActivityReflectionQuestion ??
                       "",
                 ),
-                keyValueRowWidget(
+                keyValueWrapperWidget(
                   key: StringConfig.pathway.activityVideoLesson,
                   value: pathwayController.modules[index].mqsPracticeActivity[j]
                           .activity?.mqsActivityVideoLesson ??
                       "",
                 ),
-                keyValueRowWidget(
+                keyValueWrapperWidget(
                   key: StringConfig.pathway.mqsInfo,
                   value: pathwayController.modules[index].mqsPracticeActivity[j]
                           .activity?.mqsInfo ??

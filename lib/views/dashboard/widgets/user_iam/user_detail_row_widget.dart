@@ -2,79 +2,79 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
-import 'package:mqs_admin_portal_web/widgets/key_value_row_widget.dart';
+import 'package:mqs_admin_portal_web/widgets/key_value_warpper_widget.dart';
 
 Widget userDetailRowWidget({required DashboardController dashboardController}) {
   return Column(
     children: [
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.dashboard.email,
         value: dashboardController.userDetail.email,
         isFirst: true,
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.dashboard.firstName,
         value: dashboardController.userDetail.firstName,
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.dashboard.lastName,
         value: dashboardController.userDetail.lastName,
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.dashboard.loginWith,
         value: dashboardController.userDetail.loginWith,
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.dashboard.userImage,
         value: dashboardController.userDetail.userImage,
         isImage: true,
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.reporting.enterpriseUser,
         value:
             "${dashboardController.userDetail.isEnterpriseUser.toString().capitalize}",
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.reporting.firebaseUserId,
         value: dashboardController.userDetail.isFirebaseUserId,
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.reporting.mongoDbUserId,
         value: dashboardController.userDetail.isMongoDBUserId,
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.dashboard.about,
         value: dashboardController.userDetail.about,
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.dashboard.aboutValue,
         value:
             "${dashboardController.userDetail.aboutValue.toString().capitalize}",
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.dashboard.country,
         value: dashboardController.userDetail.country,
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.dashboard.countryValue,
         value:
             "${dashboardController.userDetail.countryValue.toString().capitalize}",
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.dashboard.pronouns,
         value: dashboardController.userDetail.pronouns,
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.dashboard.pronounsValue,
         value:
             "${dashboardController.userDetail.pronounsValue.toString().capitalize}",
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.dashboard.skipOnboarding,
         value:
             "${dashboardController.userDetail.mqsSkipOnboarding.toString().capitalize}",
       ),
-      keyValueRowWidget(
+      keyValueWrapperWidget(
         key: StringConfig.dashboard.isRegister,
         value: dashboardController.userDetail.isRegister,
         isLast: true,
