@@ -49,6 +49,7 @@ dependencies:
   cached_network_image: ^3.4.1
   firebase_storage: ^12.3.7
   readmore: ^3.0.0
+  just_audio: ^0.9.42
 
 dev_dependencies:
   flutter_test:

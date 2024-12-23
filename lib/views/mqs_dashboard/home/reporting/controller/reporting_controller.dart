@@ -115,6 +115,7 @@ class ReportingController extends GetxController {
         StringConfig.reporting.userRegistered: ColorConfig.secondaryColor,
         StringConfig.reporting.onboradingCompleted: ColorConfig.bullet6Color,
         StringConfig.reporting.subscribed: ColorConfig.dividerColor,
+        StringConfig.reporting.notSubscribed: ColorConfig.bullet2Color,
         StringConfig.reporting.subscriptionExpired: ColorConfig.chartColor,
         StringConfig.reporting.cancelled: ColorConfig.card1TextColor,
       };
@@ -177,14 +178,28 @@ class ReportingController extends GetxController {
       endDateController.clear();
       final DashboardController dashboardController = Get.find();
       List<UserIAMModel> users = await UserRepository.i.getUsers();
+
+
+
+
       if (reportType.value == StringConfig.reporting.totalRegisteredUsers) {
         dashboardController.searchedUsers.value = users;
       } else if (reportType.value == StringConfig.reporting.activeUsers) {
-        dashboardController.searchedUsers.value =
-            users.where((e) => e.mqsIsUserActive).toList();
+        dashboardController.searchedUsers.value =users.where((e) {
+          final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
+          return updatedTimestamp != null &&
+              updatedTimestamp
+                  .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
+              updatedTimestamp.isBefore(DateTime.now());
+        }).toList();
       } else if (reportType.value == StringConfig.reporting.inactiveUsers) {
-        dashboardController.searchedUsers.value =
-            users.where((e) => !e.mqsIsUserActive).toList();
+        dashboardController.searchedUsers.value = users.where((e) {
+          final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
+          return !(updatedTimestamp != null &&
+              updatedTimestamp
+                  .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
+              updatedTimestamp.isBefore(DateTime.now()));
+        }).toList();
       } else if (reportType.value == StringConfig.reporting.completed) {
         dashboardController.searchedUsers.value = users
             .where((e) =>
@@ -214,16 +229,44 @@ class ReportingController extends GetxController {
       }
       dashboardController.searchUserType.value = users;
       totalRegisteredUsers.value = users.length;
-      activeUsers.value = users.where((e) => e.mqsIsUserActive).length;
-      inactiveUsers.value = users.where((e) => !e.mqsIsUserActive).length;
+      activeUsers.value = users.where((e) {
+        final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
+        return updatedTimestamp != null &&
+            updatedTimestamp
+                .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
+            updatedTimestamp.isBefore(DateTime.now());
+      }).length;
+
+      inactiveUsers.value = users.where((e) {
+        final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
+        return !(updatedTimestamp != null &&
+            updatedTimestamp
+                .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
+            updatedTimestamp.isBefore(DateTime.now()));
+      }).length;
+
       if (isOB) {
         getOBSummary(users: users);
       }
       userStream = UserRepository.i.getUserStream().listen((data) {
         authFilter.value = '';
         totalRegisteredUsers.value = data.length;
-        activeUsers.value = data.where((e) => e.mqsIsUserActive).length;
-        inactiveUsers.value = data.where((e) => !e.mqsIsUserActive).length;
+        activeUsers.value = data.where((e) {
+          final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
+          return updatedTimestamp != null &&
+              updatedTimestamp
+                  .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
+              updatedTimestamp.isBefore(DateTime.now());
+        }).length;
+
+        inactiveUsers.value = data.where((e) {
+          final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
+          return !(updatedTimestamp != null &&
+              updatedTimestamp
+                  .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
+              updatedTimestamp.isBefore(DateTime.now()));
+        }).length;
+
         if (isOB) {
           obFilter.value = '';
           getOBSummary(users: data);
@@ -300,23 +343,68 @@ class ReportingController extends GetxController {
       dashboardController.searchUserType.value = users;
       if (!isDetailView) {
         totalRegisteredUsers.value = users.length;
-        activeUsers.value = users.where((e) => e.mqsIsUserActive).length;
-        inactiveUsers.value = users.where((e) => !e.mqsIsUserActive).length;
+
+        activeUsers.value = users.where((e) {
+          final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
+          return updatedTimestamp != null &&
+              updatedTimestamp
+                  .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
+              updatedTimestamp.isBefore(DateTime.now());
+        }).length;
+
+        inactiveUsers.value = users.where((e) {
+          final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
+          return !(updatedTimestamp != null &&
+              updatedTimestamp
+                  .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
+              updatedTimestamp.isBefore(DateTime.now()));
+        }).length;
+
         dashboardController.users.value = users;
         if (authtype.value == StringConfig.reporting.activeUsers) {
-          dashboardController.searchedUsers.value =
-              users.where((e) => e.mqsIsUserActive).toList();
-          dashboardController.users.value =
-              users.where((e) => e.mqsIsUserActive).toList();
-          dashboardController.searchUserType.value =
-              users.where((e) => e.mqsIsUserActive).toList();
+          dashboardController.searchedUsers.value = users.where((e) {
+            final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
+            return updatedTimestamp != null &&
+                updatedTimestamp
+                    .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
+                updatedTimestamp.isBefore(DateTime.now());
+          }).toList();
+          dashboardController.users.value = users.where((e) {
+            final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
+            return updatedTimestamp != null &&
+                updatedTimestamp
+                    .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
+                updatedTimestamp.isBefore(DateTime.now());
+          }).toList();
+          dashboardController.searchUserType.value =users.where((e) {
+            final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
+            return updatedTimestamp != null &&
+                updatedTimestamp
+                    .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
+                updatedTimestamp.isBefore(DateTime.now());
+          }).toList();
         } else if (authtype.value == StringConfig.reporting.inactiveUsers) {
-          dashboardController.searchedUsers.value =
-              users.where((e) => !e.mqsIsUserActive).toList();
-          dashboardController.users.value =
-              users.where((e) => !e.mqsIsUserActive).toList();
-          dashboardController.searchUserType.value =
-              users.where((e) => !e.mqsIsUserActive).toList();
+          dashboardController.searchedUsers.value = users.where((e) {
+            final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
+            return !(updatedTimestamp != null &&
+                updatedTimestamp
+                    .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
+                updatedTimestamp.isBefore(DateTime.now()));
+          }).toList();
+          dashboardController.users.value = users.where((e) {
+            final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
+            return !(updatedTimestamp != null &&
+                updatedTimestamp
+                    .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
+                updatedTimestamp.isBefore(DateTime.now()));
+          }).toList();
+          dashboardController.searchUserType.value = users.where((e) {
+            final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
+            return !(updatedTimestamp != null &&
+                updatedTimestamp
+                    .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
+                updatedTimestamp.isBefore(DateTime.now()));
+          }).toList();
         }
       }
       if (dashboardController.searchedUsers.isEmpty &&
@@ -1229,6 +1317,10 @@ class ReportingController extends GetxController {
           .where((e) =>
               e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
           .toList();
+      List<UserSubscriptionReceiptModel> inActiveRec = receipt
+          .where((e) =>
+              e.mqsUserSubscriptionStatus != StringConfig.reporting.active)
+          .toList();
       users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp)
           .compareTo(DateTime.parse(b.mqsCreatedTimestamp)));
       List<int> uniqueYears = (users
@@ -1265,8 +1357,15 @@ class ReportingController extends GetxController {
                 DateTime.parse(e.mqsExpiryDate).year == year)
             .length
             .toDouble();
-        signUpChartData
-            .add(LineChartModel(DateTime(year), y1, y2: y2, y3: y3, y4: y4));
+        double y6 = users
+            .where((e) =>
+                DateTime.parse(e.mqsCreatedTimestamp).year == year &&
+                inActiveRec
+                    .any((test) => test.isFirebaseUserID == e.isFirebaseUserId))
+            .length
+            .toDouble();
+        signUpChartData.add(
+            LineChartModel(DateTime(year), y1, y2: y2, y3: y3, y4: y4, y6: y6));
       }
     } catch (e) {
       errorDialogWidget(msg: e.toString());
@@ -1282,6 +1381,10 @@ class ReportingController extends GetxController {
       List<UserSubscriptionReceiptModel> activeRec = receipt
           .where((e) =>
               e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+          .toList();
+      List<UserSubscriptionReceiptModel> inActiveRec = receipt
+          .where((e) =>
+              e.mqsUserSubscriptionStatus != StringConfig.reporting.active)
           .toList();
       users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp)
           .compareTo(DateTime.parse(b.mqsCreatedTimestamp)));
@@ -1332,8 +1435,16 @@ class ReportingController extends GetxController {
                 DateTime.parse(e.mqsExpiryDate).year == year)
             .length
             .toDouble();
-        signUpChartData.add(
-            LineChartModel(DateTime(year, month), y1, y2: y2, y3: y3, y4: y4));
+        double y6 = users
+            .where((e) =>
+                DateTime.parse(e.mqsCreatedTimestamp).month == month &&
+                DateTime.parse(e.mqsCreatedTimestamp).year == year &&
+                inActiveRec
+                    .any((test) => test.isFirebaseUserID == e.isFirebaseUserId))
+            .length
+            .toDouble();
+        signUpChartData.add(LineChartModel(DateTime(year, month), y1,
+            y2: y2, y3: y3, y4: y4, y6: y6));
       }
     } catch (e) {
       errorDialogWidget(msg: e.toString());
@@ -1372,6 +1483,10 @@ class ReportingController extends GetxController {
           .where((e) =>
               e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
           .toList();
+      List<UserSubscriptionReceiptModel> inActiveRec = receipt
+          .where((e) =>
+              e.mqsUserSubscriptionStatus != StringConfig.reporting.active)
+          .toList();
       users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp)
           .compareTo(DateTime.parse(b.mqsCreatedTimestamp)));
       final groupedData = <String, List<UserIAMModel>>{};
@@ -1404,7 +1519,7 @@ class ReportingController extends GetxController {
         int year = int.parse(data.split('-').last);
         int weekNumber = int.parse(data.split('-').first);
         DateTime date = getDateFromWeekNumber(year, weekNumber);
-        double y1 = 0, y2 = 0, y3 = 0, y4 = 0;
+        double y1 = 0, y2 = 0, y3 = 0, y4 = 0, y6 = 0;
         if (userElement.isNotEmpty) {
           y1 = userElement.first.value.length.toDouble();
           y2 = userElement.first.value
@@ -1419,11 +1534,17 @@ class ReportingController extends GetxController {
                   .any((test) => test.isFirebaseUserID == e.isFirebaseUserId))
               .length
               .toDouble();
+          y6 = userElement.first.value
+              .where((e) => inActiveRec
+                  .any((test) => test.isFirebaseUserID == e.isFirebaseUserId))
+              .length
+              .toDouble();
         }
         if (receiptElement.isNotEmpty) {
           y4 = receiptElement.first.value.length.toDouble();
         }
-        signUpChartData.add(LineChartModel(date, y1, y2: y2, y3: y3, y4: y4));
+        signUpChartData
+            .add(LineChartModel(date, y1, y2: y2, y3: y3, y4: y4, y6: y6));
       }
     } catch (e) {
       errorDialogWidget(msg: e.toString());
@@ -1439,6 +1560,10 @@ class ReportingController extends GetxController {
       List<UserSubscriptionReceiptModel> activeRec = receipt
           .where((e) =>
               e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+          .toList();
+      List<UserSubscriptionReceiptModel> inActiveRec = receipt
+          .where((e) =>
+              e.mqsUserSubscriptionStatus != StringConfig.reporting.active)
           .toList();
       users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp)
           .compareTo(DateTime.parse(b.mqsCreatedTimestamp)));
@@ -1490,9 +1615,18 @@ class ReportingController extends GetxController {
                 DateTime.parse(e.mqsExpiryDate).day == date.day)
             .length
             .toDouble();
+        double y6 = users
+            .where((e) =>
+                DateTime.parse(e.mqsCreatedTimestamp).month == date.month &&
+                DateTime.parse(e.mqsCreatedTimestamp).year == date.year &&
+                DateTime.parse(e.mqsCreatedTimestamp).day == date.day &&
+                inActiveRec
+                    .any((test) => test.isFirebaseUserID == e.isFirebaseUserId))
+            .length
+            .toDouble();
         signUpChartData.add(LineChartModel(
             DateTime(date.year, date.month, date.day), y1,
-            y2: y2, y3: y3, y4: y4));
+            y2: y2, y3: y3, y4: y4, y6: y6));
       }
     } catch (e) {
       errorDialogWidget(msg: e.toString());
@@ -1561,6 +1695,23 @@ class ReportingController extends GetxController {
         }).toList();
         dashboardController.users.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
+              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+        }).toList();
+      } else if (reportType.value == StringConfig.reporting.notSubscribed) {
+        List<UserSubscriptionReceiptModel> inActiveRec = receipt
+            .where((e) =>
+                e.mqsUserSubscriptionStatus != StringConfig.reporting.active)
+            .toList();
+        dashboardController.searchedUsers.value = users.where((localItem) {
+          return inActiveRec.any((firebaseItem) =>
+              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+        }).toList();
+        dashboardController.searchUserType.value = users.where((localItem) {
+          return inActiveRec.any((firebaseItem) =>
+              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+        }).toList();
+        dashboardController.users.value = users.where((localItem) {
+          return inActiveRec.any((firebaseItem) =>
               firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
         }).toList();
       }

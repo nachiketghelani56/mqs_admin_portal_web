@@ -126,6 +126,10 @@ Widget signUpLifeCycleChartWidget(
                                 StringConfig.reporting.cancelled) {
                               return data.y5;
                             }
+                            else if (type.key ==
+                                StringConfig.reporting.notSubscribed) {
+                              return data.y6;
+                            }
                             return data.y1;
                           },
                           color: type.value,

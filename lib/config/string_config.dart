@@ -397,6 +397,7 @@ class Reporting {
   final String active = "Active";
   final String purchased = "Purchased";
   final String cancelled = "Cancelled";
+  final String notSubscribed = "Not Subscribed";
   final String appSpecificSharedSecret = "App Specific Shared Secret";
   final String expiryDate = "Expiry Date";
   final String localVerificationData = "Local Verification Data";

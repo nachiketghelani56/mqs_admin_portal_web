@@ -47,6 +47,7 @@ Widget pathwayTableRowWidget({
                 pathwayController.viewIndex.value = index;
                 pathwayController.showModules.value = false;
                 pathwayController.moduleIndex.value = -1;
+                pathwayController.stopAudio();
                 if (context.width < SizeConfig.size1500) {
                   Get.toNamed(AppRoutes.pathwayDetail);
                 }

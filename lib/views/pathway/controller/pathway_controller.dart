@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/models/menu_option_model.dart';
 import 'package:mqs_admin_portal_web/models/mqs_my_q_pathway_model.dart';
@@ -191,11 +193,55 @@ class PathwayController extends GetxController {
   RxBool pathwayLoader = false.obs;
   StreamSubscription<List<UserIAMModel>>? userStream;
 
+  final AudioPlayer audioPlayer = AudioPlayer();
+  RxString currentUrl = ''.obs;
+  RxDouble currentPosition = 0.0.obs;
+  RxDouble totalDuration = 0.0.obs;
+
   @override
   onInit() {
     getPathway();
     getUsers();
+    audioPlayer.positionStream.listen((position) {
+      currentPosition.value = position.inMilliseconds.toDouble();
+    });
+    audioPlayer.durationStream.listen((duration) {
+      totalDuration.value = duration?.inMilliseconds.toDouble() ?? 0.0;
+    });
+    // Ensure audio source initialization
+    audioPlayer.setUrl('').catchError((e) {
+      if (kDebugMode) {
+        print('Error initializing AudioPlayer: $e');
+      }
+    });
     super.onInit();
+  }
+
+  void stopAudio() async {
+    if (audioPlayer.playing) {
+      await audioPlayer.stop();
+      currentUrl.value = '';
+    }
+  }
+
+  void playNewAudio(String url) async {
+    if (currentUrl.value == url && audioPlayer.playing) {
+      await audioPlayer.pause();
+      return;
+    }
+
+    if (currentUrl.value != url) {
+      await audioPlayer.stop(); // Stop current audio
+      currentUrl.value = url; // Set new URL
+      await audioPlayer.setUrl(url); // Load new audio
+    }
+
+    await audioPlayer.play(); // Start playback
+  }
+
+  void seekTo(double value) {
+    final position = Duration(milliseconds: value.toInt());
+    audioPlayer.seek(position);
   }
 
   @override
@@ -203,6 +249,8 @@ class PathwayController extends GetxController {
     await pathwayStream?.cancel();
     await userStream?.cancel();
     super.onClose();
+
+    audioPlayer.dispose();
   }
 
   getPathway() async {
