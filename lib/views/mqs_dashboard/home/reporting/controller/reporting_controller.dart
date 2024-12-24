@@ -178,28 +178,14 @@ class ReportingController extends GetxController {
       endDateController.clear();
       final DashboardController dashboardController = Get.find();
       List<UserIAMModel> users = await UserRepository.i.getUsers();
-
-
-
-
       if (reportType.value == StringConfig.reporting.totalRegisteredUsers) {
         dashboardController.searchedUsers.value = users;
       } else if (reportType.value == StringConfig.reporting.activeUsers) {
-        dashboardController.searchedUsers.value =users.where((e) {
-          final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
-          return updatedTimestamp != null &&
-              updatedTimestamp
-                  .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
-              updatedTimestamp.isBefore(DateTime.now());
-        }).toList();
+        dashboardController.searchedUsers.value =
+            users.where((e) => e.mqsIsUserActive).toList();
       } else if (reportType.value == StringConfig.reporting.inactiveUsers) {
-        dashboardController.searchedUsers.value = users.where((e) {
-          final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
-          return !(updatedTimestamp != null &&
-              updatedTimestamp
-                  .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
-              updatedTimestamp.isBefore(DateTime.now()));
-        }).toList();
+        dashboardController.searchedUsers.value =
+            users.where((e) => !e.mqsIsUserActive).toList();
       } else if (reportType.value == StringConfig.reporting.completed) {
         dashboardController.searchedUsers.value = users
             .where((e) =>
@@ -229,44 +215,16 @@ class ReportingController extends GetxController {
       }
       dashboardController.searchUserType.value = users;
       totalRegisteredUsers.value = users.length;
-      activeUsers.value = users.where((e) {
-        final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
-        return updatedTimestamp != null &&
-            updatedTimestamp
-                .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
-            updatedTimestamp.isBefore(DateTime.now());
-      }).length;
-
-      inactiveUsers.value = users.where((e) {
-        final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
-        return !(updatedTimestamp != null &&
-            updatedTimestamp
-                .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
-            updatedTimestamp.isBefore(DateTime.now()));
-      }).length;
-
+      activeUsers.value = users.where((e) => e.mqsIsUserActive).length;
+      inactiveUsers.value = users.where((e) => !e.mqsIsUserActive).length;
       if (isOB) {
         getOBSummary(users: users);
       }
       userStream = UserRepository.i.getUserStream().listen((data) {
         authFilter.value = '';
         totalRegisteredUsers.value = data.length;
-        activeUsers.value = data.where((e) {
-          final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
-          return updatedTimestamp != null &&
-              updatedTimestamp
-                  .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
-              updatedTimestamp.isBefore(DateTime.now());
-        }).length;
-
-        inactiveUsers.value = data.where((e) {
-          final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
-          return !(updatedTimestamp != null &&
-              updatedTimestamp
-                  .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
-              updatedTimestamp.isBefore(DateTime.now()));
-        }).length;
-
+        activeUsers.value = data.where((e) => e.mqsIsUserActive).length;
+        inactiveUsers.value = data.where((e) => !e.mqsIsUserActive).length;
         if (isOB) {
           obFilter.value = '';
           getOBSummary(users: data);
@@ -343,68 +301,23 @@ class ReportingController extends GetxController {
       dashboardController.searchUserType.value = users;
       if (!isDetailView) {
         totalRegisteredUsers.value = users.length;
-
-        activeUsers.value = users.where((e) {
-          final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
-          return updatedTimestamp != null &&
-              updatedTimestamp
-                  .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
-              updatedTimestamp.isBefore(DateTime.now());
-        }).length;
-
-        inactiveUsers.value = users.where((e) {
-          final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
-          return !(updatedTimestamp != null &&
-              updatedTimestamp
-                  .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
-              updatedTimestamp.isBefore(DateTime.now()));
-        }).length;
-
+        activeUsers.value = users.where((e) => e.mqsIsUserActive).length;
+        inactiveUsers.value = users.where((e) => !e.mqsIsUserActive).length;
         dashboardController.users.value = users;
         if (authtype.value == StringConfig.reporting.activeUsers) {
-          dashboardController.searchedUsers.value = users.where((e) {
-            final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
-            return updatedTimestamp != null &&
-                updatedTimestamp
-                    .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
-                updatedTimestamp.isBefore(DateTime.now());
-          }).toList();
-          dashboardController.users.value = users.where((e) {
-            final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
-            return updatedTimestamp != null &&
-                updatedTimestamp
-                    .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
-                updatedTimestamp.isBefore(DateTime.now());
-          }).toList();
-          dashboardController.searchUserType.value =users.where((e) {
-            final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
-            return updatedTimestamp != null &&
-                updatedTimestamp
-                    .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
-                updatedTimestamp.isBefore(DateTime.now());
-          }).toList();
+          dashboardController.searchedUsers.value =
+              users.where((e) => e.mqsIsUserActive).toList();
+          dashboardController.users.value =
+              users.where((e) => e.mqsIsUserActive).toList();
+          dashboardController.searchUserType.value =
+              users.where((e) => e.mqsIsUserActive).toList();
         } else if (authtype.value == StringConfig.reporting.inactiveUsers) {
-          dashboardController.searchedUsers.value = users.where((e) {
-            final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
-            return !(updatedTimestamp != null &&
-                updatedTimestamp
-                    .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
-                updatedTimestamp.isBefore(DateTime.now()));
-          }).toList();
-          dashboardController.users.value = users.where((e) {
-            final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
-            return !(updatedTimestamp != null &&
-                updatedTimestamp
-                    .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
-                updatedTimestamp.isBefore(DateTime.now()));
-          }).toList();
-          dashboardController.searchUserType.value = users.where((e) {
-            final updatedTimestamp = DateTime.tryParse(e.mqsUpdateTimestamp);
-            return !(updatedTimestamp != null &&
-                updatedTimestamp
-                    .isAfter(DateTime.now().subtract(const Duration(days: 7))) &&
-                updatedTimestamp.isBefore(DateTime.now()));
-          }).toList();
+          dashboardController.searchedUsers.value =
+              users.where((e) => !e.mqsIsUserActive).toList();
+          dashboardController.users.value =
+              users.where((e) => !e.mqsIsUserActive).toList();
+          dashboardController.searchUserType.value =
+              users.where((e) => !e.mqsIsUserActive).toList();
         }
       }
       if (dashboardController.searchedUsers.isEmpty &&
