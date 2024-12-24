@@ -71,6 +71,7 @@ class SizeConfig {
   static const double size11 = 11;
   static const double size10 = 10;
   static const double size8 = 8;
+  static const double size7 = 7;
   static const double size5 = 5;
   static const double size6 = 6;
   static const double size3 = 3;

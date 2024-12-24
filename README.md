@@ -34,6 +34,8 @@ dart run build_runner build
 ```
 
 ## Firebase hosting
+## Delete Build folder under assets
+## Update version in index.html
 firebase logout
 firebase login
 firebase init

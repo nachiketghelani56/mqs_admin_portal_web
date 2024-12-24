@@ -5,7 +5,6 @@ class UserIAMModel {
   final bool isEnterpriseUser;
   final String isFirebaseUserId;
   final String isRegister;
-  final bool mqsIsUserActive;
   final String mqsCreatedTimestamp;
   final String about;
   final bool aboutValue;
@@ -25,6 +24,7 @@ class UserIAMModel {
   final String mqsUserSubscriptionStatus;
   final bool mqsSkipOnboarding;
   final OnboardingModel onboardingModel;
+  final String mqsUserActiveTimestamp;
 
   UserIAMModel(
     this.onboardingModel, {
@@ -34,7 +34,6 @@ class UserIAMModel {
     required this.isEnterpriseUser,
     required this.isFirebaseUserId,
     required this.isRegister,
-    required this.mqsIsUserActive,
     required this.mqsCreatedTimestamp,
     required this.about,
     required this.aboutValue,
@@ -53,6 +52,7 @@ class UserIAMModel {
     required this.mqsUpdateTimestamp,
     required this.mqsUserSubscriptionStatus,
     required this.mqsSkipOnboarding,
+    required this.mqsUserActiveTimestamp,
   });
 
   UserIAMModel.fromJson(Map json)
@@ -62,7 +62,6 @@ class UserIAMModel {
         isEnterpriseUser = json['isEnterPriseUser'] ?? false,
         isFirebaseUserId = json['isFirebaseUserID'] ?? "",
         isRegister = json['isRegister'] ?? "",
-        mqsIsUserActive = json['mqsIsUserActive'] ?? false,
         mqsCreatedTimestamp = json['mqsCreatedTimestamp'] ?? "",
         about = json['About'] ?? "",
         aboutValue = json['AboutValue'] ?? false,
@@ -81,6 +80,7 @@ class UserIAMModel {
         mqsUpdateTimestamp = json['mqsUpdateTimestamp'] ?? "",
         mqsUserSubscriptionStatus = json['mqsUserSubscriptionStatus'] ?? "",
         mqsSkipOnboarding = json['mqsSkipOnboarding'] ?? false,
+        mqsUserActiveTimestamp = json['mqsUserActiveTimestamp'] ?? "",
         onboardingModel = json['onboardingData'] != null
             ? OnboardingModel.fromJson(json['onboardingData'])
             : OnboardingModel(
@@ -105,7 +105,6 @@ class UserIAMModel {
       'isEnterPriseUser': isEnterpriseUser,
       'isFirebaseUserID': isFirebaseUserId,
       'isRegister': isRegister,
-      'mqsIsUserActive': mqsIsUserActive,
       'mqsCreatedTimestamp': mqsCreatedTimestamp,
       'About': about,
       'AboutValue': aboutValue,
@@ -123,6 +122,7 @@ class UserIAMModel {
       'mqsUpdateTimestamp': mqsUpdateTimestamp,
       'mqsUserSubscriptionStatus': mqsUserSubscriptionStatus,
       'mqsSkipOnboarding': mqsSkipOnboarding,
+      'mqsUserActiveTimestamp': mqsUserActiveTimestamp,
       'onboardingData': onboardingModel.toJson(),
     };
   }

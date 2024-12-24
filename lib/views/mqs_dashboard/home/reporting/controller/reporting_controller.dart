@@ -181,11 +181,25 @@ class ReportingController extends GetxController {
       if (reportType.value == StringConfig.reporting.totalRegisteredUsers) {
         dashboardController.searchedUsers.value = users;
       } else if (reportType.value == StringConfig.reporting.activeUsers) {
-        dashboardController.searchedUsers.value =
-            users.where((e) => e.mqsIsUserActive).toList();
+        dashboardController.searchedUsers.value = users
+            .where((e) =>
+                e.mqsUserActiveTimestamp.isNotEmpty &&
+                DateTime.now()
+                        .difference(DateTime.parse(e.mqsUserActiveTimestamp))
+                        .inDays <
+                    SizeConfig.size7)
+            .toList();
       } else if (reportType.value == StringConfig.reporting.inactiveUsers) {
-        dashboardController.searchedUsers.value =
-            users.where((e) => !e.mqsIsUserActive).toList();
+        dashboardController.searchedUsers.value = users
+            .where((e) =>
+                e.mqsUserActiveTimestamp.isEmpty ||
+                (e.mqsUserActiveTimestamp.isNotEmpty &&
+                    DateTime.now()
+                            .difference(
+                                DateTime.parse(e.mqsUserActiveTimestamp))
+                            .inDays >
+                        SizeConfig.size7))
+            .toList();
       } else if (reportType.value == StringConfig.reporting.completed) {
         dashboardController.searchedUsers.value = users
             .where((e) =>
@@ -215,16 +229,47 @@ class ReportingController extends GetxController {
       }
       dashboardController.searchUserType.value = users;
       totalRegisteredUsers.value = users.length;
-      activeUsers.value = users.where((e) => e.mqsIsUserActive).length;
-      inactiveUsers.value = users.where((e) => !e.mqsIsUserActive).length;
+      activeUsers.value = users
+          .where((e) =>
+              e.mqsUserActiveTimestamp.isNotEmpty &&
+              DateTime.now()
+                      .difference(DateTime.parse(e.mqsUserActiveTimestamp))
+                      .inDays <
+                  SizeConfig.size7)
+          .length;
+      inactiveUsers.value = users
+          .where((e) =>
+              e.mqsUserActiveTimestamp.isEmpty ||
+              (e.mqsUserActiveTimestamp.isNotEmpty &&
+                  DateTime.now()
+                          .difference(DateTime.parse(e.mqsUserActiveTimestamp))
+                          .inDays >
+                      SizeConfig.size7))
+          .length;
       if (isOB) {
         getOBSummary(users: users);
       }
       userStream = UserRepository.i.getUserStream().listen((data) {
         authFilter.value = '';
         totalRegisteredUsers.value = data.length;
-        activeUsers.value = data.where((e) => e.mqsIsUserActive).length;
-        inactiveUsers.value = data.where((e) => !e.mqsIsUserActive).length;
+        activeUsers.value = data
+            .where((e) =>
+                e.mqsUserActiveTimestamp.isNotEmpty &&
+                DateTime.now()
+                        .difference(DateTime.parse(e.mqsUserActiveTimestamp))
+                        .inDays <
+                    SizeConfig.size7)
+            .length;
+        inactiveUsers.value = data
+            .where((e) =>
+                e.mqsUserActiveTimestamp.isEmpty ||
+                (e.mqsUserActiveTimestamp.isNotEmpty &&
+                    DateTime.now()
+                            .difference(
+                                DateTime.parse(e.mqsUserActiveTimestamp))
+                            .inDays >
+                        SizeConfig.size7))
+            .length;
         if (isOB) {
           obFilter.value = '';
           getOBSummary(users: data);
@@ -301,23 +346,81 @@ class ReportingController extends GetxController {
       dashboardController.searchUserType.value = users;
       if (!isDetailView) {
         totalRegisteredUsers.value = users.length;
-        activeUsers.value = users.where((e) => e.mqsIsUserActive).length;
-        inactiveUsers.value = users.where((e) => !e.mqsIsUserActive).length;
+        activeUsers.value = users
+            .where((e) =>
+                e.mqsUserActiveTimestamp.isNotEmpty &&
+                DateTime.now()
+                        .difference(DateTime.parse(e.mqsUserActiveTimestamp))
+                        .inDays <
+                    SizeConfig.size7)
+            .length;
+        inactiveUsers.value = users
+            .where((e) =>
+                e.mqsUserActiveTimestamp.isEmpty ||
+                (e.mqsUserActiveTimestamp.isNotEmpty &&
+                    DateTime.now()
+                            .difference(
+                                DateTime.parse(e.mqsUserActiveTimestamp))
+                            .inDays >
+                        SizeConfig.size7))
+            .length;
         dashboardController.users.value = users;
         if (authtype.value == StringConfig.reporting.activeUsers) {
-          dashboardController.searchedUsers.value =
-              users.where((e) => e.mqsIsUserActive).toList();
-          dashboardController.users.value =
-              users.where((e) => e.mqsIsUserActive).toList();
-          dashboardController.searchUserType.value =
-              users.where((e) => e.mqsIsUserActive).toList();
+          dashboardController.searchedUsers.value = users
+              .where((e) =>
+                  e.mqsUserActiveTimestamp.isNotEmpty &&
+                  DateTime.now()
+                          .difference(DateTime.parse(e.mqsUserActiveTimestamp))
+                          .inDays <
+                      SizeConfig.size7)
+              .toList();
+          dashboardController.users.value = users
+              .where((e) =>
+                  e.mqsUserActiveTimestamp.isNotEmpty &&
+                  DateTime.now()
+                          .difference(DateTime.parse(e.mqsUserActiveTimestamp))
+                          .inDays <
+                      SizeConfig.size7)
+              .toList();
+          dashboardController.searchUserType.value = users
+              .where((e) =>
+                  e.mqsUserActiveTimestamp.isNotEmpty &&
+                  DateTime.now()
+                          .difference(DateTime.parse(e.mqsUserActiveTimestamp))
+                          .inDays <
+                      SizeConfig.size7)
+              .toList();
         } else if (authtype.value == StringConfig.reporting.inactiveUsers) {
-          dashboardController.searchedUsers.value =
-              users.where((e) => !e.mqsIsUserActive).toList();
-          dashboardController.users.value =
-              users.where((e) => !e.mqsIsUserActive).toList();
-          dashboardController.searchUserType.value =
-              users.where((e) => !e.mqsIsUserActive).toList();
+          dashboardController.searchedUsers.value = users
+              .where((e) =>
+                  e.mqsUserActiveTimestamp.isEmpty ||
+                  (e.mqsUserActiveTimestamp.isNotEmpty &&
+                      DateTime.now()
+                              .difference(
+                                  DateTime.parse(e.mqsUserActiveTimestamp))
+                              .inDays >
+                          SizeConfig.size7))
+              .toList();
+          dashboardController.users.value = users
+              .where((e) =>
+                  e.mqsUserActiveTimestamp.isEmpty ||
+                  (e.mqsUserActiveTimestamp.isNotEmpty &&
+                      DateTime.now()
+                              .difference(
+                                  DateTime.parse(e.mqsUserActiveTimestamp))
+                              .inDays >
+                          SizeConfig.size7))
+              .toList();
+          dashboardController.searchUserType.value = users
+              .where((e) =>
+                  e.mqsUserActiveTimestamp.isEmpty ||
+                  (e.mqsUserActiveTimestamp.isNotEmpty &&
+                      DateTime.now()
+                              .difference(
+                                  DateTime.parse(e.mqsUserActiveTimestamp))
+                              .inDays >
+                          SizeConfig.size7))
+              .toList();
         }
       }
       if (dashboardController.searchedUsers.isEmpty &&
