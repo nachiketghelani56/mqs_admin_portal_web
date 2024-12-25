@@ -113,24 +113,24 @@ Widget overallSummaryChartWidget(
                     .map(
                       (key, value) => MapEntry(
                         key,
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              height: SizeConfig.size10,
-                              width: SizeConfig.size10,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: value,
-                              ),
+                        TextButton.icon(
+                          icon: Container(
+                            height: SizeConfig.size10,
+                            width: SizeConfig.size10,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: value,
                             ),
-                            SizeConfig.size22.width,
-                            Text(
-                              key,
-                              style: FontTextStyleConfig.dateTextStyle
-                                  .copyWith(color: ColorConfig.cardTitleColor),
-                            )
-                          ],
+                          ),
+                          onPressed: () {
+                            reportingController.overAllSummary();
+                            reportingController.reportType.value = key;
+                          },
+                          label: Text(
+                            key,
+                            style: FontTextStyleConfig.dateTextStyle
+                                .copyWith(color: ColorConfig.cardTitleColor),
+                          ),
                         ),
                       ),
                     )

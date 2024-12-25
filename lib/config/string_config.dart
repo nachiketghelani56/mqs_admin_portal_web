@@ -269,6 +269,9 @@ class Firebase {
   final String mqsPathwayTitle = "mqsPathwayTitle";
   final String mqsPathwayType = "mqsPathwayType";
   final String mqsPathwayDetail = "mqsPathwayDetail";
+  final String mqsPathwayCompletionDate = "mqsPathwayCompletionDate";
+  final String mqsUserID = "mqsUserID";
+
 }
 
 class CSV {
@@ -481,6 +484,7 @@ class Pathway {
   final String pathwayCoachInstructions = "Pathway Coach Instructions";
   final String pathwayDep = "Pathway Dep";
   final String pathwayDetail = "Pathway Detail";
+  final String pathwayCompletionDate = "Pathway Completion Date";
   final String pathwayDuration = "Pathway Duration";
   final String pathwayImage = "Pathway Image";
   final String pathwayIntroImage = "Pathway Intro Image";
@@ -543,4 +547,5 @@ class Pathway {
   final String showMore = " Show more";
   final String showLess = " Show less";
   final String userId = " User Id";
+  final String mqsPathwayID = "mqsPathwayID";
 }

@@ -142,12 +142,21 @@ class ReportingController extends GetxController {
   Future<List<ReportingChartModel>> getOverAllData() async {
     try {
       List<UserIAMModel> users = await UserRepository.i.getUsers();
+      List<UserSubscriptionReceiptModel> receipt =
+          await UserRepository.i.getUserSubscriptionReceipt();
+
       List<EnterpriseModel> enterpriseList =
           await EnterpriseRepository.i.getEnterprises();
       List<CircleModel> circleList = await CircleRepository.i.getCircles();
+      List<UserSubscriptionReceiptModel> activeRec = receipt
+          .where((e) =>
+              e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+          .toList();
 
-      List totalStatus =
-          users.where((e) => e.mqsUserSubscriptionStatus == "Active").toList();
+      List totalStatus = users.where((localItem) {
+        return activeRec.any((firebaseItem) =>
+            firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+      }).toList();
       int totalSubscriptionActivePlan = totalStatus.length;
       int totalUsers = users.length;
 
@@ -1736,6 +1745,81 @@ class ReportingController extends GetxController {
         dashboardController.viewIndex.value = -1;
       } else {
         dashboardController.viewIndex.value = 0;
+      }
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    } finally {}
+  }
+
+  overAllSummary() async {
+    try {
+      final DashboardController dashboardController = Get.find();
+      dashboardController.searchController.clear();
+      _circleController.searchController.clear();
+      List<UserIAMModel> users = await UserRepository.i.getUsers();
+      List<UserSubscriptionReceiptModel> receipt =
+          await UserRepository.i.getUserSubscriptionReceipt();
+
+      List<EnterpriseModel> enterpriseList =
+          await EnterpriseRepository.i.getEnterprises();
+      List<CircleModel> circleList = await CircleRepository.i.getCircles();
+
+      dashboardController.reset();
+      _circleController.reset();
+      if (reportType.value == StringConfig.dashboard.enterprise) {
+        dashboardController.searchedEnterprises.value = enterpriseList;
+        dashboardController.enterprises.value = enterpriseList;
+
+        if (dashboardController.searchedEnterprises.isEmpty &&
+            dashboardController.enterprises.isNotEmpty) {
+          dashboardController.viewIndex.value = -1;
+        } else {
+          dashboardController.viewIndex.value = 0;
+        }
+      } else if (reportType.value == StringConfig.reporting.users) {
+        dashboardController.searchedUsers.value = users;
+        dashboardController.searchUserType.value = users;
+        dashboardController.users.value = users;
+        if (dashboardController.searchedUsers.isEmpty &&
+            dashboardController.users.isNotEmpty) {
+          dashboardController.viewIndex.value = -1;
+        } else {
+          dashboardController.viewIndex.value = 0;
+        }
+      } else if (reportType.value == StringConfig.dashboard.circle) {
+        _circleController.searchedCircle.value = circleList;
+        _circleController.circle.value = circleList;
+        _circleController.searchCircleType.value = circleList;
+
+        if (_circleController.searchedCircle.isEmpty &&
+            _circleController.circle.isEmpty) {
+          _circleController.viewIndex.value = -1;
+        } else {
+          _circleController.viewIndex.value = 0;
+        }
+      } else if (reportType.value == StringConfig.dashboard.userSubscription) {
+        List<UserSubscriptionReceiptModel> activeRec = receipt
+            .where((e) =>
+                e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+            .toList();
+        dashboardController.searchedUsers.value = users.where((localItem) {
+          return activeRec.any((firebaseItem) =>
+              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+        }).toList();
+        dashboardController.searchUserType.value = users.where((localItem) {
+          return activeRec.any((firebaseItem) =>
+              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+        }).toList();
+        dashboardController.users.value = users.where((localItem) {
+          return activeRec.any((firebaseItem) =>
+              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+        }).toList();
+        if (dashboardController.searchedUsers.isEmpty &&
+            dashboardController.users.isNotEmpty) {
+          dashboardController.viewIndex.value = -1;
+        } else {
+          dashboardController.viewIndex.value = 0;
+        }
       }
     } catch (e) {
       errorDialogWidget(msg: e.toString());

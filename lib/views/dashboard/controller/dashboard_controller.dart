@@ -725,7 +725,8 @@ class DashboardController extends GetxController {
           StringConfig.csv.updatedTimestamp,
         ],
         // Data Rows
-        ...enterprises.map((model) {
+        // enterprises
+        ...searchedEnterprises.map((model) {
           return [
             model.mqsEnterpriseCode,
             model.mqsEnterprisePOCs.mqsEnterpriseName,
@@ -765,6 +766,7 @@ class DashboardController extends GetxController {
   }
 
   setTabIndex({required int index}) {
+    final CircleController circleController = Get.put(CircleController());
     if (FirebaseAuthService.i.isMarketingUser) {
       selectedTabIndex.value = 1;
     } else {
@@ -773,6 +775,10 @@ class DashboardController extends GetxController {
     searchController.clear();
     searchedUsers.value = users;
     searchedEnterprises.value = enterprises;
+    isAddEnterprise.value = false;
+    isEditEnterprise.value = false;
+    circleController.isAdd.value = false;
+    circleController.isEdit.value = false;
     reset();
     setFilterFields();
     if (Get.isRegistered<ReportingController>()) {
@@ -838,14 +844,14 @@ class DashboardController extends GetxController {
     }
   }
 
-  getMaxOffset() {
-    int rem = (selectedTabIndex.value == 0
+  getMaxOffset({bool? isReport}) {
+    int rem = (selectedTabIndex.value == 0 || isReport == true
             ? searchedEnterprises.length
             : (searchedUsers.length)) %
         pageLimit.value;
     if (rem != 0 &&
         currentPage.value ==
-            (selectedTabIndex.value == 0
+            (selectedTabIndex.value == 0 || isReport == true
                 ? totalEnterprisePage
                 : totalUserPage)) {
       return offset.value + rem;
@@ -1270,6 +1276,10 @@ class DashboardController extends GetxController {
       return StringConfig.pathway.pathwayType;
     } else if (keyName == StringConfig.firebase.mqsPathwayDetail) {
       return StringConfig.pathway.pathwayDetail;
+    } else if (keyName == StringConfig.firebase.mqsPathwayCompletionDate) {
+      return StringConfig.pathway.pathwayCompletionDate;
+    } else if (keyName == StringConfig.firebase.mqsUserID) {
+      return StringConfig.pathway.userId;
     }
     return "";
   }

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/views/circle/controller/circle_controller.dart';
 import 'package:mqs_admin_portal_web/views/circle/widgets/circle_widget.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/widgets/enterprise_widget.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/user_iam_widget.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/controller/home_controller.dart';
@@ -58,6 +59,8 @@ class ReportingScreen extends StatelessWidget {
                 StringConfig.reporting.subscribed,
                 StringConfig.reporting.subscriptionExpired,
                 StringConfig.reporting.notSubscribed,
+                StringConfig.reporting.users,
+                StringConfig.dashboard.userSubscription,
               ].contains(_reportingController.reportType.value)) {
                 return Column(
                   children: [
@@ -78,6 +81,7 @@ class ReportingScreen extends StatelessWidget {
                 StringConfig.reporting.totalCircles,
                 StringConfig.reporting.featuredCircles,
                 StringConfig.reporting.flaggedCircles,
+                StringConfig.dashboard.circle,
               ].contains(_reportingController.reportType.value)) {
                 return Column(
                   children: [
@@ -91,6 +95,30 @@ class ReportingScreen extends StatelessWidget {
                         reportingController: _reportingController,
                         scaffoldKey: _reportingController.circleKey,
                         isReport: true,
+                      ),
+                    ),
+                  ],
+                );
+              } else if ([
+                StringConfig.dashboard.enterprise,
+              ].contains(_reportingController.reportType.value)) {
+                return Column(
+                  children: [
+                    SizeConfig.size20.height,
+                    headerWidget(title: _reportingController.reportType.value)
+                        .paddingSymmetric(horizontal: SizeConfig.size40),
+                    Expanded(
+                      child: Padding(
+
+                        padding:  const EdgeInsets.only( left: SizeConfig.size40,
+                          right: SizeConfig.size40,
+                          top: SizeConfig.size25,bottom: SizeConfig.size25 ),
+                        child: enterpriseWidget(
+                          context: context,
+                          isReport: true,
+                          dashboardController: _dashboardController,
+                          mqsDashboardController: _mqsDashboardController,
+                        ),
                       ),
                     ),
                   ],

@@ -17,8 +17,9 @@ import 'package:mqs_admin_portal_web/widgets/loader_widget.dart';
 Widget enterpriseWidget(
     {required DashboardController dashboardController,
     required MqsDashboardController mqsDashboardController,
-    required BuildContext context}) {
-  return dashboardController.enterpriseLoader.value
+    required BuildContext context , bool isReport = false,}) {
+  return
+    dashboardController.enterpriseLoader.value
       ? const LoaderWidget()
       : Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -26,7 +27,9 @@ Widget enterpriseWidget(
             Expanded(
               child: SingleChildScrollView(
                 child: Container(
-                  decoration: FontTextStyleConfig.cardDecoration,
+                  decoration: !(isReport && dashboardController.enterprises.isEmpty)
+                      ? FontTextStyleConfig.cardDecoration
+                      : null,
                   padding: const EdgeInsets.all(SizeConfig.size16),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -35,6 +38,7 @@ Widget enterpriseWidget(
                         dashboardController: dashboardController,
                         mqsDashboardController: mqsDashboardController,
                         context: context,
+                        isReport: isReport,
                       ),
                       SizeConfig.size26.height,
                       dashboardController.searchedEnterprises.isEmpty
@@ -47,7 +51,7 @@ Widget enterpriseWidget(
                                 children: [
                                   enterpriseTableTitleWidget(context: context),
                                   for (int i = dashboardController.offset.value;
-                                      i < dashboardController.getMaxOffset();
+                                      i < dashboardController.getMaxOffset(isReport: isReport);
                                       i++)
                                     enterpriseTableRowWidget(
                                       isSelected: i ==
@@ -58,6 +62,7 @@ Widget enterpriseWidget(
                                       dashboardController: dashboardController,
                                       context: context,
                                       index: i,
+                                      isReport: isReport,
                                     ),
                                   enterpriseTableBottomWidget(
                                       dashboardController: dashboardController),

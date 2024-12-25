@@ -11,6 +11,7 @@ Widget enterpriseTableRowWidget({
   required bool isSelected,
   required BuildContext context,
   required int index,
+  bool isReport = false,
 }) {
   return Container(
     height: SizeConfig.size76,
@@ -65,35 +66,37 @@ Widget enterpriseTableRowWidget({
                   Get.toNamed(AppRoutes.enterpriseDetail);
                 }
               }),
-              Image.asset(
-                ImageConfig.edit,
-                height: SizeConfig.size24,
-              ).tap(() {
-                dashboardController.showMqsTeamList.value = false;
-                dashboardController.showMqsEmpEmailList.value = false;
-                dashboardController.isAddEnterprise.value = false;
-                dashboardController.isEditEnterprise.value = true;
-                dashboardController.viewIndex.value = index;
-                dashboardController.setEnterpriseForm(index: index);
-                if (context.width < SizeConfig.size1500) {
-                  Get.toNamed(AppRoutes.addEnterprise);
-                }
-              }),
-              Image.asset(
-                ImageConfig.delete,
-                height: SizeConfig.size24,
-              ).tap(() {
-                enterpriseDeleteDialogWidget(
-                  context: context,
-                  dashboardController: dashboardController,
-                  docId: dashboardController.searchedEnterprises[index]
-                      .mqsEnterprisePOCs.mqsEnterpriseID,
-                  mqsEnterpriseName: dashboardController
-                      .searchedEnterprises[index]
-                      .mqsEnterprisePOCs
-                      .mqsEnterpriseName,
-                );
-              }),
+              if (!isReport) ...[
+                Image.asset(
+                  ImageConfig.edit,
+                  height: SizeConfig.size24,
+                ).tap(() {
+                  dashboardController.showMqsTeamList.value = false;
+                  dashboardController.showMqsEmpEmailList.value = false;
+                  dashboardController.isAddEnterprise.value = false;
+                  dashboardController.isEditEnterprise.value = true;
+                  dashboardController.viewIndex.value = index;
+                  dashboardController.setEnterpriseForm(index: index);
+                  if (context.width < SizeConfig.size1500) {
+                    Get.toNamed(AppRoutes.addEnterprise);
+                  }
+                }),
+                Image.asset(
+                  ImageConfig.delete,
+                  height: SizeConfig.size24,
+                ).tap(() {
+                  enterpriseDeleteDialogWidget(
+                    context: context,
+                    dashboardController: dashboardController,
+                    docId: dashboardController.searchedEnterprises[index]
+                        .mqsEnterprisePOCs.mqsEnterpriseID,
+                    mqsEnterpriseName: dashboardController
+                        .searchedEnterprises[index]
+                        .mqsEnterprisePOCs
+                        .mqsEnterpriseName,
+                  );
+                }),
+              ],
             ],
           ),
         ),
