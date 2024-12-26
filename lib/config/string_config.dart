@@ -126,7 +126,7 @@ class Dashboard {
   final String isEnterpriseUser = "IsEnterpriseUser";
   final String isFirebaseUserId = "IsFirebaseUserId";
   final String isMongoDBUserId = "IsMONGODBUserId";
-  final String isRegister = "IsRegister";
+  final String mqsRegistrationStatus = "mqsRegistrationStatus";
   final String loginWith = "LoginWith";
   final String mqsExpiryDate = "mqsExpiryDate";
   final String mqsSubscriptionActivePlan = "mqsSubscriptionActivePlan";
@@ -228,6 +228,16 @@ class Validation {
 }
 
 class Firebase {
+
+
+  final String mqsFirstName = "mqsFirstName";
+  final String mqsLastName = "mqsLastName";
+  final String mqsEmail = "mqsEmail";
+  final String mqsUserName = "mqsUserName";
+  final String mqsFirebaseUserID = 'mqsFirebaseUserID';
+  final String mqsEnterpriseUserFlag = "mqsEnterpriseUserFlag";
+  final String mqsRegistrationStatus = "mqsRegistrationStatus";
+
   final String firstName = "FirstName";
   final String lastName = "LastName";
   final String email = "Email";

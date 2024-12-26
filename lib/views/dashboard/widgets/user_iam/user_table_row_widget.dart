@@ -23,7 +23,7 @@ Widget userTableRowWidget({
         Expanded(
           flex: SizeConfig.size2.toInt(),
           child: Text(
-            '${dashboardController.searchedUsers[index].firstName} ${dashboardController.searchedUsers[index].lastName}',
+            '${dashboardController.searchedUsers[index].mqsFirstName} ${dashboardController.searchedUsers[index].mqsLastName}',
             overflow: TextOverflow.ellipsis,
             style: FontTextStyleConfig.tableTextStyle,
           ),
@@ -31,7 +31,7 @@ Widget userTableRowWidget({
         Expanded(
           flex: SizeConfig.size3.toInt(),
           child: Text(
-            dashboardController.searchedUsers[index].email,
+            dashboardController.searchedUsers[index].mqsEmail,
             overflow: TextOverflow.ellipsis,
             style: FontTextStyleConfig.tableTextStyle,
           ),

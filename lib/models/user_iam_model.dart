@@ -1,10 +1,10 @@
 class UserIAMModel {
-  final String email;
-  final String firstName;
-  final String lastName;
-  final bool isEnterpriseUser;
-  final String isFirebaseUserId;
-  final String isRegister;
+  final String mqsEmail;
+  final String mqsFirstName;
+  final String mqsLastName;
+  final bool mqsEnterpriseUserFlag;
+  final String mqsFirebaseUserID;
+  final String mqsRegistrationStatus;
   final String mqsCreatedTimestamp;
   final String about;
   final bool aboutValue;
@@ -13,7 +13,7 @@ class UserIAMModel {
   final String pronouns;
   final bool pronounsValue;
   final String userImage;
-  final String userName;
+  final String mqsUserName;
   final String enterpriseId;
   final String isMongoDBUserId;
   final String loginWith;
@@ -28,12 +28,12 @@ class UserIAMModel {
 
   UserIAMModel(
     this.onboardingModel, {
-    required this.email,
-    required this.firstName,
-    required this.lastName,
-    required this.isEnterpriseUser,
-    required this.isFirebaseUserId,
-    required this.isRegister,
+    required this.mqsEmail,
+    required this.mqsFirstName,
+    required this.mqsLastName,
+    required this.mqsEnterpriseUserFlag,
+    required this.mqsFirebaseUserID,
+    required this.mqsRegistrationStatus,
     required this.mqsCreatedTimestamp,
     required this.about,
     required this.aboutValue,
@@ -42,7 +42,7 @@ class UserIAMModel {
     required this.pronouns,
     required this.pronounsValue,
     required this.userImage,
-    required this.userName,
+    required this.mqsUserName,
     required this.enterpriseId,
     required this.isMongoDBUserId,
     required this.loginWith,
@@ -56,12 +56,12 @@ class UserIAMModel {
   });
 
   UserIAMModel.fromJson(Map json)
-      : email = json['Email'] ?? "",
-        firstName = json['FirstName'] ?? "",
-        lastName = json['LastName'] ?? "",
-        isEnterpriseUser = json['isEnterPriseUser'] ?? false,
-        isFirebaseUserId = json['isFirebaseUserID'] ?? "",
-        isRegister = json['isRegister'] ?? "",
+      : mqsEmail = json['mqsEmail'] ?? json['Email'] ?? "",
+        mqsFirstName = json['mqsFirstName'] ?? json['FirstName'] ?? "",
+        mqsLastName = json['mqsLastName'] ?? json['LastName'] ?? "",
+        mqsEnterpriseUserFlag = json['mqsEnterpriseUserFlag'] ?? json['isEnterPriseUser'] ?? false,
+        mqsFirebaseUserID = json['mqsFirebaseUserID'] ?? json['isFirebaseUserID'] ?? "",
+        mqsRegistrationStatus = json['mqsRegistrationStatus'] ?? json['isRegister'] ?? "",
         mqsCreatedTimestamp = json['mqsCreatedTimestamp'] ?? "",
         about = json['About'] ?? "",
         aboutValue = json['AboutValue'] ?? false,
@@ -70,8 +70,8 @@ class UserIAMModel {
         pronouns = json['Pronouns'] ?? "",
         pronounsValue = json['PronounsValue'] ?? false,
         userImage = json['UserImage'] ?? "",
-        userName = json['UserName'] ?? "",
-        enterpriseId = json['enterPriseID'] ?? "",
+        mqsUserName = json['mqsUserName'] ?? json['UserName'] ?? "",
+        enterpriseId = json['mqsEnterpriseDetails'] != null ? json['mqsEnterpriseDetails']['mqsOrganizationID'] :  json['enterPriseID'] ?? "",
         isMongoDBUserId = json['isMONGODBUserID'] ?? "",
         loginWith = json['loginWith'] ?? "",
         mqsExpiryDate = json['mqsExpiryDate'] ?? "",
@@ -99,12 +99,12 @@ class UserIAMModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'Email': email,
-      'FirstName': firstName,
-      'LastName': lastName,
-      'isEnterPriseUser': isEnterpriseUser,
-      'isFirebaseUserID': isFirebaseUserId,
-      'isRegister': isRegister,
+      'mqsEmail': mqsEmail,
+      'mqsFirstName': mqsFirstName,
+      'mqsLastName': mqsLastName,
+      'mqsEnterpriseUserFlag': mqsEnterpriseUserFlag,
+      'mqsFirebaseUserID': mqsFirebaseUserID,
+      'mqsRegistrationStatus': mqsRegistrationStatus,
       'mqsCreatedTimestamp': mqsCreatedTimestamp,
       'About': about,
       'AboutValue': aboutValue,

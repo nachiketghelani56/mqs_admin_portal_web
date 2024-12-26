@@ -219,9 +219,9 @@ Widget addPathwayFormWidget(
         items: pathwayController.users
             .map(
               (e) => DropdownMenuItem(
-                value: e.isFirebaseUserId,
+                value: e.mqsFirebaseUserID,
                 child: Text(
-                  '${e.firstName} ${e.lastName} (${e.isFirebaseUserId})',
+                  '${e.mqsFirstName} ${e.mqsLastName} (${e.mqsFirebaseUserID})',
                   style: FontTextStyleConfig.textFieldTextStyle
                       .copyWith(fontSize: FontSizeConfig.fontSize16),
                 ),

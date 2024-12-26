@@ -149,7 +149,7 @@ class DashboardController extends GetxController {
       <UserSubscriptionReceiptModel>[].obs;
   UserSubscriptionReceiptModel? get userSubscriptionDetail =>
       userSubscriptionReceipts.firstWhereOrNull(
-          (e) => e.isFirebaseUserID == userDetail.isFirebaseUserId);
+          (e) => e.isFirebaseUserID == userDetail.mqsFirebaseUserID);
   RxList<TextEditingController> inputControllers =
       <TextEditingController>[].obs;
   RxList<String> dataTypes = [
@@ -1039,15 +1039,15 @@ class DashboardController extends GetxController {
       rows = [
         ...searchedUsers.map((model) {
           return [
-            model.email,
-            model.firstName,
-            model.lastName,
+            model.mqsEmail,
+            model.mqsFirstName,
+            model.mqsLastName,
             model.mqsCreatedTimestamp.isNotEmpty
                 ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
                     .format(DateTime.parse(model.mqsCreatedTimestamp))
                 : "",
-            "${model.isEnterpriseUser}",
-            model.isFirebaseUserId,
+            "${model.mqsEnterpriseUserFlag}",
+            model.mqsFirebaseUserID,
             model.isMongoDBUserId,
             model.mqsSubscriptionActivePlan,
             model.mqsUserSubscriptionStatus,
@@ -1116,16 +1116,16 @@ class DashboardController extends GetxController {
       } else {
         if (status == "type") {
           searchedUsers.value = searchUserType.where((e) {
-            return e.email.toLowerCase().contains(query) ||
-                e.firstName.toLowerCase().contains(query) ||
-                e.lastName.toLowerCase().contains(query) ||
+            return e.mqsEmail.toLowerCase().contains(query) ||
+                e.mqsFirstName.toLowerCase().contains(query) ||
+                e.mqsLastName.toLowerCase().contains(query) ||
                 e.loginWith.toLowerCase().contains(query);
           }).toList();
         } else {
           searchedUsers.value = users.where((e) {
-            return e.email.toLowerCase().contains(query) ||
-                e.firstName.toLowerCase().contains(query) ||
-                e.lastName.toLowerCase().contains(query) ||
+            return e.mqsEmail.toLowerCase().contains(query) ||
+                e.mqsFirstName.toLowerCase().contains(query) ||
+                e.mqsLastName.toLowerCase().contains(query) ||
                 e.loginWith.toLowerCase().contains(query);
           }).toList();
         }
@@ -1160,17 +1160,17 @@ class DashboardController extends GetxController {
 
   String userKeyName({int? index}) {
     String keyName = filterFields[index ?? selectedFilterFieldIndex.value];
-    if (keyName == StringConfig.dashboard.email) {
+    if (keyName == StringConfig.dashboard.email || keyName == StringConfig.firebase.mqsEmail) {
       return StringConfig.dashboard.email;
-    } else if (keyName == StringConfig.firebase.firstName) {
+    } else if (keyName == StringConfig.firebase.firstName || keyName == StringConfig.firebase.mqsFirstName) {
       return StringConfig.dashboard.firstName;
-    } else if (keyName == StringConfig.firebase.lastName) {
+    } else if (keyName == StringConfig.firebase.lastName || keyName == StringConfig.firebase.mqsLastName) {
       return StringConfig.dashboard.lastName;
-    } else if (keyName == StringConfig.firebase.isEnterPriseUser) {
+    } else if (keyName == StringConfig.firebase.isEnterPriseUser || keyName == StringConfig.firebase.mqsEnterpriseUserFlag) {
       return StringConfig.reporting.enterpriseUser;
-    } else if (keyName == StringConfig.firebase.isFirebaseUserID) {
+    } else if (keyName == StringConfig.firebase.isFirebaseUserID || keyName == StringConfig.firebase.mqsFirebaseUserID) {
       return StringConfig.reporting.firebaseUserId;
-    } else if (keyName == StringConfig.firebase.isRegister) {
+    } else if (keyName == StringConfig.firebase.isRegister || keyName == StringConfig.firebase.mqsRegistrationStatus) {
       return StringConfig.dashboard.register;
     } else if (keyName == StringConfig.dashboard.mqsIsUserActive) {
       return StringConfig.dashboard.userActive;

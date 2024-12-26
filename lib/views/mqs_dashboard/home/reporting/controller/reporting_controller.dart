@@ -155,7 +155,7 @@ class ReportingController extends GetxController {
 
       List totalStatus = users.where((localItem) {
         return activeRec.any((firebaseItem) =>
-            firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+            firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
       }).toList();
       int totalSubscriptionActivePlan = totalStatus.length;
       int totalUsers = users.length;
@@ -576,15 +576,15 @@ class ReportingController extends GetxController {
       List<List<String>> rows = [
         ...users.map((model) {
           return [
-            model.email,
-            model.firstName,
-            model.lastName,
+            model.mqsEmail,
+            model.mqsFirstName,
+            model.mqsLastName,
             model.mqsCreatedTimestamp.isNotEmpty
                 ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
                     .format(DateTime.parse(model.mqsCreatedTimestamp))
                 : "",
-            "${model.isEnterpriseUser}",
-            model.isFirebaseUserId,
+            "${model.mqsEnterpriseUserFlag}",
+            model.mqsFirebaseUserID,
             model.isMongoDBUserId,
             model.mqsSubscriptionActivePlan,
             model.mqsUserSubscriptionStatus,
@@ -905,7 +905,7 @@ class ReportingController extends GetxController {
 
       activeSubscriptions.value = users.where((localItem) {
         return activeRec.any((firebaseItem) =>
-            firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+            firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
       }).length;
 
       List purchasedRec =
@@ -913,7 +913,7 @@ class ReportingController extends GetxController {
 
       purchasedSubscription.value = users.where((localItem) {
         return purchasedRec.any((firebaseItem) =>
-            firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+            firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
       }).length;
 
       _dashboardController.reset();
@@ -928,15 +928,15 @@ class ReportingController extends GetxController {
 
         _dashboardController.searchedUsers.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         _dashboardController.users.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         _dashboardController.searchUserType.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
       } else if (subscriptionType.value ==
           StringConfig.reporting.purchasedSubscription) {
@@ -945,15 +945,15 @@ class ReportingController extends GetxController {
 
         _dashboardController.searchedUsers.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         _dashboardController.users.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         _dashboardController.searchUserType.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
       }
       if (_dashboardController.searchedUsers.isEmpty &&
@@ -1128,16 +1128,16 @@ class ReportingController extends GetxController {
             .toList();
         _dashboardController.searchedUsers.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         _dashboardController.searchUserType.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
 
         _dashboardController.users.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
       } else if (subscriptionType.value ==
           StringConfig.reporting.purchasedSubscription) {
@@ -1145,15 +1145,15 @@ class ReportingController extends GetxController {
             receipt.where((e) => e.mqsPurchaseID.isNotEmpty).toList();
         _dashboardController.searchedUsers.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         _dashboardController.searchUserType.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         _dashboardController.users.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
       }
       List activeRec = receipt
@@ -1163,7 +1163,7 @@ class ReportingController extends GetxController {
 
       activeSubscriptions.value = users.where((localItem) {
         return activeRec.any((firebaseItem) =>
-            firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+            firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
       }).length;
 
       List purchasedRec =
@@ -1171,7 +1171,7 @@ class ReportingController extends GetxController {
 
       purchasedSubscription.value = users.where((localItem) {
         return purchasedRec.any((firebaseItem) =>
-            firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+            firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
       }).length;
 
       userSubscriptionReceiptStream =
@@ -1185,7 +1185,7 @@ class ReportingController extends GetxController {
 
         activeSubscriptions.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).length;
 
         List purchasedRec =
@@ -1193,7 +1193,7 @@ class ReportingController extends GetxController {
 
         purchasedSubscription.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).length;
       });
     } catch (e) {
@@ -1214,22 +1214,22 @@ class ReportingController extends GetxController {
             .toList();
         _dashboardController.searchedUsers.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         _dashboardController.users.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
       } else if (status == "purchased") {
         List purchasedRec =
             receipt.where((e) => e.mqsPurchaseID.isNotEmpty).toList();
         _dashboardController.searchedUsers.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         _dashboardController.users.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
       } else {}
       userSubscriptionReceiptStream =
@@ -1241,22 +1241,22 @@ class ReportingController extends GetxController {
               .toList();
           _dashboardController.searchedUsers.value = users.where((localItem) {
             return activeRec.any((firebaseItem) =>
-                firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+                firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
           }).toList();
           _dashboardController.users.value = users.where((localItem) {
             return activeRec.any((firebaseItem) =>
-                firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+                firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
           }).toList();
         } else if (status == "purchased") {
           List purchasedRec =
               data.where((e) => e.mqsPurchaseID.isNotEmpty).toList();
           _dashboardController.searchedUsers.value = users.where((localItem) {
             return purchasedRec.any((firebaseItem) =>
-                firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+                firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
           }).toList();
           _dashboardController.users.value = users.where((localItem) {
             return purchasedRec.any((firebaseItem) =>
-                firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+                firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
           }).toList();
         } else {}
       });
@@ -1373,7 +1373,7 @@ class ReportingController extends GetxController {
             .where((e) =>
                 DateTime.parse(e.mqsCreatedTimestamp).year == year &&
                 activeRec
-                    .any((test) => test.isFirebaseUserID == e.isFirebaseUserId))
+                    .any((test) => test.isFirebaseUserID == e.mqsFirebaseUserID))
             .length
             .toDouble();
         double y4 = receipt
@@ -1386,7 +1386,7 @@ class ReportingController extends GetxController {
             .where((e) =>
                 DateTime.parse(e.mqsCreatedTimestamp).year == year &&
                 inActiveRec
-                    .any((test) => test.isFirebaseUserID == e.isFirebaseUserId))
+                    .any((test) => test.isFirebaseUserID == e.mqsFirebaseUserID))
             .length
             .toDouble();
         signUpChartData.add(
@@ -1450,7 +1450,7 @@ class ReportingController extends GetxController {
                 DateTime.parse(e.mqsCreatedTimestamp).month == month &&
                 DateTime.parse(e.mqsCreatedTimestamp).year == year &&
                 activeRec
-                    .any((test) => test.isFirebaseUserID == e.isFirebaseUserId))
+                    .any((test) => test.isFirebaseUserID == e.mqsFirebaseUserID))
             .length
             .toDouble();
         double y4 = receipt
@@ -1465,7 +1465,7 @@ class ReportingController extends GetxController {
                 DateTime.parse(e.mqsCreatedTimestamp).month == month &&
                 DateTime.parse(e.mqsCreatedTimestamp).year == year &&
                 inActiveRec
-                    .any((test) => test.isFirebaseUserID == e.isFirebaseUserId))
+                    .any((test) => test.isFirebaseUserID == e.mqsFirebaseUserID))
             .length
             .toDouble();
         signUpChartData.add(LineChartModel(DateTime(year, month), y1,
@@ -1556,12 +1556,12 @@ class ReportingController extends GetxController {
               .toDouble();
           y3 = userElement.first.value
               .where((e) => activeRec
-                  .any((test) => test.isFirebaseUserID == e.isFirebaseUserId))
+                  .any((test) => test.isFirebaseUserID == e.mqsFirebaseUserID))
               .length
               .toDouble();
           y6 = userElement.first.value
               .where((e) => inActiveRec
-                  .any((test) => test.isFirebaseUserID == e.isFirebaseUserId))
+                  .any((test) => test.isFirebaseUserID == e.mqsFirebaseUserID))
               .length
               .toDouble();
         }
@@ -1629,7 +1629,7 @@ class ReportingController extends GetxController {
                 DateTime.parse(e.mqsCreatedTimestamp).year == date.year &&
                 DateTime.parse(e.mqsCreatedTimestamp).day == date.day &&
                 activeRec
-                    .any((test) => test.isFirebaseUserID == e.isFirebaseUserId))
+                    .any((test) => test.isFirebaseUserID == e.mqsFirebaseUserID))
             .length
             .toDouble();
         double y4 = receipt
@@ -1646,7 +1646,7 @@ class ReportingController extends GetxController {
                 DateTime.parse(e.mqsCreatedTimestamp).year == date.year &&
                 DateTime.parse(e.mqsCreatedTimestamp).day == date.day &&
                 inActiveRec
-                    .any((test) => test.isFirebaseUserID == e.isFirebaseUserId))
+                    .any((test) => test.isFirebaseUserID == e.mqsFirebaseUserID))
             .length
             .toDouble();
         signUpChartData.add(LineChartModel(
@@ -1696,15 +1696,15 @@ class ReportingController extends GetxController {
             .toList();
         dashboardController.searchedUsers.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         dashboardController.searchUserType.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         dashboardController.users.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
       } else if (reportType.value ==
           StringConfig.reporting.subscriptionExpired) {
@@ -1712,15 +1712,15 @@ class ReportingController extends GetxController {
             receipt.where((e) => e.mqsExpiryDate.isNotEmpty).toList();
         dashboardController.searchedUsers.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         dashboardController.searchUserType.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         dashboardController.users.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
       } else if (reportType.value == StringConfig.reporting.notSubscribed) {
         List<UserSubscriptionReceiptModel> inActiveRec = receipt
@@ -1729,15 +1729,15 @@ class ReportingController extends GetxController {
             .toList();
         dashboardController.searchedUsers.value = users.where((localItem) {
           return inActiveRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         dashboardController.searchUserType.value = users.where((localItem) {
           return inActiveRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         dashboardController.users.value = users.where((localItem) {
           return inActiveRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
       }
       if (dashboardController.searchedUsers.isEmpty &&
@@ -1804,15 +1804,15 @@ class ReportingController extends GetxController {
             .toList();
         dashboardController.searchedUsers.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         dashboardController.searchUserType.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         dashboardController.users.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.isFirebaseUserId);
+              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         if (dashboardController.searchedUsers.isEmpty &&
             dashboardController.users.isNotEmpty) {

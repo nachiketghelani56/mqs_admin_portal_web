@@ -911,7 +911,7 @@ class PathwayController extends GetxController {
         pathwayDetail.mqsPathwayCompletionDate;
     selectedPathwayType.value = pathwayDetail.mqsPathwayType;
     selectedUserID.value =
-        users.any((e) => e.isFirebaseUserId == pathwayDetail.mqsUserID)
+        users.any((e) => e.mqsFirebaseUserID == pathwayDetail.mqsUserID)
             ? pathwayDetail.mqsUserID
             : "";
     pathwayStatus.value = pathwayDetail.mqsPathwayStatus;

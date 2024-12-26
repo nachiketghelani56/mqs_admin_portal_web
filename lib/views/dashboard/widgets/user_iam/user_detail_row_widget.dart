@@ -9,16 +9,16 @@ Widget userDetailRowWidget({required DashboardController dashboardController}) {
     children: [
       keyValueWrapperWidget(
         key: StringConfig.dashboard.email,
-        value: dashboardController.userDetail.email,
+        value: dashboardController.userDetail.mqsEmail,
         isFirst: true,
       ),
       keyValueWrapperWidget(
         key: StringConfig.dashboard.firstName,
-        value: dashboardController.userDetail.firstName,
+        value: dashboardController.userDetail.mqsFirstName,
       ),
       keyValueWrapperWidget(
         key: StringConfig.dashboard.lastName,
-        value: dashboardController.userDetail.lastName,
+        value: dashboardController.userDetail.mqsLastName,
       ),
       keyValueWrapperWidget(
         key: StringConfig.dashboard.loginWith,
@@ -32,11 +32,11 @@ Widget userDetailRowWidget({required DashboardController dashboardController}) {
       keyValueWrapperWidget(
         key: StringConfig.reporting.enterpriseUser,
         value:
-            "${dashboardController.userDetail.isEnterpriseUser.toString().capitalize}",
+            "${dashboardController.userDetail.mqsEnterpriseUserFlag.toString().capitalize}",
       ),
       keyValueWrapperWidget(
         key: StringConfig.reporting.firebaseUserId,
-        value: dashboardController.userDetail.isFirebaseUserId,
+        value: dashboardController.userDetail.mqsFirebaseUserID,
       ),
       keyValueWrapperWidget(
         key: StringConfig.reporting.mongoDbUserId,
@@ -75,8 +75,8 @@ Widget userDetailRowWidget({required DashboardController dashboardController}) {
             "${dashboardController.userDetail.mqsSkipOnboarding.toString().capitalize}",
       ),
       keyValueWrapperWidget(
-        key: StringConfig.dashboard.isRegister,
-        value: dashboardController.userDetail.isRegister,
+        key: StringConfig.dashboard.mqsRegistrationStatus,
+        value: dashboardController.userDetail.mqsRegistrationStatus,
         isLast: true,
       ),
     ],
