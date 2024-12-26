@@ -99,8 +99,25 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                   for (int i = 0;
                       i < dashboardController.filterFields.length;
                       i++)
-                    if (dashboardController.selectedTabIndex.value == 3) ...[
-                      if (dashboardController.filterFields[i] != StringConfig.pathway.mqsPathwayID)
+                    if (dashboardController.selectedTabIndex.value == 1) ...[
+                      if (dashboardController.userKeyName(index: i).isNotEmpty)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: SizeConfig.size18,
+                              vertical: SizeConfig.size6),
+                          decoration: FontTextStyleConfig.subOptionDecoration,
+                          child: Text(
+                            dashboardController.userKeyName(index: i),
+                            style: FontTextStyleConfig.tableContentTextStyle,
+                          ),
+                        ).tap(() {
+                          dashboardController.selectedFilterFieldIndex.value =
+                              i;
+                        })
+                    ] else if (dashboardController.selectedTabIndex.value ==
+                        3) ...[
+                      if (dashboardController.filterFields[i] !=
+                          StringConfig.pathway.mqsPathwayID)
                         Container(
                           padding: const EdgeInsets.symmetric(
                               horizontal: SizeConfig.size18,
@@ -123,9 +140,7 @@ Widget filterSheetWidget({required DashboardController dashboardController}) {
                         child: Text(
                           dashboardController.selectedTabIndex.value == 0
                               ? dashboardController.enterpriseKeyName(index: i)
-                              : dashboardController.selectedTabIndex.value == 1
-                                  ? dashboardController.userKeyName(index: i)
-                                  : dashboardController.circleKeyName(index: i),
+                              : dashboardController.circleKeyName(index: i),
                           style: FontTextStyleConfig.tableContentTextStyle,
                         ),
                       ).tap(() {

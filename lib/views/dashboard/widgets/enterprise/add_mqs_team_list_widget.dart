@@ -11,8 +11,9 @@ import 'package:mqs_admin_portal_web/widgets/title_widget.dart';
 
 Widget addMqsTeamListWidget(
     {required DashboardController dashboardController}) {
+  GlobalKey<FormState> entTeamFormKey = GlobalKey<FormState>();
   return Form(
-    key: dashboardController.entTeamFormKey,
+    key: entTeamFormKey,
     child: Column(
       children: [
         titleWidget(
@@ -117,7 +118,7 @@ Widget addMqsTeamListWidget(
                       ? StringConfig.dashboard.update
                       : StringConfig.dashboard.submit,
                   onTap: () {
-                    if (dashboardController.entTeamFormKey.currentState
+                    if (entTeamFormKey.currentState
                             ?.validate() ??
                         false) {
                       if (dashboardController.editMqsTeamIndex.value >= 0) {

@@ -30,8 +30,6 @@ class CircleController extends GetxController {
   CircleModel get circleDetail => searchedCircle[viewIndex.value];
   StreamSubscription<List<CircleModel>>? circleStream;
   RxBool isAdd = false.obs, isEdit = false.obs;
-  final GlobalKey<FormState> circleFormKey = GlobalKey<FormState>();
-  final GlobalKey<FormState> hashtagFormKey = GlobalKey<FormState>();
   final TextEditingController postTitleController = TextEditingController();
   final TextEditingController postContentController = TextEditingController();
   final TextEditingController postViewController = TextEditingController();
@@ -156,7 +154,7 @@ class CircleController extends GetxController {
 
   addCircle() async {
     try {
-      if (circleFormKey.currentState?.validate() ?? false) {
+
         final docRef = FirebaseStorageService.i.enterprise.doc().id;
         final circleModel = CircleModel(
           id: docRef,
@@ -203,7 +201,7 @@ class CircleController extends GetxController {
         if (Get.currentRoute == AppRoutes.addCircle) {
           Get.back();
         }
-      }
+
     } catch (e) {
       hideLoader();
       errorDialogWidget(msg: e.toString());

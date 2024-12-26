@@ -33,16 +33,6 @@ Widget homeHeaderWidget(
               ),
               SizeConfig.size10.width,
             ],
-            if (showBack)
-              Image.asset(
-                ImageConfig.back,
-                height: SizeConfig.size44,
-                width: SizeConfig.size44,
-              ).tap(() {
-                if (onBackTap != null) {
-                  onBackTap();
-                }
-              }),
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,

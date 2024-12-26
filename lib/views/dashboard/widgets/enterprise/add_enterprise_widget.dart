@@ -13,14 +13,16 @@ import 'package:mqs_admin_portal_web/widgets/custom_text_field.dart';
 
 Widget addEnterpriseWidget(
     {required DashboardController dashboardController,
-    required BuildContext context}) {
+      required BuildContext context}) {
+
+  GlobalKey<FormState> enterpriseFormKey = GlobalKey<FormState>();
   return SingleChildScrollView(
     padding: const EdgeInsets.only(bottom: SizeConfig.size24),
     child: Container(
       padding: const EdgeInsets.all(SizeConfig.size16),
       decoration: FontTextStyleConfig.cardDecoration,
       child: Form(
-        key: dashboardController.enterpriseFormKey,
+        key: enterpriseFormKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -74,7 +76,9 @@ Widget addEnterpriseWidget(
                         ? StringConfig.dashboard.update
                         : StringConfig.dashboard.submit,
                     onTap: () {
-                      dashboardController.addEnterprise();
+                      if (enterpriseFormKey.currentState?.validate() ?? false) {
+                        dashboardController.addEnterprise();
+                      }
                     },
                   ),
                 ),

@@ -10,8 +10,9 @@ import 'package:mqs_admin_portal_web/widgets/title_widget.dart';
 
 Widget addMqsEmpEmailListWidget(
     {required DashboardController dashboardController}) {
+  GlobalKey<FormState> entEmpEmailFormKey = GlobalKey<FormState>();
   return Form(
-    key: dashboardController.entEmpEmailFormKey,
+    key:entEmpEmailFormKey,
     child: Column(
       children: [
         titleWidget(
@@ -67,7 +68,7 @@ Widget addMqsEmpEmailListWidget(
                       ? StringConfig.dashboard.update
                       : StringConfig.dashboard.submit,
                   onTap: () {
-                    if (dashboardController.entEmpEmailFormKey.currentState
+                    if (entEmpEmailFormKey.currentState
                             ?.validate() ??
                         false) {
                       if (dashboardController.editMqsEmpEmailIndex.value >= 0) {

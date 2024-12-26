@@ -41,7 +41,7 @@ class ReportingScreen extends StatelessWidget {
             },
           ),
         ),
-        SizeConfig.size20.height,
+        SizeConfig.size5.height,
         Expanded(
           child: Obx(
             () {
@@ -65,7 +65,11 @@ class ReportingScreen extends StatelessWidget {
                 return Column(
                   children: [
                     SizeConfig.size20.height,
-                    headerWidget(title: _reportingController.reportType.value),
+                    headerWidget(
+                      title: _reportingController.reportType.value,
+                      mqsDashboardController: _mqsDashboardController,
+                      dashboardController: _dashboardController,
+                    ),
                     SizeConfig.size25.height,
                     Expanded(
                       child: userIAMWidget(
@@ -86,8 +90,13 @@ class ReportingScreen extends StatelessWidget {
                 return Column(
                   children: [
                     SizeConfig.size20.height,
-                    headerWidget(title: _reportingController.reportType.value)
-                        .paddingSymmetric(horizontal: SizeConfig.size40),
+                    headerWidget(
+                      title: _reportingController.reportType.value,
+                      mqsDashboardController: _mqsDashboardController,
+                      dashboardController: _dashboardController,
+                    ).paddingSymmetric(
+                      horizontal: SizeConfig.size40,
+                    ),
                     Expanded(
                       child: circleWidget(
                         context: context,
@@ -105,14 +114,18 @@ class ReportingScreen extends StatelessWidget {
                 return Column(
                   children: [
                     SizeConfig.size20.height,
-                    headerWidget(title: _reportingController.reportType.value)
-                        .paddingSymmetric(horizontal: SizeConfig.size40),
+                    headerWidget(
+                      title: _reportingController.reportType.value,
+                      mqsDashboardController: _mqsDashboardController,
+                      dashboardController: _dashboardController,
+                    ).paddingSymmetric(horizontal: SizeConfig.size40),
                     Expanded(
                       child: Padding(
-
-                        padding:  const EdgeInsets.only( left: SizeConfig.size40,
-                          right: SizeConfig.size40,
-                          top: SizeConfig.size25,bottom: SizeConfig.size25 ),
+                        padding: const EdgeInsets.only(
+                            left: SizeConfig.size40,
+                            right: SizeConfig.size40,
+                            top: SizeConfig.size25,
+                            bottom: SizeConfig.size25),
                         child: enterpriseWidget(
                           context: context,
                           isReport: true,
@@ -129,6 +142,7 @@ class ReportingScreen extends StatelessWidget {
                 reportingController: _reportingController,
                 dashboardController: _dashboardController,
                 circleController: _circleController,
+                mqsDashboardController: _mqsDashboardController,
               );
             },
           ),

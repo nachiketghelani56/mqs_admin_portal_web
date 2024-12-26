@@ -7,6 +7,7 @@ import 'package:mqs_admin_portal_web/views/dashboard/widgets/enterprise_widget.d
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/user_iam_widget.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/controller/home_controller.dart';
+import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/widgets/header_widget.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/widgets/home_header_widget.dart';
 
 class DashboardScreen extends StatelessWidget {
@@ -29,10 +30,15 @@ class DashboardScreen extends StatelessWidget {
             homeController: _homeController,
             context: context,
             scaffoldKey: scaffoldKey),
-        SizeConfig.size15.height,
         Expanded(
           child: Column(
             children: [
+              headerWidget(
+                title:isEnterprise? StringConfig.dashboard.enterpriseList:StringConfig.dashboard.usersList,
+                mqsDashboardController: _mqsDashboardController,
+                dashboardController: _dashboardController,
+              ),
+              SizeConfig.size25.height,
               // Row(
               //   children: [
               //     if (context.width < SizeConfig.size600)

@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
+import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/controller/home_controller.dart';
+import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/widgets/header_widget.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/widgets/home_header_widget.dart';
 import 'package:mqs_admin_portal_web/views/team_chart/controller/team_chart_controller.dart';
 import 'package:mqs_admin_portal_web/views/team_chart/widgets/team_connection_widget.dart';
@@ -18,6 +21,12 @@ class TeamChartScreen extends StatelessWidget {
       Get.put(TeamChartController());
   final HomeController _homeController = Get.put(HomeController());
 
+  final DashboardController _dashboardController =
+  Get.put(DashboardController());
+  final MqsDashboardController _mqsDashboardController =
+  Get.put(MqsDashboardController());
+
+
   @override
   Widget build(BuildContext context) {
     return  SingleChildScrollView(
@@ -27,7 +36,16 @@ class TeamChartScreen extends StatelessWidget {
                 homeController: _homeController,
                 context: context,
                 scaffoldKey: scaffoldKey),
-            SizeConfig.size40.height,
+            SizeConfig.size25.height,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size40),
+              child: headerWidget(
+                title: StringConfig.teamChart.teamChart,
+                mqsDashboardController: _mqsDashboardController,
+                dashboardController: _dashboardController,
+              ),
+            ),
+            SizeConfig.size25.height,
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [

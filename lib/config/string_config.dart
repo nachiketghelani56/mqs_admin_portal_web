@@ -29,6 +29,10 @@ class Dashboard {
   final String enterprise = "Enterprise";
   final String users = "Users";
   final String circle = "Circle";
+  final String enterpriseList = "Enterprise List";
+  final String usersList = "Users List";
+  final String circleList = "Circle List";
+
   final String filter = "Filter";
   final String export = "Export";
   final String addEnterprise = "Add Enterprise";
@@ -133,6 +137,9 @@ class Dashboard {
   final String mqsSubscriptionPlatform = "mqsSubscriptionPlatform";
   final String mqsSubscriptionStatus = "mqsSubscriptionStatus";
   final String onboardingData = "Onboarding Data";
+  final String mqsSkipOnboarding = "mqsSkipOnboarding";
+  final String mqsUserActiveTimestamp = "mqsUserActiveTimestamp";
+  final String userActiveTimestamp = "User Active Timestamp";
   final String checkINValue = "Check IN Value";
   final String checkInScore = "checkInScore";
   final String mqsCINValue = "mqsCINValue";
@@ -202,6 +209,7 @@ class Dashboard {
   final String mqsUpdateTimestamp = "mqsUpdateTimestamp";
   final String mqsUserSubscriptionStatus = "mqsUserSubscriptionStatus";
   final String onboardingDataKey = "onboardingData";
+  final String mqsEnterpriseUserFlag = "mqsEnterpriseUserFlag";
   final String mqsEnterprisePOCsKey = "mqsEnterprisePOCs";
   final String mqsIsTeam = "mqsIsTeam";
   final String mqsTeamListKey = "mqsTeamList";

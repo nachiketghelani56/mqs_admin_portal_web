@@ -11,13 +11,14 @@ import 'package:mqs_admin_portal_web/widgets/custom_button.dart';
 Widget addCircleWidget(
     {required CircleController circleController,
     required BuildContext context}) {
+  GlobalKey<FormState> circleFormKey = GlobalKey<FormState>();
   return SingleChildScrollView(
     padding: const EdgeInsets.only(bottom: SizeConfig.size24),
     child: Container(
       padding: const EdgeInsets.all(SizeConfig.size16),
       decoration: FontTextStyleConfig.cardDecoration,
       child: Form(
-        key: circleController.circleFormKey,
+        key: circleFormKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -56,7 +57,9 @@ Widget addCircleWidget(
                         ? StringConfig.dashboard.update
                         : StringConfig.dashboard.submit,
                     onTap: () {
-                      circleController.addCircle();
+                      if (circleFormKey.currentState?.validate() ?? false) {
+                        circleController.addCircle();
+                      }
                     },
                   ),
                 ),

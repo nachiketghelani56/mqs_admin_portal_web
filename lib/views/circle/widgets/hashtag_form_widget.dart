@@ -9,6 +9,7 @@ import 'package:mqs_admin_portal_web/widgets/custom_text_field.dart';
 import 'package:mqs_admin_portal_web/widgets/title_widget.dart';
 
 Widget hashtagFormWidget({required CircleController circleController}) {
+   GlobalKey<FormState> hashtagFormKey = GlobalKey<FormState>();
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -21,7 +22,7 @@ Widget hashtagFormWidget({required CircleController circleController}) {
       }),
       if (circleController.showHashTag.value)
         Form(
-          key: circleController.hashtagFormKey,
+          key: hashtagFormKey,
           child: Column(
             children: [
               SizeConfig.size30.height,
@@ -53,7 +54,7 @@ Widget hashtagFormWidget({required CircleController circleController}) {
                     child: CustomButton(
                       btnText: StringConfig.dashboard.submit,
                       onTap: () {
-                        if (circleController.hashtagFormKey.currentState
+                        if (hashtagFormKey.currentState
                                 ?.validate() ??
                             false) {
                           circleController.showHashTag.value = false;

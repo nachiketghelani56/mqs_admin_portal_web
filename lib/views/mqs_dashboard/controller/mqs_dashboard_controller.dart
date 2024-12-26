@@ -30,4 +30,21 @@ class MqsDashboardController extends GetxController {
     isShowHome.value = true;
     super.onInit();
   }
+
+  String getRouteName(int index) {
+    if (index == 0) {
+      return StringConfig.dashboard.enterprise;
+    } else if (index == 1) {
+      return StringConfig.dashboard.users;
+    } else if (index == 2) {
+      return StringConfig.dashboard.circle;
+    } else if (index == 3) {
+      return StringConfig.mqsDashboard.pathway;
+    } else if (index == 4) {
+      return StringConfig.teamChart.teamChart;
+    } else {
+      return StringConfig.mqsDashboard.reports;
+    }
+
+  }
 }

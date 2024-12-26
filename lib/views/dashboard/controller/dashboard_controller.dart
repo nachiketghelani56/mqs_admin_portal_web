@@ -127,11 +127,6 @@ class DashboardController extends GetxController {
   RxList<MqsTeam> mqsTeamList = <MqsTeam>[].obs;
   RxList<MqsEnterprisePOCs> mqsEnterprisePOCs = <MqsEnterprisePOCs>[].obs;
   RxInt viewIndex = (-1).obs;
-  final GlobalKey<FormState> enterpriseFormKey = GlobalKey<FormState>();
-  final GlobalKey<FormState> entEmpEmailFormKey = GlobalKey<FormState>();
-  final GlobalKey<FormState> entTeamFormKey = GlobalKey<FormState>();
-  final GlobalKey<FormState> entPOCFormKey = GlobalKey<FormState>();
-  final GlobalKey<FormState> entPOCSubscriptionFormKey = GlobalKey<FormState>();
   EnterpriseModel get enterpriseDetail => searchedEnterprises[viewIndex.value];
   RxInt editMqsEmpEmailIndex = RxInt(-1),
       editMqsEntPOCIndex = RxInt(-1),
@@ -471,55 +466,54 @@ class DashboardController extends GetxController {
 
   addEnterprise() async {
     try {
-      if (enterpriseFormKey.currentState?.validate() ?? false) {
-        final docRef = FirebaseStorageService.i.enterprise.doc().id;
-        final enterprise = EnterpriseModel(
-          mqsEnterprisePOCs: MqsEnterprisePOCs(
-            mqsEnterpriseID:
-                isEditEnterprise.value ? enterpriseId.value : docRef,
-            mqsEnterpriseName: pocNameController.text.trim(),
-            mqsEnterpriseEmail: pocEmailController.text.trim(),
-            mqsEnterprisePhoneNumber: pocPhoneNumberController.text,
-            mqsEnterpriseType: pocTypeController.text,
-            mqsEnterpriseWebsite: pocWebsiteController.text,
-            mqsEnterpriseAddress: pocAddressController.text.trim(),
-            mqsEnterprisePincode: pocPinCodeController.text.trim(),
-            mqsIsSignUp: false,
-          ),
-          mqsEnterpriseCode: mqsEnterpriseCodeController.text,
-          mqsIsTeam: mqsTeamList.isNotEmpty ? true : false,
-          mqsTeamList: mqsTeamList,
-          mqsEmployeeList: mqsEmployeeEmailList,
-          mqsEnterprisePOCsSubscriptionDetails:
-              MqsEnterprisePOCsSubscriptionDetails(
-            mqsSubscriptionStatus: subscriptionStatusController.text.trim(),
-            mqsSubscriptionActivePlan:
-                subscriptionActivePlanController.text.trim(),
-            mqsSubscriptionStartDate: startDate.value.trim(),
-            mqsSubscriptionExpiryDate: expiryDate.value.trim(),
-          ),
-          mqsCreatedTimestamp: isEditEnterprise.value
-              ? createdTimestamp.value
-              : DateTime.now().toIso8601String(),
-          mqsUpdateTimestamp: DateTime.now().toIso8601String(),
-        );
 
-        showLoader();
-        if (isEditEnterprise.value) {
-          await EnterpriseRepository.i.editEnterprises(
-              enterpriseModel: enterprise, docId: enterpriseId.value);
-        } else {
-          await EnterpriseRepository.i
-              .addEnterprises(enterpriseModel: enterprise, customId: docRef);
-        }
-        hideLoader();
-        clearAllFields();
-        isAddEnterprise.value = false;
-        isEditEnterprise.value = false;
-        if (Get.currentRoute == AppRoutes.addEnterprise) {
-          Get.back();
-        }
+      final docRef = FirebaseStorageService.i.enterprise.doc().id;
+      final enterprise = EnterpriseModel(
+        mqsEnterprisePOCs: MqsEnterprisePOCs(
+          mqsEnterpriseID: isEditEnterprise.value ? enterpriseId.value : docRef,
+          mqsEnterpriseName: pocNameController.text.trim(),
+          mqsEnterpriseEmail: pocEmailController.text.trim(),
+          mqsEnterprisePhoneNumber: pocPhoneNumberController.text,
+          mqsEnterpriseType: pocTypeController.text,
+          mqsEnterpriseWebsite: pocWebsiteController.text,
+          mqsEnterpriseAddress: pocAddressController.text.trim(),
+          mqsEnterprisePincode: pocPinCodeController.text.trim(),
+          mqsIsSignUp: false,
+        ),
+        mqsEnterpriseCode: mqsEnterpriseCodeController.text,
+        mqsIsTeam: mqsTeamList.isNotEmpty ? true : false,
+        mqsTeamList: mqsTeamList,
+        mqsEmployeeList: mqsEmployeeEmailList,
+        mqsEnterprisePOCsSubscriptionDetails:
+            MqsEnterprisePOCsSubscriptionDetails(
+          mqsSubscriptionStatus: subscriptionStatusController.text.trim(),
+          mqsSubscriptionActivePlan:
+              subscriptionActivePlanController.text.trim(),
+          mqsSubscriptionStartDate: startDate.value.trim(),
+          mqsSubscriptionExpiryDate: expiryDate.value.trim(),
+        ),
+        mqsCreatedTimestamp: isEditEnterprise.value
+            ? createdTimestamp.value
+            : DateTime.now().toIso8601String(),
+        mqsUpdateTimestamp: DateTime.now().toIso8601String(),
+      );
+
+      showLoader();
+      if (isEditEnterprise.value) {
+        await EnterpriseRepository.i.editEnterprises(
+            enterpriseModel: enterprise, docId: enterpriseId.value);
+      } else {
+        await EnterpriseRepository.i
+            .addEnterprises(enterpriseModel: enterprise, customId: docRef);
       }
+      hideLoader();
+      clearAllFields();
+      isAddEnterprise.value = false;
+      isEditEnterprise.value = false;
+      if (Get.currentRoute == AppRoutes.addEnterprise) {
+        Get.back();
+      }
+
     } catch (e) {
       hideLoader();
       errorDialogWidget(msg: e.toString());
@@ -1209,6 +1203,13 @@ class DashboardController extends GetxController {
     } else if (keyName == StringConfig.dashboard.onboardingDataKey) {
       return StringConfig.dashboard.onboardingData;
     }
+    else if (keyName == StringConfig.dashboard.mqsSkipOnboarding) {
+      return StringConfig.dashboard.skipOnboarding ;
+    }
+    else if (keyName == StringConfig.dashboard.mqsUserActiveTimestamp) {
+      return StringConfig.dashboard.userActiveTimestamp;
+    }
+
     return "";
   }
 
