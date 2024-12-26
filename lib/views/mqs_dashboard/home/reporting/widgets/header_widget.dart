@@ -24,8 +24,6 @@ Widget headerWidget(
             () {
               mqsDashboardController.menuIndex.value = 0;
               mqsDashboardController.subMenuIndex.value = -1;
-              mqsDashboardController.isShowHome.value =
-                  !mqsDashboardController.isShowHome.value;
             },
           ),
           SizeConfig.size10.width,

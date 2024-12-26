@@ -79,6 +79,10 @@ Widget sideMenuWidget(
                       mqsDashboardController.subMenuIndex.value = -1;
                       mqsDashboardController.isShowHome.value =
                           !mqsDashboardController.isShowHome.value;
+                      if (!mqsDashboardController.isShowHome.value) {
+                        mqsDashboardController.scaffoldKey.currentState
+                            ?.closeDrawer();
+                      }
                     }),
                     if (mqsDashboardController.isShowHome.value)
                       if (index == mqsDashboardController.menuIndex.value &&
@@ -124,6 +128,9 @@ Widget sideMenuWidget(
                               ).tap(() {
                                 mqsDashboardController.subMenuIndex.value = i;
                                 dashboardController.setTabIndex(index: i);
+
+                                mqsDashboardController.scaffoldKey.currentState
+                                    ?.closeDrawer();
                               }),
                             );
                           },
