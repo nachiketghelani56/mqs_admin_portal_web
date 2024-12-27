@@ -19,44 +19,66 @@ Widget userWOLWidget({required DashboardController dashboardController}) {
         SizeConfig.size10.height,
         keyValueWrapperWidget(
           key: StringConfig.dashboard.family,
-          value:
-              "${dashboardController.userDetail.onboardingModel.wOLValue.family}",
+          value: dashboardController
+                      .userDetail.onboardingModel.wOLValue.family ==
+                  null
+              ? ""
+              : "${dashboardController.userDetail.onboardingModel.wOLValue.family}",
           isFirst: true,
         ),
         keyValueWrapperWidget(
           key: StringConfig.dashboard.finance,
-          value:
-              "${dashboardController.userDetail.onboardingModel.wOLValue.finances}",
+          value: dashboardController
+                      .userDetail.onboardingModel.wOLValue.finances ==
+                  null
+              ? ""
+              : "${dashboardController.userDetail.onboardingModel.wOLValue.finances}",
         ),
         keyValueWrapperWidget(
           key: StringConfig.dashboard.fun,
-          value:
-              "${dashboardController.userDetail.onboardingModel.wOLValue.fun}",
+          value: dashboardController.userDetail.onboardingModel.wOLValue.fun ==
+                  null
+              ? ""
+              : "${dashboardController.userDetail.onboardingModel.wOLValue.fun}",
         ),
         keyValueWrapperWidget(
           key: StringConfig.dashboard.health,
-          value:
-              "${dashboardController.userDetail.onboardingModel.wOLValue.health}",
+          value: dashboardController
+                      .userDetail.onboardingModel.wOLValue.health ==
+                  null
+              ? ""
+              : "${dashboardController.userDetail.onboardingModel.wOLValue.health}",
         ),
         keyValueWrapperWidget(
           key: StringConfig.dashboard.purpose,
-          value:
-              "${dashboardController.userDetail.onboardingModel.wOLValue.purpose}",
+          value: dashboardController
+                      .userDetail.onboardingModel.wOLValue.purpose ==
+                  null
+              ? ""
+              : "${dashboardController.userDetail.onboardingModel.wOLValue.purpose}",
         ),
         keyValueWrapperWidget(
           key: StringConfig.dashboard.relationship,
-          value:
-              "${dashboardController.userDetail.onboardingModel.wOLValue.relationship}",
+          value: dashboardController
+                      .userDetail.onboardingModel.wOLValue.relationship ==
+                  null
+              ? ""
+              : "${dashboardController.userDetail.onboardingModel.wOLValue.relationship}",
         ),
         keyValueWrapperWidget(
           key: StringConfig.dashboard.social,
-          value:
-              "${dashboardController.userDetail.onboardingModel.wOLValue.social}",
+          value: dashboardController
+                      .userDetail.onboardingModel.wOLValue.social ==
+                  null
+              ? ""
+              : "${dashboardController.userDetail.onboardingModel.wOLValue.social}",
         ),
         keyValueWrapperWidget(
           key: StringConfig.dashboard.work,
-          value:
-              "${dashboardController.userDetail.onboardingModel.wOLValue.work}",
+          value: dashboardController.userDetail.onboardingModel.wOLValue.work ==
+                  null
+              ? ""
+              : "${dashboardController.userDetail.onboardingModel.wOLValue.work}",
           isLast: true,
         ),
       ],

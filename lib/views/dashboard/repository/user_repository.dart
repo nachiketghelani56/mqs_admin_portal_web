@@ -118,15 +118,27 @@ class UserRepository {
                 .orderBy(field, descending: !isAsc);
             break;
           case 'array-contains-any': // Array contains any
-            if (!allRes.contains(value)) {
-              allRes.addAll(userList.where((UserIAMModel e) {
-                Map<String, dynamic> json =
-                    e.toJson(); // Convert object to JSON
-                String? fieldValue =
-                    json[field]?.toString(); // Get the dynamic field value
-                return fieldValue != null && fieldValue.contains(value);
-              }).toList());
-            }
+             if (!allRes.contains(value)) {
+                          if (fieldKey == 'mqsEnterpriseDetails') {
+                            allRes.addAll(userList.where((UserIAMModel e) {
+                              Map<String, dynamic> json =
+                                  e.toJson(); // Convert object to JSON
+                              String? fieldValue =
+                                  json[field]?.toString(); // Get the dynamic field value
+
+                              return fieldValue != null && (fieldValue.contains(value) || json["enterPriseID"] ==value);
+                            }).toList());
+                          } else {
+                            allRes.addAll(userList.where((UserIAMModel e) {
+                              Map<String, dynamic> json =
+                                  e.toJson(); // Convert object to JSON
+                              String? fieldValue =
+                                  json[field]?.toString(); // Get the dynamic field value
+
+                              return fieldValue != null && fieldValue.contains(value);
+                            }).toList());
+                          }
+                        }
             break;
           default:
             break;

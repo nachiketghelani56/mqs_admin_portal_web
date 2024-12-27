@@ -24,10 +24,11 @@ class UserIAMModel {
   final String mqsUserSubscriptionStatus;
   final bool mqsSkipOnboarding;
   final OnboardingModel onboardingModel;
+  final EnterpriseDetails mqsEnterpriseDetails;
   final String mqsUserActiveTimestamp;
 
   UserIAMModel(
-    this.onboardingModel, {
+    this.onboardingModel,this.mqsEnterpriseDetails, {
     required this.mqsEmail,
     required this.mqsFirstName,
     required this.mqsLastName,
@@ -88,14 +89,24 @@ class UserIAMModel {
                 demoGraphicValue: [],
                 scenesValue: [],
                 wOLValue: WOLModel(
-                    family: 0,
-                    finances: 0,
-                    fun: 0,
-                    health: 0,
-                    purpose: 0,
-                    relationship: 0,
-                    social: 0,
-                    work: 0));
+                    family: null,
+                    finances: null,
+                    fun: null,
+                    health: null,
+                    purpose: null,
+                    relationship: null,
+                    social: null,
+                    work: null),
+              ),
+        mqsEnterpriseDetails = json['mqsEnterpriseDetails'] != null
+            ? EnterpriseDetails.fromJson(json['mqsEnterpriseDetails'])
+            : EnterpriseDetails(
+                mqsIndividualID: '',
+                mqsIndividualValid: false,
+                mqsOrganizationID: '',
+                mqsTeamID: '',
+                mqsOrganizationValid: false,
+                mqsTeamValid: false);
 
   Map<String, dynamic> toJson() {
     return {
@@ -124,6 +135,7 @@ class UserIAMModel {
       'mqsSkipOnboarding': mqsSkipOnboarding,
       'mqsUserActiveTimestamp': mqsUserActiveTimestamp,
       'onboardingData': onboardingModel.toJson(),
+      'mqsEnterpriseDetails': mqsEnterpriseDetails.toJson(),
     };
   }
 }
@@ -156,14 +168,14 @@ class OnboardingModel {
         wOLValue = json['wOLValue'] != null
             ? WOLModel.fromJson(json['wOLValue'])
             : WOLModel(
-                family: 0,
-                finances: 0,
-                fun: 0,
-                health: 0,
-                purpose: 0,
-                relationship: 0,
-                social: 0,
-                work: 0);
+                family: null,
+                finances: null,
+                fun: null,
+                health: null,
+                purpose: null,
+                relationship: null,
+                social: null,
+                work: null);
 
   Map<String, dynamic> toJson() {
     return {
@@ -272,45 +284,83 @@ class ScenesModel {
 }
 
 class WOLModel {
-  final num family;
-  final num finances;
-  final num fun;
-  final num health;
-  final num purpose;
-  final num relationship;
-  final num social;
-  final num work;
+  final num? family;
+  final num? finances;
+  final num? fun;
+  final num? health;
+  final num? purpose;
+  final num? relationship;
+  final num? social;
+  final num? work;
 
-  WOLModel(
-      {required this.family,
-      required this.finances,
-      required this.fun,
-      required this.health,
-      required this.purpose,
-      required this.relationship,
-      required this.social,
-      required this.work});
+  WOLModel({
+    this.family,
+    this.finances,
+    this.fun,
+    this.health,
+    this.purpose,
+    this.relationship,
+    this.social,
+    this.work,
+  });
 
-  WOLModel.fromJson(Map json)
-      : family = json['family'] ?? 0,
-        finances = json['finances'] ?? 0,
-        fun = json['fun'] ?? 0,
-        health = json['health'] ?? 0,
-        purpose = json['purpose'] ?? 0,
-        relationship = json['relationship'] ?? 0,
-        social = json['social'] ?? 0,
-        work = json['work'] ?? 0;
+  WOLModel.fromJson(Map<String, dynamic> json)
+      : family = json['family'],
+        finances = json['finances'],
+        fun = json['fun'],
+        health = json['health'],
+        purpose = json['purpose'],
+        relationship = json['relationship'],
+        social = json['social'],
+        work = json['work'];
 
   Map<String, dynamic> toJson() {
     return {
-      'family': family,
-      'finances': finances,
-      'fun': fun,
-      'health': health,
-      'purpose': purpose,
-      'relationship': relationship,
-      'social': social,
-      'work': work,
+      if (family != null) 'family': family,
+      if (finances != null) 'finances': finances,
+      if (fun != null) 'fun': fun,
+      if (health != null) 'health': health,
+      if (purpose != null) 'purpose': purpose,
+      if (relationship != null) 'relationship': relationship,
+      if (social != null) 'social': social,
+      if (work != null) 'work': work,
+    };
+  }
+}
+
+class EnterpriseDetails {
+  final String mqsIndividualID;
+  final bool mqsIndividualValid;
+  final String mqsOrganizationID;
+  final bool mqsOrganizationValid;
+  final String mqsTeamID;
+  final bool mqsTeamValid;
+
+  EnterpriseDetails({
+    required this.mqsIndividualID,
+    required this.mqsIndividualValid,
+    required this.mqsOrganizationID,
+    required this.mqsOrganizationValid,
+    required this.mqsTeamID,
+    required this.mqsTeamValid,
+  });
+
+  EnterpriseDetails.fromJson(Map json)
+      : mqsIndividualID = json['mqsIndividualID'] ?? "",
+        mqsIndividualValid = json['mqsIndividualValid'] ?? false,
+        mqsOrganizationID = json['mqsOrganizationID'] ?? "",
+        mqsOrganizationValid = json['mqsOrganizationValid'] ?? false,
+        mqsTeamID = json['mqsTeamID'] ?? "",
+        mqsTeamValid = json['mqsTeamValid'] ?? false;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'mqsIndividualID': mqsIndividualID,
+      'mqsIndividualValid': mqsIndividualValid,
+      'mqsOrganizationID': mqsOrganizationID,
+      'mqsOrganizationValid': mqsOrganizationValid,
+      'mqsTeamID': mqsTeamID,
+      'mqsTeamValid': mqsTeamValid,
     };
   }
 }

@@ -16,11 +16,38 @@ Widget userSubscriptionDetailWidget(
       ),
       SizeConfig.size10.height,
       keyValueWrapperWidget(
-        key: StringConfig.reporting.subscriptionStatus,
+        key: StringConfig.reporting.appSpecificSharedSecret,
         value: dashboardController
-                .userSubscriptionDetail?.mqsUserSubscriptionStatus ??
+                .userSubscriptionDetail?.mqsAppSpecificSharedSecret ??
             "",
         isFirst: true,
+      ),
+      keyValueWrapperWidget(
+        key: StringConfig.reporting.localVerificationData,
+        value: dashboardController
+                .userSubscriptionDetail?.mqsLocalVerificationData ??
+            "",
+      ),
+      keyValueWrapperWidget(
+        key: StringConfig.reporting.purchaseId,
+        value: dashboardController.userSubscriptionDetail?.mqsPurchaseID ?? "",
+      ),
+      keyValueWrapperWidget(
+        key: StringConfig.reporting.serverVerificationData,
+        value: dashboardController
+                .userSubscriptionDetail?.mqsServerVerificationData ??
+            "",
+      ),
+      keyValueWrapperWidget(
+        key: StringConfig.reporting.transactionId,
+        value:
+            dashboardController.userSubscriptionDetail?.mqsTransactionID ?? "",
+      ),
+      keyValueWrapperWidget(
+        key: StringConfig.reporting.subscriptionStatus,
+          value: dashboardController
+                .userSubscriptionDetail?.mqsUserSubscriptionStatus ??
+            "",
       ),
       keyValueWrapperWidget(
         key: StringConfig.reporting.subscriptionActivePlan,

@@ -3,6 +3,7 @@ import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/user_iam/user_detail_row_widget.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/widgets/user_iam/user_enterprise_detail_widget.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/user_iam/user_onboarding_data_widget.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/user_iam/user_subscription_detail_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/title_widget.dart';
@@ -23,11 +24,23 @@ Widget userDetailWidget({required DashboardController dashboardController}) {
           SizeConfig.size10.height,
           userDetailRowWidget(dashboardController: dashboardController),
           SizeConfig.size34.height,
+          userEnterpriseDetailWidget(dashboardController: dashboardController),
+          SizeConfig.size34.height,
           userSubscriptionDetailWidget(
               dashboardController: dashboardController),
           SizeConfig.size34.height,
-          userOnboardingDataWidget(dashboardController: dashboardController),
-          SizeConfig.size34.height,
+          if(!(dashboardController
+              .userDetail.onboardingModel.checkInValue.isEmpty  && dashboardController
+              .userDetail.onboardingModel.demoGraphicValue.isEmpty && dashboardController
+              .userDetail.onboardingModel.scenesValue.isEmpty &&dashboardController.userDetail.onboardingModel.wOLValue
+              .toJson()
+              .toString() ==
+              "{}"))
+            ...[
+              userOnboardingDataWidget(dashboardController: dashboardController),
+              SizeConfig.size34.height,
+            ],
+
           Container(
             height: SizeConfig.size55,
             padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),

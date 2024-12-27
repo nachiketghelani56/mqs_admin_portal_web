@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/widgets/key_value_warpper_widget.dart';
@@ -75,7 +76,15 @@ Widget userDetailRowWidget({required DashboardController dashboardController}) {
             "${dashboardController.userDetail.mqsSkipOnboarding.toString().capitalize}",
       ),
       keyValueWrapperWidget(
-        key: StringConfig.dashboard.mqsRegistrationStatus,
+        key: StringConfig.dashboard.userActiveTimestamp,
+        value: dashboardController.userDetail.mqsUserActiveTimestamp.isNotEmpty
+            ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
+                DateTime.parse(
+                    dashboardController.userDetail.mqsUserActiveTimestamp))
+            : "",
+      ),
+      keyValueWrapperWidget(
+        key: StringConfig.dashboard.registrationStatus,
         value: dashboardController.userDetail.mqsRegistrationStatus,
         isLast: true,
       ),

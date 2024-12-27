@@ -32,8 +32,15 @@ Widget userOnboardingDataWidget(
         SizeConfig.size34.height,
         userScenesWidget(dashboardController: dashboardController),
       ],
-      SizeConfig.size34.height,
-      userWOLWidget(dashboardController: dashboardController),
+      if(dashboardController.userDetail.onboardingModel.wOLValue
+          .toJson()
+          .toString() !=
+          "{}")
+        ...[
+          SizeConfig.size34.height,
+          userWOLWidget(dashboardController: dashboardController),
+        ],
+
     ],
   );
 }

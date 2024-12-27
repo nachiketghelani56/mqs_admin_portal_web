@@ -1026,6 +1026,9 @@ class DashboardController extends GetxController {
 
   exportUserIAM() async {
     try {
+      List<UserSubscriptionReceiptModel> receipt =
+          await UserRepository.i.getUserSubscriptionReceipt();
+
       String currentDate =
           DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(DateTime(0));
       List<List<String>> rows = [];
@@ -1043,13 +1046,24 @@ class DashboardController extends GetxController {
             "${model.mqsEnterpriseUserFlag}",
             model.mqsFirebaseUserID,
             model.isMongoDBUserId,
-            model.mqsSubscriptionActivePlan,
-            model.mqsUserSubscriptionStatus,
-            model.mqsSubscriptionPlatform,
-            model.mqsExpiryDate.isNotEmpty
+            model.loginWith,
+            model.about,
+            "${model.aboutValue}",
+            model.country,
+            "${model.countryValue}",
+            model.pronouns,
+            "${model.pronounsValue}",
+            "${model.mqsSkipOnboarding}",
+            model.mqsUserActiveTimestamp.isNotEmpty
                 ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
-                    .format(DateTime.parse(model.mqsExpiryDate))
+                    .format(DateTime.parse(model.mqsUserActiveTimestamp))
                 : "",
+            model.mqsRegistrationStatus,
+            jsonEncode(model.mqsEnterpriseDetails.toJson()),
+            json.encode(receipt
+                .where((e) => e.isFirebaseUserID == model.mqsFirebaseUserID)
+                .toList()),
+            model.mqsUserActiveTimestamp,
             jsonEncode(model.onboardingModel.checkInValue
                 .map((e) => e.toJson())
                 .toList()),
@@ -1078,10 +1092,18 @@ class DashboardController extends GetxController {
           StringConfig.reporting.enterpriseUser,
           StringConfig.reporting.firebaseUserId,
           StringConfig.reporting.mongoDbUserId,
-          StringConfig.reporting.subscriptionActivePlan,
-          StringConfig.reporting.subscriptionStatus,
-          StringConfig.reporting.subscriptionPlatform,
-          StringConfig.reporting.subscriptionExpiryDate,
+          StringConfig.dashboard.loginWith,
+          StringConfig.dashboard.about,
+          StringConfig.dashboard.aboutValue,
+          StringConfig.dashboard.country,
+          StringConfig.dashboard.countryValue,
+          StringConfig.dashboard.pronouns,
+          StringConfig.dashboard.pronounsValue,
+          StringConfig.dashboard.skipOnboarding,
+          StringConfig.dashboard.userActiveTimestamp,
+          StringConfig.dashboard.registrationStatus,
+          StringConfig.dashboard.enterpriseDetail,
+          StringConfig.dashboard.userSubscriptionReceipt,
           StringConfig.reporting.obCheckIn,
           StringConfig.reporting.obDemographic,
           StringConfig.reporting.obScenes,
@@ -1184,9 +1206,7 @@ class DashboardController extends GetxController {
       return StringConfig.dashboard.pronounsValueText;
     } else if (keyName == StringConfig.dashboard.userImage) {
       return StringConfig.dashboard.userImageText;
-    } else if (keyName == StringConfig.firebase.enterPriseID) {
-      return StringConfig.dashboard.enterPriseID;
-    } else if (keyName == StringConfig.dashboard.isMongoDBUserIdText) {
+    }else if (keyName == StringConfig.dashboard.isMongoDBUserIdText) {
       return StringConfig.dashboard.mongoDBUserId;
     } else if (keyName == StringConfig.dashboard.loginWithKey) {
       return StringConfig.dashboard.loginWithText;
@@ -1202,12 +1222,12 @@ class DashboardController extends GetxController {
       return StringConfig.dashboard.userSubscriptionStatus;
     } else if (keyName == StringConfig.dashboard.onboardingDataKey) {
       return StringConfig.dashboard.onboardingData;
-    }
-    else if (keyName == StringConfig.dashboard.mqsSkipOnboarding) {
-      return StringConfig.dashboard.skipOnboarding ;
-    }
-    else if (keyName == StringConfig.dashboard.mqsUserActiveTimestamp) {
+    } else if (keyName == StringConfig.dashboard.mqsSkipOnboarding) {
+      return StringConfig.dashboard.skipOnboarding;
+    } else if (keyName == StringConfig.dashboard.mqsUserActiveTimestamp) {
       return StringConfig.dashboard.userActiveTimestamp;
+    } else if (keyName == StringConfig.dashboard.mqsEnterpriseDetails) {
+      return StringConfig.dashboard.enterpriseDetail;
     }
 
     return "";

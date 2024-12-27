@@ -32,6 +32,7 @@ class Dashboard {
   final String enterpriseList = "Enterprise List";
   final String usersList = "Users List";
   final String circleList = "Circle List";
+  final String enterpriseDetail = "Enterprise Details";
 
   final String filter = "Filter";
   final String export = "Export";
@@ -130,7 +131,7 @@ class Dashboard {
   final String isEnterpriseUser = "IsEnterpriseUser";
   final String isFirebaseUserId = "IsFirebaseUserId";
   final String isMongoDBUserId = "IsMONGODBUserId";
-  final String mqsRegistrationStatus = "mqsRegistrationStatus";
+  final String registrationStatus = "Registration Status";
   final String loginWith = "LoginWith";
   final String mqsExpiryDate = "mqsExpiryDate";
   final String mqsSubscriptionActivePlan = "mqsSubscriptionActivePlan";
@@ -139,6 +140,7 @@ class Dashboard {
   final String onboardingData = "Onboarding Data";
   final String mqsSkipOnboarding = "mqsSkipOnboarding";
   final String mqsUserActiveTimestamp = "mqsUserActiveTimestamp";
+  final String mqsEnterpriseDetails = "mqsEnterpriseDetails";
   final String userActiveTimestamp = "User Active Timestamp";
   final String checkINValue = "Check IN Value";
   final String checkInScore = "checkInScore";
@@ -151,6 +153,12 @@ class Dashboard {
   final String wOLValue = "WOL Value";
   final String family = "family";
   final String finance = "finance";
+  final String individualID = "Individual ID";
+  final String individualValid = "Valid Individual";
+  final String organizationID = "Organization ID";
+  final String organizationValid = "Valid Organization";
+  final String teamID = "Team ID";
+  final String teamValid = "Valid Team";
   final String fun = "fun";
   final String health = "health";
   final String mqsTimeStamp = "mqsTimeStamp";
