@@ -23,11 +23,11 @@ Widget userDetailRowWidget({required DashboardController dashboardController}) {
       ),
       keyValueWrapperWidget(
         key: StringConfig.dashboard.loginWith,
-        value: dashboardController.userDetail.loginWith,
+        value: dashboardController.userDetail.mqsUserLoginWith,
       ),
       keyValueWrapperWidget(
         key: StringConfig.dashboard.userImage,
-        value: dashboardController.userDetail.userImage,
+        value: dashboardController.userDetail.mqsUserImage,
         isImage: true,
       ),
       keyValueWrapperWidget(
@@ -41,34 +41,34 @@ Widget userDetailRowWidget({required DashboardController dashboardController}) {
       ),
       keyValueWrapperWidget(
         key: StringConfig.reporting.mongoDbUserId,
-        value: dashboardController.userDetail.isMongoDBUserId,
+        value: dashboardController.userDetail.mqsMONGODBUserID,
       ),
       keyValueWrapperWidget(
         key: StringConfig.dashboard.about,
-        value: dashboardController.userDetail.about,
+        value: dashboardController.userDetail.mqsAbout,
       ),
       keyValueWrapperWidget(
         key: StringConfig.dashboard.aboutValue,
         value:
-            "${dashboardController.userDetail.aboutValue.toString().capitalize}",
+            "${dashboardController.userDetail.mqsAllowAbout.toString().capitalize}",
       ),
       keyValueWrapperWidget(
         key: StringConfig.dashboard.country,
-        value: dashboardController.userDetail.country,
+        value: dashboardController.userDetail.mqsCountry,
       ),
       keyValueWrapperWidget(
         key: StringConfig.dashboard.countryValue,
         value:
-            "${dashboardController.userDetail.countryValue.toString().capitalize}",
+            "${dashboardController.userDetail.mqsAllowCountry.toString().capitalize}",
       ),
       keyValueWrapperWidget(
         key: StringConfig.dashboard.pronouns,
-        value: dashboardController.userDetail.pronouns,
+        value: dashboardController.userDetail.mqsPronouns,
       ),
       keyValueWrapperWidget(
         key: StringConfig.dashboard.pronounsValue,
         value:
-            "${dashboardController.userDetail.pronounsValue.toString().capitalize}",
+            "${dashboardController.userDetail.mqsAllowPronouns.toString().capitalize}",
       ),
       keyValueWrapperWidget(
         key: StringConfig.dashboard.skipOnboarding,

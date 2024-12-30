@@ -10,7 +10,7 @@ Widget userCheckInWidget({required DashboardController dashboardController}) {
   return Column(
     children: [
       titleWidget(
-        title: StringConfig.dashboard.checkINValue,
+        title: StringConfig.dashboard.mqsCheckInDetails,
         isShowContent: dashboardController.showCheckIn.value,
       ).tap(() {
         dashboardController.showCheckIn.value =
@@ -54,14 +54,14 @@ Widget userCheckInWidget({required DashboardController dashboardController}) {
         for (int i = 0;
             i <
                 dashboardController
-                    .userDetail.onboardingModel.checkInValue.length;
+                    .userDetail.onboardingModel.mqsCheckInDetails.length;
             i++)
           Container(
             padding: const EdgeInsets.symmetric(
                 horizontal: SizeConfig.size14, vertical: SizeConfig.size14),
             decoration: i ==
                     dashboardController
-                            .userDetail.onboardingModel.checkInValue.length -
+                            .userDetail.onboardingModel.mqsCheckInDetails.length -
                         1
                 ? FontTextStyleConfig.contentDecoration.copyWith(
                     borderRadius: const BorderRadius.vertical(
@@ -73,20 +73,20 @@ Widget userCheckInWidget({required DashboardController dashboardController}) {
               children: [
                 Expanded(
                   child: Text(
-                    "${dashboardController.userDetail.onboardingModel.checkInValue[i].checkInScore}",
+                    "${dashboardController.userDetail.onboardingModel.mqsCheckInDetails[i].checkInScore}",
                     style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
                 Expanded(
                   child: Text(
                     dashboardController
-                        .userDetail.onboardingModel.checkInValue[i].id,
+                        .userDetail.onboardingModel.mqsCheckInDetails[i].id,
                     style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
                 Expanded(
                   child: Text(
-                    "${dashboardController.userDetail.onboardingModel.checkInValue[i].mqsCINValue}",
+                    "${dashboardController.userDetail.onboardingModel.mqsCheckInDetails[i].mqsCINValue}",
                     style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
@@ -94,7 +94,7 @@ Widget userCheckInWidget({required DashboardController dashboardController}) {
                   child: Text(
                     DateFormat('dd-MM-yyyy').format(DateTime.parse(
                         dashboardController.userDetail.onboardingModel
-                            .checkInValue[i].mqsTimestamp)),
+                            .mqsCheckInDetails[i].mqsTimestamp)),
                     style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),

@@ -1,8 +1,8 @@
 class UserSubscriptionReceiptModel {
-  final String isFirebaseUserID;
-  final String isMONGODBUserID;
+  final String mqsFirebaseUserID;
+  final String mqsMONGODBUserID;
   final String mqsAppSpecificSharedSecret;
-  final String mqsExpiryDate;
+  final String mqsSubscriptionExpiryDate;
   final String mqsLocalVerificationData;
   final String mqsPackageName;
   final String mqsPurchaseID;
@@ -12,12 +12,14 @@ class UserSubscriptionReceiptModel {
   final String mqsSubscriptionPlatform;
   final String mqsTransactionID;
   final String mqsUserSubscriptionStatus;
+  final String mqsCreatedTimestamp;
+  final String mqsUpdateTimestamp;
 
   UserSubscriptionReceiptModel(
-      {required this.isFirebaseUserID,
-      required this.isMONGODBUserID,
+      {required this.mqsFirebaseUserID,
+      required this.mqsMONGODBUserID,
       required this.mqsAppSpecificSharedSecret,
-      required this.mqsExpiryDate,
+      required this.mqsSubscriptionExpiryDate,
       required this.mqsLocalVerificationData,
       required this.mqsPackageName,
       required this.mqsPurchaseID,
@@ -26,13 +28,16 @@ class UserSubscriptionReceiptModel {
       required this.mqsSubscriptionActivePlan,
       required this.mqsSubscriptionPlatform,
       required this.mqsTransactionID,
-      required this.mqsUserSubscriptionStatus});
+      required this.mqsUserSubscriptionStatus,
+      required this.mqsCreatedTimestamp,
+      required this.mqsUpdateTimestamp});
 
   UserSubscriptionReceiptModel.fromJson(Map json)
-      : isFirebaseUserID = json['isFirebaseUserID'] ?? "",
-        isMONGODBUserID = json['isMONGODBUserID'] ?? "",
+      :
+        mqsFirebaseUserID = json['mqsFirebaseUserID'] ?? json['isFirebaseUserID'] ?? "",
+        mqsMONGODBUserID = json['mqsMONGODBUserID'] ?? json['isMONGODBUserID'] ?? "",
         mqsAppSpecificSharedSecret = json['mqsAppSpecificSharedSecret'] ?? "",
-        mqsExpiryDate = json['mqsExpiryDate'] ?? "",
+        mqsSubscriptionExpiryDate = json['mqsSubscriptionExpiryDate'] ?? json['mqsExpiryDate'] ?? "",
         mqsLocalVerificationData = json['mqsLocalVerificationData'] ?? "",
         mqsPackageName = json['mqsPackageName'] ?? "",
         mqsPurchaseID = json['mqsPurchaseID'] ?? "",
@@ -41,14 +46,17 @@ class UserSubscriptionReceiptModel {
         mqsSubscriptionActivePlan = json['mqsSubscriptionActivePlan'] ?? "",
         mqsSubscriptionPlatform = json['mqsSubscriptionPlatform'] ?? "",
         mqsTransactionID = json['mqsTransactionID'] ?? "",
-        mqsUserSubscriptionStatus = json['mqsUserSubscriptionStatus'] ?? "";
+        mqsUserSubscriptionStatus = json['mqsUserSubscriptionStatus'] ?? "",
+        mqsCreatedTimestamp = json['mqsCreatedTimestamp'] ?? "",
+        mqsUpdateTimestamp = json['mqsUpdateTimestamp'] ?? "";
+
 
   Map<String, dynamic> toJson() {
     return {
-      'isFirebaseUserID': isFirebaseUserID,
-      'isMONGODBUserID': isMONGODBUserID,
+      'mqsFirebaseUserID': mqsFirebaseUserID,
+      'mqsMONGODBUserID': mqsMONGODBUserID,
       'mqsAppSpecificSharedSecret': mqsAppSpecificSharedSecret,
-      'mqsExpiryDate': mqsExpiryDate,
+      'mqsSubscriptionExpiryDate': mqsSubscriptionExpiryDate,
       'mqsLocalVerificationData': mqsLocalVerificationData,
       'mqsPackageName': mqsPackageName,
       'mqsPurchaseID': mqsPurchaseID,
@@ -58,6 +66,8 @@ class UserSubscriptionReceiptModel {
       'mqsSubscriptionPlatform': mqsSubscriptionPlatform,
       'mqsTransactionID': mqsTransactionID,
       'mqsUserSubscriptionStatus': mqsUserSubscriptionStatus,
+      'mqsCreatedTimestamp': mqsCreatedTimestamp,
+      'mqsUpdateTimestamp': mqsUpdateTimestamp,
     };
   }
 }

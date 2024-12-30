@@ -30,9 +30,9 @@ Widget userDetailWidget({required DashboardController dashboardController}) {
               dashboardController: dashboardController),
           SizeConfig.size34.height,
           if(!(dashboardController
-              .userDetail.onboardingModel.checkInValue.isEmpty  && dashboardController
-              .userDetail.onboardingModel.demoGraphicValue.isEmpty && dashboardController
-              .userDetail.onboardingModel.scenesValue.isEmpty &&dashboardController.userDetail.onboardingModel.wOLValue
+              .userDetail.onboardingModel.mqsCheckInDetails.isEmpty  && dashboardController
+              .userDetail.onboardingModel.mqsDemoGraphicDetails.isEmpty && dashboardController
+              .userDetail.onboardingModel.mqsScenesDetails.isEmpty && dashboardController.userDetail.onboardingModel.mqsWheelOfLifeDetails
               .toJson()
               .toString() ==
               "{}"))

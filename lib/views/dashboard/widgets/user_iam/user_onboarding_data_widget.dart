@@ -18,21 +18,21 @@ Widget userOnboardingDataWidget(
         showArrowIcon: false,
       ),
       if (dashboardController
-          .userDetail.onboardingModel.checkInValue.isNotEmpty) ...[
+          .userDetail.onboardingModel.mqsCheckInDetails.isNotEmpty) ...[
         SizeConfig.size24.height,
         userCheckInWidget(dashboardController: dashboardController),
       ],
       if (dashboardController
-          .userDetail.onboardingModel.demoGraphicValue.isNotEmpty) ...[
+          .userDetail.onboardingModel.mqsDemoGraphicDetails.isNotEmpty) ...[
         SizeConfig.size34.height,
         userDemographicWidget(dashboardController: dashboardController),
       ],
       if (dashboardController
-          .userDetail.onboardingModel.scenesValue.isNotEmpty) ...[
+          .userDetail.onboardingModel.mqsScenesDetails.isNotEmpty) ...[
         SizeConfig.size34.height,
         userScenesWidget(dashboardController: dashboardController),
       ],
-      if(dashboardController.userDetail.onboardingModel.wOLValue
+      if(dashboardController.userDetail.onboardingModel.mqsWheelOfLifeDetails
           .toJson()
           .toString() !=
           "{}")

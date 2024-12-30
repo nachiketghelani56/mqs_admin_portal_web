@@ -144,7 +144,7 @@ class DashboardController extends GetxController {
       <UserSubscriptionReceiptModel>[].obs;
   UserSubscriptionReceiptModel? get userSubscriptionDetail =>
       userSubscriptionReceipts.firstWhereOrNull(
-          (e) => e.isFirebaseUserID == userDetail.mqsFirebaseUserID);
+          (e) => e.mqsFirebaseUserID == userDetail.mqsFirebaseUserID);
   RxList<TextEditingController> inputControllers =
       <TextEditingController>[].obs;
   RxList<String> dataTypes = [
@@ -1045,14 +1045,14 @@ class DashboardController extends GetxController {
                 : "",
             "${model.mqsEnterpriseUserFlag}",
             model.mqsFirebaseUserID,
-            model.isMongoDBUserId,
-            model.loginWith,
-            model.about,
-            "${model.aboutValue}",
-            model.country,
-            "${model.countryValue}",
-            model.pronouns,
-            "${model.pronounsValue}",
+            model.mqsMONGODBUserID,
+            model.mqsUserLoginWith,
+            model.mqsAbout,
+            "${model.mqsAllowAbout}",
+            model.mqsCountry,
+            "${model.mqsAllowCountry}",
+            model.mqsPronouns,
+            "${model.mqsAllowPronouns}",
             "${model.mqsSkipOnboarding}",
             model.mqsUserActiveTimestamp.isNotEmpty
                 ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
@@ -1061,19 +1061,19 @@ class DashboardController extends GetxController {
             model.mqsRegistrationStatus,
             jsonEncode(model.mqsEnterpriseDetails.toJson()),
             json.encode(receipt
-                .where((e) => e.isFirebaseUserID == model.mqsFirebaseUserID)
+                .where((e) => e.mqsFirebaseUserID == model.mqsFirebaseUserID)
                 .toList()),
             model.mqsUserActiveTimestamp,
-            jsonEncode(model.onboardingModel.checkInValue
+            jsonEncode(model.onboardingModel.mqsCheckInDetails
                 .map((e) => e.toJson())
                 .toList()),
-            jsonEncode(model.onboardingModel.demoGraphicValue
+            jsonEncode(model.onboardingModel.mqsDemoGraphicDetails
                 .map((e) => e.toJson())
                 .toList()),
-            jsonEncode(model.onboardingModel.scenesValue
+            jsonEncode(model.onboardingModel.mqsScenesDetails
                 .map((e) => e.toJson())
                 .toList()),
-            jsonEncode(model.onboardingModel.wOLValue.toJson()),
+            jsonEncode(model.onboardingModel.mqsWheelOfLifeDetails.toJson()),
           ];
         }),
       ];
@@ -1135,14 +1135,14 @@ class DashboardController extends GetxController {
             return e.mqsEmail.toLowerCase().contains(query) ||
                 e.mqsFirstName.toLowerCase().contains(query) ||
                 e.mqsLastName.toLowerCase().contains(query) ||
-                e.loginWith.toLowerCase().contains(query);
+                e.mqsUserLoginWith.toLowerCase().contains(query);
           }).toList();
         } else {
           searchedUsers.value = users.where((e) {
             return e.mqsEmail.toLowerCase().contains(query) ||
                 e.mqsFirstName.toLowerCase().contains(query) ||
                 e.mqsLastName.toLowerCase().contains(query) ||
-                e.loginWith.toLowerCase().contains(query);
+                e.mqsUserLoginWith.toLowerCase().contains(query);
           }).toList();
         }
       }

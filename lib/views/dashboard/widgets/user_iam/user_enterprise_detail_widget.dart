@@ -33,7 +33,7 @@ Widget userEnterpriseDetailWidget(
                 .userDetail.mqsEnterpriseDetails.mqsOrganizationID.isNotEmpty
             ? dashboardController
                 .userDetail.mqsEnterpriseDetails.mqsOrganizationID
-            : dashboardController.userDetail.enterpriseId,
+            : dashboardController.userDetail.mqsEnterpriseID,
       ),
       keyValueWrapperWidget(
         key: StringConfig.dashboard.organizationValid,

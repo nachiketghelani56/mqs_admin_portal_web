@@ -155,7 +155,7 @@ class ReportingController extends GetxController {
 
       List totalStatus = users.where((localItem) {
         return activeRec.any((firebaseItem) =>
-            firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+            firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
       }).toList();
       int totalSubscriptionActivePlan = totalStatus.length;
       int totalUsers = users.length;
@@ -212,9 +212,9 @@ class ReportingController extends GetxController {
       } else if (reportType.value == StringConfig.reporting.completed) {
         dashboardController.searchedUsers.value = users
             .where((e) =>
-                e.onboardingModel.checkInValue.isNotEmpty &&
-                e.onboardingModel.demoGraphicValue.isNotEmpty &&
-                e.onboardingModel.scenesValue.isNotEmpty)
+                e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
+                e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
+                e.onboardingModel.mqsScenesDetails.isNotEmpty)
             .toList();
       } else if (reportType.value == StringConfig.reporting.skipped) {
         dashboardController.searchedUsers.value =
@@ -222,15 +222,15 @@ class ReportingController extends GetxController {
       } else if (reportType.value == StringConfig.reporting.partialCompletion) {
         List<UserIAMModel> completed = users
             .where((e) =>
-                e.onboardingModel.checkInValue.isNotEmpty &&
-                e.onboardingModel.demoGraphicValue.isNotEmpty &&
-                e.onboardingModel.scenesValue.isNotEmpty)
+                e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
+                e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
+                e.onboardingModel.mqsScenesDetails.isNotEmpty)
             .toList();
         List<UserIAMModel> empty = users
             .where((e) =>
-                e.onboardingModel.checkInValue.isEmpty &&
-                e.onboardingModel.demoGraphicValue.isEmpty &&
-                e.onboardingModel.scenesValue.isEmpty)
+                e.onboardingModel.mqsCheckInDetails.isEmpty &&
+                e.onboardingModel.mqsDemoGraphicDetails.isEmpty &&
+                e.onboardingModel.mqsScenesDetails.isEmpty)
             .toList();
         dashboardController.searchedUsers.value = users
             .where((e) => !completed.contains(e) && !empty.contains(e))
@@ -507,23 +507,23 @@ class ReportingController extends GetxController {
       dashboardController.reset();
       dashboardController.searchedUsers.value = users
           .where((e) =>
-              e.onboardingModel.checkInValue.isNotEmpty &&
-              e.onboardingModel.demoGraphicValue.isNotEmpty &&
-              e.onboardingModel.scenesValue.isNotEmpty)
+              e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
+              e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
+              e.onboardingModel.mqsScenesDetails.isNotEmpty)
           .toList();
       dashboardController.searchUserType.value = users
           .where((e) =>
-              e.onboardingModel.checkInValue.isNotEmpty &&
-              e.onboardingModel.demoGraphicValue.isNotEmpty &&
-              e.onboardingModel.scenesValue.isNotEmpty)
+              e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
+              e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
+              e.onboardingModel.mqsScenesDetails.isNotEmpty)
           .toList();
       if (!isDetailView) {
         getOBSummary(users: users);
         dashboardController.users.value = users
             .where((e) =>
-                e.onboardingModel.checkInValue.isNotEmpty &&
-                e.onboardingModel.demoGraphicValue.isNotEmpty &&
-                e.onboardingModel.scenesValue.isNotEmpty)
+                e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
+                e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
+                e.onboardingModel.mqsScenesDetails.isNotEmpty)
             .toList();
 
         if (obtype.value == StringConfig.reporting.skipped) {
@@ -536,15 +536,15 @@ class ReportingController extends GetxController {
         } else if (obtype.value == StringConfig.reporting.partialCompletion) {
           List<UserIAMModel> completed = users
               .where((e) =>
-                  e.onboardingModel.checkInValue.isNotEmpty &&
-                  e.onboardingModel.demoGraphicValue.isNotEmpty &&
-                  e.onboardingModel.scenesValue.isNotEmpty)
+                  e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
+                  e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
+                  e.onboardingModel.mqsScenesDetails.isNotEmpty)
               .toList();
           List<UserIAMModel> empty = users
               .where((e) =>
-                  e.onboardingModel.checkInValue.isEmpty &&
-                  e.onboardingModel.demoGraphicValue.isEmpty &&
-                  e.onboardingModel.scenesValue.isEmpty)
+                  e.onboardingModel.mqsCheckInDetails.isEmpty &&
+                  e.onboardingModel.mqsDemoGraphicDetails.isEmpty &&
+                  e.onboardingModel.mqsScenesDetails.isEmpty)
               .toList();
           dashboardController.searchedUsers.value = users
               .where((e) => !completed.contains(e) && !empty.contains(e))
@@ -585,24 +585,24 @@ class ReportingController extends GetxController {
                 : "",
             "${model.mqsEnterpriseUserFlag}",
             model.mqsFirebaseUserID,
-            model.isMongoDBUserId,
-            model.mqsSubscriptionActivePlan,
-            model.mqsUserSubscriptionStatus,
-            model.mqsSubscriptionPlatform,
-            model.mqsExpiryDate.isNotEmpty
-                ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
-                    .format(DateTime.parse(model.mqsExpiryDate))
-                : "",
-            jsonEncode(model.onboardingModel.checkInValue
+            model.mqsMONGODBUserID,
+            // model.mqsSubscriptionActivePlan,
+            // model.mqsUserSubscriptionStatus,
+            // model.mqsSubscriptionPlatform,
+            // model.mqsSubscriptionExpiryDate.isNotEmpty
+            //     ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
+            //         .format(DateTime.parse(model.mqsSubscriptionExpiryDate))
+            //     : "",
+            jsonEncode(model.onboardingModel.mqsCheckInDetails
                 .map((e) => e.toJson())
                 .toList()),
-            jsonEncode(model.onboardingModel.demoGraphicValue
+            jsonEncode(model.onboardingModel.mqsDemoGraphicDetails
                 .map((e) => e.toJson())
                 .toList()),
-            jsonEncode(model.onboardingModel.scenesValue
+            jsonEncode(model.onboardingModel.mqsScenesDetails
                 .map((e) => e.toJson())
                 .toList()),
-            jsonEncode(model.onboardingModel.wOLValue.toJson()),
+            jsonEncode(model.onboardingModel.mqsWheelOfLifeDetails.toJson()),
           ];
         }),
       ];
@@ -620,10 +620,10 @@ class ReportingController extends GetxController {
           StringConfig.reporting.enterpriseUser,
           StringConfig.reporting.firebaseUserId,
           StringConfig.reporting.mongoDbUserId,
-          StringConfig.reporting.subscriptionActivePlan,
-          StringConfig.reporting.subscriptionStatus,
-          StringConfig.reporting.subscriptionPlatform,
-          StringConfig.reporting.subscriptionExpiryDate,
+          // StringConfig.reporting.subscriptionActivePlan,
+          // StringConfig.reporting.subscriptionStatus,
+          // StringConfig.reporting.subscriptionPlatform,
+          // StringConfig.reporting.subscriptionExpiryDate,
           StringConfig.reporting.obCheckIn,
           StringConfig.reporting.obDemographic,
           StringConfig.reporting.obScenes,
@@ -905,7 +905,7 @@ class ReportingController extends GetxController {
 
       activeSubscriptions.value = users.where((localItem) {
         return activeRec.any((firebaseItem) =>
-            firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+            firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
       }).length;
 
       List purchasedRec =
@@ -913,7 +913,7 @@ class ReportingController extends GetxController {
 
       purchasedSubscription.value = users.where((localItem) {
         return purchasedRec.any((firebaseItem) =>
-            firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+            firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
       }).length;
 
       _dashboardController.reset();
@@ -928,15 +928,15 @@ class ReportingController extends GetxController {
 
         _dashboardController.searchedUsers.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         _dashboardController.users.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         _dashboardController.searchUserType.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
       } else if (subscriptionType.value ==
           StringConfig.reporting.purchasedSubscription) {
@@ -945,15 +945,15 @@ class ReportingController extends GetxController {
 
         _dashboardController.searchedUsers.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         _dashboardController.users.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         _dashboardController.searchUserType.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
       }
       if (_dashboardController.searchedUsers.isEmpty &&
@@ -1087,18 +1087,18 @@ class ReportingController extends GetxController {
     try {
       completedOBUsers.value = users
           .where((e) =>
-              e.onboardingModel.checkInValue.isNotEmpty &&
-              e.onboardingModel.demoGraphicValue.isNotEmpty &&
-              e.onboardingModel.scenesValue.isNotEmpty)
+              e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
+              e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
+              e.onboardingModel.mqsScenesDetails.isNotEmpty)
           .toList()
           .length;
       skippedOBUsers.value =
           users.where((e) => e.mqsSkipOnboarding).toList().length;
       int empty = users
           .where((e) =>
-              e.onboardingModel.checkInValue.isEmpty &&
-              e.onboardingModel.demoGraphicValue.isEmpty &&
-              e.onboardingModel.scenesValue.isEmpty)
+              e.onboardingModel.mqsCheckInDetails.isEmpty &&
+              e.onboardingModel.mqsDemoGraphicDetails.isEmpty &&
+              e.onboardingModel.mqsScenesDetails.isEmpty)
           .toList()
           .length;
       partialCompletedOBUsers.value =
@@ -1128,16 +1128,16 @@ class ReportingController extends GetxController {
             .toList();
         _dashboardController.searchedUsers.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         _dashboardController.searchUserType.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
 
         _dashboardController.users.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
       } else if (subscriptionType.value ==
           StringConfig.reporting.purchasedSubscription) {
@@ -1145,15 +1145,15 @@ class ReportingController extends GetxController {
             receipt.where((e) => e.mqsPurchaseID.isNotEmpty).toList();
         _dashboardController.searchedUsers.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         _dashboardController.searchUserType.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         _dashboardController.users.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
       }
       List activeRec = receipt
@@ -1163,7 +1163,7 @@ class ReportingController extends GetxController {
 
       activeSubscriptions.value = users.where((localItem) {
         return activeRec.any((firebaseItem) =>
-            firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+            firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
       }).length;
 
       List purchasedRec =
@@ -1171,7 +1171,7 @@ class ReportingController extends GetxController {
 
       purchasedSubscription.value = users.where((localItem) {
         return purchasedRec.any((firebaseItem) =>
-            firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+            firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
       }).length;
 
       userSubscriptionReceiptStream =
@@ -1185,7 +1185,7 @@ class ReportingController extends GetxController {
 
         activeSubscriptions.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).length;
 
         List purchasedRec =
@@ -1193,7 +1193,7 @@ class ReportingController extends GetxController {
 
         purchasedSubscription.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).length;
       });
     } catch (e) {
@@ -1214,22 +1214,22 @@ class ReportingController extends GetxController {
             .toList();
         _dashboardController.searchedUsers.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         _dashboardController.users.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
       } else if (status == "purchased") {
         List purchasedRec =
             receipt.where((e) => e.mqsPurchaseID.isNotEmpty).toList();
         _dashboardController.searchedUsers.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         _dashboardController.users.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
       } else {}
       userSubscriptionReceiptStream =
@@ -1241,22 +1241,22 @@ class ReportingController extends GetxController {
               .toList();
           _dashboardController.searchedUsers.value = users.where((localItem) {
             return activeRec.any((firebaseItem) =>
-                firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+                firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
           }).toList();
           _dashboardController.users.value = users.where((localItem) {
             return activeRec.any((firebaseItem) =>
-                firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+                firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
           }).toList();
         } else if (status == "purchased") {
           List purchasedRec =
               data.where((e) => e.mqsPurchaseID.isNotEmpty).toList();
           _dashboardController.searchedUsers.value = users.where((localItem) {
             return purchasedRec.any((firebaseItem) =>
-                firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+                firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
           }).toList();
           _dashboardController.users.value = users.where((localItem) {
             return purchasedRec.any((firebaseItem) =>
-                firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+                firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
           }).toList();
         } else {}
       });
@@ -1287,12 +1287,12 @@ class ReportingController extends GetxController {
         ],
         ...receipt.map((model) {
           return [
-            model.isFirebaseUserID,
-            model.isMONGODBUserID,
+            model.mqsFirebaseUserID,
+            model.mqsMONGODBUserID,
             model.mqsAppSpecificSharedSecret,
-            model.mqsExpiryDate.isNotEmpty
+            model.mqsSubscriptionExpiryDate.isNotEmpty
                 ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
-                    .format(DateTime.parse(model.mqsExpiryDate))
+                    .format(DateTime.parse(model.mqsSubscriptionExpiryDate))
                 : "",
             model.mqsLocalVerificationData,
             model.mqsPackageName,
@@ -1351,8 +1351,8 @@ class ReportingController extends GetxController {
       List<int> uniqueYears = (users
               .map((data) => (DateTime.parse(data.mqsCreatedTimestamp)).year)
               .toList()
-            ..addAll((receipt.where((e) => e.mqsExpiryDate.isNotEmpty))
-                .map((data) => (DateTime.parse(data.mqsExpiryDate)).year)))
+            ..addAll((receipt.where((e) => e.mqsSubscriptionExpiryDate.isNotEmpty))
+                .map((data) => (DateTime.parse(data.mqsSubscriptionExpiryDate)).year)))
           .toSet()
           .toList()
         ..sort();
@@ -1364,29 +1364,29 @@ class ReportingController extends GetxController {
         double y2 = users
             .where((e) =>
                 DateTime.parse(e.mqsCreatedTimestamp).year == year &&
-                e.onboardingModel.checkInValue.isNotEmpty &&
-                e.onboardingModel.demoGraphicValue.isNotEmpty &&
-                e.onboardingModel.scenesValue.isNotEmpty)
+                e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
+                e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
+                e.onboardingModel.mqsScenesDetails.isNotEmpty)
             .length
             .toDouble();
         double y3 = users
             .where((e) =>
                 DateTime.parse(e.mqsCreatedTimestamp).year == year &&
                 activeRec
-                    .any((test) => test.isFirebaseUserID == e.mqsFirebaseUserID))
+                    .any((test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
             .length
             .toDouble();
         double y4 = receipt
             .where((e) =>
-                e.mqsExpiryDate.isNotEmpty &&
-                DateTime.parse(e.mqsExpiryDate).year == year)
+                e.mqsSubscriptionExpiryDate.isNotEmpty &&
+                DateTime.parse(e.mqsSubscriptionExpiryDate).year == year)
             .length
             .toDouble();
         double y6 = users
             .where((e) =>
                 DateTime.parse(e.mqsCreatedTimestamp).year == year &&
                 inActiveRec
-                    .any((test) => test.isFirebaseUserID == e.mqsFirebaseUserID))
+                    .any((test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
             .length
             .toDouble();
         signUpChartData.add(
@@ -1421,10 +1421,10 @@ class ReportingController extends GetxController {
             "${DateTime.parse(point.mqsCreatedTimestamp).year}-${DateTime.parse(point.mqsCreatedTimestamp).month.toString().padLeft(2, '0')}";
         uniqueMonths.add(monthYear);
       }
-      for (var point in (receipt.where((e) => e.mqsExpiryDate.isNotEmpty))) {
+      for (var point in (receipt.where((e) => e.mqsSubscriptionExpiryDate.isNotEmpty))) {
         // Format month-year for uniqueness
         final monthYear =
-            "${DateTime.parse(point.mqsExpiryDate).year}-${DateTime.parse(point.mqsExpiryDate).month.toString().padLeft(2, '0')}";
+            "${DateTime.parse(point.mqsSubscriptionExpiryDate).year}-${DateTime.parse(point.mqsSubscriptionExpiryDate).month.toString().padLeft(2, '0')}";
         uniqueMonths.add(monthYear);
       }
       for (String x in uniqueMonths) {
@@ -1440,9 +1440,9 @@ class ReportingController extends GetxController {
             .where((e) =>
                 DateTime.parse(e.mqsCreatedTimestamp).month == month &&
                 DateTime.parse(e.mqsCreatedTimestamp).year == year &&
-                e.onboardingModel.checkInValue.isNotEmpty &&
-                e.onboardingModel.demoGraphicValue.isNotEmpty &&
-                e.onboardingModel.scenesValue.isNotEmpty)
+                e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
+                e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
+                e.onboardingModel.mqsScenesDetails.isNotEmpty)
             .length
             .toDouble();
         double y3 = users
@@ -1450,14 +1450,14 @@ class ReportingController extends GetxController {
                 DateTime.parse(e.mqsCreatedTimestamp).month == month &&
                 DateTime.parse(e.mqsCreatedTimestamp).year == year &&
                 activeRec
-                    .any((test) => test.isFirebaseUserID == e.mqsFirebaseUserID))
+                    .any((test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
             .length
             .toDouble();
         double y4 = receipt
             .where((e) =>
-                e.mqsExpiryDate.isNotEmpty &&
-                DateTime.parse(e.mqsExpiryDate).month == month &&
-                DateTime.parse(e.mqsExpiryDate).year == year)
+                e.mqsSubscriptionExpiryDate.isNotEmpty &&
+                DateTime.parse(e.mqsSubscriptionExpiryDate).month == month &&
+                DateTime.parse(e.mqsSubscriptionExpiryDate).year == year)
             .length
             .toDouble();
         double y6 = users
@@ -1465,7 +1465,7 @@ class ReportingController extends GetxController {
                 DateTime.parse(e.mqsCreatedTimestamp).month == month &&
                 DateTime.parse(e.mqsCreatedTimestamp).year == year &&
                 inActiveRec
-                    .any((test) => test.isFirebaseUserID == e.mqsFirebaseUserID))
+                    .any((test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
             .length
             .toDouble();
         signUpChartData.add(LineChartModel(DateTime(year, month), y1,
@@ -1524,8 +1524,8 @@ class ReportingController extends GetxController {
       }
       final groupedReceiptData = <String, List<UserSubscriptionReceiptModel>>{};
       for (var dataPoint
-          in (receipt.where((e) => e.mqsExpiryDate.isNotEmpty))) {
-        DateTime date = DateTime.parse(dataPoint.mqsExpiryDate);
+          in (receipt.where((e) => e.mqsSubscriptionExpiryDate.isNotEmpty))) {
+        DateTime date = DateTime.parse(dataPoint.mqsSubscriptionExpiryDate);
         final weekNumber = getWeekNumber(date);
         groupedReceiptData
             .putIfAbsent('$weekNumber-${date.year}', () => [])
@@ -1549,19 +1549,19 @@ class ReportingController extends GetxController {
           y1 = userElement.first.value.length.toDouble();
           y2 = userElement.first.value
               .where((e) =>
-                  e.onboardingModel.checkInValue.isNotEmpty &&
-                  e.onboardingModel.demoGraphicValue.isNotEmpty &&
-                  e.onboardingModel.scenesValue.isNotEmpty)
+                  e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
+                  e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
+                  e.onboardingModel.mqsScenesDetails.isNotEmpty)
               .length
               .toDouble();
           y3 = userElement.first.value
               .where((e) => activeRec
-                  .any((test) => test.isFirebaseUserID == e.mqsFirebaseUserID))
+                  .any((test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
               .length
               .toDouble();
           y6 = userElement.first.value
               .where((e) => inActiveRec
-                  .any((test) => test.isFirebaseUserID == e.mqsFirebaseUserID))
+                  .any((test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
               .length
               .toDouble();
         }
@@ -1598,11 +1598,11 @@ class ReportingController extends GetxController {
                   DateTime.parse(data.mqsCreatedTimestamp).month,
                   DateTime.parse(data.mqsCreatedTimestamp).day))
               .toList()
-            ..addAll((receipt.where((e) => e.mqsExpiryDate.isNotEmpty)).map(
+            ..addAll((receipt.where((e) => e.mqsSubscriptionExpiryDate.isNotEmpty)).map(
                 (data) => DateTime(
-                    DateTime.parse(data.mqsExpiryDate).year,
-                    DateTime.parse(data.mqsExpiryDate).month,
-                    DateTime.parse(data.mqsExpiryDate).day))))
+                    DateTime.parse(data.mqsSubscriptionExpiryDate).year,
+                    DateTime.parse(data.mqsSubscriptionExpiryDate).month,
+                    DateTime.parse(data.mqsSubscriptionExpiryDate).day))))
           .toSet()
           .toList();
       for (DateTime date in uniqueDays) {
@@ -1618,9 +1618,9 @@ class ReportingController extends GetxController {
                 DateTime.parse(e.mqsCreatedTimestamp).month == date.month &&
                 DateTime.parse(e.mqsCreatedTimestamp).year == date.year &&
                 DateTime.parse(e.mqsCreatedTimestamp).day == date.day &&
-                e.onboardingModel.checkInValue.isNotEmpty &&
-                e.onboardingModel.demoGraphicValue.isNotEmpty &&
-                e.onboardingModel.scenesValue.isNotEmpty)
+                e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
+                e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
+                e.onboardingModel.mqsScenesDetails.isNotEmpty)
             .length
             .toDouble();
         double y3 = users
@@ -1629,15 +1629,15 @@ class ReportingController extends GetxController {
                 DateTime.parse(e.mqsCreatedTimestamp).year == date.year &&
                 DateTime.parse(e.mqsCreatedTimestamp).day == date.day &&
                 activeRec
-                    .any((test) => test.isFirebaseUserID == e.mqsFirebaseUserID))
+                    .any((test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
             .length
             .toDouble();
         double y4 = receipt
             .where((e) =>
-                e.mqsExpiryDate.isNotEmpty &&
-                DateTime.parse(e.mqsExpiryDate).month == date.month &&
-                DateTime.parse(e.mqsExpiryDate).year == date.year &&
-                DateTime.parse(e.mqsExpiryDate).day == date.day)
+                e.mqsSubscriptionExpiryDate.isNotEmpty &&
+                DateTime.parse(e.mqsSubscriptionExpiryDate).month == date.month &&
+                DateTime.parse(e.mqsSubscriptionExpiryDate).year == date.year &&
+                DateTime.parse(e.mqsSubscriptionExpiryDate).day == date.day)
             .length
             .toDouble();
         double y6 = users
@@ -1646,7 +1646,7 @@ class ReportingController extends GetxController {
                 DateTime.parse(e.mqsCreatedTimestamp).year == date.year &&
                 DateTime.parse(e.mqsCreatedTimestamp).day == date.day &&
                 inActiveRec
-                    .any((test) => test.isFirebaseUserID == e.mqsFirebaseUserID))
+                    .any((test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
             .length
             .toDouble();
         signUpChartData.add(LineChartModel(
@@ -1673,21 +1673,21 @@ class ReportingController extends GetxController {
           StringConfig.reporting.onboradingCompleted) {
         dashboardController.searchedUsers.value = users
             .where((e) =>
-                e.onboardingModel.checkInValue.isNotEmpty &&
-                e.onboardingModel.demoGraphicValue.isNotEmpty &&
-                e.onboardingModel.scenesValue.isNotEmpty)
+                e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
+                e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
+                e.onboardingModel.mqsScenesDetails.isNotEmpty)
             .toList();
         dashboardController.searchUserType.value = users
             .where((e) =>
-                e.onboardingModel.checkInValue.isNotEmpty &&
-                e.onboardingModel.demoGraphicValue.isNotEmpty &&
-                e.onboardingModel.scenesValue.isNotEmpty)
+                e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
+                e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
+                e.onboardingModel.mqsScenesDetails.isNotEmpty)
             .toList();
         dashboardController.users.value = users
             .where((e) =>
-                e.onboardingModel.checkInValue.isNotEmpty &&
-                e.onboardingModel.demoGraphicValue.isNotEmpty &&
-                e.onboardingModel.scenesValue.isNotEmpty)
+                e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
+                e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
+                e.onboardingModel.mqsScenesDetails.isNotEmpty)
             .toList();
       } else if (reportType.value == StringConfig.reporting.subscribed) {
         List<UserSubscriptionReceiptModel> activeRec = receipt
@@ -1696,31 +1696,31 @@ class ReportingController extends GetxController {
             .toList();
         dashboardController.searchedUsers.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         dashboardController.searchUserType.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         dashboardController.users.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
       } else if (reportType.value ==
           StringConfig.reporting.subscriptionExpired) {
         List<UserSubscriptionReceiptModel> activeRec =
-            receipt.where((e) => e.mqsExpiryDate.isNotEmpty).toList();
+            receipt.where((e) => e.mqsSubscriptionExpiryDate.isNotEmpty).toList();
         dashboardController.searchedUsers.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         dashboardController.searchUserType.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         dashboardController.users.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
       } else if (reportType.value == StringConfig.reporting.notSubscribed) {
         List<UserSubscriptionReceiptModel> inActiveRec = receipt
@@ -1729,15 +1729,15 @@ class ReportingController extends GetxController {
             .toList();
         dashboardController.searchedUsers.value = users.where((localItem) {
           return inActiveRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         dashboardController.searchUserType.value = users.where((localItem) {
           return inActiveRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         dashboardController.users.value = users.where((localItem) {
           return inActiveRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
       }
       if (dashboardController.searchedUsers.isEmpty &&
@@ -1804,15 +1804,15 @@ class ReportingController extends GetxController {
             .toList();
         dashboardController.searchedUsers.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         dashboardController.searchUserType.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         dashboardController.users.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.isFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
         }).toList();
         if (dashboardController.searchedUsers.isEmpty &&
             dashboardController.users.isNotEmpty) {

@@ -71,11 +71,11 @@ Widget userSubscriptionDetailWidget(
       ),
       keyValueWrapperWidget(
         key: StringConfig.reporting.expiryDate,
-        value: (dashboardController.userSubscriptionDetail?.mqsExpiryDate ?? "")
+        value: (dashboardController.userSubscriptionDetail?.mqsSubscriptionExpiryDate ?? "")
                 .isNotEmpty
             ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
                 DateTime.parse(
-                    dashboardController.userSubscriptionDetail?.mqsExpiryDate ??
+                    dashboardController.userSubscriptionDetail?.mqsSubscriptionExpiryDate ??
                         ""))
             : "",
         isLast: true,

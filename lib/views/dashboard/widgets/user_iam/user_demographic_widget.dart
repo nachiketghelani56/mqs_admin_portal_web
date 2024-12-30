@@ -10,7 +10,7 @@ Widget userDemographicWidget(
   return Column(
     children: [
       titleWidget(
-        title: StringConfig.dashboard.demoGraphicValue,
+        title: StringConfig.dashboard.mqsDemoGraphicDetails,
         isShowContent: dashboardController.showDemographic.value,
       ).tap(() {
         dashboardController.showDemographic.value =
@@ -43,14 +43,14 @@ Widget userDemographicWidget(
         for (int i = 0;
             i <
                 dashboardController
-                    .userDetail.onboardingModel.demoGraphicValue.length;
+                    .userDetail.onboardingModel.mqsDemoGraphicDetails.length;
             i++)
           Container(
             padding: const EdgeInsets.symmetric(
                 horizontal: SizeConfig.size14, vertical: SizeConfig.size14),
             decoration: i ==
                     dashboardController.userDetail.onboardingModel
-                            .demoGraphicValue.length -
+                            .mqsDemoGraphicDetails.length -
                         1
                 ? FontTextStyleConfig.contentDecoration.copyWith(
                     borderRadius: const BorderRadius.vertical(
@@ -64,13 +64,13 @@ Widget userDemographicWidget(
                   flex: SizeConfig.size2.toInt(),
                   child: Text(
                     dashboardController.userDetail.onboardingModel
-                        .demoGraphicValue[i].currentSelectedAnswer,
+                        .mqsDemoGraphicDetails[i].currentSelectedAnswer,
                     style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
                 Expanded(
                   child: Text(
-                    "${dashboardController.userDetail.onboardingModel.demoGraphicValue[i].selectedIndex}",
+                    "${dashboardController.userDetail.onboardingModel.mqsDemoGraphicDetails[i].selectedIndex}",
                     style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),

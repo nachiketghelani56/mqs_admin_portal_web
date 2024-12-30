@@ -10,7 +10,7 @@ Widget userWOLWidget({required DashboardController dashboardController}) {
   return Column(
     children: [
       titleWidget(
-        title: StringConfig.dashboard.wOLValue,
+        title: StringConfig.dashboard.mqsWheelOfLifeDetails,
         isShowContent: dashboardController.showWOL.value,
       ).tap(() {
         dashboardController.showWOL.value = !dashboardController.showWOL.value;
@@ -20,65 +20,65 @@ Widget userWOLWidget({required DashboardController dashboardController}) {
         keyValueWrapperWidget(
           key: StringConfig.dashboard.family,
           value: dashboardController
-                      .userDetail.onboardingModel.wOLValue.family ==
+                      .userDetail.onboardingModel.mqsWheelOfLifeDetails.family ==
                   null
               ? ""
-              : "${dashboardController.userDetail.onboardingModel.wOLValue.family}",
+              : "${dashboardController.userDetail.onboardingModel.mqsWheelOfLifeDetails.family}",
           isFirst: true,
         ),
         keyValueWrapperWidget(
           key: StringConfig.dashboard.finance,
           value: dashboardController
-                      .userDetail.onboardingModel.wOLValue.finances ==
+                      .userDetail.onboardingModel.mqsWheelOfLifeDetails.finances ==
                   null
               ? ""
-              : "${dashboardController.userDetail.onboardingModel.wOLValue.finances}",
+              : "${dashboardController.userDetail.onboardingModel.mqsWheelOfLifeDetails.finances}",
         ),
         keyValueWrapperWidget(
           key: StringConfig.dashboard.fun,
-          value: dashboardController.userDetail.onboardingModel.wOLValue.fun ==
+          value: dashboardController.userDetail.onboardingModel.mqsWheelOfLifeDetails.fun ==
                   null
               ? ""
-              : "${dashboardController.userDetail.onboardingModel.wOLValue.fun}",
+              : "${dashboardController.userDetail.onboardingModel.mqsWheelOfLifeDetails.fun}",
         ),
         keyValueWrapperWidget(
           key: StringConfig.dashboard.health,
           value: dashboardController
-                      .userDetail.onboardingModel.wOLValue.health ==
+                      .userDetail.onboardingModel.mqsWheelOfLifeDetails.health ==
                   null
               ? ""
-              : "${dashboardController.userDetail.onboardingModel.wOLValue.health}",
+              : "${dashboardController.userDetail.onboardingModel.mqsWheelOfLifeDetails.health}",
         ),
         keyValueWrapperWidget(
           key: StringConfig.dashboard.purpose,
           value: dashboardController
-                      .userDetail.onboardingModel.wOLValue.purpose ==
+                      .userDetail.onboardingModel.mqsWheelOfLifeDetails.purpose ==
                   null
               ? ""
-              : "${dashboardController.userDetail.onboardingModel.wOLValue.purpose}",
+              : "${dashboardController.userDetail.onboardingModel.mqsWheelOfLifeDetails.purpose}",
         ),
         keyValueWrapperWidget(
           key: StringConfig.dashboard.relationship,
           value: dashboardController
-                      .userDetail.onboardingModel.wOLValue.relationship ==
+                      .userDetail.onboardingModel.mqsWheelOfLifeDetails.relationship ==
                   null
               ? ""
-              : "${dashboardController.userDetail.onboardingModel.wOLValue.relationship}",
+              : "${dashboardController.userDetail.onboardingModel.mqsWheelOfLifeDetails.relationship}",
         ),
         keyValueWrapperWidget(
           key: StringConfig.dashboard.social,
           value: dashboardController
-                      .userDetail.onboardingModel.wOLValue.social ==
+                      .userDetail.onboardingModel.mqsWheelOfLifeDetails.social ==
                   null
               ? ""
-              : "${dashboardController.userDetail.onboardingModel.wOLValue.social}",
+              : "${dashboardController.userDetail.onboardingModel.mqsWheelOfLifeDetails.social}",
         ),
         keyValueWrapperWidget(
           key: StringConfig.dashboard.work,
-          value: dashboardController.userDetail.onboardingModel.wOLValue.work ==
+          value: dashboardController.userDetail.onboardingModel.mqsWheelOfLifeDetails.work ==
                   null
               ? ""
-              : "${dashboardController.userDetail.onboardingModel.wOLValue.work}",
+              : "${dashboardController.userDetail.onboardingModel.mqsWheelOfLifeDetails.work}",
           isLast: true,
         ),
       ],

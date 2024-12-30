@@ -10,7 +10,7 @@ Widget userScenesWidget({required DashboardController dashboardController}) {
   return Column(
     children: [
       titleWidget(
-        title: StringConfig.dashboard.scenesValue,
+        title: StringConfig.dashboard.mqsScenesDetails,
         isShowContent: dashboardController.showScenes.value,
       ).tap(() {
         dashboardController.showScenes.value =
@@ -21,7 +21,7 @@ Widget userScenesWidget({required DashboardController dashboardController}) {
         for (int i = 0;
             i <
                 dashboardController
-                    .userDetail.onboardingModel.scenesValue.length;
+                    .userDetail.onboardingModel.mqsScenesDetails.length;
             i++)
           Column(
             children: [
@@ -36,7 +36,7 @@ Widget userScenesWidget({required DashboardController dashboardController}) {
                     Expanded(
                       child: Text(
                         dashboardController.userDetail.onboardingModel
-                            .scenesValue[i].mqsSceneID,
+                            .mqsScenesDetails[i].mqsSceneID,
                         style: FontTextStyleConfig.tableBottomTextStyle
                             .copyWith(fontWeight: FontWeight.bold),
                       ),
@@ -66,44 +66,44 @@ Widget userScenesWidget({required DashboardController dashboardController}) {
                       keyValueWrapperWidget(
                         key: StringConfig.dashboard.mqsSceneID,
                         value: dashboardController.userDetail.onboardingModel
-                            .scenesValue[i].mqsSceneID,
+                            .mqsScenesDetails[i].mqsSceneID,
                         isFirst: true,
                       ),
                       keyValueWrapperWidget(
                         key: StringConfig.dashboard.mqsSceneOptionGrScore,
                         value:
-                            "${dashboardController.userDetail.onboardingModel.scenesValue[i].mqsSceneOptionGrScore}",
+                            "${dashboardController.userDetail.onboardingModel.mqsScenesDetails[i].mqsSceneOptionGrScore}",
                       ),
                       keyValueWrapperWidget(
                         key: StringConfig.dashboard.mqsSceneOptionText,
                         value: dashboardController.userDetail.onboardingModel
-                            .scenesValue[i].mqsSceneOptionText,
+                            .mqsScenesDetails[i].mqsSceneOptionText,
                       ),
                       keyValueWrapperWidget(
                         key: StringConfig.dashboard.mqsSceneOptionWeight,
                         value:
-                            "${dashboardController.userDetail.onboardingModel.scenesValue[i].mqsSceneOptionWeight}",
+                            "${dashboardController.userDetail.onboardingModel.mqsScenesDetails[i].mqsSceneOptionWeight}",
                       ),
                       keyValueWrapperWidget(
                           key: StringConfig.dashboard.mqsSceneStScore,
                           value:
-                              "${dashboardController.userDetail.onboardingModel.scenesValue[i].mqsSceneStScore}"),
+                              "${dashboardController.userDetail.onboardingModel.mqsScenesDetails[i].mqsSceneStScore}"),
                       keyValueWrapperWidget(
                           key: StringConfig.dashboard.mqsSceneStmt,
                           value: dashboardController.userDetail.onboardingModel
-                              .scenesValue[i].mqsSceneStmt),
+                              .mqsScenesDetails[i].mqsSceneStmt),
                       keyValueWrapperWidget(
                           key: StringConfig.dashboard.mqsTimeStamp,
                           value: dashboardController.userDetail.onboardingModel
-                              .scenesValue[i].mqsTimeStamp),
+                              .mqsScenesDetails[i].mqsTimeStamp),
                       keyValueWrapperWidget(
                           key: StringConfig.dashboard.mqsUserOBRegDate,
                           value: dashboardController.userDetail.onboardingModel
-                              .scenesValue[i].mqsUserOBRegDate),
+                              .mqsScenesDetails[i].mqsUserOBRegDate),
                       keyValueWrapperWidget(
                         key: StringConfig.dashboard.mqsUserOBSceneScore,
                         value:
-                            "${dashboardController.userDetail.onboardingModel.scenesValue[i].mqsUserOBScenesScore}",
+                            "${dashboardController.userDetail.onboardingModel.mqsScenesDetails[i].mqsUserOBScenesScore}",
                         isLast: true,
                       ),
                     ],

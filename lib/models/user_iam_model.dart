@@ -6,29 +6,29 @@ class UserIAMModel {
   final String mqsFirebaseUserID;
   final String mqsRegistrationStatus;
   final String mqsCreatedTimestamp;
-  final String about;
-  final bool aboutValue;
-  final String country;
-  final bool countryValue;
-  final String pronouns;
-  final bool pronounsValue;
-  final String userImage;
-  final String mqsUserName;
-  final String enterpriseId;
-  final String isMongoDBUserId;
-  final String loginWith;
-  final String mqsExpiryDate;
-  final String mqsSubscriptionActivePlan;
-  final String mqsSubscriptionPlatform;
+  final String mqsAbout;
+  final bool mqsAllowAbout;
+  final String mqsCountry;
+  final bool mqsAllowCountry;
+  final String mqsPronouns;
+  final bool mqsAllowPronouns;
+  final String mqsUserImage;
+  final String mqsEnterpriseID;
+  final String mqsMONGODBUserID;
+  final String mqsUserLoginWith;
+  // final String mqsSubscriptionExpiryDate;
+  // final String mqsSubscriptionActivePlan;
+  // final String mqsSubscriptionPlatform;
   final String mqsUpdateTimestamp;
-  final String mqsUserSubscriptionStatus;
+  // final String mqsSubscriptionPlatform;
   final bool mqsSkipOnboarding;
   final OnboardingModel onboardingModel;
   final EnterpriseDetails mqsEnterpriseDetails;
   final String mqsUserActiveTimestamp;
 
   UserIAMModel(
-    this.onboardingModel,this.mqsEnterpriseDetails, {
+    this.onboardingModel,
+    this.mqsEnterpriseDetails, {
     required this.mqsEmail,
     required this.mqsFirstName,
     required this.mqsLastName,
@@ -36,22 +36,21 @@ class UserIAMModel {
     required this.mqsFirebaseUserID,
     required this.mqsRegistrationStatus,
     required this.mqsCreatedTimestamp,
-    required this.about,
-    required this.aboutValue,
-    required this.country,
-    required this.countryValue,
-    required this.pronouns,
-    required this.pronounsValue,
-    required this.userImage,
-    required this.mqsUserName,
-    required this.enterpriseId,
-    required this.isMongoDBUserId,
-    required this.loginWith,
-    required this.mqsExpiryDate,
-    required this.mqsSubscriptionActivePlan,
-    required this.mqsSubscriptionPlatform,
+    required this.mqsAbout,
+    required this.mqsAllowAbout,
+    required this.mqsCountry,
+    required this.mqsAllowCountry,
+    required this.mqsPronouns,
+    required this.mqsAllowPronouns,
+    required this.mqsUserImage,
+    required this.mqsEnterpriseID,
+    required this.mqsMONGODBUserID,
+    required this.mqsUserLoginWith,
+    // required this.mqsSubscriptionExpiryDate,
+    // required this.mqsSubscriptionActivePlan,
+    // required this.mqsSubscriptionPlatform,
     required this.mqsUpdateTimestamp,
-    required this.mqsUserSubscriptionStatus,
+    // required this.mqsUserSubscriptionStatus,
     required this.mqsSkipOnboarding,
     required this.mqsUserActiveTimestamp,
   });
@@ -60,44 +59,57 @@ class UserIAMModel {
       : mqsEmail = json['mqsEmail'] ?? json['Email'] ?? "",
         mqsFirstName = json['mqsFirstName'] ?? json['FirstName'] ?? "",
         mqsLastName = json['mqsLastName'] ?? json['LastName'] ?? "",
-        mqsEnterpriseUserFlag = json['mqsEnterpriseUserFlag'] ?? json['isEnterPriseUser'] ?? false,
-        mqsFirebaseUserID = json['mqsFirebaseUserID'] ?? json['isFirebaseUserID'] ?? "",
-        mqsRegistrationStatus = json['mqsRegistrationStatus'] ?? json['isRegister'] ?? "",
+        mqsEnterpriseUserFlag =
+            json['mqsEnterpriseUserFlag'] ?? json['isEnterPriseUser'] ?? false,
+        mqsFirebaseUserID =
+            json['mqsFirebaseUserID'] ?? json['isFirebaseUserID'] ?? "",
+        mqsRegistrationStatus =
+            json['mqsRegistrationStatus'] ?? json['isRegister'] ?? "",
         mqsCreatedTimestamp = json['mqsCreatedTimestamp'] ?? "",
-        about = json['About'] ?? "",
-        aboutValue = json['AboutValue'] ?? false,
-        country = json['Country'] ?? "",
-        countryValue = json['CountryValue'] ?? false,
-        pronouns = json['Pronouns'] ?? "",
-        pronounsValue = json['PronounsValue'] ?? false,
-        userImage = json['UserImage'] ?? "",
-        mqsUserName = json['mqsUserName'] ?? json['UserName'] ?? "",
-        enterpriseId = json['mqsEnterpriseDetails'] != null ? json['mqsEnterpriseDetails']['mqsOrganizationID'] :  json['enterPriseID'] ?? "",
-        isMongoDBUserId = json['isMONGODBUserID'] ?? "",
-        loginWith = json['loginWith'] ?? "",
-        mqsExpiryDate = json['mqsExpiryDate'] ?? "",
-        mqsSubscriptionActivePlan = json['mqsSubscriptionActivePlan'] ?? "",
-        mqsSubscriptionPlatform = json['mqsSubscriptionPlatform'] ?? "",
+        mqsAbout = json['mqsAbout'] ?? json['About'] ?? "",
+        mqsAllowAbout = json['mqsPrivacySettingsDetails'] != null
+            ? json['mqsPrivacySettingsDetails']['mqsAllowAbout']
+            : json['AboutValue'] ?? false,
+        mqsCountry = json['mqsCountry'] ?? json['Country'] ?? "",
+        mqsAllowCountry = json['mqsPrivacySettingsDetails'] != null
+            ? json['mqsPrivacySettingsDetails']['mqsAllowCountry']
+            : json['CountryValue'] ?? false,
+        mqsPronouns = json['mqsPronouns'] ?? json['Pronouns'] ?? "",
+        mqsAllowPronouns = json['mqsPrivacySettingsDetails'] != null
+            ? json['mqsPrivacySettingsDetails']['mqsAllowPronouns']
+            : json['PronounsValue'] ?? false,
+        mqsUserImage = json['mqsUserImage'] ?? json['UserImage'] ?? "",
+        mqsEnterpriseID = json['mqsEnterpriseDetails'] != null
+            ? json['mqsEnterpriseDetails']['mqsOrganizationID']
+            : json['enterPriseID'] ?? "",
+        mqsMONGODBUserID =
+            json['mqsMONGODBUserID'] ?? json['isMONGODBUserID'] ?? "",
+        mqsUserLoginWith = json['mqsUserLoginWith'] ?? json['loginWith'] ?? "",
+        // mqsSubscriptionExpiryDate = json['mqsSubscriptionExpiryDate'] ?? json['mqsExpiryDate'] ?? "",
+        // mqsSubscriptionActivePlan = json['mqsSubscriptionActivePlan'] ?? "",
+        // mqsSubscriptionPlatform = json['mqsSubscriptionPlatform'] ?? "",
         mqsUpdateTimestamp = json['mqsUpdateTimestamp'] ?? "",
-        mqsUserSubscriptionStatus = json['mqsUserSubscriptionStatus'] ?? "",
+        // mqsUserSubscriptionStatus = json['mqsUserSubscriptionStatus'] ?? "",
         mqsSkipOnboarding = json['mqsSkipOnboarding'] ?? false,
         mqsUserActiveTimestamp = json['mqsUserActiveTimestamp'] ?? "",
-        onboardingModel = json['onboardingData'] != null
-            ? OnboardingModel.fromJson(json['onboardingData'])
-            : OnboardingModel(
-                checkInValue: [],
-                demoGraphicValue: [],
-                scenesValue: [],
-                wOLValue: WOLModel(
-                    family: null,
-                    finances: null,
-                    fun: null,
-                    health: null,
-                    purpose: null,
-                    relationship: null,
-                    social: null,
-                    work: null),
-              ),
+        onboardingModel = json['mqsOnboardingDetails'] != null
+            ? OnboardingModel.fromJson(json['mqsOnboardingDetails'])
+            : json['onboardingData'] != null
+                ? OnboardingModel.fromJson(json['onboardingData'])
+                : OnboardingModel(
+                    mqsCheckInDetails: [],
+                    mqsDemoGraphicDetails: [],
+                    mqsScenesDetails: [],
+                    mqsWheelOfLifeDetails: WOLModel(
+                        family: null,
+                        finances: null,
+                        fun: null,
+                        health: null,
+                        purpose: null,
+                        relationship: null,
+                        social: null,
+                        work: null),
+                  ),
         mqsEnterpriseDetails = json['mqsEnterpriseDetails'] != null
             ? EnterpriseDetails.fromJson(json['mqsEnterpriseDetails'])
             : EnterpriseDetails(
@@ -117,73 +129,85 @@ class UserIAMModel {
       'mqsFirebaseUserID': mqsFirebaseUserID,
       'mqsRegistrationStatus': mqsRegistrationStatus,
       'mqsCreatedTimestamp': mqsCreatedTimestamp,
-      'About': about,
-      'AboutValue': aboutValue,
-      'Country': country,
-      'CountryValue': countryValue,
-      'Pronouns': pronouns,
-      'PronounsValue': pronounsValue,
-      'UserImage': userImage,
-      'enterPriseID': enterpriseId,
-      'isMONGODBUserID': isMongoDBUserId,
-      'loginWith': loginWith,
-      'mqsExpiryDate': mqsExpiryDate,
-      'mqsSubscriptionActivePlan': mqsSubscriptionActivePlan,
-      'mqsSubscriptionPlatform': mqsSubscriptionPlatform,
+      'mqsAbout': mqsAbout,
+      'mqsAllowAbout': mqsAllowAbout,
+      'mqsCountry': mqsCountry,
+      'mqsAllowCountry': mqsAllowCountry,
+      'mqsPronouns': mqsPronouns,
+      'mqsAllowPronouns': mqsAllowPronouns,
+      'mqsUserImage': mqsUserImage,
+      'mqsEnterpriseID': mqsEnterpriseID,
+      'mqsMONGODBUserID': mqsMONGODBUserID,
+      'mqsUserLoginWith': mqsUserLoginWith,
+      // 'mqsSubscriptionExpiryDate': mqsSubscriptionExpiryDate,
+      // 'mqsSubscriptionActivePlan': mqsSubscriptionActivePlan,
+      // 'mqsSubscriptionPlatform': mqsSubscriptionPlatform,
       'mqsUpdateTimestamp': mqsUpdateTimestamp,
-      'mqsUserSubscriptionStatus': mqsUserSubscriptionStatus,
+      // 'mqsUserSubscriptionStatus': mqsUserSubscriptionStatus,
       'mqsSkipOnboarding': mqsSkipOnboarding,
       'mqsUserActiveTimestamp': mqsUserActiveTimestamp,
-      'onboardingData': onboardingModel.toJson(),
+      'mqsOnboardingDetails': onboardingModel.toJson(),
       'mqsEnterpriseDetails': mqsEnterpriseDetails.toJson(),
     };
   }
 }
 
 class OnboardingModel {
-  final List<CheckInModel> checkInValue;
-  final List<DemographicModel> demoGraphicValue;
-  final List<ScenesModel> scenesValue;
-  final WOLModel wOLValue;
+  final List<CheckInModel> mqsCheckInDetails;
+  final List<DemographicModel> mqsDemoGraphicDetails;
+  final List<ScenesModel> mqsScenesDetails;
+  final WOLModel mqsWheelOfLifeDetails;
 
   OnboardingModel(
-      {required this.checkInValue,
-      required this.demoGraphicValue,
-      required this.scenesValue,
-      required this.wOLValue});
+      {required this.mqsCheckInDetails,
+      required this.mqsDemoGraphicDetails,
+      required this.mqsScenesDetails,
+      required this.mqsWheelOfLifeDetails});
 
   OnboardingModel.fromJson(Map json)
-      : checkInValue = json['checkINValue'] != null
-            ? List<CheckInModel>.from((json['checkINValue'] as List)
+      : mqsCheckInDetails = json['mqsCheckInDetails'] != null
+            ? List<CheckInModel>.from((json['mqsCheckInDetails'] as List)
                 .map((model) => CheckInModel.fromJson(model)))
-            : [],
-        demoGraphicValue = json['demoGraphicValue'] != null
-            ? List<DemographicModel>.from((json['demoGraphicValue'] as List)
-                .map((model) => DemographicModel.fromJson(model)))
-            : [],
-        scenesValue = json['scenesValue'] != null
-            ? List<ScenesModel>.from((json['scenesValue'] as List)
+            : json['checkINValue'] != null
+                ? List<CheckInModel>.from((json['checkINValue'] as List)
+                    .map((model) => CheckInModel.fromJson(model)))
+                : [],
+        mqsDemoGraphicDetails = json['mqsDemoGraphicDetails'] != null
+            ? List<DemographicModel>.from(
+                (json['mqsDemoGraphicDetails'] as List)
+                    .map((model) => DemographicModel.fromJson(model)))
+            : json['demoGraphicValue'] != null
+                ? List<DemographicModel>.from((json['demoGraphicValue'] as List)
+                    .map((model) => DemographicModel.fromJson(model)))
+                : [],
+        mqsScenesDetails = json['mqsScenesDetails'] != null
+            ? List<ScenesModel>.from((json['mqsScenesDetails'] as List)
                 .map((model) => ScenesModel.fromJson(model)))
-            : [],
-        wOLValue = json['wOLValue'] != null
-            ? WOLModel.fromJson(json['wOLValue'])
-            : WOLModel(
-                family: null,
-                finances: null,
-                fun: null,
-                health: null,
-                purpose: null,
-                relationship: null,
-                social: null,
-                work: null);
+            : json['scenesValue'] != null
+                ? List<ScenesModel>.from((json['scenesValue'] as List)
+                    .map((model) => ScenesModel.fromJson(model)))
+                : [],
+        mqsWheelOfLifeDetails = json['mqsWheelOfLifeDetails'] != null
+            ? WOLModel.fromJson(json['mqsWheelOfLifeDetails'])
+            : json['wOLValue'] != null
+                ? WOLModel.fromJson(json['wOLValue'])
+                : WOLModel(
+                    family: null,
+                    finances: null,
+                    fun: null,
+                    health: null,
+                    purpose: null,
+                    relationship: null,
+                    social: null,
+                    work: null);
 
   Map<String, dynamic> toJson() {
     return {
-      'checkINValue': List.from((checkInValue).map((model) => model.toJson())),
-      'demoGraphicValue':
-          List.from((demoGraphicValue).map((model) => model.toJson())),
-      'scenesValue': List.from((scenesValue).map((model) => model.toJson())),
-      'wOLValue': wOLValue.toJson(),
+      'mqsCheckInDetails': List.from((mqsCheckInDetails).map((model) => model.toJson())),
+      'mqsDemoGraphicDetails':
+          List.from((mqsDemoGraphicDetails).map((model) => model.toJson())),
+      'mqsScenesDetails': List.from((mqsScenesDetails).map((model) => model.toJson())),
+      'mqsWheelOfLifeDetails': mqsWheelOfLifeDetails.toJson(),
     };
   }
 }
