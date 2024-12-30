@@ -13,7 +13,7 @@ class EnterpriseRepository {
     QuerySnapshot<Object?> ent = await enterprise.get();
     final List<EnterpriseModel> enterprises = ent.docs.map((doc) {
       final data = doc.data() as Map<String, dynamic>;
-      return EnterpriseModel.fromJson(data);
+      return EnterpriseModel.fromJson(data, doc.id);
     }).toList();
     enterprises.sort((a, b) => DateTime.parse(b.mqsCreatedTimestamp)
         .compareTo(DateTime.parse(a.mqsCreatedTimestamp)));
@@ -24,7 +24,7 @@ class EnterpriseRepository {
     return enterprise.snapshots().map((snapshot) {
       List<EnterpriseModel> entList = snapshot.docs
           .map((doc) =>
-              EnterpriseModel.fromJson(doc.data() as Map<String, dynamic>))
+              EnterpriseModel.fromJson(doc.data() as Map<String, dynamic>,doc.id))
           .toList();
       entList.sort((a, b) => DateTime.parse(b.mqsCreatedTimestamp)
           .compareTo(DateTime.parse(a.mqsCreatedTimestamp)));
@@ -142,7 +142,7 @@ class EnterpriseRepository {
       QuerySnapshot querySnapshot = await query.get();
       return querySnapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
-        return EnterpriseModel.fromJson(data);
+        return EnterpriseModel.fromJson(data,doc.id);
       }).toList();
     }
   }

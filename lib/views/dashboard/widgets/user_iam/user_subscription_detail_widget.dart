@@ -78,6 +78,28 @@ Widget userSubscriptionDetailWidget(
                     dashboardController.userSubscriptionDetail?.mqsSubscriptionExpiryDate ??
                         ""))
             : "",
+
+      ),
+      keyValueWrapperWidget(
+        key: StringConfig.csv.createdTimestamp,
+        value: (dashboardController.userSubscriptionDetail?.mqsCreatedTimestamp ?? "")
+            .isNotEmpty
+            ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
+            DateTime.parse(
+                dashboardController.userSubscriptionDetail?.mqsCreatedTimestamp ??
+                    ""))
+            : "",
+
+      ),
+      keyValueWrapperWidget(
+        key: StringConfig.csv.updatedTimestamp,
+        value: (dashboardController.userSubscriptionDetail?.mqsUpdateTimestamp ?? "")
+            .isNotEmpty
+            ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
+            DateTime.parse(
+                dashboardController.userSubscriptionDetail?.mqsUpdateTimestamp ??
+                    ""))
+            : "",
         isLast: true,
       ),
     ],

@@ -1,4 +1,5 @@
 class EnterpriseModel {
+  final String docId;
   final MqsEnterprisePOCs mqsEnterprisePOCs;
   final String mqsEnterpriseCode;
   final bool mqsIsTeam;
@@ -10,6 +11,7 @@ class EnterpriseModel {
   final String mqsUpdateTimestamp;
 
   EnterpriseModel({
+    required this.docId,
     required this.mqsEnterprisePOCs,
     required this.mqsEnterpriseCode,
     required this.mqsIsTeam,
@@ -20,8 +22,9 @@ class EnterpriseModel {
     required this.mqsUpdateTimestamp,
   });
 
-  factory EnterpriseModel.fromJson(Map<String, dynamic> json) {
+  factory EnterpriseModel.fromJson(Map<String, dynamic> json,String docId) {
     return EnterpriseModel(
+      docId: docId,
       mqsEnterprisePOCs: MqsEnterprisePOCs.fromJson(json['mqsEnterprisePOCs']),
       mqsEnterpriseCode: json['mqsEnterpriseCode'] ?? "",
       mqsIsTeam: json['mqsIsTeam'] ?? false,

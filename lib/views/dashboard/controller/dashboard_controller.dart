@@ -216,8 +216,50 @@ class DashboardController extends GetxController {
             .fetchEnterpriseFilteredData(
                 field, filters, condition, isAsc.value);
       } else if (selectedTabIndex.value == 1) {
-        searchedUsers.value = await UserRepository.i
-            .fetchUserFilteredData(field, filters, condition, isAsc.value);
+        String field2Key = "";
+        if (field == StringConfig.dashboard.mqsEnterpriseUserFlag) {
+          field2Key = StringConfig.firebase.isEnterPriseUser;
+        } else if (field == StringConfig.firebase.mqsEmail) {
+          field2Key = StringConfig.firebase.email;
+        } else if (field == StringConfig.firebase.mqsFirstName) {
+          field2Key = StringConfig.firebase.firstName;
+        } else if (field == StringConfig.firebase.mqsLastName) {
+          field2Key = StringConfig.firebase.lastName;
+        } else if (field == StringConfig.firebase.mqsFirebaseUserID) {
+          field2Key = StringConfig.firebase.isFirebaseUserID;
+        } else if (field == StringConfig.firebase.mqsRegistrationStatus) {
+          field2Key = StringConfig.firebase.isRegister;
+        } else if (field == StringConfig.dashboard.mqsAbout) {
+          field2Key = StringConfig.dashboard.about;
+        } else if (field == StringConfig.dashboard.mqsAllowAbout) {
+          field2Key = StringConfig.dashboard.aboutValue;
+        } else if (field == StringConfig.dashboard.mqsCountry) {
+          field2Key = StringConfig.dashboard.country;
+        } else if (field == StringConfig.dashboard.mqsAllowCountry) {
+          field2Key = StringConfig.dashboard.countryValue;
+        } else if (field == StringConfig.dashboard.mqsPronouns) {
+          field2Key = StringConfig.dashboard.pronouns;
+        } else if (field == StringConfig.dashboard.mqsAllowPronouns) {
+          field2Key = StringConfig.dashboard.pronounsValue;
+        } else if (field == StringConfig.dashboard.mqsCheckInDetailsKey) {
+          field2Key = StringConfig.dashboard.checkINValue;
+        } else if (field == StringConfig.dashboard.mqsDemoGraphicDetailsKey) {
+          field2Key = StringConfig.dashboard.demoGraphicValue;
+        } else if (field == StringConfig.dashboard.mqsScenesDetailsKey) {
+          field2Key = StringConfig.dashboard.scenesValue;
+        } else if (field == StringConfig.dashboard.mqsWheelOfLifeDetailsKey) {
+          field2Key = StringConfig.dashboard.wOLValue;
+        }
+        else if (field == StringConfig.dashboard.mqsMONGODBUserID) {
+          field2Key = StringConfig.dashboard.isMongoDBUserIdText;
+        } else if (field == StringConfig.dashboard.mqsUserLoginWith) {
+          field2Key = StringConfig.dashboard.loginWithKey;
+        } else {
+          field2Key = "";
+        }
+
+        searchedUsers.value = await UserRepository.i.fetchUserFilteredData(
+            field, field2Key, filters, condition, isAsc.value);
       } else if (selectedTabIndex.value == 2) {
         Get.find<CircleController>().searchedCircle.value =
             await CircleRepository.i.fetchCircleFilteredData(
@@ -469,6 +511,7 @@ class DashboardController extends GetxController {
 
       final docRef = FirebaseStorageService.i.enterprise.doc().id;
       final enterprise = EnterpriseModel(
+        docId: isEditEnterprise.value ? enterpriseId.value : docRef,
         mqsEnterprisePOCs: MqsEnterprisePOCs(
           mqsEnterpriseID: isEditEnterprise.value ? enterpriseId.value : docRef,
           mqsEnterpriseName: pocNameController.text.trim(),
@@ -521,7 +564,7 @@ class DashboardController extends GetxController {
   }
 
   setEnterpriseForm({required int index}) {
-    enterpriseId.value = enterpriseDetail.mqsEnterprisePOCs.mqsEnterpriseID;
+    enterpriseId.value = enterpriseDetail.docId;
     mqsEnterpriseCodeController.text = enterpriseDetail.mqsEnterpriseCode;
     pocNameController.text =
         enterpriseDetail.mqsEnterprisePOCs.mqsEnterpriseName;
@@ -639,6 +682,7 @@ class DashboardController extends GetxController {
 
           final docRef = FirebaseStorageService.i.enterprise.doc().id;
           EnterpriseModel enterprise = EnterpriseModel(
+            docId: docRef,
             mqsEnterprisePOCs: MqsEnterprisePOCs(
               mqsEnterpriseID: docRef,
               mqsEnterpriseName: rowMap['Enterprise Name'] ?? "",
@@ -1192,23 +1236,32 @@ class DashboardController extends GetxController {
       return StringConfig.dashboard.userActive;
     } else if (keyName == StringConfig.firebase.mqsCreatedTimestamp) {
       return StringConfig.csv.createdTimestamp;
-    } else if (keyName == StringConfig.dashboard.about) {
+    } else if (keyName == StringConfig.dashboard.about ||
+        keyName == StringConfig.dashboard.mqsAbout) {
       return StringConfig.dashboard.about;
-    } else if (keyName == StringConfig.dashboard.aboutValue) {
+    } else if (keyName == StringConfig.dashboard.aboutValue ||
+        keyName == StringConfig.dashboard.mqsAllowAbout) {
       return StringConfig.dashboard.aboutValueText;
-    } else if (keyName == StringConfig.dashboard.country) {
+    } else if (keyName == StringConfig.dashboard.country ||
+        keyName == StringConfig.dashboard.mqsCountry) {
       return StringConfig.dashboard.country;
-    } else if (keyName == StringConfig.dashboard.countryValue) {
+    } else if (keyName == StringConfig.dashboard.countryValue ||
+        keyName == StringConfig.dashboard.mqsAllowCountry) {
       return StringConfig.dashboard.countryValueText;
-    } else if (keyName == StringConfig.dashboard.pronouns) {
+    } else if (keyName == StringConfig.dashboard.pronouns ||
+        keyName == StringConfig.dashboard.mqsPronouns) {
       return StringConfig.dashboard.pronouns;
-    } else if (keyName == StringConfig.dashboard.pronounsValue) {
+    } else if (keyName == StringConfig.dashboard.pronounsValue ||
+        keyName == StringConfig.dashboard.mqsAllowPronouns) {
       return StringConfig.dashboard.pronounsValueText;
-    } else if (keyName == StringConfig.dashboard.userImage) {
+    } else if (keyName == StringConfig.dashboard.userImage ||
+        keyName == StringConfig.dashboard.mqsUserImage) {
       return StringConfig.dashboard.userImageText;
-    }else if (keyName == StringConfig.dashboard.isMongoDBUserIdText) {
+    } else if (keyName == StringConfig.dashboard.isMongoDBUserIdText ||
+        keyName == StringConfig.dashboard.mqsMONGODBUserID) {
       return StringConfig.dashboard.mongoDBUserId;
-    } else if (keyName == StringConfig.dashboard.loginWithKey) {
+    } else if (keyName == StringConfig.dashboard.loginWithKey ||
+        keyName == StringConfig.dashboard.mqsUserLoginWith) {
       return StringConfig.dashboard.loginWithText;
     } else if (keyName == StringConfig.dashboard.mqsExpiryDate) {
       return StringConfig.reporting.expiryDate;
@@ -1220,7 +1273,8 @@ class DashboardController extends GetxController {
       return StringConfig.csv.updatedTimestamp;
     } else if (keyName == StringConfig.dashboard.mqsUserSubscriptionStatus) {
       return StringConfig.dashboard.userSubscriptionStatus;
-    } else if (keyName == StringConfig.dashboard.onboardingDataKey) {
+    } else if (keyName == StringConfig.dashboard.onboardingDataKey ||
+        keyName == StringConfig.dashboard.mqsOnboardingDetails) {
       return StringConfig.dashboard.onboardingData;
     } else if (keyName == StringConfig.dashboard.mqsSkipOnboarding) {
       return StringConfig.dashboard.skipOnboarding;

@@ -52,108 +52,373 @@ class UserRepository {
     });
   }
 
-  Future<List<UserIAMModel>> fetchUserFilteredData(String fieldKey,
-      List<Map<String, dynamic>> filter, String condition, bool isAsc) async {
-    Query query = user;
-    List<UserIAMModel> allRes = [];
-    if (filter.isEmpty) {
-      query = query.orderBy(fieldKey, descending: !isAsc);
-    }
-    List<UserIAMModel> userList = await getUsers();
-    for (Map<String, dynamic> filter in filter) {
-      String field = filter['field'];
-      var condition = filter['condition'];
-      if (condition is Map<String, dynamic>) {
-        String operator = condition['operator'];
-        dynamic type = condition['type'];
-        dynamic value = condition['value'];
+   Future<List<UserIAMModel>> fetchUserFilteredData(
+       String fieldKey,
+       String field2Key,
+       List<Map<String, dynamic>> filter,
+       String condition,
+       bool isAsc) async {
+     Query query = user;
+     List<UserIAMModel> allRes = [];
+     List<UserIAMModel> matchedUsers = [];
+     if (filter.isEmpty) {
+       query = query.orderBy(fieldKey, descending: !isAsc);
+     }
+     List<UserIAMModel> userList = await getUsers();
+
+     for (Map<String, dynamic> filter in filter) {
+       String field = filter['field'];
+       var condition = filter['condition'];
+       if (condition is Map<String, dynamic>) {
+         String operator = condition['operator'];
+         dynamic type = condition['type'];
+         dynamic value = condition['value'];
         switch (operator) {
-          case '==': // Equal to
-            query = query
-                .where(field,
-                    isEqualTo: type == StringConfig.dashboard.boolean
-                        ? value == 'true'
-                        : value.toString())
-                .orderBy(field, descending: !isAsc);
-            break;
-          case '!=': // Not equal to
-            query = query
-                .where(field,
-                    isNotEqualTo: type == StringConfig.dashboard.boolean
-                        ? value == 'true'
-                        : value.toString())
-                .orderBy(field, descending: !isAsc);
-            break;
-          case '>': // Greater than
-            query = query
-                .where(field,
-                    isGreaterThan: type == StringConfig.dashboard.boolean
-                        ? value == 'true'
-                        : value.toString())
-                .orderBy(field, descending: !isAsc);
-            break;
-          case '>=': // Greater than or equal to
-            query = query
-                .where(field,
-                    isGreaterThanOrEqualTo:
-                        type == StringConfig.dashboard.boolean
+                case '==': // Equal to
+
+                  if (field2Key.isNotEmpty) {
+                    Query query1 = user
+                        .where(
+                            fieldKey == "mqsAllowAbout"
+                                ? "mqsPrivacySettingsDetails.mqsAllowAbout"
+                                : fieldKey == "mqsAllowCountry"
+                                    ? "mqsPrivacySettingsDetails.mqsAllowCountry"
+                                    : fieldKey == "mqsAllowPronouns"
+                                        ? "mqsPrivacySettingsDetails.mqsAllowPronouns"
+                                        : fieldKey,
+                            isEqualTo: type == StringConfig.dashboard.boolean
+                                ? value == 'true'
+                                : value.toString())
+                        .orderBy(
+                            fieldKey == "mqsAllowAbout"
+                                ? "mqsPrivacySettingsDetails.mqsAllowAbout"
+                                : fieldKey == "mqsAllowCountry"
+                                    ? "mqsPrivacySettingsDetails.mqsAllowCountry"
+                                    : fieldKey == "mqsAllowPronouns"
+                                        ? "mqsPrivacySettingsDetails.mqsAllowPronouns"
+                                        : fieldKey,
+                            descending: !isAsc);
+                    Query query2 = user
+                        .where(field2Key,
+                            isEqualTo: type == StringConfig.dashboard.boolean
+                                ? value == 'true'
+                                : value.toString())
+                        .orderBy(field2Key, descending: !isAsc);
+
+                    QuerySnapshot snapshot1 = await query1.get();
+                    QuerySnapshot snapshot2 = await query2.get();
+
+                    matchedUsers = [
+                      ...snapshot1.docs
+                          .map((doc) => UserIAMModel.fromJson(doc.data() as Map)),
+                      ...snapshot2.docs
+                          .map((doc) => UserIAMModel.fromJson(doc.data() as Map)),
+                    ];
+                    // }
+                  } else {
+                    query = query
+                        .where(field,
+                            isEqualTo: type == StringConfig.dashboard.boolean
+                                ? value == 'true'
+                                : value.toString())
+                        .orderBy(field, descending: !isAsc);
+                  }
+                  break;
+                case '!=': // Not equal to
+                  if (field2Key.isNotEmpty) {
+                    Query query1 = user
+                        .where(
+                        fieldKey == "mqsAllowAbout"
+                            ? "mqsPrivacySettingsDetails.mqsAllowAbout"
+                            : fieldKey == "mqsAllowCountry"
+                            ? "mqsPrivacySettingsDetails.mqsAllowCountry"
+                            : fieldKey == "mqsAllowPronouns"
+                            ? "mqsPrivacySettingsDetails.mqsAllowPronouns"
+                            : fieldKey,
+                        isNotEqualTo: type == StringConfig.dashboard.boolean
                             ? value == 'true'
                             : value.toString())
-                .orderBy(field, descending: !isAsc);
-            break;
-          case '<': // Less than
-            query = query
-                .where(field,
-                    isLessThan: type == StringConfig.dashboard.boolean
-                        ? value == 'true'
-                        : value.toString())
-                .orderBy(field, descending: !isAsc);
-            break;
-          case '<=': // Less than or equal to
-            query = query
-                .where(field,
-                    isLessThanOrEqualTo: type == StringConfig.dashboard.boolean
-                        ? value == 'true'
-                        : value.toString())
-                .orderBy(field, descending: !isAsc);
-            break;
-          case 'array-contains-any': // Array contains any
-             if (!allRes.contains(value)) {
-                          if (fieldKey == 'mqsEnterpriseDetails') {
-                            allRes.addAll(userList.where((UserIAMModel e) {
-                              Map<String, dynamic> json =
-                                  e.toJson(); // Convert object to JSON
-                              String? fieldValue =
-                                  json[field]?.toString(); // Get the dynamic field value
+                        .orderBy(
+                        fieldKey == "mqsAllowAbout"
+                            ? "mqsPrivacySettingsDetails.mqsAllowAbout"
+                            : fieldKey == "mqsAllowCountry"
+                            ? "mqsPrivacySettingsDetails.mqsAllowCountry"
+                            : fieldKey == "mqsAllowPronouns"
+                            ? "mqsPrivacySettingsDetails.mqsAllowPronouns"
+                            : fieldKey,
+                        descending: !isAsc);
 
-                              return fieldValue != null && (fieldValue.contains(value) || json["enterPriseID"] ==value);
-                            }).toList());
-                          } else {
-                            allRes.addAll(userList.where((UserIAMModel e) {
-                              Map<String, dynamic> json =
-                                  e.toJson(); // Convert object to JSON
-                              String? fieldValue =
-                                  json[field]?.toString(); // Get the dynamic field value
+                    Query query2 = user
+                        .where(field2Key,
+                            isNotEqualTo: type == StringConfig.dashboard.boolean
+                                ? value == 'true'
+                                : value.toString())
+                        .orderBy(field2Key, descending: !isAsc);
 
-                              return fieldValue != null && fieldValue.contains(value);
-                            }).toList());
-                          }
-                        }
-            break;
-          default:
-            break;
-        }
-      }
-    }
-    if (condition == "array-contains-any") {
-      return allRes;
-    } else {
-      // Get the filtered query results
-      QuerySnapshot querySnapshot = await query.get();
-      // Return the matching documents
-      return querySnapshot.docs
-          .map((e) => UserIAMModel.fromJson(e.data() as Map))
-          .toList();
-    }
-  }
+                    QuerySnapshot snapshot1 = await query1.get();
+                    QuerySnapshot snapshot2 = await query2.get();
+
+                    matchedUsers = [
+                      ...snapshot1.docs
+                          .map((doc) => UserIAMModel.fromJson(doc.data() as Map)),
+                      ...snapshot2.docs
+                          .map((doc) => UserIAMModel.fromJson(doc.data() as Map)),
+                    ];
+                  } else {
+                    query = query
+                        .where(field,
+                            isNotEqualTo: type == StringConfig.dashboard.boolean
+                                ? value == 'true'
+                                : value.toString())
+                        .orderBy(field, descending: !isAsc);
+                  }
+                  break;
+                case '>': // Greater than
+                  if (field2Key.isNotEmpty) {
+                    Query query1 = user
+                        .where(
+                        fieldKey == "mqsAllowAbout"
+                            ? "mqsPrivacySettingsDetails.mqsAllowAbout"
+                            : fieldKey == "mqsAllowCountry"
+                            ? "mqsPrivacySettingsDetails.mqsAllowCountry"
+                            : fieldKey == "mqsAllowPronouns"
+                            ? "mqsPrivacySettingsDetails.mqsAllowPronouns"
+                            : fieldKey,
+                        isGreaterThan: type == StringConfig.dashboard.boolean
+                            ? value == 'true'
+                            : value.toString())
+                        .orderBy(
+                        fieldKey == "mqsAllowAbout"
+                            ? "mqsPrivacySettingsDetails.mqsAllowAbout"
+                            : fieldKey == "mqsAllowCountry"
+                            ? "mqsPrivacySettingsDetails.mqsAllowCountry"
+                            : fieldKey == "mqsAllowPronouns"
+                            ? "mqsPrivacySettingsDetails.mqsAllowPronouns"
+                            : fieldKey,
+                        descending: !isAsc);
+
+                    Query query2 = user
+                        .where(field2Key,
+                            isGreaterThan: type == StringConfig.dashboard.boolean
+                                ? value == 'true'
+                                : value.toString())
+                        .orderBy(field2Key, descending: !isAsc);
+
+                    QuerySnapshot snapshot1 = await query1.get();
+                    QuerySnapshot snapshot2 = await query2.get();
+
+                    matchedUsers = [
+                      ...snapshot1.docs
+                          .map((doc) => UserIAMModel.fromJson(doc.data() as Map)),
+                      ...snapshot2.docs
+                          .map((doc) => UserIAMModel.fromJson(doc.data() as Map)),
+                    ];
+                  } else {
+                    query = query
+                        .where(field,
+                            isGreaterThan: type == StringConfig.dashboard.boolean
+                                ? value == 'true'
+                                : value.toString())
+                        .orderBy(field, descending: !isAsc);
+                  }
+                  break;
+                case '>=': // Greater than or equal to
+                  if (field2Key.isNotEmpty) {
+                    Query query1 = user
+                        .where(
+                        fieldKey == "mqsAllowAbout"
+                            ? "mqsPrivacySettingsDetails.mqsAllowAbout"
+                            : fieldKey == "mqsAllowCountry"
+                            ? "mqsPrivacySettingsDetails.mqsAllowCountry"
+                            : fieldKey == "mqsAllowPronouns"
+                            ? "mqsPrivacySettingsDetails.mqsAllowPronouns"
+                            : fieldKey,
+                        isGreaterThanOrEqualTo: type == StringConfig.dashboard.boolean
+                            ? value == 'true'
+                            : value.toString())
+                        .orderBy(
+                        fieldKey == "mqsAllowAbout"
+                            ? "mqsPrivacySettingsDetails.mqsAllowAbout"
+                            : fieldKey == "mqsAllowCountry"
+                            ? "mqsPrivacySettingsDetails.mqsAllowCountry"
+                            : fieldKey == "mqsAllowPronouns"
+                            ? "mqsPrivacySettingsDetails.mqsAllowPronouns"
+                            : fieldKey,
+                        descending: !isAsc);
+
+                    Query query2 = user
+                        .where(field2Key,
+                            isGreaterThanOrEqualTo:
+                                type == StringConfig.dashboard.boolean
+                                    ? value == 'true'
+                                    : value.toString())
+                        .orderBy(field2Key, descending: !isAsc);
+
+                    QuerySnapshot snapshot1 = await query1.get();
+                    QuerySnapshot snapshot2 = await query2.get();
+
+                    matchedUsers = [
+                      ...snapshot1.docs
+                          .map((doc) => UserIAMModel.fromJson(doc.data() as Map)),
+                      ...snapshot2.docs
+                          .map((doc) => UserIAMModel.fromJson(doc.data() as Map)),
+                    ];
+                  } else {
+                    query = query
+                        .where(field,
+                            isGreaterThanOrEqualTo:
+                                type == StringConfig.dashboard.boolean
+                                    ? value == 'true'
+                                    : value.toString())
+                        .orderBy(field, descending: !isAsc);
+                  }
+                  break;
+                case '<': // Less than
+                  if (field2Key.isNotEmpty) {
+                    Query query1 = user
+                        .where(
+                        fieldKey == "mqsAllowAbout"
+                            ? "mqsPrivacySettingsDetails.mqsAllowAbout"
+                            : fieldKey == "mqsAllowCountry"
+                            ? "mqsPrivacySettingsDetails.mqsAllowCountry"
+                            : fieldKey == "mqsAllowPronouns"
+                            ? "mqsPrivacySettingsDetails.mqsAllowPronouns"
+                            : fieldKey,
+                        isLessThan: type == StringConfig.dashboard.boolean
+                            ? value == 'true'
+                            : value.toString())
+                        .orderBy(
+                        fieldKey == "mqsAllowAbout"
+                            ? "mqsPrivacySettingsDetails.mqsAllowAbout"
+                            : fieldKey == "mqsAllowCountry"
+                            ? "mqsPrivacySettingsDetails.mqsAllowCountry"
+                            : fieldKey == "mqsAllowPronouns"
+                            ? "mqsPrivacySettingsDetails.mqsAllowPronouns"
+                            : fieldKey,
+                        descending: !isAsc);
+
+                    Query query2 = user
+                        .where(field2Key,
+                            isLessThan: type == StringConfig.dashboard.boolean
+                                ? value == 'true'
+                                : value.toString())
+                        .orderBy(field2Key, descending: !isAsc);
+
+                    QuerySnapshot snapshot1 = await query1.get();
+                    QuerySnapshot snapshot2 = await query2.get();
+
+                    matchedUsers = [
+                      ...snapshot1.docs
+                          .map((doc) => UserIAMModel.fromJson(doc.data() as Map)),
+                      ...snapshot2.docs
+                          .map((doc) => UserIAMModel.fromJson(doc.data() as Map)),
+                    ];
+                  } else {
+                    query = query
+                        .where(field,
+                            isLessThan: type == StringConfig.dashboard.boolean
+                                ? value == 'true'
+                                : value.toString())
+                        .orderBy(field, descending: !isAsc);
+                  }
+                  break;
+                case '<=': // Less than or equal to
+                  if (field2Key.isNotEmpty) {
+
+                    Query query1 = user
+                        .where(
+                        fieldKey == "mqsAllowAbout"
+                            ? "mqsPrivacySettingsDetails.mqsAllowAbout"
+                            : fieldKey == "mqsAllowCountry"
+                            ? "mqsPrivacySettingsDetails.mqsAllowCountry"
+                            : fieldKey == "mqsAllowPronouns"
+                            ? "mqsPrivacySettingsDetails.mqsAllowPronouns"
+                            : fieldKey,
+                        isLessThanOrEqualTo: type == StringConfig.dashboard.boolean
+                            ? value == 'true'
+                            : value.toString())
+                        .orderBy(
+                        fieldKey == "mqsAllowAbout"
+                            ? "mqsPrivacySettingsDetails.mqsAllowAbout"
+                            : fieldKey == "mqsAllowCountry"
+                            ? "mqsPrivacySettingsDetails.mqsAllowCountry"
+                            : fieldKey == "mqsAllowPronouns"
+                            ? "mqsPrivacySettingsDetails.mqsAllowPronouns"
+                            : fieldKey,
+                        descending: !isAsc);
+
+                    Query query2 = user
+                        .where(field2Key,
+                            isLessThanOrEqualTo:
+                                type == StringConfig.dashboard.boolean
+                                    ? value == 'true'
+                                    : value.toString())
+                        .orderBy(field2Key, descending: !isAsc);
+
+                    QuerySnapshot snapshot1 = await query1.get();
+                    QuerySnapshot snapshot2 = await query2.get();
+
+                    matchedUsers = [
+                      ...snapshot1.docs
+                          .map((doc) => UserIAMModel.fromJson(doc.data() as Map)),
+                      ...snapshot2.docs
+                          .map((doc) => UserIAMModel.fromJson(doc.data() as Map)),
+                    ];
+                  } else {
+                    query = query
+                        .where(field,
+                            isLessThanOrEqualTo:
+                                type == StringConfig.dashboard.boolean
+                                    ? value == 'true'
+                                    : value.toString())
+                        .orderBy(field, descending: !isAsc);
+                  }
+                  break;
+                case 'array-contains-any': // Array contains any
+                  if (!allRes.contains(value)) {
+                    if (fieldKey == 'mqsEnterpriseDetails') {
+                      allRes.addAll(userList.where((UserIAMModel e) {
+                        Map<String, dynamic> json =
+                            e.toJson(); // Convert object to JSON
+                        String? fieldValue =
+                            json[field]?.toString(); // Get the dynamic field value
+
+                        return fieldValue != null &&
+                            (fieldValue.contains(value) ||
+                                json["enterPriseID"] == value);
+                      }).toList());
+                    } else {
+                      allRes.addAll(userList.where((UserIAMModel e) {
+                        Map<String, dynamic> json =
+                            e.toJson(); // Convert object to JSON
+
+                        String? fieldValue =
+                            json[field]?.toString(); // Get the dynamic field value
+
+                        return fieldValue != null && fieldValue.contains(value);
+                      }).toList());
+                    }
+                  }
+                  break;
+                default:
+                  break;
+              }
+              }
+     }
+     if (condition == "array-contains-any") {
+       return allRes;
+     } else {
+         if (field2Key.isNotEmpty) {
+               return matchedUsers;
+             } else {
+               // Get the filtered query results
+               QuerySnapshot querySnapshot = await query.get();
+       // Return the matching documents
+
+               return querySnapshot.docs
+                   .map((e) => UserIAMModel.fromJson(e.data() as Map))
+                   .toList();
+             }
+     }
+   }
 }
