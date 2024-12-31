@@ -23,7 +23,9 @@ Widget enterpriseDetailWidget(
           Container(
             height: SizeConfig.size55,
             padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
-            decoration: FontTextStyleConfig.headerDecoration,
+            decoration: FontTextStyleConfig.headerDecoration.copyWith( borderRadius: const BorderRadius.all(
+             Radius.circular(SizeConfig.size12),
+            ),),
             child: Row(
               children: [
                 Expanded(
@@ -34,43 +36,50 @@ Widget enterpriseDetailWidget(
                   ),
                 ),
                 Expanded(
-                  flex: SizeConfig.size3.toInt(),
-                  child: Text(
-                    StringConfig.dashboard.team,
-                    style: FontTextStyleConfig.tableBottomTextStyle,
-                  ),
-                )
-              ],
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(
-                horizontal: SizeConfig.size14, vertical: SizeConfig.size14),
-            decoration: FontTextStyleConfig.contentDecoration.copyWith(
-              borderRadius: const BorderRadius.vertical(
-                bottom: Radius.circular(SizeConfig.size12),
-              ),
-            ),
-            child: Row(
-              children: [
-                Expanded(
                   flex: SizeConfig.size4.toInt(),
                   child: Text(
                     dashboardController.enterpriseDetail.mqsEnterpriseCode,
                     style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
-                Expanded(
-                  flex: SizeConfig.size3.toInt(),
-                  child: Text(
-                    "${dashboardController.enterpriseDetail.mqsIsTeam.toString().capitalize}",
-                    style: FontTextStyleConfig.tableContentTextStyle,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
+                // Expanded(
+                //   flex: SizeConfig.size3.toInt(),
+                //   child: Text(
+                //     StringConfig.dashboard.team,
+                //     style: FontTextStyleConfig.tableBottomTextStyle,
+                //   ),
+                // )
               ],
             ),
           ),
+          // Container(
+          //   padding: const EdgeInsets.symmetric(
+          //       horizontal: SizeConfig.size14, vertical: SizeConfig.size14),
+          //   decoration: FontTextStyleConfig.contentDecoration.copyWith(
+          //     borderRadius: const BorderRadius.vertical(
+          //       bottom: Radius.circular(SizeConfig.size12),
+          //     ),
+          //   ),
+          //   child: Row(
+          //     children: [
+          //       Expanded(
+          //         flex: SizeConfig.size4.toInt(),
+          //         child: Text(
+          //           dashboardController.enterpriseDetail.mqsEnterpriseCode,
+          //           style: FontTextStyleConfig.tableContentTextStyle,
+          //         ),
+          //       ),
+          //       // Expanded(
+          //       //   flex: SizeConfig.size3.toInt(),
+          //       //   child: Text(
+          //       //     "${dashboardController.enterpriseDetail.mqsIsTeam.toString().capitalize}",
+          //       //     style: FontTextStyleConfig.tableContentTextStyle,
+          //       //     overflow: TextOverflow.ellipsis,
+          //       //   ),
+          //       // ),
+          //     ],
+          //   ),
+          // ),
           if (dashboardController.enterpriseDetail.mqsTeamList.isNotEmpty) ...[
             SizeConfig.size34.height,
             mqsTeamListWidget(dashboardController: dashboardController),
@@ -133,7 +142,7 @@ Widget enterpriseDetailWidget(
                   flex: SizeConfig.size3.toInt(),
                   child: Text(
                     dashboardController.dateConvert(dashboardController
-                        .enterpriseDetail.mqsUpdateTimestamp),
+                        .enterpriseDetail.mqsUpdatedTimestamp),
                     style: FontTextStyleConfig.tableContentTextStyle,
                     overflow: TextOverflow.ellipsis,
                   ),

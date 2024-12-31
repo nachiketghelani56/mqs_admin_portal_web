@@ -387,17 +387,13 @@ class UserRepository {
                             (fieldValue.contains(value) ||
                                 json["enterPriseID"] == value);
                       }).toList());
-                    } else {
-                      allRes.addAll(userList.where((UserIAMModel e) {
-                        Map<String, dynamic> json =
-                            e.toJson(); // Convert object to JSON
+                    } else if(fieldKey == 'mqsOnboardingDetails') {
 
-                        String? fieldValue =
-                            json[field]?.toString(); // Get the dynamic field value
+                                      allRes.addAll(userList.where((UserIAMModel e) {
 
-                        return fieldValue != null && fieldValue.contains(value);
-                      }).toList());
-                    }
+                                        return  e.onboardingModel.toJson().toString().contains(value);
+                                      }).toList());
+                                    }
                   }
                   break;
                 default:

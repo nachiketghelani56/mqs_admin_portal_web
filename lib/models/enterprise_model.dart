@@ -2,24 +2,24 @@ class EnterpriseModel {
   final String docId;
   final MqsEnterprisePOCs mqsEnterprisePOCs;
   final String mqsEnterpriseCode;
-  final bool mqsIsTeam;
+  // final bool mqsIsTeam;
   final List<MqsTeam> mqsTeamList;
   final List<MqsEmployee> mqsEmployeeList;
   final MqsEnterprisePOCsSubscriptionDetails
       mqsEnterprisePOCsSubscriptionDetails;
   final String mqsCreatedTimestamp;
-  final String mqsUpdateTimestamp;
+  final String mqsUpdatedTimestamp;
 
   EnterpriseModel({
     required this.docId,
     required this.mqsEnterprisePOCs,
     required this.mqsEnterpriseCode,
-    required this.mqsIsTeam,
+    // required this.mqsIsTeam,
     required this.mqsTeamList,
     required this.mqsEmployeeList,
     required this.mqsEnterprisePOCsSubscriptionDetails,
     required this.mqsCreatedTimestamp,
-    required this.mqsUpdateTimestamp,
+    required this.mqsUpdatedTimestamp,
   });
 
   factory EnterpriseModel.fromJson(Map<String, dynamic> json,String docId) {
@@ -27,7 +27,7 @@ class EnterpriseModel {
       docId: docId,
       mqsEnterprisePOCs: MqsEnterprisePOCs.fromJson(json['mqsEnterprisePOCs']),
       mqsEnterpriseCode: json['mqsEnterpriseCode'] ?? "",
-      mqsIsTeam: json['mqsIsTeam'] ?? false,
+      // mqsIsTeam: json['mqsIsTeam'] ?? false,
       mqsTeamList: (json['mqsTeamList'] as List)
           .map((team) => MqsTeam.fromJson(team))
           .toList(),
@@ -38,7 +38,7 @@ class EnterpriseModel {
           MqsEnterprisePOCsSubscriptionDetails.fromJson(
               json['mqsEnterprisePOCsSubscriptionDetails']),
       mqsCreatedTimestamp: json['mqsCreatedTimestamp'] ?? "",
-      mqsUpdateTimestamp: json['mqsUpdateTimestamp'] ?? "",
+      mqsUpdatedTimestamp: json['mqsUpdatedTimestamp'] ?? "",
     );
   }
 
@@ -46,14 +46,14 @@ class EnterpriseModel {
     return {
       'mqsEnterprisePOCs': mqsEnterprisePOCs.toJson(),
       'mqsEnterpriseCode': mqsEnterpriseCode,
-      'mqsIsTeam': mqsIsTeam,
+      // 'mqsIsTeam': mqsIsTeam,
       'mqsTeamList': mqsTeamList.map((team) => team.toJson()).toList(),
       'mqsEmployeeList':
           mqsEmployeeList.map((employee) => employee.toJson()).toList(),
       'mqsEnterprisePOCsSubscriptionDetails':
           mqsEnterprisePOCsSubscriptionDetails.toJson(),
       'mqsCreatedTimestamp': mqsCreatedTimestamp,
-      'mqsUpdateTimestamp': mqsUpdateTimestamp,
+      'mqsUpdatedTimestamp': mqsUpdatedTimestamp,
     };
   }
 }
@@ -151,12 +151,14 @@ class MqsEmployee {
   String mqsEmployeeName;
   String mqsEmployeeEmail;
   final bool mqsIsSignUp;
+  final bool mqsCommonLogin;
 
   MqsEmployee({
     required this.mqsEmployeeID,
     required this.mqsEmployeeName,
     required this.mqsEmployeeEmail,
     required this.mqsIsSignUp,
+    required this.mqsCommonLogin,
   });
 
   factory MqsEmployee.fromJson(Map<String, dynamic> json) {
@@ -165,6 +167,7 @@ class MqsEmployee {
       mqsEmployeeName: json['mqsEmployeeName'] ?? "",
       mqsEmployeeEmail: json['mqsEmployeeEmail'] ?? "",
       mqsIsSignUp: json['mqsIsSignUp'] ?? false,
+      mqsCommonLogin: json['mqsCommonLogin'] ?? false,
     );
   }
 
@@ -174,6 +177,7 @@ class MqsEmployee {
       'mqsEmployeeName': mqsEmployeeName,
       'mqsEmployeeEmail': mqsEmployeeEmail,
       'mqsIsSignUp': mqsIsSignUp,
+      'mqsCommonLogin': mqsCommonLogin,
     };
   }
 }

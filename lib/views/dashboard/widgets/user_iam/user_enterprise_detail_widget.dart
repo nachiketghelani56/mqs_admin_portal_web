@@ -35,10 +35,21 @@ Widget userEnterpriseDetailWidget(
                 .userDetail.mqsEnterpriseDetails.mqsOrganizationID
             : dashboardController.userDetail.mqsEnterpriseID,
       ),
+
+      keyValueWrapperWidget(
+        key: StringConfig.dashboard.organizationName,
+        value:
+        dashboardController.userDetail.mqsEnterpriseDetails.mqsOrganizationName,
+      ),
+      keyValueWrapperWidget(
+        key: StringConfig.dashboard.organizationEmail,
+        value:
+        dashboardController.userDetail.mqsEnterpriseDetails.mqsOrganizationEmail,
+      ),
       keyValueWrapperWidget(
         key: StringConfig.dashboard.organizationValid,
         value:
-            "${dashboardController.userDetail.mqsEnterpriseDetails.mqsOrganizationValid.toString().capitalize}",
+        "${dashboardController.userDetail.mqsEnterpriseDetails.mqsOrganizationValid.toString().capitalize}",
       ),
       keyValueWrapperWidget(
         key: StringConfig.dashboard.teamID,

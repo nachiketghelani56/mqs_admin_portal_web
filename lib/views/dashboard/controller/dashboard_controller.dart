@@ -249,8 +249,9 @@ class DashboardController extends GetxController {
           field2Key = StringConfig.dashboard.scenesValue;
         } else if (field == StringConfig.dashboard.mqsWheelOfLifeDetailsKey) {
           field2Key = StringConfig.dashboard.wOLValue;
-        }
-        else if (field == StringConfig.dashboard.mqsMONGODBUserID) {
+        } else if (field == StringConfig.dashboard.mqsUserImage) {
+          field2Key = StringConfig.dashboard.userImage;
+        } else if (field == StringConfig.dashboard.mqsMONGODBUserID) {
           field2Key = StringConfig.dashboard.isMongoDBUserIdText;
         } else if (field == StringConfig.dashboard.mqsUserLoginWith) {
           field2Key = StringConfig.dashboard.loginWithKey;
@@ -459,6 +460,7 @@ class DashboardController extends GetxController {
         mqsEmployeeName: employeeEmailController.text.trim(),
         mqsEmployeeEmail: employeeEmailController.text.trim(),
         mqsIsSignUp: false,
+        mqsCommonLogin: false,
       ),
     );
     clearMqsEmpEmailFields();
@@ -524,7 +526,7 @@ class DashboardController extends GetxController {
           mqsIsSignUp: false,
         ),
         mqsEnterpriseCode: mqsEnterpriseCodeController.text,
-        mqsIsTeam: mqsTeamList.isNotEmpty ? true : false,
+        // mqsIsTeam: mqsTeamList.isNotEmpty ? true : false,
         mqsTeamList: mqsTeamList,
         mqsEmployeeList: mqsEmployeeEmailList,
         mqsEnterprisePOCsSubscriptionDetails:
@@ -538,7 +540,7 @@ class DashboardController extends GetxController {
         mqsCreatedTimestamp: isEditEnterprise.value
             ? createdTimestamp.value
             : DateTime.now().toIso8601String(),
-        mqsUpdateTimestamp: DateTime.now().toIso8601String(),
+        mqsUpdatedTimestamp: DateTime.now().toIso8601String(),
       );
 
       showLoader();
@@ -556,7 +558,6 @@ class DashboardController extends GetxController {
       if (Get.currentRoute == AppRoutes.addEnterprise) {
         Get.back();
       }
-
     } catch (e) {
       hideLoader();
       errorDialogWidget(msg: e.toString());
@@ -654,6 +655,9 @@ class DashboardController extends GetxController {
                   mqsIsSignUp:
                       employee['mqsIsSignUp']?.toString().toLowerCase() ==
                           'true',
+                  mqsCommonLogin:
+                      employee['mqsCommonLogin']?.toString().toLowerCase() ==
+                          'true',
                 );
               }).toList();
             } catch (e) {
@@ -697,7 +701,7 @@ class DashboardController extends GetxController {
                   rowMap['IsSignUp'].toString().toLowerCase() == 'true',
             ),
             mqsEnterpriseCode: rowMap['Enterprise Code'].toString(),
-            mqsIsTeam: rowMap['Is Team']?.toString().toLowerCase() == 'true',
+            // mqsIsTeam: rowMap['Is Team']?.toString().toLowerCase() == 'true',
             mqsTeamList: mqsTeamList,
             mqsEmployeeList: mqsEmployeeList,
             mqsEnterprisePOCsSubscriptionDetails:
@@ -723,7 +727,7 @@ class DashboardController extends GetxController {
                 : DateFormat(StringConfig.dashboard.dateYYYYMMDD)
                     .parse(rowMap['Created Timestamp'])
                     .toIso8601String(),
-            mqsUpdateTimestamp: rowMap['Updated Timestamp'].toString().isEmpty
+            mqsUpdatedTimestamp: rowMap['Updated Timestamp'].toString().isEmpty
                 ? ""
                 : DateFormat(StringConfig.dashboard.dateYYYYMMDD)
                     .parse(rowMap['Updated Timestamp'])
@@ -752,7 +756,7 @@ class DashboardController extends GetxController {
           StringConfig.csv.enterpriseAddress,
           StringConfig.csv.enterprisePinCode,
           StringConfig.csv.isSignUp,
-          StringConfig.dashboard.isTeam,
+          // StringConfig.dashboard.isTeam,
           StringConfig.csv.teams,
           StringConfig.reporting.employees,
           StringConfig.dashboard.subscriptionStatus,
@@ -775,7 +779,7 @@ class DashboardController extends GetxController {
             model.mqsEnterprisePOCs.mqsEnterpriseAddress,
             model.mqsEnterprisePOCs.mqsEnterprisePincode,
             model.mqsEnterprisePOCs.mqsIsSignUp.toString(),
-            model.mqsIsTeam.toString(),
+            // model.mqsIsTeam.toString(),
             jsonEncode(model.mqsTeamList.map((p) => p.toJson()).toList()),
             jsonEncode(model.mqsEmployeeList.map((p) => p.toJson()).toList()),
             model.mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionStatus,
@@ -786,7 +790,7 @@ class DashboardController extends GetxController {
             dateConvert(model.mqsEnterprisePOCsSubscriptionDetails
                 .mqsSubscriptionExpiryDate),
             dateConvert(model.mqsCreatedTimestamp),
-            dateConvert(model.mqsUpdateTimestamp),
+            dateConvert(model.mqsUpdatedTimestamp),
           ];
         }),
       ];
@@ -1230,8 +1234,9 @@ class DashboardController extends GetxController {
       return StringConfig.reporting.enterpriseUser;
     } else if (keyName == StringConfig.firebase.isFirebaseUserID || keyName == StringConfig.firebase.mqsFirebaseUserID) {
       return StringConfig.reporting.firebaseUserId;
-    } else if (keyName == StringConfig.firebase.isRegister || keyName == StringConfig.firebase.mqsRegistrationStatus) {
-      return StringConfig.dashboard.register;
+    } else if (keyName == StringConfig.firebase.isRegister ||
+        keyName == StringConfig.firebase.mqsRegistrationStatus) {
+      return StringConfig.dashboard.registrationStatus;
     } else if (keyName == StringConfig.dashboard.mqsIsUserActive) {
       return StringConfig.dashboard.userActive;
     } else if (keyName == StringConfig.firebase.mqsCreatedTimestamp) {
@@ -1241,19 +1246,19 @@ class DashboardController extends GetxController {
       return StringConfig.dashboard.about;
     } else if (keyName == StringConfig.dashboard.aboutValue ||
         keyName == StringConfig.dashboard.mqsAllowAbout) {
-      return StringConfig.dashboard.aboutValueText;
+      return StringConfig.dashboard.allowAboutVisibility;
     } else if (keyName == StringConfig.dashboard.country ||
         keyName == StringConfig.dashboard.mqsCountry) {
       return StringConfig.dashboard.country;
     } else if (keyName == StringConfig.dashboard.countryValue ||
         keyName == StringConfig.dashboard.mqsAllowCountry) {
-      return StringConfig.dashboard.countryValueText;
+      return StringConfig.dashboard.allowCountryVisibility;
     } else if (keyName == StringConfig.dashboard.pronouns ||
         keyName == StringConfig.dashboard.mqsPronouns) {
       return StringConfig.dashboard.pronouns;
     } else if (keyName == StringConfig.dashboard.pronounsValue ||
         keyName == StringConfig.dashboard.mqsAllowPronouns) {
-      return StringConfig.dashboard.pronounsValueText;
+      return StringConfig.dashboard.allowPronounsVisibility;
     } else if (keyName == StringConfig.dashboard.userImage ||
         keyName == StringConfig.dashboard.mqsUserImage) {
       return StringConfig.dashboard.userImageText;
@@ -1275,7 +1280,7 @@ class DashboardController extends GetxController {
       return StringConfig.dashboard.userSubscriptionStatus;
     } else if (keyName == StringConfig.dashboard.onboardingDataKey ||
         keyName == StringConfig.dashboard.mqsOnboardingDetails) {
-      return StringConfig.dashboard.onboardingData;
+      return StringConfig.dashboard.onboardingDetails;
     } else if (keyName == StringConfig.dashboard.mqsSkipOnboarding) {
       return StringConfig.dashboard.skipOnboarding;
     } else if (keyName == StringConfig.dashboard.mqsUserActiveTimestamp) {

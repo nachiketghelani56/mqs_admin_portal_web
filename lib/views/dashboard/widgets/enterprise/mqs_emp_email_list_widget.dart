@@ -42,6 +42,13 @@ Widget mqsEmployeeEmailListWidget(
               Expanded(
                 flex: SizeConfig.size2.toInt(),
                 child: Text(
+                  StringConfig.dashboard.mqsCommonLogin,
+                  style: FontTextStyleConfig.tableBottomTextStyle,
+                ),
+              ),
+              Expanded(
+                flex: SizeConfig.size2.toInt(),
+                child: Text(
                   StringConfig.dashboard.signedUp,
                   style: FontTextStyleConfig.tableBottomTextStyle,
                 ),
@@ -80,6 +87,13 @@ Widget mqsEmployeeEmailListWidget(
                   child: Text(
                     dashboardController
                         .enterpriseDetail.mqsEmployeeList[i].mqsEmployeeEmail,
+                    style: FontTextStyleConfig.tableContentTextStyle,
+                  ),
+                ),
+                Expanded(
+                  flex: SizeConfig.size2.toInt(),
+                  child: Text(
+                    "${dashboardController.enterpriseDetail.mqsEmployeeList[i].mqsCommonLogin.toString().capitalize}",
                     style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),

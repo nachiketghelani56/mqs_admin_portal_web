@@ -70,7 +70,7 @@ Widget userSubscriptionDetailWidget(
         value: dashboardController.userSubscriptionDetail?.mqsPackageName ?? "",
       ),
       keyValueWrapperWidget(
-        key: StringConfig.reporting.expiryDate,
+        key: StringConfig.dashboard.mqsSubscriptionExpiryDate,
         value: (dashboardController.userSubscriptionDetail?.mqsSubscriptionExpiryDate ?? "")
                 .isNotEmpty
             ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(

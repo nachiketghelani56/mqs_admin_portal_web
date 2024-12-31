@@ -145,10 +145,12 @@ class Dashboard {
   final String mqsSubscriptionPlatform = "mqsSubscriptionPlatform";
   final String mqsSubscriptionStatus = "mqsSubscriptionStatus";
   final String onboardingData = "Onboarding Data";
+  final String onboardingDetails = "Onboarding Details";
   final String mqsSkipOnboarding = "mqsSkipOnboarding";
   final String mqsUserActiveTimestamp = "mqsUserActiveTimestamp";
   final String mqsEnterpriseDetails = "mqsEnterpriseDetails";
   final String userActiveTimestamp = "User Active Timestamp";
+  final String userActiveAt = "User Active At";
   final String mqsCheckInDetails = "CheckIn Details";
   final String mqsCheckInDetailsKey = "mqsCheckInDetails";
   final String checkINValue = "checkINValue";
@@ -172,6 +174,8 @@ class Dashboard {
   final String individualValid = "Valid Individual";
   final String organizationID = "Organization ID";
   final String organizationValid = "Valid Organization";
+  final String organizationName = "Organization Name";
+  final String organizationEmail = "Organization Email";
   final String teamID = "Team ID";
   final String teamValid = "Valid Team";
   final String fun = "fun";
@@ -219,8 +223,14 @@ class Dashboard {
   final String userSubscription = "User Subscription";
   final String userActive = "User Active";
   final String aboutValueText = "About Value";
+  final String aboutVisibility = "About Visibility";
   final String countryValueText = "Country Value";
+  final String countryVisibility = "Country Visibility";
   final String pronounsValueText = "Pronouns Value";
+  final String pronounsVisibility = "Pronouns Visibility";
+  final String allowAboutVisibility = "Allow About";
+  final String allowPronounsVisibility = "Allow Pronouns";
+  final String allowCountryVisibility = "Allow Country";
   final String userImageText = "User Image";
   final String enterPriseID = "EnterPrise ID";
   final String mongoDBUserId = "MONGODB User Id";
@@ -351,6 +361,8 @@ class CSV {
   final String teams = "Teams";
   final String createdTimestamp = "Created Timestamp";
   final String updatedTimestamp = "Updated Timestamp";
+  final String createdAt = "Created At";
+  final String updatedAt = "Updated At";
 }
 
 class MQSDashboard {

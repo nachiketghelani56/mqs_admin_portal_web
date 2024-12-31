@@ -118,7 +118,7 @@ class UserIAMModel {
                 mqsOrganizationID: '',
                 mqsTeamID: '',
                 mqsOrganizationValid: false,
-                mqsTeamValid: false);
+                mqsTeamValid: false, mqsOrganizationEmail: '', mqsOrganizationName: '');
 
   Map<String, dynamic> toJson() {
     return {
@@ -203,10 +203,12 @@ class OnboardingModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'mqsCheckInDetails': List.from((mqsCheckInDetails).map((model) => model.toJson())),
+      'mqsCheckInDetails':
+          List.from((mqsCheckInDetails).map((model) => model.toJson())),
       'mqsDemoGraphicDetails':
           List.from((mqsDemoGraphicDetails).map((model) => model.toJson())),
-      'mqsScenesDetails': List.from((mqsScenesDetails).map((model) => model.toJson())),
+      'mqsScenesDetails':
+          List.from((mqsScenesDetails).map((model) => model.toJson())),
       'mqsWheelOfLifeDetails': mqsWheelOfLifeDetails.toJson(),
     };
   }
@@ -354,6 +356,8 @@ class WOLModel {
 
 class EnterpriseDetails {
   final String mqsIndividualID;
+  final String mqsOrganizationEmail;
+  final String mqsOrganizationName;
   final bool mqsIndividualValid;
   final String mqsOrganizationID;
   final bool mqsOrganizationValid;
@@ -362,6 +366,8 @@ class EnterpriseDetails {
 
   EnterpriseDetails({
     required this.mqsIndividualID,
+    required this.mqsOrganizationEmail,
+    required this.mqsOrganizationName,
     required this.mqsIndividualValid,
     required this.mqsOrganizationID,
     required this.mqsOrganizationValid,
@@ -371,6 +377,8 @@ class EnterpriseDetails {
 
   EnterpriseDetails.fromJson(Map json)
       : mqsIndividualID = json['mqsIndividualID'] ?? "",
+        mqsOrganizationEmail = json['mqsOrganizationEmail'] ?? "",
+        mqsOrganizationName = json['mqsOrganizationName'] ?? "",
         mqsIndividualValid = json['mqsIndividualValid'] ?? false,
         mqsOrganizationID = json['mqsOrganizationID'] ?? "",
         mqsOrganizationValid = json['mqsOrganizationValid'] ?? false,
@@ -380,6 +388,8 @@ class EnterpriseDetails {
   Map<String, dynamic> toJson() {
     return {
       'mqsIndividualID': mqsIndividualID,
+      'mqsOrganizationEmail': mqsOrganizationEmail,
+      'mqsOrganizationName': mqsOrganizationName,
       'mqsIndividualValid': mqsIndividualValid,
       'mqsOrganizationID': mqsOrganizationID,
       'mqsOrganizationValid': mqsOrganizationValid,
