@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
@@ -14,6 +15,9 @@ class MQSAdminPortalWeb extends StatelessWidget {
       navigatorKey: navigatorKey,
       title: StringConfig.mqsAdminPortalWeb,
       defaultTransition: Transition.fadeIn,
+      scrollBehavior: const MaterialScrollBehavior().copyWith(overscroll: false,
+        dragDevices: {PointerDeviceKind.mouse},
+      ),
       theme: ThemeData.light(useMaterial3: true).copyWith(
         appBarTheme: const AppBarTheme(centerTitle: false),
         dialogBackgroundColor: ColorConfig.whiteColor,

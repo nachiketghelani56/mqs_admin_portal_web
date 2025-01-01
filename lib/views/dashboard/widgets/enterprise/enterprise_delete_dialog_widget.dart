@@ -32,11 +32,11 @@ enterpriseDeleteDialogWidget(
                   StringConfig.dashboard.areYouSureYouWantToDeleteThis,
                   style: FontTextStyleConfig.tableTextStyle,
                 ),
-                Text(
-                  mqsEnterpriseName,
-                  style: FontTextStyleConfig.textFieldTextStyle
-                      .copyWith(fontWeight: FontWeight.w600),
-                ),
+                // Text(
+                //   mqsEnterpriseName,
+                //   style: FontTextStyleConfig.textFieldTextStyle
+                //       .copyWith(fontWeight: FontWeight.w600),
+                // ),
                 Text(
                   '${StringConfig.dashboard.enterprise}?',
                   style: FontTextStyleConfig.tableTextStyle,

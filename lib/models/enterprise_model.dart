@@ -1,31 +1,32 @@
 class EnterpriseModel {
   final String docId;
-  final MqsEnterprisePOCs mqsEnterprisePOCs;
+  final List<MqsEnterprisePOCs> mqsEnterprisePOCsList;
   final String mqsEnterpriseCode;
   // final bool mqsIsTeam;
   final List<MqsTeam> mqsTeamList;
   final List<MqsEmployee> mqsEmployeeList;
-  final MqsEnterprisePOCsSubscriptionDetails
-      mqsEnterprisePOCsSubscriptionDetails;
+  final MqsEnterpriseSubscriptionDetails mqsEnterpriseSubscriptionDetails;
   final String mqsCreatedTimestamp;
   final String mqsUpdatedTimestamp;
 
   EnterpriseModel({
     required this.docId,
-    required this.mqsEnterprisePOCs,
+    required this.mqsEnterprisePOCsList,
     required this.mqsEnterpriseCode,
     // required this.mqsIsTeam,
     required this.mqsTeamList,
     required this.mqsEmployeeList,
-    required this.mqsEnterprisePOCsSubscriptionDetails,
+    required this.mqsEnterpriseSubscriptionDetails,
     required this.mqsCreatedTimestamp,
     required this.mqsUpdatedTimestamp,
   });
 
-  factory EnterpriseModel.fromJson(Map<String, dynamic> json,String docId) {
+  factory EnterpriseModel.fromJson(Map<String, dynamic> json, String docId) {
     return EnterpriseModel(
       docId: docId,
-      mqsEnterprisePOCs: MqsEnterprisePOCs.fromJson(json['mqsEnterprisePOCs']),
+      mqsEnterprisePOCsList: (json['mqsEnterprisePOCsList'] as List)
+          .map((enterprise) => MqsEnterprisePOCs.fromJson(enterprise))
+          .toList(),
       mqsEnterpriseCode: json['mqsEnterpriseCode'] ?? "",
       // mqsIsTeam: json['mqsIsTeam'] ?? false,
       mqsTeamList: (json['mqsTeamList'] as List)
@@ -34,9 +35,9 @@ class EnterpriseModel {
       mqsEmployeeList: (json['mqsEmployeeList'] as List)
           .map((employee) => MqsEmployee.fromJson(employee))
           .toList(),
-      mqsEnterprisePOCsSubscriptionDetails:
-          MqsEnterprisePOCsSubscriptionDetails.fromJson(
-              json['mqsEnterprisePOCsSubscriptionDetails']),
+      mqsEnterpriseSubscriptionDetails:
+      MqsEnterpriseSubscriptionDetails.fromJson(
+          json['mqsEnterpriseSubscriptionDetails']),
       mqsCreatedTimestamp: json['mqsCreatedTimestamp'] ?? "",
       mqsUpdatedTimestamp: json['mqsUpdatedTimestamp'] ?? "",
     );
@@ -44,14 +45,16 @@ class EnterpriseModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'mqsEnterprisePOCs': mqsEnterprisePOCs.toJson(),
+      'mqsEnterprisePOCsList': mqsEnterprisePOCsList
+          .map((enterprise) => enterprise.toJson())
+          .toList(),
       'mqsEnterpriseCode': mqsEnterpriseCode,
       // 'mqsIsTeam': mqsIsTeam,
       'mqsTeamList': mqsTeamList.map((team) => team.toJson()).toList(),
       'mqsEmployeeList':
-          mqsEmployeeList.map((employee) => employee.toJson()).toList(),
-      'mqsEnterprisePOCsSubscriptionDetails':
-          mqsEnterprisePOCsSubscriptionDetails.toJson(),
+      mqsEmployeeList.map((employee) => employee.toJson()).toList(),
+      'mqsEnterpriseSubscriptionDetails':
+      mqsEnterpriseSubscriptionDetails.toJson(),
       'mqsCreatedTimestamp': mqsCreatedTimestamp,
       'mqsUpdatedTimestamp': mqsUpdatedTimestamp,
     };
@@ -59,15 +62,15 @@ class EnterpriseModel {
 }
 
 class MqsEnterprisePOCs {
-  final String mqsEnterpriseID;
-  final String mqsEnterpriseName;
-  final String mqsEnterpriseEmail;
-  final String mqsEnterprisePhoneNumber;
-  final String mqsEnterpriseType;
-  final String mqsEnterpriseWebsite;
-  final String mqsEnterpriseAddress;
-  final String mqsEnterprisePincode;
-  final bool mqsIsSignUp;
+   String mqsEnterpriseID;
+   String mqsEnterpriseName;
+   String mqsEnterpriseEmail;
+   String mqsEnterprisePhoneNumber;
+   String mqsEnterpriseType;
+   String mqsEnterpriseWebsite;
+   String mqsEnterpriseAddress;
+   String mqsEnterprisePincode;
+   bool mqsIsSignUp;
 
   MqsEnterprisePOCs({
     required this.mqsEnterpriseID,
@@ -182,22 +185,21 @@ class MqsEmployee {
   }
 }
 
-class MqsEnterprisePOCsSubscriptionDetails {
+class MqsEnterpriseSubscriptionDetails {
   final String mqsSubscriptionStatus;
   final String mqsSubscriptionActivePlan;
   final String mqsSubscriptionStartDate;
   final String mqsSubscriptionExpiryDate;
 
-  MqsEnterprisePOCsSubscriptionDetails({
+  MqsEnterpriseSubscriptionDetails({
     required this.mqsSubscriptionStatus,
     required this.mqsSubscriptionActivePlan,
     required this.mqsSubscriptionStartDate,
     required this.mqsSubscriptionExpiryDate,
   });
 
-  factory MqsEnterprisePOCsSubscriptionDetails.fromJson(
-      Map<String, dynamic> json) {
-    return MqsEnterprisePOCsSubscriptionDetails(
+  factory MqsEnterpriseSubscriptionDetails.fromJson(Map<String, dynamic> json) {
+    return MqsEnterpriseSubscriptionDetails(
       mqsSubscriptionStatus: json['mqsSubscriptionStatus'] ?? "",
       mqsSubscriptionActivePlan: json['mqsSubscriptionActivePlan'] ?? "",
       mqsSubscriptionStartDate: json['mqsSubscriptionStartDate'] ?? "",

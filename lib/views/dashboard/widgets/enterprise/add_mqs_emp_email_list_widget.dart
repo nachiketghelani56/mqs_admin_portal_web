@@ -106,6 +106,13 @@ Widget addMqsEmpEmailListWidget(
                   ),
                 ),
                 Expanded(
+                  flex: SizeConfig.size3.toInt(),
+                  child: Text(
+                    StringConfig.dashboard.mqsCommonLogin,
+                    style: FontTextStyleConfig.tableBottomTextStyle,
+                  ),
+                ),
+                Expanded(
                   flex: SizeConfig.size2.toInt(),
                   child: Text(
                     StringConfig.dashboard.isSignedUp,
@@ -147,6 +154,14 @@ Widget addMqsEmpEmailListWidget(
                     child: Text(
                       dashboardController
                           .mqsEmployeeEmailList[i].mqsEmployeeName,
+                      style: FontTextStyleConfig.tableContentTextStyle,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Expanded(
+                    flex: SizeConfig.size3.toInt(),
+                    child: Text(
+                      "${dashboardController.mqsEmployeeEmailList[i].mqsCommonLogin.toString().capitalize}",
                       style: FontTextStyleConfig.tableContentTextStyle,
                       overflow: TextOverflow.ellipsis,
                     ),

@@ -1,62 +1,339 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_utils/src/extensions/string_extensions.dart';
+import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
+import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/widgets/key_value_warpper_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/title_widget.dart';
 
 Widget mqsEnterprisePOCsWidget(
     {required DashboardController dashboardController}) {
+  ScrollController scrollController = ScrollController();
+
   return Column(
     children: [
       titleWidget(
-        title: StringConfig.dashboard.mqsEnterprisePOCs,
-        showArrowIcon: false,
-      ),
-      SizeConfig.size10.height,
-      keyValueWrapperWidget(
-        isFirst: true,
-        key: StringConfig.dashboard.name,
-        value: dashboardController
-            .enterpriseDetail.mqsEnterprisePOCs.mqsEnterpriseName,
-      ),
-      keyValueWrapperWidget(
-        key: StringConfig.dashboard.email,
-        value: dashboardController
-            .enterpriseDetail.mqsEnterprisePOCs.mqsEnterpriseEmail,
-      ),
-      keyValueWrapperWidget(
-        key: StringConfig.dashboard.address,
-        value: dashboardController
-            .enterpriseDetail.mqsEnterprisePOCs.mqsEnterpriseAddress,
-      ),
-      keyValueWrapperWidget(
-        key: StringConfig.dashboard.phoneNumber,
-        value: dashboardController
-            .enterpriseDetail.mqsEnterprisePOCs.mqsEnterprisePhoneNumber,
-      ),
-      keyValueWrapperWidget(
-        key: StringConfig.dashboard.type,
-        value: dashboardController
-            .enterpriseDetail.mqsEnterprisePOCs.mqsEnterpriseType,
-      ),
-      keyValueWrapperWidget(
-        key: StringConfig.dashboard.website,
-        value: dashboardController
-            .enterpriseDetail.mqsEnterprisePOCs.mqsEnterpriseWebsite,
-      ),
-      keyValueWrapperWidget(
-        key: StringConfig.dashboard.pinCodeText,
-        value: dashboardController
-            .enterpriseDetail.mqsEnterprisePOCs.mqsEnterprisePincode,
-      ),
-      keyValueWrapperWidget(
-        isLast: true,
-        key: StringConfig.dashboard.signedUp,
-        value:
-            "${dashboardController.enterpriseDetail.mqsEnterprisePOCs.mqsIsSignUp.toString().capitalize}",
-      ),
+        title: StringConfig.dashboard.mqsEnterprisePOCsList,
+        isShowContent: dashboardController.showMqsEnterprisePocsList.value,
+      ).tap(() {
+        dashboardController.showMqsEnterprisePocsList.value =
+            !dashboardController.showMqsEnterprisePocsList.value;
+      }),
+      if (dashboardController.showMqsEnterprisePocsList.value) ...[
+        SizeConfig.size10.height,
+        LayoutBuilder(builder: (context, constraints) {
+          return MouseRegion(
+            onEnter: (_) {
+              dashboardController.isHovering.value = true;
+            },
+            onExit: (_) {
+              dashboardController.isHovering.value = false;
+            },
+            child: Container(
+              clipBehavior: Clip.hardEdge,
+              decoration: FontTextStyleConfig.contentDecoration.copyWith(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(SizeConfig.size12),
+                  bottom: Radius.circular(SizeConfig.size12),
+                ),
+              ),
+              child: Scrollbar(
+                controller: scrollController,
+                thumbVisibility: dashboardController.isHovering.value,
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  scrollDirection: Axis.horizontal,
+                  child: Column(
+                    children: [
+                      Container(
+                        constraints:
+                            BoxConstraints(minWidth: 0, maxWidth: Get.width),
+                        height: SizeConfig.size55,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: SizeConfig.size14),
+                        decoration: FontTextStyleConfig.headerDecoration
+                            .copyWith(
+                                borderRadius:
+                                    BorderRadius.circular(SizeConfig.size0),
+                                border: Border.symmetric(
+                                  horizontal: BorderSide(
+                                      color: ColorConfig.labelColor
+                                          .withOpacity(SizeConfig.size0point2)),
+                                )),
+                        child: Row(
+                          children: [
+                            Flexible(
+                              fit: FlexFit.tight,
+                              flex: SizeConfig.size2.toInt(),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: SizeConfig.size5),
+                                child: Text(
+                                  StringConfig.dashboard.name,
+                                  style:
+                                      FontTextStyleConfig.tableBottomTextStyle,
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              fit: FlexFit.tight,
+                              flex: SizeConfig.size2.toInt(),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: SizeConfig.size5),
+                                child: Text(
+                                  StringConfig.dashboard.email,
+                                  style:
+                                      FontTextStyleConfig.tableBottomTextStyle,
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              fit: FlexFit.tight,
+                              flex: SizeConfig.size2.toInt(),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: SizeConfig.size5),
+                                child: Text(
+                                  StringConfig.dashboard.address,
+                                  style:
+                                      FontTextStyleConfig.tableBottomTextStyle,
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              fit: FlexFit.tight,
+                              flex: SizeConfig.size2.toInt(),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: SizeConfig.size5),
+                                child: Text(
+                                  StringConfig.dashboard.phoneNumber,
+                                  style:
+                                      FontTextStyleConfig.tableBottomTextStyle,
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              fit: FlexFit.tight,
+                              flex: SizeConfig.size2.toInt(),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: SizeConfig.size5),
+                                child: Text(
+                                  StringConfig.dashboard.type,
+                                  style:
+                                      FontTextStyleConfig.tableBottomTextStyle,
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              fit: FlexFit.tight,
+                              flex: SizeConfig.size2.toInt(),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: SizeConfig.size5),
+                                child: Text(
+                                  StringConfig.dashboard.website,
+                                  style:
+                                      FontTextStyleConfig.tableBottomTextStyle,
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              fit: FlexFit.tight,
+                              flex: SizeConfig.size2.toInt(),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: SizeConfig.size5),
+                                child: Text(
+                                  StringConfig.dashboard.pinCodeText,
+                                  style:
+                                      FontTextStyleConfig.tableBottomTextStyle,
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              fit: FlexFit.tight,
+                              flex: SizeConfig.size2.toInt(),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: SizeConfig.size5),
+                                child: Text(
+                                  StringConfig.dashboard.signedUp,
+                                  style:
+                                      FontTextStyleConfig.tableBottomTextStyle,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      for (int i = 0;
+                          i <
+                              dashboardController.enterpriseDetail
+                                  .mqsEnterprisePOCsList.length;
+                          i++)
+                        Container(
+                          constraints:
+                              BoxConstraints(minWidth: 0, maxWidth: Get.width),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: SizeConfig.size14,
+                              vertical: SizeConfig.size14),
+                          decoration:
+                              FontTextStyleConfig.contentDecoration.copyWith(
+                            borderRadius: BorderRadius.circular(0),
+                            border: i ==
+                                    dashboardController.enterpriseDetail
+                                            .mqsEnterprisePOCsList.length -
+                                        1
+                                ? const Border()
+                                : Border(
+                                    bottom: BorderSide(
+                                      color: ColorConfig.labelColor
+                                          .withOpacity(SizeConfig.size0point2),
+                                    ),
+                                  ),
+                          ),
+                          child: Row(
+                            children: [
+                              Flexible(
+                                fit: FlexFit.tight,
+                                flex: SizeConfig.size2.toInt(),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: SizeConfig.size5),
+                                  child: Text(
+                                    dashboardController
+                                        .enterpriseDetail
+                                        .mqsEnterprisePOCsList[i]
+                                        .mqsEnterpriseName,
+                                    style: FontTextStyleConfig
+                                        .tableContentTextStyle,
+                                  ),
+                                ),
+                              ),
+                              Flexible(
+                                fit: FlexFit.tight,
+                                flex: SizeConfig.size2.toInt(),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: SizeConfig.size5),
+                                  child: Text(
+                                    dashboardController
+                                        .enterpriseDetail
+                                        .mqsEnterprisePOCsList[i]
+                                        .mqsEnterpriseEmail,
+                                    style: FontTextStyleConfig
+                                        .tableContentTextStyle,
+                                  ),
+                                ),
+                              ),
+                              Flexible(
+                                fit: FlexFit.tight,
+                                flex: SizeConfig.size2.toInt(),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: SizeConfig.size5),
+                                  child: Text(
+                                    dashboardController
+                                        .enterpriseDetail
+                                        .mqsEnterprisePOCsList[i]
+                                        .mqsEnterpriseAddress,
+                                    style: FontTextStyleConfig
+                                        .tableContentTextStyle,
+                                  ),
+                                ),
+                              ),
+                              Flexible(
+                                fit: FlexFit.tight,
+                                flex: SizeConfig.size2.toInt(),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: SizeConfig.size5),
+                                  child: Text(
+                                    dashboardController
+                                        .enterpriseDetail
+                                        .mqsEnterprisePOCsList[i]
+                                        .mqsEnterprisePhoneNumber,
+                                    style: FontTextStyleConfig
+                                        .tableContentTextStyle,
+                                  ),
+                                ),
+                              ),
+                              Flexible(
+                                fit: FlexFit.tight,
+                                flex: SizeConfig.size2.toInt(),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: SizeConfig.size5),
+                                  child: Text(
+                                    dashboardController
+                                        .enterpriseDetail
+                                        .mqsEnterprisePOCsList[i]
+                                        .mqsEnterpriseType,
+                                    style: FontTextStyleConfig
+                                        .tableContentTextStyle,
+                                  ),
+                                ),
+                              ),
+                              Flexible(
+                                fit: FlexFit.tight,
+                                flex: SizeConfig.size2.toInt(),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: SizeConfig.size5),
+                                  child: Text(
+                                    dashboardController
+                                        .enterpriseDetail
+                                        .mqsEnterprisePOCsList[i]
+                                        .mqsEnterpriseWebsite,
+                                    style: FontTextStyleConfig
+                                        .tableContentTextStyle,
+                                  ),
+                                ),
+                              ),
+                              Flexible(
+                                fit: FlexFit.tight,
+                                flex: SizeConfig.size2.toInt(),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: SizeConfig.size5),
+                                  child: Text(
+                                    dashboardController
+                                        .enterpriseDetail
+                                        .mqsEnterprisePOCsList[i]
+                                        .mqsEnterprisePincode,
+                                    style: FontTextStyleConfig
+                                        .tableContentTextStyle,
+                                  ),
+                                ),
+                              ),
+                              Flexible(
+                                fit: FlexFit.tight,
+                                flex: SizeConfig.size2.toInt(),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: SizeConfig.size5),
+                                  child: Text(
+                                    "${dashboardController.enterpriseDetail.mqsEnterprisePOCsList[i].mqsIsSignUp.toString().capitalize}",
+                                    style: FontTextStyleConfig
+                                        .tableContentTextStyle,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        })
+      ],
     ],
   );
 }

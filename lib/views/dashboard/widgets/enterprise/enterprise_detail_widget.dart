@@ -18,7 +18,10 @@ Widget enterpriseDetailWidget(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          mqsEnterprisePOCsWidget(dashboardController: dashboardController),
+          if (dashboardController.enterpriseDetail.mqsEnterprisePOCsList.isNotEmpty) ...[
+            SizeConfig.size34.height,
+            mqsEnterprisePOCsWidget(dashboardController: dashboardController),
+          ],
           SizeConfig.size34.height,
           Container(
             height: SizeConfig.size55,

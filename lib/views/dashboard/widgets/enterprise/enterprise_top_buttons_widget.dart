@@ -69,8 +69,10 @@ Widget enterpriseTopButtonsWidget({
                   dashboardController.isAddEnterprise.value = true;
                   dashboardController.showMqsEmpEmailList.value = false;
                   dashboardController.showMqsTeamList.value = false;
+                  dashboardController.showMqsEnterprisePocsList.value = false;
                   dashboardController.mqsEmployeeEmailList.clear();
                   dashboardController.mqsTeamList.clear();
+                  dashboardController.mqsEnterprisePOCsList.clear();
                   dashboardController.clearAllFields();
                   if (context.width < SizeConfig.size1500) {
                     Get.toNamed(AppRoutes.addEnterprise);
@@ -120,9 +122,11 @@ Widget enterpriseTopButtonsWidget({
                 dashboardController.isEditEnterprise.value = false;
                 dashboardController.isAddEnterprise.value = true;
                 dashboardController.showMqsEmpEmailList.value = false;
+                dashboardController.showMqsEnterprisePocsList.value = false;
                 dashboardController.showMqsTeamList.value = false;
                 dashboardController.mqsEmployeeEmailList.clear();
                 dashboardController.mqsTeamList.clear();
+                dashboardController.mqsEnterprisePOCsList.clear();
                 dashboardController.clearAllFields();
                 if (context.width < SizeConfig.size1500) {
                   Get.toNamed(AppRoutes.addEnterprise);

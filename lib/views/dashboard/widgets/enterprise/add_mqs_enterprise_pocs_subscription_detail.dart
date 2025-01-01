@@ -11,7 +11,7 @@ Widget addMqsEnterprisePOCsSubscriptionDetailWidget(
   return Column(
     children: [
       titleWidget(
-        title: StringConfig.dashboard.mqsEnterprisePOCsSubscriptionDetail,
+        title: StringConfig.dashboard.mqsEnterpriseSubscriptionDetail,
         showArrowIcon: false,
       ),
       SizeConfig.size30.height,

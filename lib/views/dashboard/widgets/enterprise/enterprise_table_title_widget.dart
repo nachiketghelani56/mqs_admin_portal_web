@@ -22,7 +22,7 @@ Widget enterpriseTableTitleWidget({required BuildContext context}) {
           child: Padding(
             padding: const EdgeInsets.only(right: SizeConfig.size4),
             child: Text(
-              StringConfig.dashboard.mqsEnterPriseName,
+              StringConfig.dashboard.mqsEnterPriseCode,
               style: FontTextStyleConfig.textFieldTextStyle.copyWith(
                 fontSize: FontSizeConfig.fontSize15,
                 fontWeight: FontWeight.w700,

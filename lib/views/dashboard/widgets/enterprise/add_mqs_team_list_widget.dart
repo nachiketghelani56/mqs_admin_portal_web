@@ -23,6 +23,17 @@ Widget addMqsTeamListWidget(
           dashboardController.showMqsTeamList.value = true;
           dashboardController.clearMqsTeamFields();
         }),
+        if(dashboardController.teamError.value)
+          Align(alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(top: SizeConfig.size7,left: SizeConfig.size15),
+              child: Text(
+                StringConfig.validation.atLeastOneAdd+ StringConfig.reporting.team.toLowerCase()+StringConfig.validation.toProceed,
+                style: const TextStyle(color: ColorConfig.validationErrorColor,fontSize: FontSizeConfig.fontSize12_5),
+
+              ),
+            ),
+          ),
         if (dashboardController.showMqsTeamList.value) ...[
           SizeConfig.size34.height,
           CustomTextField(

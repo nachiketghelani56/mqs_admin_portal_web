@@ -9,7 +9,7 @@ Widget mqsEnterpriseSubscriptionDetailWidget(
   return Column(
     children: [
       titleWidget(
-          title: StringConfig.dashboard.mqsEnterprisePOCsSubscriptionDetail,
+          title: StringConfig.dashboard.mqsEnterpriseSubscriptionDetail,
           showArrowIcon: false),
       SizeConfig.size10.height,
       Container(
@@ -64,7 +64,7 @@ Widget mqsEnterpriseSubscriptionDetailWidget(
               child: Text(
                 dashboardController
                     .enterpriseDetail
-                    .mqsEnterprisePOCsSubscriptionDetails
+                    .mqsEnterpriseSubscriptionDetails
                     .mqsSubscriptionActivePlan,
                 style: FontTextStyleConfig.tableContentTextStyle,
               ),
@@ -73,7 +73,7 @@ Widget mqsEnterpriseSubscriptionDetailWidget(
               flex: SizeConfig.size2.toInt(),
               child: Text(
                 dashboardController.enterpriseDetail
-                    .mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionStatus,
+                    .mqsEnterpriseSubscriptionDetails.mqsSubscriptionStatus,
                 style: FontTextStyleConfig.tableContentTextStyle,
               ),
             ),
@@ -82,7 +82,7 @@ Widget mqsEnterpriseSubscriptionDetailWidget(
               child: Text(
                 dashboardController.dateConvert(dashboardController
                     .enterpriseDetail
-                    .mqsEnterprisePOCsSubscriptionDetails
+                    .mqsEnterpriseSubscriptionDetails
                     .mqsSubscriptionStartDate),
                 style: FontTextStyleConfig.tableContentTextStyle,
               ),
@@ -92,7 +92,7 @@ Widget mqsEnterpriseSubscriptionDetailWidget(
               child: Text(
                 dashboardController.dateConvert(dashboardController
                     .enterpriseDetail
-                    .mqsEnterprisePOCsSubscriptionDetails
+                    .mqsEnterpriseSubscriptionDetails
                     .mqsSubscriptionExpiryDate),
                 style: FontTextStyleConfig.tableContentTextStyle,
               ),

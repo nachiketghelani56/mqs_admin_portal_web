@@ -33,6 +33,7 @@ class Dashboard {
   final String usersList = "Users List";
   final String circleList = "Circle List";
   final String enterpriseDetail = "Enterprise Details";
+  final String enterprisePOC = "enterprisePOC";
 
   final String filter = "Filter";
   final String export = "Export";
@@ -91,8 +92,12 @@ class Dashboard {
   final String enterPinCode = "Enter pin code";
   final String enterType = "Enter type";
   final String mqsEnterprisePOCs = "Enterprise POCs";
+  final String mqsEnterprisePOCsList = "Enterprise POCs List";
+  final String mqsEnterprisePOCsListKey = "mqsEnterprisePOCsList";
   final String mqsEnterprisePOCsSubscriptionDetail =
-      "Enterprise POCs Subscription Detail";
+      "Enterprise Subscription Detail";
+  final String mqsEnterpriseSubscriptionDetail =
+      "Enterprise Subscription Details";
   final String name = "Name";
   final String subscriptionStatus = "Subscription Status";
   final String status = "Status";
@@ -119,6 +124,7 @@ class Dashboard {
   final String apply = "Apply";
   final String reset = "Reset";
   final String enterValue = "Enter value";
+  final String mqsEnterpriseSubscriptionDetails = "mqsEnterpriseSubscriptionDetails";
   final String userId = "User ID";
   final String fullName = "Full Name";
   final String about = "About";
@@ -242,6 +248,7 @@ class Dashboard {
   final String loginWithKey = "loginWith";
   final String mqsUserLoginWith = "mqsUserLoginWith";
   final String mqsUpdateTimestamp = "mqsUpdateTimestamp";
+  final String mqsUpdatedTimestamp = "mqsUpdatedTimestamp";
   final String mqsUserSubscriptionStatus = "mqsUserSubscriptionStatus";
   final String onboardingDataKey = "onboardingData";
   final String mqsOnboardingDetails = "mqsOnboardingDetails";
@@ -269,6 +276,7 @@ class Validation {
   final String expiryDateAfter = "Expiry date is after start date";
   final String pleaseProvideYour = "Please provide your ";
   final String toProceed = " to proceed.";
+  final String atLeastOneAdd = "Please add at least one ";
 }
 
 class Firebase {

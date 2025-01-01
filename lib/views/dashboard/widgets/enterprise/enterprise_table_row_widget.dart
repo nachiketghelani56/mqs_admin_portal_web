@@ -27,8 +27,7 @@ Widget enterpriseTableRowWidget({
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size4),
             child: Text(
-              dashboardController.searchedEnterprises[index].mqsEnterprisePOCs
-                  .mqsEnterpriseName,
+              dashboardController.searchedEnterprises[index].mqsEnterpriseCode,
               overflow: TextOverflow.ellipsis,
               style: FontTextStyleConfig.tableTextStyle.copyWith(
                 fontSize: FontSizeConfig.fontSize15,
@@ -42,7 +41,7 @@ Widget enterpriseTableRowWidget({
             padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size4),
             child: Text(
               dashboardController.searchedEnterprises[index]
-                  .mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionStatus,
+                  .mqsEnterpriseSubscriptionDetails.mqsSubscriptionStatus,
               overflow: TextOverflow.ellipsis,
               style: FontTextStyleConfig.tableTextStyle.copyWith(
                 fontSize: FontSizeConfig.fontSize15,
@@ -73,6 +72,7 @@ Widget enterpriseTableRowWidget({
                 ).tap(() {
                   dashboardController.showMqsTeamList.value = false;
                   dashboardController.showMqsEmpEmailList.value = false;
+                  dashboardController.showMqsEnterprisePocsList.value = false;
                   dashboardController.isAddEnterprise.value = false;
                   dashboardController.isEditEnterprise.value = true;
                   dashboardController.viewIndex.value = index;
@@ -89,11 +89,11 @@ Widget enterpriseTableRowWidget({
                     context: context,
                     dashboardController: dashboardController,
                     docId: dashboardController.searchedEnterprises[index]
-                        .mqsEnterprisePOCs.mqsEnterpriseID,
-                    mqsEnterpriseName: dashboardController
-                        .searchedEnterprises[index]
-                        .mqsEnterprisePOCs
-                        .mqsEnterpriseName,
+                            .mqsEnterprisePOCsList.isNotEmpty
+                        ? dashboardController.searchedEnterprises[index]
+                            .mqsEnterprisePOCsList.first.mqsEnterpriseID
+                        : dashboardController.searchedEnterprises[index].docId,
+                      mqsEnterpriseName: "",
                   );
                 }),
               ],

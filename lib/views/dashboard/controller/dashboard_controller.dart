@@ -36,6 +36,7 @@ class DashboardController extends GetxController {
   ].obs;
   RxInt selectedTabIndex = 0.obs;
   RxString enterpriseId = "".obs;
+  RxBool isHovering = false.obs;
   RxString createdTimestamp = "".obs, updateTimestamp = "".obs;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   final TextEditingController searchController = TextEditingController();
@@ -76,10 +77,12 @@ class DashboardController extends GetxController {
   RxString startDate = "".obs, expiryDate = "".obs;
   RxBool mqsCommonLogin = false.obs,
       isSignedUp = false.obs,
+      isCommonLogin = false.obs,
       isTeam = false.obs,
       isEnable = false.obs,
       isPocsSignedUp = false.obs;
   RxBool showMqsEmpEmailList = false.obs,
+      showMqsEnterprisePocsList = false.obs,
       showMqsTeamList = false.obs,
       showMqsEnterpriseLocationDetails = false.obs,
       showMqsEnterprisePOCs = false.obs,
@@ -113,7 +116,9 @@ class DashboardController extends GetxController {
   ].obs;
   RxBool showFilterByField = false.obs,
       showAddCondition = false.obs,
-      showSortResults = false.obs;
+      showSortResults = false.obs,
+      enterprisePOCsError = false.obs,
+      teamError = false.obs;
   RxBool isAsc = true.obs;
   RxInt selectedFilterFieldIndex = (-1).obs;
   RxBool showCheckIn = false.obs,
@@ -124,6 +129,7 @@ class DashboardController extends GetxController {
   RxList<EnterpriseModel> searchedEnterprises = <EnterpriseModel>[].obs,
       enterprises = <EnterpriseModel>[].obs;
   RxList<MqsEmployee> mqsEmployeeEmailList = <MqsEmployee>[].obs;
+  RxList<MqsEnterprisePOCs> mqsEnterprisePOCsList = <MqsEnterprisePOCs>[].obs;
   RxList<MqsTeam> mqsTeamList = <MqsTeam>[].obs;
   RxList<MqsEnterprisePOCs> mqsEnterprisePOCs = <MqsEnterprisePOCs>[].obs;
   RxInt viewIndex = (-1).obs;
@@ -340,12 +346,14 @@ class DashboardController extends GetxController {
   clearMqsEmpEmailFields() {
     employeeEmailController.clear();
     isSignedUp.value = false;
+    isCommonLogin.value = false;
     employeeNameController.clear();
   }
 
   clearMqsTeamFields() {
     teamNameController.clear();
     isEnable.value = false;
+    teamError.value = false;
     teamEmailController.clear();
     teamMemberLimitController.clear();
   }
@@ -368,6 +376,7 @@ class DashboardController extends GetxController {
     pocTypeController.clear();
     pocPinCodeController.clear();
     isSignedUp.value = false;
+    enterprisePOCsError.value = false;
   }
 
   getEnterprises() async {
@@ -467,6 +476,45 @@ class DashboardController extends GetxController {
     showMqsEmpEmailList.value = false;
   }
 
+  editMqsEnterprisePOCs() {
+    mqsEnterprisePOCsList[editMqsEntPOCIndex.value].mqsEnterpriseName =
+        pocNameController.text.trim();
+    mqsEnterprisePOCsList[editMqsEntPOCIndex.value].mqsEnterpriseEmail =
+        pocEmailController.text.trim();
+    mqsEnterprisePOCsList[editMqsEntPOCIndex.value].mqsEnterprisePhoneNumber =
+        pocPhoneNumberController.text.trim();
+    mqsEnterprisePOCsList[editMqsEntPOCIndex.value].mqsEnterpriseType =
+        pocTypeController.text.trim();
+    mqsEnterprisePOCsList[editMqsEntPOCIndex.value].mqsEnterpriseWebsite =
+        pocWebsiteController.text.trim();
+    mqsEnterprisePOCsList[editMqsEntPOCIndex.value].mqsEnterpriseAddress =
+        pocAddressController.text.trim();
+    mqsEnterprisePOCsList[editMqsEntPOCIndex.value].mqsEnterprisePincode =
+        pocPinCodeController.text.trim();
+
+    clearMqsEntPOCFields();
+    editMqsEntPOCIndex.value = -1;
+    showMqsEnterprisePocsList.value = false;
+  }
+
+  addMqsEnterprisePOCsEmail() {
+    mqsEnterprisePOCsList.add(
+      MqsEnterprisePOCs(
+        mqsEnterpriseID: '',
+        mqsEnterpriseName: pocNameController.text.trim(),
+        mqsEnterpriseEmail: pocEmailController.text.trim(),
+        mqsEnterpriseType: pocTypeController.text.trim(),
+        mqsEnterprisePhoneNumber: pocPhoneNumberController.text.trim(),
+        mqsEnterpriseWebsite: pocWebsiteController.text.trim(),
+        mqsEnterpriseAddress: pocAddressController.text.trim(),
+        mqsEnterprisePincode: pocPinCodeController.text.trim(),
+        mqsIsSignUp: false,
+      ),
+    );
+    clearMqsEntPOCFields();
+    showMqsEnterprisePocsList.value = false;
+  }
+
   setMqsTeamForm({required int index}) {
     editMqsTeamIndex.value = index;
     teamNameController.text = mqsTeamList[index].mqsTeamName;
@@ -485,6 +533,23 @@ class DashboardController extends GetxController {
     showMqsEmpEmailList.value = true;
   }
 
+  setMqsEnterprisePOCsForm({required int index}) {
+    editMqsEntPOCIndex.value = index;
+    pocNameController.text = mqsEnterprisePOCsList[index].mqsEnterpriseName;
+    pocEmailController.text = mqsEnterprisePOCsList[index].mqsEnterpriseEmail;
+    pocPhoneNumberController.text =
+        mqsEnterprisePOCsList[index].mqsEnterprisePhoneNumber;
+    pocTypeController.text = mqsEnterprisePOCsList[index].mqsEnterpriseType;
+    pocWebsiteController.text =
+        mqsEnterprisePOCsList[index].mqsEnterpriseWebsite;
+    pocAddressController.text =
+        mqsEnterprisePOCsList[index].mqsEnterpriseAddress;
+    pocPinCodeController.text =
+        mqsEnterprisePOCsList[index].mqsEnterprisePincode;
+
+    showMqsEnterprisePocsList.value = true;
+  }
+
   editMqsEmpEmail() {
     mqsEmployeeEmailList[editMqsEmpEmailIndex.value].mqsEmployeeName =
         employeeNameController.text.trim();
@@ -494,6 +559,10 @@ class DashboardController extends GetxController {
     clearMqsEmpEmailFields();
     editMqsEmpEmailIndex.value = -1;
     showMqsEmpEmailList.value = false;
+  }
+
+  deleteMqsEnterprisePOCs({required int index}) {
+    mqsEnterprisePOCsList.removeAt(index);
   }
 
   deleteMqsEmpEmial({required int index}) {
@@ -510,53 +579,67 @@ class DashboardController extends GetxController {
 
   addEnterprise() async {
     try {
+      if (mqsEnterprisePOCsList.isNotEmpty && mqsTeamList.isNotEmpty) {
+        enterprisePOCsError.value = false;
+        teamError.value = false;
+        final docRef = FirebaseStorageService.i.enterprise.doc().id;
+        final enterprise = EnterpriseModel(
+          docId: isEditEnterprise.value ? enterpriseId.value : docRef,
 
-      final docRef = FirebaseStorageService.i.enterprise.doc().id;
-      final enterprise = EnterpriseModel(
-        docId: isEditEnterprise.value ? enterpriseId.value : docRef,
-        mqsEnterprisePOCs: MqsEnterprisePOCs(
-          mqsEnterpriseID: isEditEnterprise.value ? enterpriseId.value : docRef,
-          mqsEnterpriseName: pocNameController.text.trim(),
-          mqsEnterpriseEmail: pocEmailController.text.trim(),
-          mqsEnterprisePhoneNumber: pocPhoneNumberController.text,
-          mqsEnterpriseType: pocTypeController.text,
-          mqsEnterpriseWebsite: pocWebsiteController.text,
-          mqsEnterpriseAddress: pocAddressController.text.trim(),
-          mqsEnterprisePincode: pocPinCodeController.text.trim(),
-          mqsIsSignUp: false,
-        ),
-        mqsEnterpriseCode: mqsEnterpriseCodeController.text,
-        // mqsIsTeam: mqsTeamList.isNotEmpty ? true : false,
-        mqsTeamList: mqsTeamList,
-        mqsEmployeeList: mqsEmployeeEmailList,
-        mqsEnterprisePOCsSubscriptionDetails:
-            MqsEnterprisePOCsSubscriptionDetails(
-          mqsSubscriptionStatus: subscriptionStatusController.text.trim(),
-          mqsSubscriptionActivePlan:
-              subscriptionActivePlanController.text.trim(),
-          mqsSubscriptionStartDate: startDate.value.trim(),
-          mqsSubscriptionExpiryDate: expiryDate.value.trim(),
-        ),
-        mqsCreatedTimestamp: isEditEnterprise.value
-            ? createdTimestamp.value
-            : DateTime.now().toIso8601String(),
-        mqsUpdatedTimestamp: DateTime.now().toIso8601String(),
-      );
+          mqsEnterprisePOCsList: mqsEnterprisePOCsList.map((item) {
+            return MqsEnterprisePOCs(
+              mqsEnterpriseID:
+                  isEditEnterprise.value ? enterpriseId.value : docRef,
+              mqsEnterpriseName: item.mqsEnterpriseName,
+              mqsEnterpriseEmail: item.mqsEnterpriseEmail,
+              mqsEnterprisePhoneNumber: item.mqsEnterprisePhoneNumber,
+              mqsEnterpriseType: item.mqsEnterpriseType,
+              mqsEnterpriseWebsite: item.mqsEnterpriseWebsite,
+              mqsEnterpriseAddress: item.mqsEnterpriseAddress,
+              mqsEnterprisePincode: item.mqsEnterprisePincode,
+              mqsIsSignUp: false,
+            );
+          }).toList(),
+          mqsEnterpriseCode: mqsEnterpriseCodeController.text,
+          // mqsIsTeam: mqsTeamList.isNotEmpty ? true : false,
+          mqsTeamList: mqsTeamList,
+          mqsEmployeeList: mqsEmployeeEmailList,
+          mqsEnterpriseSubscriptionDetails: MqsEnterpriseSubscriptionDetails(
+            mqsSubscriptionStatus: subscriptionStatusController.text.trim(),
+            mqsSubscriptionActivePlan:
+                subscriptionActivePlanController.text.trim(),
+            mqsSubscriptionStartDate: startDate.value.trim(),
+            mqsSubscriptionExpiryDate: expiryDate.value.trim(),
+          ),
+          mqsCreatedTimestamp: isEditEnterprise.value
+              ? createdTimestamp.value
+              : DateTime.now().toIso8601String(),
+          mqsUpdatedTimestamp: DateTime.now().toIso8601String(),
+        );
 
-      showLoader();
-      if (isEditEnterprise.value) {
-        await EnterpriseRepository.i.editEnterprises(
-            enterpriseModel: enterprise, docId: enterpriseId.value);
+        showLoader();
+
+        if (isEditEnterprise.value) {
+          await EnterpriseRepository.i.editEnterprises(
+              enterpriseModel: enterprise, docId: enterpriseId.value);
+        } else {
+          await EnterpriseRepository.i
+              .addEnterprises(enterpriseModel: enterprise, customId: docRef);
+        }
+        hideLoader();
+        clearAllFields();
+        isAddEnterprise.value = false;
+        isEditEnterprise.value = false;
+        if (Get.currentRoute == AppRoutes.addEnterprise) {
+          Get.back();
+        }
       } else {
-        await EnterpriseRepository.i
-            .addEnterprises(enterpriseModel: enterprise, customId: docRef);
-      }
-      hideLoader();
-      clearAllFields();
-      isAddEnterprise.value = false;
-      isEditEnterprise.value = false;
-      if (Get.currentRoute == AppRoutes.addEnterprise) {
-        Get.back();
+        if (mqsEnterprisePOCsList.isEmpty) {
+          enterprisePOCsError.value = true;
+        }
+        if (mqsTeamList.isEmpty) {
+          teamError.value = true;
+        }
       }
     } catch (e) {
       hideLoader();
@@ -567,42 +650,29 @@ class DashboardController extends GetxController {
   setEnterpriseForm({required int index}) {
     enterpriseId.value = enterpriseDetail.docId;
     mqsEnterpriseCodeController.text = enterpriseDetail.mqsEnterpriseCode;
-    pocNameController.text =
-        enterpriseDetail.mqsEnterprisePOCs.mqsEnterpriseName;
 
-    pocEmailController.text =
-        enterpriseDetail.mqsEnterprisePOCs.mqsEnterpriseEmail;
-    pocAddressController.text =
-        enterpriseDetail.mqsEnterprisePOCs.mqsEnterpriseAddress;
-    pocWebsiteController.text =
-        enterpriseDetail.mqsEnterprisePOCs.mqsEnterpriseWebsite;
-    pocTypeController.text =
-        enterpriseDetail.mqsEnterprisePOCs.mqsEnterpriseType;
-    pocPhoneNumberController.text =
-        enterpriseDetail.mqsEnterprisePOCs.mqsEnterprisePhoneNumber;
-    pocPinCodeController.text =
-        enterpriseDetail.mqsEnterprisePOCs.mqsEnterprisePincode;
     subscriptionActivePlanController.text = enterpriseDetail
-        .mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionActivePlan;
-    subscriptionStatusController.text = enterpriseDetail
-        .mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionStatus;
+        .mqsEnterpriseSubscriptionDetails.mqsSubscriptionActivePlan;
+    subscriptionStatusController.text =
+        enterpriseDetail.mqsEnterpriseSubscriptionDetails.mqsSubscriptionStatus;
     mqsSubscriptionStartDateController.text = dateConvert(enterpriseDetail
-        .mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionStartDate);
+        .mqsEnterpriseSubscriptionDetails.mqsSubscriptionStartDate);
     mqsSubscriptionExpiryDateController.text = dateConvert(enterpriseDetail
-        .mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionExpiryDate);
-    startDate.value = enterpriseDetail.mqsEnterprisePOCsSubscriptionDetails
-            .mqsSubscriptionStartDate.isEmpty
+        .mqsEnterpriseSubscriptionDetails.mqsSubscriptionExpiryDate);
+    startDate.value = enterpriseDetail
+            .mqsEnterpriseSubscriptionDetails.mqsSubscriptionStartDate.isEmpty
         ? ""
         : DateTime.parse(enterpriseDetail
-                .mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionStartDate)
+                .mqsEnterpriseSubscriptionDetails.mqsSubscriptionStartDate)
             .toIso8601String();
-    expiryDate.value = enterpriseDetail.mqsEnterprisePOCsSubscriptionDetails
-            .mqsSubscriptionExpiryDate.isEmpty
+    expiryDate.value = enterpriseDetail
+            .mqsEnterpriseSubscriptionDetails.mqsSubscriptionExpiryDate.isEmpty
         ? ""
         : DateTime.parse(enterpriseDetail
-                .mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionExpiryDate)
+                .mqsEnterpriseSubscriptionDetails.mqsSubscriptionExpiryDate)
             .toIso8601String();
     mqsEmployeeEmailList.value = enterpriseDetail.mqsEmployeeList;
+    mqsEnterprisePOCsList.value = enterpriseDetail.mqsEnterprisePOCsList;
     mqsTeamList.value = enterpriseDetail.mqsTeamList;
     createdTimestamp.value = enterpriseDetail.mqsCreatedTimestamp;
   }
@@ -641,6 +711,36 @@ class DashboardController extends GetxController {
             for (int j = 0; j < headers.length; j++) headers[j]: rows[i][j]
           };
 
+          List<MqsEnterprisePOCs> mqsEnterprisePOCsList = [];
+
+          if (rowMap['Enterprise POCs'] != null &&
+              rowMap['Enterprise POCs'].toString().isNotEmpty) {
+            try {
+              List<dynamic> enterprisePOCs =
+                  jsonDecode(rowMap['Enterprise POCs']);
+              mqsEnterprisePOCsList = enterprisePOCs.map((enterprise) {
+                return MqsEnterprisePOCs(
+                  mqsEnterpriseID: enterprise['mqsEnterpriseID'] ?? "",
+                  mqsEnterpriseName: enterprise['mqsEnterpriseName'] ?? "",
+                  mqsEnterpriseEmail: enterprise['mqsEnterpriseEmail'] ?? "",
+                  mqsEnterpriseType: enterprise['mqsEnterpriseType'] ?? "",
+                  mqsEnterprisePhoneNumber:
+                      enterprise['mqsEnterprisePhoneNumber'] ?? "",
+                  mqsEnterpriseWebsite:
+                      enterprise['mqsEnterpriseWebsite'] ?? "",
+                  mqsEnterpriseAddress:
+                      enterprise['mqsEnterpriseAddress'] ?? "",
+                  mqsEnterprisePincode:
+                      enterprise['mqsEnterprisePincode'] ?? "",
+                  mqsIsSignUp:
+                      enterprise['mqsIsSignUp']?.toString().toLowerCase() ==
+                          'true',
+                );
+              }).toList();
+            } catch (e) {
+              errorDialogWidget(msg: e.toString());
+            }
+          }
           List<MqsEmployee> mqsEmployeeList = [];
 
           if (rowMap['Employees'] != null &&
@@ -687,25 +787,11 @@ class DashboardController extends GetxController {
           final docRef = FirebaseStorageService.i.enterprise.doc().id;
           EnterpriseModel enterprise = EnterpriseModel(
             docId: docRef,
-            mqsEnterprisePOCs: MqsEnterprisePOCs(
-              mqsEnterpriseID: docRef,
-              mqsEnterpriseName: rowMap['Enterprise Name'] ?? "",
-              mqsEnterpriseEmail: rowMap['Enterprise Email'] ?? "",
-              mqsEnterprisePhoneNumber:
-                  rowMap['Enterprise Phone Number'].toString(),
-              mqsEnterpriseType: rowMap['Enterprise Type'] ?? "",
-              mqsEnterpriseWebsite: rowMap['Enterprise Website'] ?? "",
-              mqsEnterpriseAddress: rowMap['Enterprise Address'] ?? "",
-              mqsEnterprisePincode: rowMap['Enterprise Pincode'].toString(),
-              mqsIsSignUp:
-                  rowMap['IsSignUp'].toString().toLowerCase() == 'true',
-            ),
             mqsEnterpriseCode: rowMap['Enterprise Code'].toString(),
             // mqsIsTeam: rowMap['Is Team']?.toString().toLowerCase() == 'true',
             mqsTeamList: mqsTeamList,
             mqsEmployeeList: mqsEmployeeList,
-            mqsEnterprisePOCsSubscriptionDetails:
-                MqsEnterprisePOCsSubscriptionDetails(
+            mqsEnterpriseSubscriptionDetails: MqsEnterpriseSubscriptionDetails(
               mqsSubscriptionStatus: rowMap['Subscription Status'] ?? "",
               mqsSubscriptionActivePlan:
                   rowMap['Subscription Active Plan'] ?? "",
@@ -732,6 +818,7 @@ class DashboardController extends GetxController {
                 : DateFormat(StringConfig.dashboard.dateYYYYMMDD)
                     .parse(rowMap['Updated Timestamp'])
                     .toIso8601String(),
+            mqsEnterprisePOCsList: mqsEnterprisePOCsList,
           );
           await EnterpriseRepository.i
               .addEnterprises(enterpriseModel: enterprise, customId: docRef);
@@ -748,15 +835,7 @@ class DashboardController extends GetxController {
       List<List<String>> rows = [
         [
           StringConfig.dashboard.mqsEnterPriseCode,
-          StringConfig.dashboard.mqsEnterPriseName,
-          StringConfig.dashboard.enterpriseEmail,
-          StringConfig.csv.enterprisePhoneNumber,
-          StringConfig.csv.enterpriseType,
-          StringConfig.csv.enterpriseWebsite,
-          StringConfig.csv.enterpriseAddress,
-          StringConfig.csv.enterprisePinCode,
-          StringConfig.csv.isSignUp,
-          // StringConfig.dashboard.isTeam,
+          StringConfig.dashboard.mqsEnterprisePOCs,
           StringConfig.csv.teams,
           StringConfig.reporting.employees,
           StringConfig.dashboard.subscriptionStatus,
@@ -771,24 +850,17 @@ class DashboardController extends GetxController {
         ...searchedEnterprises.map((model) {
           return [
             model.mqsEnterpriseCode,
-            model.mqsEnterprisePOCs.mqsEnterpriseName,
-            model.mqsEnterprisePOCs.mqsEnterpriseEmail,
-            model.mqsEnterprisePOCs.mqsEnterprisePhoneNumber,
-            model.mqsEnterprisePOCs.mqsEnterpriseType,
-            model.mqsEnterprisePOCs.mqsEnterpriseWebsite,
-            model.mqsEnterprisePOCs.mqsEnterpriseAddress,
-            model.mqsEnterprisePOCs.mqsEnterprisePincode,
-            model.mqsEnterprisePOCs.mqsIsSignUp.toString(),
-            // model.mqsIsTeam.toString(),
+            jsonEncode(
+                model.mqsEnterprisePOCsList.map((p) => p.toJson()).toList()),
+
             jsonEncode(model.mqsTeamList.map((p) => p.toJson()).toList()),
             jsonEncode(model.mqsEmployeeList.map((p) => p.toJson()).toList()),
-            model.mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionStatus,
-            model
-                .mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionActivePlan,
+            model.mqsEnterpriseSubscriptionDetails.mqsSubscriptionStatus,
+            model.mqsEnterpriseSubscriptionDetails.mqsSubscriptionActivePlan,
             dateConvert(model
-                .mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionStartDate),
-            dateConvert(model.mqsEnterprisePOCsSubscriptionDetails
-                .mqsSubscriptionExpiryDate),
+                .mqsEnterpriseSubscriptionDetails.mqsSubscriptionStartDate),
+            dateConvert(model
+                .mqsEnterpriseSubscriptionDetails.mqsSubscriptionExpiryDate),
             dateConvert(model.mqsCreatedTimestamp),
             dateConvert(model.mqsUpdatedTimestamp),
           ];
@@ -933,31 +1005,21 @@ class DashboardController extends GetxController {
       } else {
         searchedEnterprises.value = enterprises.where((e) {
           return e.mqsEnterpriseCode.toLowerCase().contains(query) ||
-              e.mqsEnterprisePOCs.mqsEnterpriseName
+              e.mqsEnterprisePOCsList.any((poc) {
+                return poc.mqsEnterpriseName.toLowerCase().contains(query) ||
+                    poc.mqsEnterpriseEmail.toLowerCase().contains(query) ||
+                    poc.mqsEnterprisePhoneNumber
+                        .toLowerCase()
+                        .contains(query) ||
+                    poc.mqsEnterpriseType.toLowerCase().contains(query) ||
+                    poc.mqsEnterpriseWebsite.toLowerCase().contains(query) ||
+                    poc.mqsEnterpriseAddress.toLowerCase().contains(query) ||
+                    poc.mqsEnterprisePincode.toLowerCase().contains(query);
+              }) ||
+              e.mqsEnterpriseSubscriptionDetails.mqsSubscriptionActivePlan
                   .toLowerCase()
                   .contains(query) ||
-              e.mqsEnterprisePOCs.mqsEnterpriseEmail
-                  .toLowerCase()
-                  .contains(query) ||
-              e.mqsEnterprisePOCs.mqsEnterprisePhoneNumber
-                  .toLowerCase()
-                  .contains(query) ||
-              e.mqsEnterprisePOCs.mqsEnterpriseType
-                  .toLowerCase()
-                  .contains(query) ||
-              e.mqsEnterprisePOCs.mqsEnterpriseWebsite
-                  .toLowerCase()
-                  .contains(query) ||
-              e.mqsEnterprisePOCs.mqsEnterpriseAddress
-                  .toLowerCase()
-                  .contains(query) ||
-              e.mqsEnterprisePOCs.mqsEnterprisePincode
-                  .toLowerCase()
-                  .contains(query) ||
-              e.mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionActivePlan
-                  .toLowerCase()
-                  .contains(query) ||
-              e.mqsEnterprisePOCsSubscriptionDetails.mqsSubscriptionStatus
+              e.mqsEnterpriseSubscriptionDetails.mqsSubscriptionStatus
                   .toLowerCase()
                   .contains(query);
         }).toList();
@@ -968,14 +1030,14 @@ class DashboardController extends GetxController {
   }
 
   bool checkEnterprisePOCsSubscriptionDetail() {
-    if (enterpriseDetail.mqsEnterprisePOCsSubscriptionDetails
+    if (enterpriseDetail.mqsEnterpriseSubscriptionDetails
             .mqsSubscriptionStartDate.isEmpty &&
-        enterpriseDetail.mqsEnterprisePOCsSubscriptionDetails
+        enterpriseDetail.mqsEnterpriseSubscriptionDetails
             .mqsSubscriptionExpiryDate.isEmpty &&
-        enterpriseDetail.mqsEnterprisePOCsSubscriptionDetails
+        enterpriseDetail.mqsEnterpriseSubscriptionDetails
             .mqsSubscriptionActivePlan.isEmpty &&
-        enterpriseDetail.mqsEnterprisePOCsSubscriptionDetails
-            .mqsSubscriptionStatus.isEmpty) {
+        enterpriseDetail
+            .mqsEnterpriseSubscriptionDetails.mqsSubscriptionStatus.isEmpty) {
       return false;
     } else {
       return true;
@@ -1201,8 +1263,8 @@ class DashboardController extends GetxController {
 
   String enterpriseKeyName({int? index}) {
     String keyName = filterFields[index ?? selectedFilterFieldIndex.value];
-    if (keyName == StringConfig.dashboard.mqsEnterprisePOCsKey) {
-      return StringConfig.dashboard.mqsEnterprisePOCs;
+    if (keyName == StringConfig.dashboard.mqsEnterprisePOCsListKey) {
+      return StringConfig.dashboard.mqsEnterprisePOCsList;
     } else if (keyName == StringConfig.firebase.mqsEnterpriseCode) {
       return StringConfig.dashboard.mqsEnterPriseCode;
     } else if (keyName == StringConfig.dashboard.mqsIsTeam) {
@@ -1212,11 +1274,11 @@ class DashboardController extends GetxController {
     } else if (keyName == StringConfig.dashboard.mqsEmployeeList) {
       return StringConfig.dashboard.mqsEmployeeEmailList;
     } else if (keyName ==
-        StringConfig.dashboard.mqsEnterprisePOCsSubscriptionDetails) {
+        StringConfig.dashboard.mqsEnterpriseSubscriptionDetails) {
       return StringConfig.dashboard.mqsEnterprisePOCsSubscriptionDetail;
     } else if (keyName == StringConfig.firebase.mqsCreatedTimestamp) {
       return StringConfig.csv.createdTimestamp;
-    } else if (keyName == StringConfig.dashboard.mqsUpdateTimestamp) {
+    } else if (keyName == StringConfig.dashboard.mqsUpdatedTimestamp) {
       return StringConfig.csv.updatedTimestamp;
     }
     return "";

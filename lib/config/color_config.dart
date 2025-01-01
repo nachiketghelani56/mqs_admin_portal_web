@@ -32,4 +32,5 @@ class ColorConfig {
   static const Color chartColor = Color(0xFFB8543D);
   static const Color transparentColor = Colors.transparent;
   static const Color hoverColor = Color(0xFF0E5A5B);
+  static const Color validationErrorColor = Color(0xFFF15B27);
 }

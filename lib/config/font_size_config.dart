@@ -11,5 +11,6 @@ class FontSizeConfig {
   static const double fontSize16 = 16;
   static const double fontSize15 = 15;
   static const double fontSize14 = 14;
+  static const double fontSize12_5 = 12.5;
   static const double fontSize8 = 8;
 }
