@@ -33,6 +33,7 @@ Widget mqsEnterprisePOCsWidget(
             child: Container(
               clipBehavior: Clip.hardEdge,
               decoration: FontTextStyleConfig.contentDecoration.copyWith(
+                color: ColorConfig.transparentColor,
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(SizeConfig.size12),
                   bottom: Radius.circular(SizeConfig.size12),
@@ -43,6 +44,7 @@ Widget mqsEnterprisePOCsWidget(
                 thumbVisibility: dashboardController.isHovering.value,
                 child: SingleChildScrollView(
                   controller: scrollController,
+                  physics: const ClampingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   child: Column(
                     children: [

@@ -304,7 +304,9 @@ class ReportingController extends GetxController {
       if (filterType == StringConfig.reporting.today) {
         DateTime today = DateTime.now();
         users = users.where((e) {
-          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp);
+          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              : e.mqsCreatedTimestamp);
           return createdTime.day == today.day &&
               createdTime.month == today.month &&
               createdTime.year == today.year;
@@ -312,7 +314,9 @@ class ReportingController extends GetxController {
       } else if (filterType == StringConfig.reporting.lastDay) {
         DateTime lastDay = DateTime.now().subtract(const Duration(days: 1));
         users = users.where((e) {
-          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp);
+          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              : e.mqsCreatedTimestamp);
           return createdTime.day == lastDay.day &&
               createdTime.month == lastDay.month &&
               createdTime.year == lastDay.year;
@@ -326,14 +330,18 @@ class ReportingController extends GetxController {
             .add(Duration(days: DateTime.daysPerWeek - lastWeek.weekday));
         DateTime endDate = DateTime(end.year, end.month, end.day, 24);
         users = users.where((e) {
-          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp);
+          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              : e.mqsCreatedTimestamp);
           return createdTime.isAfter(startDate) &&
               createdTime.isBefore(endDate);
         }).toList();
       } else if (filterType == StringConfig.reporting.lastMonth) {
         DateTime lastMonth = DateTime.now().subtract(const Duration(days: 30));
         users = users.where((e) {
-          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp);
+          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              : e.mqsCreatedTimestamp);
           return createdTime.month == lastMonth.month &&
               createdTime.year == lastMonth.year;
         }).toList();
@@ -346,7 +354,9 @@ class ReportingController extends GetxController {
             DateFormat('dd/MM/yyyy').parse(endDateController.text);
         DateTime end = DateTime(endDate.year, endDate.month, endDate.day, 24);
         users = users.where((e) {
-          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp);
+          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              : e.mqsCreatedTimestamp);
           return createdTime.isAfter(start) && createdTime.isBefore(end);
         }).toList();
       }
@@ -458,7 +468,9 @@ class ReportingController extends GetxController {
       if (filterType == StringConfig.reporting.today) {
         DateTime today = DateTime.now();
         users = users.where((e) {
-          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp);
+          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              : e.mqsCreatedTimestamp);
           return createdTime.day == today.day &&
               createdTime.month == today.month &&
               createdTime.year == today.year;
@@ -466,7 +478,9 @@ class ReportingController extends GetxController {
       } else if (filterType == StringConfig.reporting.lastDay) {
         DateTime lastDay = DateTime.now().subtract(const Duration(days: 1));
         users = users.where((e) {
-          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp);
+          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              : e.mqsCreatedTimestamp);
           return createdTime.day == lastDay.day &&
               createdTime.month == lastDay.month &&
               createdTime.year == lastDay.year;
@@ -480,14 +494,18 @@ class ReportingController extends GetxController {
             .add(Duration(days: DateTime.daysPerWeek - lastWeek.weekday));
         DateTime endDate = DateTime(end.year, end.month, end.day, 24);
         users = users.where((e) {
-          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp);
+          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              : e.mqsCreatedTimestamp);
           return createdTime.isAfter(startDate) &&
               createdTime.isBefore(endDate);
         }).toList();
       } else if (filterType == StringConfig.reporting.lastMonth) {
         DateTime lastMonth = DateTime.now().subtract(const Duration(days: 30));
         users = users.where((e) {
-          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp);
+          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              : e.mqsCreatedTimestamp);
           return createdTime.month == lastMonth.month &&
               createdTime.year == lastMonth.year;
         }).toList();
@@ -500,7 +518,9 @@ class ReportingController extends GetxController {
             DateFormat('dd/MM/yyyy').parse(endDateController.text);
         DateTime end = DateTime(endDate.year, endDate.month, endDate.day, 24);
         users = users.where((e) {
-          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp);
+          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              : e.mqsCreatedTimestamp);
           return createdTime.isAfter(start) && createdTime.isBefore(end);
         }).toList();
       }
@@ -696,8 +716,9 @@ class ReportingController extends GetxController {
       if (circleFilter.value == StringConfig.reporting.today) {
         DateTime today = DateTime.now();
         circles = circles.where((e) {
-          DateTime postTime =
-              DateTime.parse(e.postTime ?? DateTime.now().toIso8601String());
+          DateTime postTime = DateTime.parse(e.postTime?.isEmpty ?? false
+              ? DateTime.now().toIso8601String()
+              : e.postTime ?? DateTime.now().toIso8601String());
           return postTime.day == today.day &&
               postTime.month == today.month &&
               postTime.year == today.year;
@@ -706,7 +727,9 @@ class ReportingController extends GetxController {
         DateTime lastDay = DateTime.now().subtract(const Duration(days: 1));
         circles = circles.where((e) {
           DateTime postTime =
-              DateTime.parse(e.postTime ?? DateTime.now().toIso8601String());
+              DateTime.parse(e.postTime?.isEmpty ?? false
+                  ? DateTime.now().toIso8601String()
+                  :e.postTime ?? DateTime.now().toIso8601String());
           return postTime.day == lastDay.day &&
               postTime.month == lastDay.month &&
               postTime.year == lastDay.year;
@@ -721,14 +744,18 @@ class ReportingController extends GetxController {
         DateTime endDate = DateTime(end.year, end.month, end.day, 24);
         circles = circles.where((e) {
           DateTime postTime =
-              DateTime.parse(e.postTime ?? DateTime.now().toIso8601String());
+              DateTime.parse(e.postTime?.isEmpty ?? false
+                  ? DateTime.now().toIso8601String()
+                  :e.postTime ?? DateTime.now().toIso8601String());
           return postTime.isAfter(startDate) && postTime.isBefore(endDate);
         }).toList();
       } else if (circleFilter.value == StringConfig.reporting.lastMonth) {
         DateTime lastMonth = DateTime.now().subtract(const Duration(days: 30));
         circles = circles.where((e) {
           DateTime postTime =
-              DateTime.parse(e.postTime ?? DateTime.now().toIso8601String());
+              DateTime.parse(e.postTime?.isEmpty ?? false
+                  ? DateTime.now().toIso8601String()
+                  :e.postTime ?? DateTime.now().toIso8601String());
           return postTime.month == lastMonth.month &&
               postTime.year == lastMonth.year;
         }).toList();
@@ -741,7 +768,9 @@ class ReportingController extends GetxController {
         DateTime end = DateTime(endDate.year, endDate.month, endDate.day, 24);
         circles = circles.where((e) {
           DateTime postTime =
-              DateTime.parse(e.postTime ?? DateTime.now().toIso8601String());
+              DateTime.parse(e.postTime?.isEmpty ?? false
+                  ? DateTime.now().toIso8601String()
+                  :e.postTime ?? DateTime.now().toIso8601String());
           return postTime.isAfter(start) && postTime.isBefore(end);
         }).toList();
       }
@@ -789,7 +818,9 @@ class ReportingController extends GetxController {
         DateTime lastDay = DateTime.now().subtract(const Duration(days: 1));
         filterCircles = circles.where((e) {
           DateTime postTime =
-              DateTime.parse(e.postTime ?? DateTime.now().toIso8601String());
+              DateTime.parse(e.postTime?.isEmpty ?? false
+                  ? DateTime.now().toIso8601String()
+                  : e.postTime ?? DateTime.now().toIso8601String());
           return postTime.day == lastDay.day &&
               postTime.month == lastDay.month &&
               postTime.year == lastDay.year;
@@ -804,14 +835,18 @@ class ReportingController extends GetxController {
         DateTime endDate = DateTime(end.year, end.month, end.day, 24);
         filterCircles = circles.where((e) {
           DateTime postTime =
-              DateTime.parse(e.postTime ?? DateTime.now().toIso8601String());
+              DateTime.parse(e.postTime?.isEmpty ?? false
+                  ? DateTime.now().toIso8601String()
+                  : e.postTime ?? DateTime.now().toIso8601String());
           return postTime.isAfter(startDate) && postTime.isBefore(endDate);
         }).toList();
       } else if (circleFilterType.value == StringConfig.reporting.lastMonth) {
         DateTime lastMonth = DateTime.now().subtract(const Duration(days: 30));
         filterCircles = circles.where((e) {
           DateTime postTime =
-              DateTime.parse(e.postTime ?? DateTime.now().toIso8601String());
+              DateTime.parse(e.postTime?.isEmpty ?? false
+                  ? DateTime.now().toIso8601String()
+                  : e.postTime ?? DateTime.now().toIso8601String());
           return postTime.month == lastMonth.month &&
               postTime.year == lastMonth.year;
         }).toList();
@@ -824,7 +859,9 @@ class ReportingController extends GetxController {
         DateTime end = DateTime(endDate.year, endDate.month, endDate.day, 24);
         filterCircles = circles.where((e) {
           DateTime postTime =
-              DateTime.parse(e.postTime ?? DateTime.now().toIso8601String());
+              DateTime.parse(e.postTime?.isEmpty ?? false
+                  ? DateTime.now().toIso8601String()
+                  : e.postTime ?? DateTime.now().toIso8601String());
           return postTime.isAfter(start) && postTime.isBefore(end);
         }).toList();
       }
@@ -853,7 +890,9 @@ class ReportingController extends GetxController {
       if (subscriptionFilter.value == StringConfig.reporting.today) {
         DateTime today = DateTime.now();
         users = users.where((e) {
-          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp);
+          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              : e.mqsCreatedTimestamp);
           return postTime.day == today.day &&
               postTime.month == today.month &&
               postTime.year == today.year;
@@ -862,7 +901,9 @@ class ReportingController extends GetxController {
         DateTime lastDay = DateTime.now().subtract(const Duration(days: 1));
 
         users = users.where((e) {
-          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp);
+          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              :e.mqsCreatedTimestamp);
           return postTime.day == lastDay.day &&
               postTime.month == lastDay.month &&
               postTime.year == lastDay.year;
@@ -876,13 +917,17 @@ class ReportingController extends GetxController {
             .add(Duration(days: DateTime.daysPerWeek - lastWeek.weekday));
         DateTime endDate = DateTime(end.year, end.month, end.day, 24);
         users = users.where((e) {
-          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp);
+          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              :e.mqsCreatedTimestamp);
           return postTime.isAfter(startDate) && postTime.isBefore(endDate);
         }).toList();
       } else if (subscriptionFilter.value == StringConfig.reporting.lastMonth) {
         DateTime lastMonth = DateTime.now().subtract(const Duration(days: 30));
         users = users.where((e) {
-          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp);
+          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              :e.mqsCreatedTimestamp);
           return postTime.month == lastMonth.month &&
               postTime.year == lastMonth.year;
         }).toList();
@@ -894,7 +939,9 @@ class ReportingController extends GetxController {
             DateFormat('dd/MM/yyyy').parse(endDateController.text);
         DateTime end = DateTime(endDate.year, endDate.month, endDate.day, 24);
         users = users.where((e) {
-          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp);
+          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              :e.mqsCreatedTimestamp);
           return postTime.isAfter(start) && postTime.isBefore(end);
         }).toList();
       }
@@ -974,7 +1021,9 @@ class ReportingController extends GetxController {
       if (subscriptionFilterType.value == StringConfig.reporting.lastDay) {
         DateTime lastDay = DateTime.now().subtract(const Duration(days: 1));
         filterUsers = users.where((e) {
-          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp);
+          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              : e.mqsCreatedTimestamp);
           return postTime.day == lastDay.day &&
               postTime.month == lastDay.month &&
               postTime.year == lastDay.year;
@@ -989,14 +1038,18 @@ class ReportingController extends GetxController {
             .add(Duration(days: DateTime.daysPerWeek - lastWeek.weekday));
         DateTime endDate = DateTime(end.year, end.month, end.day, 24);
         filterUsers = users.where((e) {
-          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp);
+          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              : e.mqsCreatedTimestamp);
           return postTime.isAfter(startDate) && postTime.isBefore(endDate);
         }).toList();
       } else if (subscriptionFilterType.value ==
           StringConfig.reporting.lastMonth) {
         DateTime lastMonth = DateTime.now().subtract(const Duration(days: 30));
         filterUsers = users.where((e) {
-          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp);
+          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              : e.mqsCreatedTimestamp);
           return postTime.month == lastMonth.month &&
               postTime.year == lastMonth.year;
         }).toList();
@@ -1008,7 +1061,9 @@ class ReportingController extends GetxController {
             .parse(endSubscriptionTypeDateController.text);
         DateTime end = DateTime(endDate.year, endDate.month, endDate.day, 24);
         filterUsers = users.where((e) {
-          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp);
+          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              : e.mqsCreatedTimestamp);
           return postTime.isAfter(start) && postTime.isBefore(end);
         }).toList();
       }
@@ -1346,24 +1401,42 @@ class ReportingController extends GetxController {
           .where((e) =>
               e.mqsUserSubscriptionStatus != StringConfig.reporting.active)
           .toList();
-      users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp)
-          .compareTo(DateTime.parse(b.mqsCreatedTimestamp)));
+      users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              : a.mqsCreatedTimestamp)
+          .compareTo(DateTime.parse(b.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              : b.mqsCreatedTimestamp)));
       List<int> uniqueYears = (users
-              .map((data) => (DateTime.parse(data.mqsCreatedTimestamp)).year)
+              .map((data) => (DateTime.parse(data.mqsCreatedTimestamp.isEmpty
+                      ? DateTime.now().toIso8601String()
+                      : data.mqsCreatedTimestamp))
+                  .year)
               .toList()
-            ..addAll((receipt.where((e) => e.mqsSubscriptionExpiryDate.isNotEmpty))
-                .map((data) => (DateTime.parse(data.mqsSubscriptionExpiryDate)).year)))
+            ..addAll(
+                (receipt.where((e) => e.mqsSubscriptionExpiryDate.isNotEmpty))
+                    .map((data) =>
+                        (DateTime.parse(data.mqsSubscriptionExpiryDate)).year)))
           .toSet()
           .toList()
         ..sort();
       for (int year in uniqueYears) {
         double y1 = users
-            .where((e) => DateTime.parse(e.mqsCreatedTimestamp).year == year)
+            .where((e) =>
+                (DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+                        ? DateTime.now().toIso8601String()
+                        : e.mqsCreatedTimestamp))
+                    .year ==
+                year)
             .length
             .toDouble();
         double y2 = users
             .where((e) =>
-                DateTime.parse(e.mqsCreatedTimestamp).year == year &&
+                DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : e.mqsCreatedTimestamp)
+                        .year ==
+                    year &&
                 e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
                 e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
                 e.onboardingModel.mqsScenesDetails.isNotEmpty)
@@ -1371,9 +1444,13 @@ class ReportingController extends GetxController {
             .toDouble();
         double y3 = users
             .where((e) =>
-                DateTime.parse(e.mqsCreatedTimestamp).year == year &&
-                activeRec
-                    .any((test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
+                DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : e.mqsCreatedTimestamp)
+                        .year ==
+                    year &&
+                activeRec.any(
+                    (test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
             .length
             .toDouble();
         double y4 = receipt
@@ -1384,9 +1461,13 @@ class ReportingController extends GetxController {
             .toDouble();
         double y6 = users
             .where((e) =>
-                DateTime.parse(e.mqsCreatedTimestamp).year == year &&
-                inActiveRec
-                    .any((test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
+                DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : e.mqsCreatedTimestamp)
+                        .year ==
+                    year &&
+                inActiveRec.any(
+                    (test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
             .length
             .toDouble();
         signUpChartData.add(
@@ -1411,17 +1492,23 @@ class ReportingController extends GetxController {
           .where((e) =>
               e.mqsUserSubscriptionStatus != StringConfig.reporting.active)
           .toList();
-      users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp)
-          .compareTo(DateTime.parse(b.mqsCreatedTimestamp)));
+
+      users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              : a.mqsCreatedTimestamp)
+          .compareTo(DateTime.parse(b.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              : b.mqsCreatedTimestamp)));
       // Use a set to ensure uniqueness
       final uniqueMonths = <String>{};
       for (var point in users) {
         // Format month-year for uniqueness
         final monthYear =
-            "${DateTime.parse(point.mqsCreatedTimestamp).year}-${DateTime.parse(point.mqsCreatedTimestamp).month.toString().padLeft(2, '0')}";
+            "${DateTime.parse(point.mqsCreatedTimestamp.isEmpty ? DateTime.now().toIso8601String() : point.mqsCreatedTimestamp).year}-${DateTime.parse(point.mqsCreatedTimestamp.isEmpty ? DateTime.now().toIso8601String() : point.mqsCreatedTimestamp).month.toString().padLeft(2, '0')}";
         uniqueMonths.add(monthYear);
       }
-      for (var point in (receipt.where((e) => e.mqsSubscriptionExpiryDate.isNotEmpty))) {
+      for (var point
+          in (receipt.where((e) => e.mqsSubscriptionExpiryDate.isNotEmpty))) {
         // Format month-year for uniqueness
         final monthYear =
             "${DateTime.parse(point.mqsSubscriptionExpiryDate).year}-${DateTime.parse(point.mqsSubscriptionExpiryDate).month.toString().padLeft(2, '0')}";
@@ -1432,14 +1519,30 @@ class ReportingController extends GetxController {
         int month = int.parse(x.split('-').last);
         double y1 = users
             .where((e) =>
-                DateTime.parse(e.mqsCreatedTimestamp).month == month &&
-                DateTime.parse(e.mqsCreatedTimestamp).year == year)
+                DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : e.mqsCreatedTimestamp)
+                        .month ==
+                    month &&
+                DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : e.mqsCreatedTimestamp)
+                        .year ==
+                    year)
             .length
             .toDouble();
         double y2 = users
             .where((e) =>
-                DateTime.parse(e.mqsCreatedTimestamp).month == month &&
-                DateTime.parse(e.mqsCreatedTimestamp).year == year &&
+                DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : e.mqsCreatedTimestamp)
+                        .month ==
+                    month &&
+                DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : e.mqsCreatedTimestamp)
+                        .year ==
+                    year &&
                 e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
                 e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
                 e.onboardingModel.mqsScenesDetails.isNotEmpty)
@@ -1447,10 +1550,18 @@ class ReportingController extends GetxController {
             .toDouble();
         double y3 = users
             .where((e) =>
-                DateTime.parse(e.mqsCreatedTimestamp).month == month &&
-                DateTime.parse(e.mqsCreatedTimestamp).year == year &&
-                activeRec
-                    .any((test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
+                DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : e.mqsCreatedTimestamp)
+                        .month ==
+                    month &&
+                DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : e.mqsCreatedTimestamp)
+                        .year ==
+                    year &&
+                activeRec.any(
+                    (test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
             .length
             .toDouble();
         double y4 = receipt
@@ -1462,10 +1573,18 @@ class ReportingController extends GetxController {
             .toDouble();
         double y6 = users
             .where((e) =>
-                DateTime.parse(e.mqsCreatedTimestamp).month == month &&
-                DateTime.parse(e.mqsCreatedTimestamp).year == year &&
-                inActiveRec
-                    .any((test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
+                DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : e.mqsCreatedTimestamp)
+                        .month ==
+                    month &&
+                DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : e.mqsCreatedTimestamp)
+                        .year ==
+                    year &&
+                inActiveRec.any(
+                    (test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
             .length
             .toDouble();
         signUpChartData.add(LineChartModel(DateTime(year, month), y1,
@@ -1512,11 +1631,17 @@ class ReportingController extends GetxController {
           .where((e) =>
               e.mqsUserSubscriptionStatus != StringConfig.reporting.active)
           .toList();
-      users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp)
-          .compareTo(DateTime.parse(b.mqsCreatedTimestamp)));
+      users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              : a.mqsCreatedTimestamp)
+          .compareTo(DateTime.parse(b.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              : b.mqsCreatedTimestamp)));
       final groupedData = <String, List<UserIAMModel>>{};
       for (var dataPoint in users) {
-        DateTime date = DateTime.parse(dataPoint.mqsCreatedTimestamp);
+        DateTime date = DateTime.parse(dataPoint.mqsCreatedTimestamp.isEmpty
+            ? DateTime.now().toIso8601String()
+            : dataPoint.mqsCreatedTimestamp);
         final weekNumber = getWeekNumber(date);
         groupedData
             .putIfAbsent('$weekNumber-${date.year}', () => [])
@@ -1590,34 +1715,64 @@ class ReportingController extends GetxController {
           .where((e) =>
               e.mqsUserSubscriptionStatus != StringConfig.reporting.active)
           .toList();
-      users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp)
-          .compareTo(DateTime.parse(b.mqsCreatedTimestamp)));
+      users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              : a.mqsCreatedTimestamp)
+          .compareTo(DateTime.parse(b.mqsCreatedTimestamp.isEmpty
+              ? DateTime.now().toIso8601String()
+              : b.mqsCreatedTimestamp)));
       List<DateTime> uniqueDays = (users
               .map((data) => DateTime(
-                  DateTime.parse(data.mqsCreatedTimestamp).year,
-                  DateTime.parse(data.mqsCreatedTimestamp).month,
-                  DateTime.parse(data.mqsCreatedTimestamp).day))
+                  DateTime.parse(data.mqsCreatedTimestamp.isEmpty ? DateTime.now().toIso8601String() : data.mqsCreatedTimestamp)
+                      .year,
+                  DateTime.parse(data.mqsCreatedTimestamp.isEmpty ? DateTime.now().toIso8601String() : data.mqsCreatedTimestamp)
+                      .month,
+                  DateTime.parse(data.mqsCreatedTimestamp.isEmpty
+                          ? DateTime.now().toIso8601String()
+                          : data.mqsCreatedTimestamp)
+                      .day))
               .toList()
-            ..addAll((receipt.where((e) => e.mqsSubscriptionExpiryDate.isNotEmpty)).map(
-                (data) => DateTime(
-                    DateTime.parse(data.mqsSubscriptionExpiryDate).year,
-                    DateTime.parse(data.mqsSubscriptionExpiryDate).month,
-                    DateTime.parse(data.mqsSubscriptionExpiryDate).day))))
+            ..addAll((receipt.where((e) => e.mqsSubscriptionExpiryDate.isNotEmpty))
+                .map((data) => DateTime(DateTime.parse(data.mqsSubscriptionExpiryDate).year, DateTime.parse(data.mqsSubscriptionExpiryDate).month, DateTime.parse(data.mqsSubscriptionExpiryDate).day))))
           .toSet()
           .toList();
       for (DateTime date in uniqueDays) {
         double y1 = users
             .where((e) =>
-                DateTime.parse(e.mqsCreatedTimestamp).month == date.month &&
-                DateTime.parse(e.mqsCreatedTimestamp).year == date.year &&
-                DateTime.parse(e.mqsCreatedTimestamp).day == date.day)
+                DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : e.mqsCreatedTimestamp)
+                        .month ==
+                    date.month &&
+                DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : e.mqsCreatedTimestamp)
+                        .year ==
+                    date.year &&
+                DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : e.mqsCreatedTimestamp)
+                        .day ==
+                    date.day)
             .length
             .toDouble();
         double y2 = users
             .where((e) =>
-                DateTime.parse(e.mqsCreatedTimestamp).month == date.month &&
-                DateTime.parse(e.mqsCreatedTimestamp).year == date.year &&
-                DateTime.parse(e.mqsCreatedTimestamp).day == date.day &&
+                DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : e.mqsCreatedTimestamp)
+                        .month ==
+                    date.month &&
+                DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : e.mqsCreatedTimestamp)
+                        .year ==
+                    date.year &&
+                DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : e.mqsCreatedTimestamp)
+                        .day ==
+                    date.day &&
                 e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
                 e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
                 e.onboardingModel.mqsScenesDetails.isNotEmpty)
@@ -1625,28 +1780,53 @@ class ReportingController extends GetxController {
             .toDouble();
         double y3 = users
             .where((e) =>
-                DateTime.parse(e.mqsCreatedTimestamp).month == date.month &&
-                DateTime.parse(e.mqsCreatedTimestamp).year == date.year &&
-                DateTime.parse(e.mqsCreatedTimestamp).day == date.day &&
-                activeRec
-                    .any((test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
+                DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : e.mqsCreatedTimestamp)
+                        .month ==
+                    date.month &&
+                DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : e.mqsCreatedTimestamp)
+                        .year ==
+                    date.year &&
+                DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : e.mqsCreatedTimestamp)
+                        .day ==
+                    date.day &&
+                activeRec.any(
+                    (test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
             .length
             .toDouble();
         double y4 = receipt
             .where((e) =>
                 e.mqsSubscriptionExpiryDate.isNotEmpty &&
-                DateTime.parse(e.mqsSubscriptionExpiryDate).month == date.month &&
+                DateTime.parse(e.mqsSubscriptionExpiryDate).month ==
+                    date.month &&
                 DateTime.parse(e.mqsSubscriptionExpiryDate).year == date.year &&
                 DateTime.parse(e.mqsSubscriptionExpiryDate).day == date.day)
             .length
             .toDouble();
         double y6 = users
             .where((e) =>
-                DateTime.parse(e.mqsCreatedTimestamp).month == date.month &&
-                DateTime.parse(e.mqsCreatedTimestamp).year == date.year &&
-                DateTime.parse(e.mqsCreatedTimestamp).day == date.day &&
-                inActiveRec
-                    .any((test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
+                DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : e.mqsCreatedTimestamp)
+                        .month ==
+                    date.month &&
+                DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : e.mqsCreatedTimestamp)
+                        .year ==
+                    date.year &&
+                DateTime.parse(e.mqsCreatedTimestamp.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : e.mqsCreatedTimestamp)
+                        .day ==
+                    date.day &&
+                inActiveRec.any(
+                    (test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
             .length
             .toDouble();
         signUpChartData.add(LineChartModel(

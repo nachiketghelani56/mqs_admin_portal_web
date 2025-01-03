@@ -87,7 +87,7 @@ Widget userDetailWidget({required DashboardController dashboardController}) {
                   flex: SizeConfig.size3.toInt(),
                   child: Text(
                     dashboardController.dateConvert(
-                        dashboardController.userDetail.mqsUpdateTimestamp),
+                        dashboardController.userDetail.mqsUpdatedTimestamp),
                     style: FontTextStyleConfig.tableContentTextStyle,
                     overflow: TextOverflow.ellipsis,
                   ),

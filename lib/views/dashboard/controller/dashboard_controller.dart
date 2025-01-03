@@ -261,7 +261,10 @@ class DashboardController extends GetxController {
           field2Key = StringConfig.dashboard.isMongoDBUserIdText;
         } else if (field == StringConfig.dashboard.mqsUserLoginWith) {
           field2Key = StringConfig.dashboard.loginWithKey;
-        } else {
+        }
+        else if (field == StringConfig.dashboard.mqsUpdatedTimestamp) {
+          field2Key = StringConfig.dashboard.mqsUpdateTimestamp;
+        }else {
           field2Key = "";
         }
 
@@ -403,6 +406,7 @@ class DashboardController extends GetxController {
     try {
       if (!FirebaseAuthService.i.isMarketingUser) {
         userLoader.value = true;
+
         List<UserIAMModel> userList = await UserRepository.i.getUsers();
         searchedUsers.value = userList;
         users.value = userList;
@@ -1173,7 +1177,6 @@ class DashboardController extends GetxController {
             json.encode(receipt
                 .where((e) => e.mqsFirebaseUserID == model.mqsFirebaseUserID)
                 .toList()),
-            model.mqsUserActiveTimestamp,
             jsonEncode(model.onboardingModel.mqsCheckInDetails
                 .map((e) => e.toJson())
                 .toList()),
@@ -1336,7 +1339,7 @@ class DashboardController extends GetxController {
       return StringConfig.dashboard.subscriptionActivePlan;
     } else if (keyName == StringConfig.dashboard.mqsSubscriptionPlatform) {
       return StringConfig.reporting.subscriptionPlatform;
-    } else if (keyName == StringConfig.dashboard.mqsUpdateTimestamp) {
+    } else if (keyName == StringConfig.dashboard.mqsUpdatedTimestamp) {
       return StringConfig.csv.updatedTimestamp;
     } else if (keyName == StringConfig.dashboard.mqsUserSubscriptionStatus) {
       return StringConfig.dashboard.userSubscriptionStatus;

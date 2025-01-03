@@ -15,8 +15,8 @@ class UserRepository {
     QuerySnapshot<Object?> users = await user.get();
     List<UserIAMModel> userList =
         users.docs.map((e) => UserIAMModel.fromJson(e.data() as Map)).toList();
-    userList.sort((a, b) => DateTime.parse(b.mqsCreatedTimestamp)
-        .compareTo(DateTime.parse(a.mqsCreatedTimestamp)));
+    userList.sort((a, b) => DateTime.parse(b.mqsCreatedTimestamp.isEmpty ? DateTime.now().toIso8601String() :b.mqsCreatedTimestamp)
+              .compareTo(DateTime.parse(a.mqsCreatedTimestamp.isEmpty ? DateTime.now().toIso8601String() :a.mqsCreatedTimestamp)));
     return userList;
   }
 
@@ -26,8 +26,9 @@ class UserRepository {
           .map((doc) =>
               UserIAMModel.fromJson(doc.data() as Map<String, dynamic>))
           .toList();
-      userList.sort((a, b) => DateTime.parse(b.mqsCreatedTimestamp)
-          .compareTo(DateTime.parse(a.mqsCreatedTimestamp)));
+           userList.sort((a, b) => DateTime.parse(b.mqsCreatedTimestamp.isEmpty ? DateTime.now().toIso8601String() :b.mqsCreatedTimestamp)
+                        .compareTo(DateTime.parse(a.mqsCreatedTimestamp.isEmpty ? DateTime.now().toIso8601String() :a.mqsCreatedTimestamp)));
+
       return userList;
     });
   }

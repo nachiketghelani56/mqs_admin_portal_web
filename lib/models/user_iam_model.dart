@@ -19,7 +19,7 @@ class UserIAMModel {
   // final String mqsSubscriptionExpiryDate;
   // final String mqsSubscriptionActivePlan;
   // final String mqsSubscriptionPlatform;
-  final String mqsUpdateTimestamp;
+  final String mqsUpdatedTimestamp;
   // final String mqsSubscriptionPlatform;
   final bool mqsSkipOnboarding;
   final OnboardingModel onboardingModel;
@@ -49,7 +49,7 @@ class UserIAMModel {
     // required this.mqsSubscriptionExpiryDate,
     // required this.mqsSubscriptionActivePlan,
     // required this.mqsSubscriptionPlatform,
-    required this.mqsUpdateTimestamp,
+    required this.mqsUpdatedTimestamp,
     // required this.mqsUserSubscriptionStatus,
     required this.mqsSkipOnboarding,
     required this.mqsUserActiveTimestamp,
@@ -88,7 +88,8 @@ class UserIAMModel {
         // mqsSubscriptionExpiryDate = json['mqsSubscriptionExpiryDate'] ?? json['mqsExpiryDate'] ?? "",
         // mqsSubscriptionActivePlan = json['mqsSubscriptionActivePlan'] ?? "",
         // mqsSubscriptionPlatform = json['mqsSubscriptionPlatform'] ?? "",
-        mqsUpdateTimestamp = json['mqsUpdateTimestamp'] ?? "",
+        mqsUpdatedTimestamp =
+            json['mqsUpdatedTimestamp'] ?? json['mqsUpdateTimestamp'] ?? "",
         // mqsUserSubscriptionStatus = json['mqsUserSubscriptionStatus'] ?? "",
         mqsSkipOnboarding = json['mqsSkipOnboarding'] ?? false,
         mqsUserActiveTimestamp = json['mqsUserActiveTimestamp'] ?? "",
@@ -118,7 +119,9 @@ class UserIAMModel {
                 mqsOrganizationID: '',
                 mqsTeamID: '',
                 mqsOrganizationValid: false,
-                mqsTeamValid: false, mqsOrganizationEmail: '', mqsOrganizationName: '');
+                mqsTeamValid: false,
+                mqsOrganizationEmail: '',
+                mqsOrganizationName: '');
 
   Map<String, dynamic> toJson() {
     return {
@@ -142,7 +145,7 @@ class UserIAMModel {
       // 'mqsSubscriptionExpiryDate': mqsSubscriptionExpiryDate,
       // 'mqsSubscriptionActivePlan': mqsSubscriptionActivePlan,
       // 'mqsSubscriptionPlatform': mqsSubscriptionPlatform,
-      'mqsUpdateTimestamp': mqsUpdateTimestamp,
+      'mqsUpdatedTimestamp': mqsUpdatedTimestamp,
       // 'mqsUserSubscriptionStatus': mqsUserSubscriptionStatus,
       'mqsSkipOnboarding': mqsSkipOnboarding,
       'mqsUserActiveTimestamp': mqsUserActiveTimestamp,
