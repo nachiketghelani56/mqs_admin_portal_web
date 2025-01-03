@@ -31,6 +31,20 @@ Widget addMqsEnterprisePOCsSubscriptionDetailWidget(
             p0 ?? "", StringConfig.dashboard.subscriptionStatus.toLowerCase()),
       ),
       SizeConfig.size34.height,
+      if (dashboardController.isEditEnterprise.value) ...[
+        CustomTextField(
+          controller: dashboardController.mqsSubscriptionRenewalDateController,
+          label: StringConfig.dashboard.mqsSubscriptionRenewalDate,
+          hintText: StringConfig.dashboard.enterRenewalDate,
+          suffixIcon: ImageConfig.calendar,
+          readOnly: true,
+          onTap: () async {
+            dashboardController.pickRenewalDateTime(context,
+                dashboardController.mqsSubscriptionRenewalDateController);
+          },
+        ),
+        SizeConfig.size34.height,
+      ],
       Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -38,13 +52,13 @@ Widget addMqsEnterprisePOCsSubscriptionDetailWidget(
             child: CustomTextField(
               controller:
                   dashboardController.mqsSubscriptionStartDateController,
-              label: StringConfig.dashboard.mqsSubscriptionStartDate,
-              hintText: StringConfig.dashboard.enterStartDate,
+              label: StringConfig.dashboard.mqsSubscriptionActivationDate,
+              hintText: StringConfig.dashboard.enterActivationDate,
               suffixIcon: ImageConfig.calendar,
               readOnly: true,
               validator: (p0) => Validator.emptyValidator(
                   p0 ?? "",
-                  StringConfig.dashboard.mqsSubscriptionStartDate
+                  StringConfig.dashboard.mqsSubscriptionActivationDate
                       .toLowerCase()),
               onTap: () async {
                 dashboardController.pickStartDateTime(context,

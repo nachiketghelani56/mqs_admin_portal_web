@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
+import 'package:mqs_admin_portal_web/widgets/key_value_warpper_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/title_widget.dart';
 
 Widget mqsEnterpriseSubscriptionDetailWidget(
@@ -9,96 +10,42 @@ Widget mqsEnterpriseSubscriptionDetailWidget(
   return Column(
     children: [
       titleWidget(
-          title: StringConfig.dashboard.mqsEnterpriseSubscriptionDetail,
-          showArrowIcon: false),
-      SizeConfig.size10.height,
-      Container(
-        height: SizeConfig.size55,
-        padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
-        decoration: FontTextStyleConfig.headerDecoration,
-        child: Row(
-          children: [
-            Expanded(
-              flex: SizeConfig.size3.toInt(),
-              child: Text(
-                StringConfig.dashboard.activePlan,
-                style: FontTextStyleConfig.tableBottomTextStyle,
-              ),
-            ),
-            Expanded(
-              flex: SizeConfig.size2.toInt(),
-              child: Text(
-                StringConfig.dashboard.status,
-                style: FontTextStyleConfig.tableBottomTextStyle,
-              ),
-            ),
-            Expanded(
-              flex: SizeConfig.size3.toInt(),
-              child: Text(
-                StringConfig.dashboard.startDate,
-                style: FontTextStyleConfig.tableBottomTextStyle,
-              ),
-            ),
-            Expanded(
-              flex: SizeConfig.size3.toInt(),
-              child: Text(
-                StringConfig.dashboard.expiryDate,
-                style: FontTextStyleConfig.tableBottomTextStyle,
-              ),
-            ),
-          ],
-        ),
+        title: StringConfig.dashboard.mqsEnterpriseSubscriptionDetail,
+        showArrowIcon: false,
       ),
-      Container(
-        padding: const EdgeInsets.symmetric(
-            horizontal: SizeConfig.size14, vertical: SizeConfig.size14),
-        decoration: FontTextStyleConfig.contentDecoration.copyWith(
-          borderRadius: const BorderRadius.vertical(
-            bottom: Radius.circular(SizeConfig.size12),
-          ),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              flex: SizeConfig.size3.toInt(),
-              child: Text(
-                dashboardController
-                    .enterpriseDetail
-                    .mqsEnterpriseSubscriptionDetails
-                    .mqsSubscriptionActivePlan,
-                style: FontTextStyleConfig.tableContentTextStyle,
-              ),
-            ),
-            Expanded(
-              flex: SizeConfig.size2.toInt(),
-              child: Text(
-                dashboardController.enterpriseDetail
-                    .mqsEnterpriseSubscriptionDetails.mqsSubscriptionStatus,
-                style: FontTextStyleConfig.tableContentTextStyle,
-              ),
-            ),
-            Expanded(
-              flex: SizeConfig.size3.toInt(),
-              child: Text(
-                dashboardController.dateConvert(dashboardController
-                    .enterpriseDetail
-                    .mqsEnterpriseSubscriptionDetails
-                    .mqsSubscriptionStartDate),
-                style: FontTextStyleConfig.tableContentTextStyle,
-              ),
-            ),
-            Expanded(
-              flex: SizeConfig.size3.toInt(),
-              child: Text(
-                dashboardController.dateConvert(dashboardController
-                    .enterpriseDetail
-                    .mqsEnterpriseSubscriptionDetails
-                    .mqsSubscriptionExpiryDate),
-                style: FontTextStyleConfig.tableContentTextStyle,
-              ),
-            ),
-          ],
-        ),
+      SizeConfig.size10.height,
+      keyValueWrapperWidget(
+        isFirst: true,
+        key: StringConfig.dashboard.activePlan,
+        value: dashboardController.enterpriseDetail
+            .mqsEnterpriseSubscriptionDetails.mqsSubscriptionActivePlan,
+      ),
+      keyValueWrapperWidget(
+        key: StringConfig.dashboard.status,
+        value: dashboardController.enterpriseDetail
+            .mqsEnterpriseSubscriptionDetails.mqsSubscriptionStatus,
+      ),
+      keyValueWrapperWidget(
+        key: StringConfig.dashboard.activationDate,
+        value: dashboardController.dateConvert(dashboardController
+            .enterpriseDetail
+            .mqsEnterpriseSubscriptionDetails
+            .mqsSubscriptionActivationTimestamp),
+      ),
+      keyValueWrapperWidget(
+        key: StringConfig.dashboard.renewalDate,
+        value: dashboardController.dateConvert(dashboardController
+            .enterpriseDetail
+            .mqsEnterpriseSubscriptionDetails
+            .mqsSubscriptionRenewalDate),
+      ),
+      keyValueWrapperWidget(
+        key: StringConfig.dashboard.expiryDate,
+        value: dashboardController.dateConvert(dashboardController
+            .enterpriseDetail
+            .mqsEnterpriseSubscriptionDetails
+            .mqsSubscriptionExpiryDate),
+        isLast: true,
       ),
     ],
   );

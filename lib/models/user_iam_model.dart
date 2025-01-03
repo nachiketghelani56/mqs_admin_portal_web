@@ -25,6 +25,7 @@ class UserIAMModel {
   final OnboardingModel onboardingModel;
   final EnterpriseDetails mqsEnterpriseDetails;
   final String mqsUserActiveTimestamp;
+  final String mqsEnterpriseCreatedTimestamp;
 
   UserIAMModel(
     this.onboardingModel,
@@ -53,6 +54,7 @@ class UserIAMModel {
     // required this.mqsUserSubscriptionStatus,
     required this.mqsSkipOnboarding,
     required this.mqsUserActiveTimestamp,
+    required this.mqsEnterpriseCreatedTimestamp,
   });
 
   UserIAMModel.fromJson(Map json)
@@ -93,6 +95,7 @@ class UserIAMModel {
         // mqsUserSubscriptionStatus = json['mqsUserSubscriptionStatus'] ?? "",
         mqsSkipOnboarding = json['mqsSkipOnboarding'] ?? false,
         mqsUserActiveTimestamp = json['mqsUserActiveTimestamp'] ?? "",
+        mqsEnterpriseCreatedTimestamp = json['mqsEnterpriseCreatedTimestamp'] ?? "",
         onboardingModel = json['mqsOnboardingDetails'] != null
             ? OnboardingModel.fromJson(json['mqsOnboardingDetails'])
             : json['onboardingData'] != null
@@ -149,6 +152,7 @@ class UserIAMModel {
       // 'mqsUserSubscriptionStatus': mqsUserSubscriptionStatus,
       'mqsSkipOnboarding': mqsSkipOnboarding,
       'mqsUserActiveTimestamp': mqsUserActiveTimestamp,
+      'mqsEnterpriseCreatedTimestamp': mqsEnterpriseCreatedTimestamp,
       'mqsOnboardingDetails': onboardingModel.toJson(),
       'mqsEnterpriseDetails': mqsEnterpriseDetails.toJson(),
     };

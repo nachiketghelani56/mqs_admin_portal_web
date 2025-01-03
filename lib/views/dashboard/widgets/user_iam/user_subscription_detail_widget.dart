@@ -46,7 +46,7 @@ Widget userSubscriptionDetailWidget(
       keyValueWrapperWidget(
         key: StringConfig.reporting.subscriptionStatus,
           value: dashboardController
-                .userSubscriptionDetail?.mqsUserSubscriptionStatus ??
+                .userSubscriptionDetail?.mqsSubscriptionStatus ??
             "",
       ),
       keyValueWrapperWidget(

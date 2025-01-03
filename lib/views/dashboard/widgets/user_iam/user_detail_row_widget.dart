@@ -86,6 +86,15 @@ Widget userDetailRowWidget({required DashboardController dashboardController}) {
       keyValueWrapperWidget(
         key: StringConfig.dashboard.registrationStatus,
         value: dashboardController.userDetail.mqsRegistrationStatus,
+
+      ),
+      keyValueWrapperWidget(
+        key: StringConfig.dashboard.enterpriseCreatedTimestamp,
+        value:   dashboardController.userDetail.mqsEnterpriseCreatedTimestamp.isNotEmpty
+  ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
+  DateTime.parse(
+  dashboardController.userDetail.mqsEnterpriseCreatedTimestamp))
+      : "",
         isLast: true,
       ),
     ],

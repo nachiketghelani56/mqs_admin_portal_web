@@ -11,7 +11,7 @@ class UserSubscriptionReceiptModel {
   final String mqsSubscriptionActivePlan;
   final String mqsSubscriptionPlatform;
   final String mqsTransactionID;
-  final String mqsUserSubscriptionStatus;
+  final String mqsSubscriptionStatus;
   final String mqsCreatedTimestamp;
   final String mqsUpdateTimestamp;
 
@@ -28,7 +28,7 @@ class UserSubscriptionReceiptModel {
       required this.mqsSubscriptionActivePlan,
       required this.mqsSubscriptionPlatform,
       required this.mqsTransactionID,
-      required this.mqsUserSubscriptionStatus,
+      required this.mqsSubscriptionStatus,
       required this.mqsCreatedTimestamp,
       required this.mqsUpdateTimestamp});
 
@@ -46,7 +46,9 @@ class UserSubscriptionReceiptModel {
         mqsSubscriptionActivePlan = json['mqsSubscriptionActivePlan'] ?? "",
         mqsSubscriptionPlatform = json['mqsSubscriptionPlatform'] ?? "",
         mqsTransactionID = json['mqsTransactionID'] ?? "",
-        mqsUserSubscriptionStatus = json['mqsUserSubscriptionStatus'] ?? "",
+        mqsSubscriptionStatus = json['mqsSubscriptionStatus'] ??
+            json['mqsUserSubscriptionStatus'] ??
+            "",
         mqsCreatedTimestamp = json['mqsCreatedTimestamp'] ?? "",
         mqsUpdateTimestamp = json['mqsUpdateTimestamp'] ?? "";
 
@@ -65,7 +67,7 @@ class UserSubscriptionReceiptModel {
       'mqsSubscriptionActivePlan': mqsSubscriptionActivePlan,
       'mqsSubscriptionPlatform': mqsSubscriptionPlatform,
       'mqsTransactionID': mqsTransactionID,
-      'mqsUserSubscriptionStatus': mqsUserSubscriptionStatus,
+      'mqsSubscriptionStatus': mqsSubscriptionStatus,
       'mqsCreatedTimestamp': mqsCreatedTimestamp,
       'mqsUpdateTimestamp': mqsUpdateTimestamp,
     };

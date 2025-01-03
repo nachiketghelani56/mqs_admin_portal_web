@@ -14,6 +14,7 @@ class StringConfig {
   static final teamChart = TeamChart();
   static final circle = Circle();
   static final pathway = Pathway();
+  static final database = Database();
 }
 
 class Login {
@@ -34,7 +35,8 @@ class Dashboard {
   final String circleList = "Circle List";
   final String enterpriseDetail = "Enterprise Details";
   final String enterprisePOC = "enterprisePOC";
-
+  final String enterpriseCreatedTimestamp = "Enterprise Created Timestamp";
+  final String mqsEnterpriseCreatedTimestamp = "mqsEnterpriseCreatedTimestamp";
   final String filter = "Filter";
   final String export = "Export";
   final String addEnterprise = "Add Enterprise";
@@ -62,10 +64,16 @@ class Dashboard {
   final String enterTeamName = "Enter team name";
   final String mqsSubscriptionExpiryDate = "Subscription Expiry Date";
   final String mqsSubscriptionStartDate = "Subscription Start Date";
+  final String mqsSubscriptionActivationDate = "Subscription Activation Date";
+  final String mqsSubscriptionRenewalDate = "Subscription Renewal Date";
   final String enterExpiryDate = "Enter expiry date";
   final String enterStartDate = "Enter start date";
+  final String enterActivationDate = "Enter Activation date";
+  final String enterRenewalDate = "Enter renewal date";
   final String startDate = "Start date";
+  final String activationDate = "Activation date";
   final String expiryDate = "Expiry date";
+  final String renewalDate = "Renewal date";
   final String mqsEmployeeEmailList = "Employee List";
   final String mqsTeamList = "Team List";
   final String emailAddress = "Employee Email";
@@ -612,4 +620,21 @@ class Pathway {
   final String showLess = " Show less";
   final String userId = " User Id";
   final String mqsPathwayID = "mqsPathwayID";
+}
+class Database {
+  final String database = "Database";
+  final String next = "Next";
+  final String subscriptionReceipt = "Subscription Receipt";
+  final String enterpriseCollection = "Enterprise Collection";
+  final String userCollection = "User Collection";
+  final String circleCollection = "Circle Collection";
+  final String pathwayCollection = "Pathway Collection";
+  final String teamCollection = "Team Collection";
+  final String userSubscriptionReceiptCollection = "Subscription Receipt Collection";
+  final String addCollection = "Add Collection";
+  final String addACollection = "Add a Collection";
+  final String collectionID = "Collection ID";
+  final String documentID = "Document ID";
+
+
 }

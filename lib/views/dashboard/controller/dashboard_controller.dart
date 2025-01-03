@@ -49,6 +49,8 @@ class DashboardController extends GetxController {
       TextEditingController();
   final TextEditingController mqsSubscriptionStartDateController =
       TextEditingController();
+  final TextEditingController mqsSubscriptionRenewalDateController =
+      TextEditingController();
   final TextEditingController employeeEmailController = TextEditingController();
   final TextEditingController teamEmailController = TextEditingController();
   final TextEditingController employeeNameController = TextEditingController();
@@ -74,7 +76,8 @@ class DashboardController extends GetxController {
       TextEditingController();
   final TextEditingController filterNumberFieldController =
       TextEditingController();
-  RxString startDate = "".obs, expiryDate = "".obs;
+  RxString startDate = "".obs, expiryDate = "".obs, renewalDate = "".obs;
+
   RxBool mqsCommonLogin = false.obs,
       isSignedUp = false.obs,
       isCommonLogin = false.obs,
@@ -164,6 +167,24 @@ class DashboardController extends GetxController {
   StreamSubscription<List<UserSubscriptionReceiptModel>>?
       userSubscriptionReceiptStream;
   RxBool enterpriseLoader = false.obs, userLoader = false.obs;
+  List<DropdownMenuItem> get boolOptions => [
+        DropdownMenuItem(
+          value: true,
+          child: Text(
+            StringConfig.dashboard.trueText,
+            style: FontTextStyleConfig.textFieldTextStyle
+                .copyWith(fontSize: FontSizeConfig.fontSize16),
+          ),
+        ),
+        DropdownMenuItem(
+          value: false,
+          child: Text(
+            StringConfig.dashboard.falseText,
+            style: FontTextStyleConfig.textFieldTextStyle
+                .copyWith(fontSize: FontSizeConfig.fontSize16),
+          ),
+        )
+      ];
 
   @override
   onInit() {
@@ -261,10 +282,9 @@ class DashboardController extends GetxController {
           field2Key = StringConfig.dashboard.isMongoDBUserIdText;
         } else if (field == StringConfig.dashboard.mqsUserLoginWith) {
           field2Key = StringConfig.dashboard.loginWithKey;
-        }
-        else if (field == StringConfig.dashboard.mqsUpdatedTimestamp) {
+        } else if (field == StringConfig.dashboard.mqsUpdatedTimestamp) {
           field2Key = StringConfig.dashboard.mqsUpdateTimestamp;
-        }else {
+        } else {
           field2Key = "";
         }
 
@@ -351,6 +371,7 @@ class DashboardController extends GetxController {
     isSignedUp.value = false;
     isCommonLogin.value = false;
     employeeNameController.clear();
+    mqsCommonLogin.value = false;
   }
 
   clearMqsTeamFields() {
@@ -365,8 +386,10 @@ class DashboardController extends GetxController {
     subscriptionStatusController.clear();
     mqsSubscriptionStartDateController.clear();
     mqsSubscriptionExpiryDateController.clear();
+    mqsSubscriptionRenewalDateController.clear();
     expiryDate.value = "";
     startDate.value = "";
+    renewalDate.value = "";
     subscriptionActivePlanController.clear();
   }
 
@@ -470,10 +493,10 @@ class DashboardController extends GetxController {
     mqsEmployeeEmailList.add(
       MqsEmployee(
         mqsEmployeeID: const Uuid().v4().replaceAll('-', '').substring(0, 24),
-        mqsEmployeeName: employeeEmailController.text.trim(),
+        mqsEmployeeName: employeeNameController.text.trim(),
         mqsEmployeeEmail: employeeEmailController.text.trim(),
         mqsIsSignUp: false,
-        mqsCommonLogin: false,
+        mqsCommonLogin: mqsCommonLogin.value,
       ),
     );
     clearMqsEmpEmailFields();
@@ -533,7 +556,7 @@ class DashboardController extends GetxController {
     employeeEmailController.text = mqsEmployeeEmailList[index].mqsEmployeeEmail;
 
     employeeNameController.text = mqsEmployeeEmailList[index].mqsEmployeeName;
-
+    mqsCommonLogin.value = mqsEmployeeEmailList[index].mqsCommonLogin;
     showMqsEmpEmailList.value = true;
   }
 
@@ -559,7 +582,8 @@ class DashboardController extends GetxController {
         employeeNameController.text.trim();
     mqsEmployeeEmailList[editMqsEmpEmailIndex.value].mqsEmployeeEmail =
         employeeEmailController.text.trim();
-
+    mqsEmployeeEmailList[editMqsEmpEmailIndex.value].mqsCommonLogin =
+        mqsCommonLogin.value;
     clearMqsEmpEmailFields();
     editMqsEmpEmailIndex.value = -1;
     showMqsEmpEmailList.value = false;
@@ -612,8 +636,10 @@ class DashboardController extends GetxController {
             mqsSubscriptionStatus: subscriptionStatusController.text.trim(),
             mqsSubscriptionActivePlan:
                 subscriptionActivePlanController.text.trim(),
-            mqsSubscriptionStartDate: startDate.value.trim(),
+            mqsSubscriptionActivationTimestamp: startDate.value.trim(),
             mqsSubscriptionExpiryDate: expiryDate.value.trim(),
+            mqsSubscriptionRenewalDate:
+                isEditEnterprise.value ? renewalDate.value.trim() : "",
           ),
           mqsCreatedTimestamp: isEditEnterprise.value
               ? createdTimestamp.value
@@ -660,20 +686,28 @@ class DashboardController extends GetxController {
     subscriptionStatusController.text =
         enterpriseDetail.mqsEnterpriseSubscriptionDetails.mqsSubscriptionStatus;
     mqsSubscriptionStartDateController.text = dateConvert(enterpriseDetail
-        .mqsEnterpriseSubscriptionDetails.mqsSubscriptionStartDate);
+        .mqsEnterpriseSubscriptionDetails.mqsSubscriptionActivationTimestamp);
     mqsSubscriptionExpiryDateController.text = dateConvert(enterpriseDetail
         .mqsEnterpriseSubscriptionDetails.mqsSubscriptionExpiryDate);
-    startDate.value = enterpriseDetail
-            .mqsEnterpriseSubscriptionDetails.mqsSubscriptionStartDate.isEmpty
+    mqsSubscriptionRenewalDateController.text = dateConvert(enterpriseDetail
+        .mqsEnterpriseSubscriptionDetails.mqsSubscriptionRenewalDate);
+    startDate.value = enterpriseDetail.mqsEnterpriseSubscriptionDetails
+            .mqsSubscriptionActivationTimestamp.isEmpty
         ? ""
-        : DateTime.parse(enterpriseDetail
-                .mqsEnterpriseSubscriptionDetails.mqsSubscriptionStartDate)
+        : DateTime.parse(enterpriseDetail.mqsEnterpriseSubscriptionDetails
+                .mqsSubscriptionActivationTimestamp)
             .toIso8601String();
     expiryDate.value = enterpriseDetail
             .mqsEnterpriseSubscriptionDetails.mqsSubscriptionExpiryDate.isEmpty
         ? ""
         : DateTime.parse(enterpriseDetail
                 .mqsEnterpriseSubscriptionDetails.mqsSubscriptionExpiryDate)
+            .toIso8601String();
+    renewalDate.value = enterpriseDetail
+            .mqsEnterpriseSubscriptionDetails.mqsSubscriptionRenewalDate.isEmpty
+        ? ""
+        : DateTime.parse(enterpriseDetail
+                .mqsEnterpriseSubscriptionDetails.mqsSubscriptionRenewalDate)
             .toIso8601String();
     mqsEmployeeEmailList.value = enterpriseDetail.mqsEmployeeList;
     mqsEnterprisePOCsList.value = enterpriseDetail.mqsEnterprisePOCsList;
@@ -799,17 +833,23 @@ class DashboardController extends GetxController {
               mqsSubscriptionStatus: rowMap['Subscription Status'] ?? "",
               mqsSubscriptionActivePlan:
                   rowMap['Subscription Active Plan'] ?? "",
-              mqsSubscriptionStartDate:
-                  rowMap['Subscription Start Date'].toString().isEmpty
+              mqsSubscriptionActivationTimestamp:
+                  rowMap['Subscription Activation Date'].toString().isEmpty
                       ? ""
                       : DateFormat(StringConfig.dashboard.dateYYYYMMDD)
-                          .parse(rowMap['Subscription Start Date'])
+                          .parse(rowMap['Subscription Activation Date'])
                           .toIso8601String(),
               mqsSubscriptionExpiryDate:
                   rowMap['Subscription Expiry Date'].toString().isEmpty
                       ? ""
                       : DateFormat(StringConfig.dashboard.dateYYYYMMDD)
                           .parse(rowMap['Subscription Expiry Date'])
+                          .toIso8601String(),
+              mqsSubscriptionRenewalDate:
+                  rowMap['Subscription Renewal Date'].toString().isEmpty
+                      ? ""
+                      : DateFormat(StringConfig.dashboard.dateYYYYMMDD)
+                          .parse(rowMap['Subscription Renewal Date'])
                           .toIso8601String(),
             ),
             mqsCreatedTimestamp: rowMap['Created Timestamp'].toString().isEmpty
@@ -844,7 +884,8 @@ class DashboardController extends GetxController {
           StringConfig.reporting.employees,
           StringConfig.dashboard.subscriptionStatus,
           StringConfig.dashboard.subscriptionActivePlan,
-          StringConfig.dashboard.mqsSubscriptionStartDate,
+          StringConfig.dashboard.mqsSubscriptionActivationDate,
+          StringConfig.dashboard.mqsSubscriptionRenewalDate,
           StringConfig.dashboard.mqsSubscriptionExpiryDate,
           StringConfig.csv.createdTimestamp,
           StringConfig.csv.updatedTimestamp,
@@ -861,8 +902,10 @@ class DashboardController extends GetxController {
             jsonEncode(model.mqsEmployeeList.map((p) => p.toJson()).toList()),
             model.mqsEnterpriseSubscriptionDetails.mqsSubscriptionStatus,
             model.mqsEnterpriseSubscriptionDetails.mqsSubscriptionActivePlan,
+            dateConvert(model.mqsEnterpriseSubscriptionDetails
+                .mqsSubscriptionActivationTimestamp),
             dateConvert(model
-                .mqsEnterpriseSubscriptionDetails.mqsSubscriptionStartDate),
+                .mqsEnterpriseSubscriptionDetails.mqsSubscriptionRenewalDate),
             dateConvert(model
                 .mqsEnterpriseSubscriptionDetails.mqsSubscriptionExpiryDate),
             dateConvert(model.mqsCreatedTimestamp),
@@ -1035,7 +1078,7 @@ class DashboardController extends GetxController {
 
   bool checkEnterprisePOCsSubscriptionDetail() {
     if (enterpriseDetail.mqsEnterpriseSubscriptionDetails
-            .mqsSubscriptionStartDate.isEmpty &&
+            .mqsSubscriptionActivationTimestamp.isEmpty &&
         enterpriseDetail.mqsEnterpriseSubscriptionDetails
             .mqsSubscriptionExpiryDate.isEmpty &&
         enterpriseDetail.mqsEnterpriseSubscriptionDetails
@@ -1100,17 +1143,33 @@ class DashboardController extends GetxController {
     DateTime? pickedDate = await showDatePicker(
       initialEntryMode: DatePickerEntryMode.calendar,
       context: context,
-      firstDate: startDate.value.isNotEmpty
-          ? DateTime.parse(
-              startDate.value,
-            )
-          : DateTime.now(),
+      firstDate: isEditEnterprise.value
+          ? renewalDate.isEmpty
+              ? DateTime.parse(
+                  startDate.value,
+                )
+              : DateTime.parse(
+                  renewalDate.value,
+                )
+          : startDate.value.isNotEmpty
+              ? DateTime.parse(
+                  startDate.value,
+                )
+              : DateTime.now(),
       lastDate: DateTime(3000),
-      initialDate: startDate.value.isNotEmpty
-          ? DateTime.parse(
-              startDate.value,
-            )
-          : DateTime.now(),
+      initialDate: isEditEnterprise.value
+          ? renewalDate.isEmpty
+              ? DateTime.parse(
+                  startDate.value,
+                )
+              : DateTime.parse(
+                  renewalDate.value,
+                )
+          : startDate.value.isNotEmpty
+              ? DateTime.parse(
+                  startDate.value,
+                )
+              : DateTime.now(),
     );
 
     if (pickedDate != null) {
@@ -1134,6 +1193,45 @@ class DashboardController extends GetxController {
         mqsSubscriptionExpiryDateController.text = formattedDateTime;
 
         expiryDate.value = pickedDateTime.toIso8601String();
+      }
+    }
+  }
+
+  Future<void> pickRenewalDateTime(
+      BuildContext context, TextEditingController controller) async {
+    DateTime? pickedDate = await showDatePicker(
+      initialEntryMode: DatePickerEntryMode.calendar,
+      context: context,
+      firstDate: DateTime(0),
+      lastDate: DateTime(3000),
+      initialDate: DateTime.now(),
+    );
+
+    if (pickedDate != null) {
+      TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+
+      if (pickedTime != null) {
+        final DateTime pickedDateTime = DateTime(
+          pickedDate.year,
+          pickedDate.month,
+          pickedDate.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        );
+
+        final formattedDateTime =
+            DateFormat(StringConfig.dashboard.dateYYYYMMDD)
+                .format(pickedDateTime);
+
+        mqsSubscriptionRenewalDateController.text = formattedDateTime;
+
+        renewalDate.value = pickedDateTime.toIso8601String();
+        mqsSubscriptionExpiryDateController.clear();
+
+        expiryDate.value = "";
       }
     }
   }
@@ -1171,6 +1269,10 @@ class DashboardController extends GetxController {
             model.mqsUserActiveTimestamp.isNotEmpty
                 ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
                     .format(DateTime.parse(model.mqsUserActiveTimestamp))
+                : "",
+            model.mqsEnterpriseCreatedTimestamp.isNotEmpty
+                ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
+                    .format(DateTime.parse(model.mqsEnterpriseCreatedTimestamp))
                 : "",
             model.mqsRegistrationStatus,
             jsonEncode(model.mqsEnterpriseDetails.toJson()),
@@ -1214,6 +1316,7 @@ class DashboardController extends GetxController {
           StringConfig.dashboard.pronounsValue,
           StringConfig.dashboard.skipOnboarding,
           StringConfig.dashboard.userActiveTimestamp,
+          StringConfig.dashboard.enterpriseCreatedTimestamp,
           StringConfig.dashboard.registrationStatus,
           StringConfig.dashboard.enterpriseDetail,
           StringConfig.dashboard.userSubscriptionReceipt,
@@ -1352,6 +1455,9 @@ class DashboardController extends GetxController {
       return StringConfig.dashboard.userActiveTimestamp;
     } else if (keyName == StringConfig.dashboard.mqsEnterpriseDetails) {
       return StringConfig.dashboard.enterpriseDetail;
+    } else if (keyName ==
+        StringConfig.dashboard.mqsEnterpriseCreatedTimestamp) {
+      return StringConfig.dashboard.enterpriseCreatedTimestamp;
     }
 
     return "";

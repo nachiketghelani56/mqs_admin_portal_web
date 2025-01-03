@@ -154,7 +154,7 @@ class MqsEmployee {
   String mqsEmployeeName;
   String mqsEmployeeEmail;
   final bool mqsIsSignUp;
-  final bool mqsCommonLogin;
+   bool mqsCommonLogin;
 
   MqsEmployee({
     required this.mqsEmployeeID,
@@ -188,22 +188,25 @@ class MqsEmployee {
 class MqsEnterpriseSubscriptionDetails {
   final String mqsSubscriptionStatus;
   final String mqsSubscriptionActivePlan;
-  final String mqsSubscriptionStartDate;
+  final String mqsSubscriptionActivationTimestamp;
   final String mqsSubscriptionExpiryDate;
+  final String mqsSubscriptionRenewalDate;
 
   MqsEnterpriseSubscriptionDetails({
     required this.mqsSubscriptionStatus,
     required this.mqsSubscriptionActivePlan,
-    required this.mqsSubscriptionStartDate,
+    required this.mqsSubscriptionActivationTimestamp,
     required this.mqsSubscriptionExpiryDate,
+    required this.mqsSubscriptionRenewalDate,
   });
 
   factory MqsEnterpriseSubscriptionDetails.fromJson(Map<String, dynamic> json) {
     return MqsEnterpriseSubscriptionDetails(
       mqsSubscriptionStatus: json['mqsSubscriptionStatus'] ?? "",
       mqsSubscriptionActivePlan: json['mqsSubscriptionActivePlan'] ?? "",
-      mqsSubscriptionStartDate: json['mqsSubscriptionStartDate'] ?? "",
+      mqsSubscriptionActivationTimestamp: json['mqsSubscriptionActivationTimestamp'] ?? json['mqsSubscriptionStartDate'] ?? "" ,
       mqsSubscriptionExpiryDate: json['mqsSubscriptionExpiryDate'] ?? "",
+      mqsSubscriptionRenewalDate: json['mqsSubscriptionRenewalDate'] ?? "",
     );
   }
 
@@ -211,8 +214,9 @@ class MqsEnterpriseSubscriptionDetails {
     return {
       'mqsSubscriptionStatus': mqsSubscriptionStatus,
       'mqsSubscriptionActivePlan': mqsSubscriptionActivePlan,
-      'mqsSubscriptionStartDate': mqsSubscriptionStartDate,
+      'mqsSubscriptionActivationTimestamp': mqsSubscriptionActivationTimestamp,
       'mqsSubscriptionExpiryDate': mqsSubscriptionExpiryDate,
+      'mqsSubscriptionRenewalDate': mqsSubscriptionRenewalDate,
     };
   }
 }

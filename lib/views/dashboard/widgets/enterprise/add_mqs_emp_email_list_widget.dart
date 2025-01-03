@@ -5,6 +5,7 @@ import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_button.dart';
+import 'package:mqs_admin_portal_web/widgets/custom_drop_down.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_text_field.dart';
 import 'package:mqs_admin_portal_web/widgets/title_widget.dart';
 
@@ -43,6 +44,15 @@ Widget addMqsEmpEmailListWidget(
             hintText: StringConfig.dashboard.enterEmployeeName,
             validator: (p0) => Validator.emptyValidator(
                 p0 ?? "", StringConfig.dashboard.employeeName.toLowerCase()),
+          ),
+          SizeConfig.size34.height,
+          CustomDropDown(
+            label: StringConfig.dashboard.mqsCommonLogin,
+            value: dashboardController.mqsCommonLogin.value,
+            items: dashboardController.boolOptions,
+            onChanged: (value) {
+              dashboardController.mqsCommonLogin.value = value;
+            },
           ),
           SizeConfig.size18.height,
           Row(

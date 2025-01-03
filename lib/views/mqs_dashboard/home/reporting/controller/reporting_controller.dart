@@ -150,7 +150,7 @@ class ReportingController extends GetxController {
       List<CircleModel> circleList = await CircleRepository.i.getCircles();
       List<UserSubscriptionReceiptModel> activeRec = receipt
           .where((e) =>
-              e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+              e.mqsSubscriptionStatus == StringConfig.reporting.active)
           .toList();
 
       List totalStatus = users.where((localItem) {
@@ -947,7 +947,7 @@ class ReportingController extends GetxController {
       }
       List activeRec = receipt
           .where((e) =>
-              e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+              e.mqsSubscriptionStatus == StringConfig.reporting.active)
           .toList();
 
       activeSubscriptions.value = users.where((localItem) {
@@ -970,7 +970,7 @@ class ReportingController extends GetxController {
       if (subscriptionType.value == StringConfig.reporting.activeSubscription) {
         List activeRec = receipt
             .where((e) =>
-                e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+                e.mqsSubscriptionStatus == StringConfig.reporting.active)
             .toList();
 
         _dashboardController.searchedUsers.value = users.where((localItem) {
@@ -1179,7 +1179,7 @@ class ReportingController extends GetxController {
       if (subscriptionType.value == StringConfig.reporting.activeSubscription) {
         List activeRec = receipt
             .where((e) =>
-                e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+                e.mqsSubscriptionStatus == StringConfig.reporting.active)
             .toList();
         _dashboardController.searchedUsers.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
@@ -1213,7 +1213,7 @@ class ReportingController extends GetxController {
       }
       List activeRec = receipt
           .where((e) =>
-              e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+              e.mqsSubscriptionStatus == StringConfig.reporting.active)
           .toList();
 
       activeSubscriptions.value = users.where((localItem) {
@@ -1235,7 +1235,7 @@ class ReportingController extends GetxController {
 
         List activeRec = data
             .where((e) =>
-                e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+                e.mqsSubscriptionStatus == StringConfig.reporting.active)
             .toList();
 
         activeSubscriptions.value = users.where((localItem) {
@@ -1265,7 +1265,7 @@ class ReportingController extends GetxController {
       if (status == "active") {
         List activeRec = receipt
             .where((e) =>
-                e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+                e.mqsSubscriptionStatus == StringConfig.reporting.active)
             .toList();
         _dashboardController.searchedUsers.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
@@ -1292,7 +1292,7 @@ class ReportingController extends GetxController {
         if (status == "active") {
           List activeRec = data
               .where((e) =>
-                  e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+                  e.mqsSubscriptionStatus == StringConfig.reporting.active)
               .toList();
           _dashboardController.searchedUsers.value = users.where((localItem) {
             return activeRec.any((firebaseItem) =>
@@ -1357,7 +1357,7 @@ class ReportingController extends GetxController {
             model.mqsSubscriptionActivePlan,
             model.mqsSubscriptionPlatform,
             model.mqsTransactionID,
-            model.mqsUserSubscriptionStatus,
+            model.mqsSubscriptionStatus,
           ];
         }),
       ];
@@ -1395,11 +1395,11 @@ class ReportingController extends GetxController {
           await UserRepository.i.getUserSubscriptionReceipt();
       List<UserSubscriptionReceiptModel> activeRec = receipt
           .where((e) =>
-              e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+              e.mqsSubscriptionStatus == StringConfig.reporting.active)
           .toList();
       List<UserSubscriptionReceiptModel> inActiveRec = receipt
           .where((e) =>
-              e.mqsUserSubscriptionStatus != StringConfig.reporting.active)
+              e.mqsSubscriptionStatus != StringConfig.reporting.active)
           .toList();
       users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp.isEmpty
               ? DateTime.now().toIso8601String()
@@ -1486,11 +1486,11 @@ class ReportingController extends GetxController {
           await UserRepository.i.getUserSubscriptionReceipt();
       List<UserSubscriptionReceiptModel> activeRec = receipt
           .where((e) =>
-              e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+              e.mqsSubscriptionStatus == StringConfig.reporting.active)
           .toList();
       List<UserSubscriptionReceiptModel> inActiveRec = receipt
           .where((e) =>
-              e.mqsUserSubscriptionStatus != StringConfig.reporting.active)
+              e.mqsSubscriptionStatus != StringConfig.reporting.active)
           .toList();
 
       users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp.isEmpty
@@ -1625,11 +1625,11 @@ class ReportingController extends GetxController {
           await UserRepository.i.getUserSubscriptionReceipt();
       List<UserSubscriptionReceiptModel> activeRec = receipt
           .where((e) =>
-              e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+              e.mqsSubscriptionStatus == StringConfig.reporting.active)
           .toList();
       List<UserSubscriptionReceiptModel> inActiveRec = receipt
           .where((e) =>
-              e.mqsUserSubscriptionStatus != StringConfig.reporting.active)
+              e.mqsSubscriptionStatus != StringConfig.reporting.active)
           .toList();
       users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp.isEmpty
               ? DateTime.now().toIso8601String()
@@ -1709,11 +1709,11 @@ class ReportingController extends GetxController {
           await UserRepository.i.getUserSubscriptionReceipt();
       List<UserSubscriptionReceiptModel> activeRec = receipt
           .where((e) =>
-              e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+              e.mqsSubscriptionStatus == StringConfig.reporting.active)
           .toList();
       List<UserSubscriptionReceiptModel> inActiveRec = receipt
           .where((e) =>
-              e.mqsUserSubscriptionStatus != StringConfig.reporting.active)
+              e.mqsSubscriptionStatus != StringConfig.reporting.active)
           .toList();
       users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp.isEmpty
               ? DateTime.now().toIso8601String()
@@ -1872,7 +1872,7 @@ class ReportingController extends GetxController {
       } else if (reportType.value == StringConfig.reporting.subscribed) {
         List<UserSubscriptionReceiptModel> activeRec = receipt
             .where((e) =>
-                e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+                e.mqsSubscriptionStatus == StringConfig.reporting.active)
             .toList();
         dashboardController.searchedUsers.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
@@ -1905,7 +1905,7 @@ class ReportingController extends GetxController {
       } else if (reportType.value == StringConfig.reporting.notSubscribed) {
         List<UserSubscriptionReceiptModel> inActiveRec = receipt
             .where((e) =>
-                e.mqsUserSubscriptionStatus != StringConfig.reporting.active)
+                e.mqsSubscriptionStatus != StringConfig.reporting.active)
             .toList();
         dashboardController.searchedUsers.value = users.where((localItem) {
           return inActiveRec.any((firebaseItem) =>
@@ -1980,7 +1980,7 @@ class ReportingController extends GetxController {
       } else if (reportType.value == StringConfig.dashboard.userSubscription) {
         List<UserSubscriptionReceiptModel> activeRec = receipt
             .where((e) =>
-                e.mqsUserSubscriptionStatus == StringConfig.reporting.active)
+                e.mqsSubscriptionStatus == StringConfig.reporting.active)
             .toList();
         dashboardController.searchedUsers.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
