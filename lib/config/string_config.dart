@@ -622,11 +622,10 @@ class Pathway {
   final String mqsPathwayID = "mqsPathwayID";
 }
 class Database {
-  final String database = "Database";
   final String next = "Next";
   final String subscriptionReceipt = "Subscription Receipt";
   final String circleFlaggedPost = "Circle Flagged Post";
-  final String storage = "Storage";
+  final String data = "Data";
   final String addCollection = "Add Collection";
   final String addACollection = "Add a Collection";
   final String collectionID = "Collection ID";

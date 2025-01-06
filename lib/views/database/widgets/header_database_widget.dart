@@ -14,7 +14,7 @@ Widget headerDatabaseWidget(
       Row(
         children: [
           Text(
-            StringConfig.database.storage,
+            StringConfig.database.data,
             style: FontTextStyleConfig.tabTextStyle.copyWith(
               fontSize: FontSizeConfig.fontSize18,
               color:

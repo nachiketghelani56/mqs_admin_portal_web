@@ -23,7 +23,7 @@ class MqsDashboardController extends GetxController {
     ),
     MenuModel(
       icon: ImageConfig.data,
-      title: StringConfig.database.storage,
+      title: StringConfig.database.data,
       subtitles:  [
         StringConfig.dashboard.enterprise,
         StringConfig.dashboard.users,
