@@ -18,6 +18,7 @@ Widget circleTableTitleWidget() {
     child: Row(
       children: [
         Expanded(
+          flex: SizeConfig.size2.toInt(),
           child: Text(
             StringConfig.dashboard.fullName,
             style: FontTextStyleConfig.textFieldTextStyle.copyWith(
@@ -27,6 +28,7 @@ Widget circleTableTitleWidget() {
           ),
         ),
         Expanded(
+          flex: SizeConfig.size3.toInt(),
           child: Text(
             StringConfig.reporting.postTitle,
             style: FontTextStyleConfig.textFieldTextStyle.copyWith(

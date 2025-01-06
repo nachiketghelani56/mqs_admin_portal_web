@@ -23,6 +23,7 @@ Widget circleTableRowWidget({
     child: Row(
       children: [
         Expanded(
+          flex: SizeConfig.size2.toInt(),
           child: Text(
             circleController.searchedCircle[index].userName ?? "",
             overflow: TextOverflow.ellipsis,
@@ -30,6 +31,7 @@ Widget circleTableRowWidget({
           ),
         ),
         Expanded(
+          flex: SizeConfig.size3.toInt(),
           child: Text(
             circleController.searchedCircle[index].postTitle ?? "",
             overflow: TextOverflow.ellipsis,
@@ -38,7 +40,7 @@ Widget circleTableRowWidget({
         ),
         Expanded(
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
                 ImageConfig.eyeOpened,
@@ -51,31 +53,31 @@ Widget circleTableRowWidget({
                   Get.toNamed(AppRoutes.circleDetail);
                 }
               }),
-              if (!isReport) ...[
-                Image.asset(
-                  ImageConfig.edit,
-                  height: SizeConfig.size24,
-                ).tap(() {
-                  circleController.viewIndex.value = index;
-                  circleController.isAdd.value = false;
-                  circleController.isEdit.value = true;
-                  circleController.showHashTag.value = false;
-                  circleController.setCircleForm();
-                  if (context.width < SizeConfig.size1500) {
-                    Get.toNamed(AppRoutes.addCircle);
-                  }
-                }),
-                Image.asset(
-                  ImageConfig.delete,
-                  height: SizeConfig.size24,
-                ).tap(() {
-                  circleDeleteDialogWidget(
-                    context: context,
-                    circleController: circleController,
-                    docId: circleController.searchedCircle[index].id ?? "",
-                  );
-                }),
-              ],
+              // if (!isReport) ...[
+              //   Image.asset(
+              //     ImageConfig.edit,
+              //     height: SizeConfig.size24,
+              //   ).tap(() {
+              //     circleController.viewIndex.value = index;
+              //     circleController.isAdd.value = false;
+              //     circleController.isEdit.value = true;
+              //     circleController.showHashTag.value = false;
+              //     circleController.setCircleForm();
+              //     if (context.width < SizeConfig.size1500) {
+              //       Get.toNamed(AppRoutes.addCircle);
+              //     }
+              //   }),
+              //   Image.asset(
+              //     ImageConfig.delete,
+              //     height: SizeConfig.size24,
+              //   ).tap(() {
+              //     circleDeleteDialogWidget(
+              //       context: context,
+              //       circleController: circleController,
+              //       docId: circleController.searchedCircle[index].id ?? "",
+              //     );
+              //   }),
+              // ],
             ],
           ),
         ),

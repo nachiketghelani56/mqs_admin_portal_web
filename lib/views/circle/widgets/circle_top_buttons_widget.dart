@@ -44,16 +44,16 @@ Widget circleTopButtonsWidget({
                 },
               ),
             const Spacer(),
-            if (!isReport) ...[
-              SizeConfig.size12.width,
-              CustomIconButton(
-                icon: ImageConfig.import,
-                onTap: () {
-                  circleController.importCircle();
-                },
-              ),
-              SizeConfig.size12.width,
-            ],
+            // if (!isReport) ...[
+            //   SizeConfig.size12.width,
+            //   CustomIconButton(
+            //     icon: ImageConfig.import,
+            //     onTap: () {
+            //       circleController.importCircle();
+            //     },
+            //   ),
+            //   SizeConfig.size12.width,
+            // ],
             if (!(isReport && circleController.circle.isEmpty))
               CustomIconButton(
                 icon: ImageConfig.export,
@@ -66,23 +66,23 @@ Widget circleTopButtonsWidget({
               SizeConfig.size12.width,
               filterWidget
             ],
-            if (!isReport) ...[
-              SizeConfig.size12.width,
-              CustomPrefixButton(
-                prefixIcon: ImageConfig.add,
-                padding: SizeConfig.size15,
-                btnText: StringConfig.circle.addCircle,
-                onTap: () {
-                  circleController.isEdit.value = false;
-                  circleController.isAdd.value = true;
-                  circleController.showHashTag.value = false;
-                  circleController.clearAllFields();
-                  if (context.width < SizeConfig.size1500) {
-                    Get.toNamed(AppRoutes.addCircle);
-                  }
-                },
-              ),
-            ],
+            // if (!isReport) ...[
+            //   SizeConfig.size12.width,
+            //   CustomPrefixButton(
+            //     prefixIcon: ImageConfig.add,
+            //     padding: SizeConfig.size15,
+            //     btnText: StringConfig.circle.addCircle,
+            //     onTap: () {
+            //       circleController.isEdit.value = false;
+            //       circleController.isAdd.value = true;
+            //       circleController.showHashTag.value = false;
+            //       circleController.clearAllFields();
+            //       if (context.width < SizeConfig.size1500) {
+            //         Get.toNamed(AppRoutes.addCircle);
+            //       }
+            //     },
+            //   ),
+            // ],
           ],
         )
       : Row(
@@ -109,15 +109,15 @@ Widget circleTopButtonsWidget({
                 },
               ),
             const Spacer(),
-            if (!isReport) ...[
-              CustomIconButton(
-                icon: ImageConfig.import,
-                onTap: () {
-                  circleController.importCircle();
-                },
-              ),
-              SizeConfig.size12.width,
-            ],
+            // if (!isReport) ...[
+            //   CustomIconButton(
+            //     icon: ImageConfig.import,
+            //     onTap: () {
+            //       circleController.importCircle();
+            //     },
+            //   ),
+            //   SizeConfig.size12.width,
+            // ],
             if (!(isReport && circleController.circle.isEmpty))
               CustomIconButton(
                 icon: ImageConfig.export,
@@ -130,21 +130,21 @@ Widget circleTopButtonsWidget({
               SizeConfig.size12.width,
               filterWidget
             ],
-            if (!isReport) ...[
-              SizeConfig.size12.width,
-              CustomIconButton(
-                icon: ImageConfig.add,
-                onTap: () {
-                  circleController.isEdit.value = false;
-                  circleController.isAdd.value = true;
-                  circleController.showHashTag.value = false;
-                  circleController.clearAllFields();
-                  if (context.width < SizeConfig.size1500) {
-                    Get.toNamed(AppRoutes.addCircle);
-                  }
-                },
-              ),
-            ],
+            // if (!isReport) ...[
+            //   SizeConfig.size12.width,
+            //   CustomIconButton(
+            //     icon: ImageConfig.add,
+            //     onTap: () {
+            //       circleController.isEdit.value = false;
+            //       circleController.isAdd.value = true;
+            //       circleController.showHashTag.value = false;
+            //       circleController.clearAllFields();
+            //       if (context.width < SizeConfig.size1500) {
+            //         Get.toNamed(AppRoutes.addCircle);
+            //       }
+            //     },
+            //   ),
+            // ],
           ],
         );
 }
