@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
-import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
+import 'package:mqs_admin_portal_web/views/database/controller/database_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
-import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/controller/home_controller.dart';
 
-Widget homeOptionsWidget(
-    {required HomeController homeController,
-    required MqsDashboardController mqsDashboardController,
-    required DashboardController dashboardController}) {
+Widget databaseOptionsWidget({
+  required DatabaseController databaseController,
+  required MqsDashboardController mqsDashboardController,
+  required BuildContext context,
+}) {
   return Wrap(
     spacing: SizeConfig.size34,
     runSpacing: SizeConfig.size34,
     children: [
-      for (int i = 0; i < homeController.options.length; i++)
+      for (int i = 0; i < databaseController.options.length; i++)
         GestureDetector(
           onTap: () {
             mqsDashboardController.subMenuIndex.value = i;
-            // mqsDashboardController.isShowHome.value = true;
-            mqsDashboardController.setTrueAtIndex(0);
-            dashboardController.setTabIndex(index: i);
+            mqsDashboardController.setTrueAtIndex(1);
           },
           child: Stack(
             alignment: Alignment.topLeft,
@@ -32,17 +30,21 @@ Widget homeOptionsWidget(
                 alignment: Alignment.center,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Image.asset(
-                      homeController.options[i].icon,
+                      databaseController.options[i].icon ?? "",
                       height: SizeConfig.size72,
                       width: SizeConfig.size72,
                     ),
                     SizeConfig.size12.height,
                     Text(
-                      homeController.options[i].title,
-                      style: FontTextStyleConfig.cardSubTextStyle
-                          .copyWith(color: ColorConfig.primaryColor),
+                      databaseController.options[i].title,
+                      textAlign: TextAlign.center,
+                      style: FontTextStyleConfig.subMenuTextStyle.copyWith(
+                        color: ColorConfig.primaryColor,
+                        fontSize: FontSizeConfig.fontSize20,
+                      ),
                     ),
                   ],
                 ),

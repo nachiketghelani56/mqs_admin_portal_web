@@ -18,7 +18,7 @@ Widget circleWidget({
   required CircleController circleController,
   ReportingController? reportingController,
   required GlobalKey<ScaffoldState> scaffoldKey,
-  bool isReport = false,
+  bool isReport = false,bool isStorage= false,
   Widget? filterWidget,
 }) {
   return Obx(
@@ -37,6 +37,7 @@ Widget circleWidget({
                     padding: const EdgeInsets.all(SizeConfig.size16),
                     child: Column(
                       children: [
+                        if(!isStorage)...[
                         circleTopButtonsWidget(
                           circleController: circleController,
                           scaffoldKey: scaffoldKey,
@@ -45,7 +46,7 @@ Widget circleWidget({
                           filterWidget: filterWidget,
                           isReport: isReport,
                         ),
-                        SizeConfig.size26.height,
+                        SizeConfig.size26.height,],
                         circleController.searchedCircle.isEmpty
                             ? Text(
                                 StringConfig.dashboard.noDataFound,
@@ -66,6 +67,7 @@ Widget circleWidget({
                                         context: context,
                                         index: i,
                                         isReport: isReport,
+                                          isStorage: isStorage
                                       ),
                                     circleTableBottomWidget(
                                         circleController: circleController),

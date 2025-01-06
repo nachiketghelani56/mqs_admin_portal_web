@@ -17,6 +17,7 @@ Widget userIAMWidget(
     required MqsDashboardController mqsDashboardController,
     required BuildContext context,
     bool isReport = false,
+    bool isStorage = false,
     Widget? filterWidget}) {
   return dashboardController.userLoader.value
       ? const LoaderWidget()
@@ -33,14 +34,16 @@ Widget userIAMWidget(
                   padding: const EdgeInsets.all(SizeConfig.size16),
                   child: Column(
                     children: [
-                      userTopButtonsWidget(
-                        dashboardController: dashboardController,
-                        context: context,
-                        mqsDashboardController: mqsDashboardController,
-                        filterWidget: filterWidget,
-                        isReport: isReport,
-                      ),
-                      SizeConfig.size26.height,
+                      if (!isStorage) ...[
+                        userTopButtonsWidget(
+                          dashboardController: dashboardController,
+                          context: context,
+                          mqsDashboardController: mqsDashboardController,
+                          filterWidget: filterWidget,
+                          isReport: isReport,
+                        ),
+                        SizeConfig.size26.height,
+                      ],
                       dashboardController.searchedUsers.isEmpty
                           ? Text(
                               StringConfig.dashboard.noDataFound,
@@ -54,12 +57,12 @@ Widget userIAMWidget(
                                       i < dashboardController.getMaxOffset();
                                       i++)
                                     userTableRowWidget(
-                                      isSelected: i ==
-                                          dashboardController.viewIndex.value,
-                                      dashboardController: dashboardController,
-                                      context: context,
-                                      index: i,
-                                    ),
+                                        isSelected: i ==
+                                            dashboardController.viewIndex.value,
+                                        dashboardController:
+                                            dashboardController,
+                                        context: context,
+                                        index: i,),
                                   userTableBottomWidget(
                                       dashboardController: dashboardController),
                                 ],

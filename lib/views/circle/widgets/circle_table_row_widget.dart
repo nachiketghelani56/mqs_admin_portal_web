@@ -12,6 +12,7 @@ Widget circleTableRowWidget({
   required BuildContext context,
   required int index,
   bool isReport = false,
+  bool isStorage= false
 }) {
   return Container(
     height: SizeConfig.size76,

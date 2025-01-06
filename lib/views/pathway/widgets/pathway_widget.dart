@@ -15,7 +15,8 @@ import 'package:mqs_admin_portal_web/widgets/loader_widget.dart';
 Widget pathwayWidget(
     {required BuildContext context,
     required PathwayController pathwayController,
-    required GlobalKey<ScaffoldState> scaffoldKey}) {
+    required GlobalKey<ScaffoldState> scaffoldKey,
+    bool isStorage = false}) {
   return Obx(
     () => pathwayController.pathwayLoader.value
         ? const LoaderWidget()
@@ -30,12 +31,14 @@ Widget pathwayWidget(
                     padding: const EdgeInsets.all(SizeConfig.size16),
                     child: Column(
                       children: [
-                        pathwayTopButtonsWidget(
-                          pathwayController: pathwayController,
-                          scaffoldKey: scaffoldKey,
-                          context: context,
-                        ),
-                        SizeConfig.size26.height,
+                        if (!isStorage) ...[
+                          pathwayTopButtonsWidget(
+                            pathwayController: pathwayController,
+                            scaffoldKey: scaffoldKey,
+                            context: context,
+                          ),
+                          SizeConfig.size26.height,
+                        ],
                         pathwayController.searchedPathway.isEmpty
                             ? Text(
                                 StringConfig.dashboard.noDataFound,

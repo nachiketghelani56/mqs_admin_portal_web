@@ -6,6 +6,11 @@ import 'package:mqs_admin_portal_web/views/circle/circle_screen.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/dashboard_screen.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/filter_sheet_widget.dart';
+import 'package:mqs_admin_portal_web/views/database/circle_collection_screen.dart';
+import 'package:mqs_admin_portal_web/views/database/enterprise_collection_screen.dart';
+import 'package:mqs_admin_portal_web/views/database/database_screen.dart';
+import 'package:mqs_admin_portal_web/views/database/pathway_collection_screen.dart';
+import 'package:mqs_admin_portal_web/views/database/user_collection_screen.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/home_screen.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/reporting_screen.dart';
@@ -83,7 +88,31 @@ class MqsDashboardScreen extends StatelessWidget {
                           dashboardController: _dashboardController,
                         );
                       }
-                    }
+                    }else if (_mqsDashboardController.menuIndex.value == 1)
+                      {
+                        if (_mqsDashboardController.subMenuIndex.value ==
+                            0) {
+                          return EnterpriseCollectionScreen(
+                              scaffoldKey: _mqsDashboardController.scaffoldKey);
+                        }   else if (_mqsDashboardController.subMenuIndex.value ==
+                            1) {
+                          return UserCollectionScreen(
+                              scaffoldKey: _mqsDashboardController.scaffoldKey);
+                        }else if (_mqsDashboardController.subMenuIndex.value ==
+                            2) {
+                          return CircleCollectionScreen(
+                              scaffoldKey: _mqsDashboardController.scaffoldKey);
+                        }else if (_mqsDashboardController.subMenuIndex.value ==
+                            3) {
+                          return PathwayCollectionScreen(
+                              scaffoldKey: _mqsDashboardController.scaffoldKey);
+                        }
+                        else{
+                          return DatabaseScreen(
+                              scaffoldKey: _mqsDashboardController.scaffoldKey);
+                        }
+                      }
+
                     return const SizedBox.shrink();
                   },
                 ),

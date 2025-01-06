@@ -17,7 +17,7 @@ import 'package:mqs_admin_portal_web/widgets/loader_widget.dart';
 Widget enterpriseWidget(
     {required DashboardController dashboardController,
     required MqsDashboardController mqsDashboardController,
-    required BuildContext context , bool isReport = false,}) {
+    required BuildContext context , bool isReport = false,bool isStorage= false}) {
   return
     dashboardController.enterpriseLoader.value
       ? const LoaderWidget()
@@ -34,13 +34,16 @@ Widget enterpriseWidget(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      enterpriseTopButtonsWidget(
-                        dashboardController: dashboardController,
-                        mqsDashboardController: mqsDashboardController,
-                        context: context,
-                        isReport: isReport,
-                      ),
-                      SizeConfig.size26.height,
+                      if(!isStorage)...[
+                        enterpriseTopButtonsWidget(
+                          dashboardController: dashboardController,
+                          mqsDashboardController: mqsDashboardController,
+                          context: context,
+                          isReport: isReport,
+                        ),
+                        SizeConfig.size26.height,
+                      ],
+
                       dashboardController.searchedEnterprises.isEmpty
                           ? Text(
                               StringConfig.dashboard.noDataFound,
@@ -63,6 +66,7 @@ Widget enterpriseWidget(
                                       context: context,
                                       index: i,
                                       isReport: isReport,
+                                      isStorage: isStorage
                                     ),
                                   enterpriseTableBottomWidget(
                                       dashboardController: dashboardController),

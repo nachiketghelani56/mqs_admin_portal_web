@@ -166,7 +166,7 @@ class DashboardController extends GetxController {
   StreamSubscription<List<UserIAMModel>>? userStream;
   StreamSubscription<List<UserSubscriptionReceiptModel>>?
       userSubscriptionReceiptStream;
-  RxBool enterpriseLoader = false.obs, userLoader = false.obs;
+  RxBool enterpriseLoader = false.obs, userLoader = false.obs,userSubscriptionReceipt= false.obs;
   List<DropdownMenuItem> get boolOptions => [
         DropdownMenuItem(
           value: true,
@@ -449,7 +449,7 @@ class DashboardController extends GetxController {
   }
 
   getUserSubscriptionRecipts() async {
-    try {
+    try {userSubscriptionReceipt.value = true;
       userSubscriptionReceipts.value =
           await UserRepository.i.getUserSubscriptionReceipt();
       userSubscriptionReceiptStream =
@@ -459,7 +459,9 @@ class DashboardController extends GetxController {
       });
     } catch (e) {
       errorDialogWidget(msg: e.toString());
-    } finally {}
+    } finally {
+      userSubscriptionReceipt.value = false;
+    }
   }
 
   addMqsTeam() {

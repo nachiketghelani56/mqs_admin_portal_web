@@ -50,8 +50,10 @@ Widget sideMenuWidget(
                       child: Row(
                         children: [
                           Image.asset(
-                            mqsDashboardController.menuItems[index].icon,
+                            mqsDashboardController.menuItems[index].icon ??"",
                             width: SizeConfig.size20,
+                            height: SizeConfig.size20,
+                            fit: BoxFit.fitHeight,
                           ),
                           SizeConfig.size8.width,
                           Expanded(
@@ -65,7 +67,7 @@ Widget sideMenuWidget(
                                   .menuItems[index].subtitles.isNotEmpty) ...[
                             SizeConfig.size8.width,
                             Icon(
-                              mqsDashboardController.isShowHome.value
+                              mqsDashboardController.totalMenu[index]
                                   ? Icons.keyboard_arrow_down
                                   : Icons.keyboard_arrow_up,
                               color: ColorConfig.whiteColor,
@@ -77,14 +79,16 @@ Widget sideMenuWidget(
                     ).tap(() {
                       mqsDashboardController.menuIndex.value = index;
                       mqsDashboardController.subMenuIndex.value = -1;
-                      mqsDashboardController.isShowHome.value =
-                          !mqsDashboardController.isShowHome.value;
-                      if (!mqsDashboardController.isShowHome.value) {
+                      //
+                      // mqsDashboardController.isShowHome.value =
+                      //     !mqsDashboardController.isShowHome.value;
+                      mqsDashboardController.toggleMenu(index);
+                      if (!mqsDashboardController.totalMenu.contains(true)) {
                         mqsDashboardController.scaffoldKey.currentState
                             ?.closeDrawer();
                       }
                     }),
-                    if (mqsDashboardController.isShowHome.value)
+                    if (mqsDashboardController.totalMenu[index])
                       if (index == mqsDashboardController.menuIndex.value &&
                           mqsDashboardController
                               .menuItems[index].subtitles.isNotEmpty) ...[
@@ -92,8 +96,7 @@ Widget sideMenuWidget(
                           shrinkWrap: true,
                           padding: const EdgeInsets.only(
                               left: SizeConfig.size38,
-                              top: SizeConfig.size12,
-                              bottom: SizeConfig.size24),
+                              top: SizeConfig.size12,),
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, i) {
                             return Obx(
@@ -112,17 +115,19 @@ Widget sideMenuWidget(
                                         shape: BoxShape.circle),
                                   ),
                                   SizeConfig.size6.width,
-                                  Text(
-                                    mqsDashboardController
-                                        .menuItems[index].subtitles[i],
-                                    style: i ==
-                                            mqsDashboardController
-                                                .subMenuIndex.value
-                                        ? FontTextStyleConfig.subMenuTextStyle
-                                            .copyWith(
-                                                fontWeight: FontWeight.w500,
-                                                color: ColorConfig.whiteColor)
-                                        : FontTextStyleConfig.subMenuTextStyle,
+                                  Flexible(
+                                    child: Text(
+                                      mqsDashboardController
+                                          .menuItems[index].subtitles[i],
+                                      style: i ==
+                                              mqsDashboardController
+                                                  .subMenuIndex.value
+                                          ? FontTextStyleConfig.subMenuTextStyle
+                                              .copyWith(
+                                                  fontWeight: FontWeight.w500,
+                                                  color: ColorConfig.whiteColor)
+                                          : FontTextStyleConfig.subMenuTextStyle,
+                                    ),
                                   ),
                                 ],
                               ).tap(() {

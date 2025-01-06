@@ -625,12 +625,8 @@ class Database {
   final String database = "Database";
   final String next = "Next";
   final String subscriptionReceipt = "Subscription Receipt";
-  final String enterpriseCollection = "Enterprise Collection";
-  final String userCollection = "User Collection";
-  final String circleCollection = "Circle Collection";
-  final String pathwayCollection = "Pathway Collection";
-  final String teamCollection = "Team Collection";
-  final String userSubscriptionReceiptCollection = "Subscription Receipt Collection";
+  final String circleFlaggedPost = "Circle Flagged Post";
+  final String storage = "Storage";
   final String addCollection = "Add Collection";
   final String addACollection = "Add a Collection";
   final String collectionID = "Collection ID";

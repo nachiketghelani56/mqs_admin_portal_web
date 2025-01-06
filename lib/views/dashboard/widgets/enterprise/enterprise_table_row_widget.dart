@@ -12,6 +12,7 @@ Widget enterpriseTableRowWidget({
   required BuildContext context,
   required int index,
   bool isReport = false,
+  bool isStorage= false
 }) {
   return Container(
     height: SizeConfig.size76,
@@ -65,7 +66,7 @@ Widget enterpriseTableRowWidget({
                   Get.toNamed(AppRoutes.enterpriseDetail);
                 }
               }),
-              if (!isReport) ...[
+              if (!(isReport || isStorage)) ...[
                 Image.asset(
                   ImageConfig.edit,
                   height: SizeConfig.size24,
