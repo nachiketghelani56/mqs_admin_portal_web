@@ -1254,7 +1254,10 @@ class DashboardController extends GetxController {
             model.mqsCreatedTimestamp.isNotEmpty
                 ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
                     .format(DateTime.parse(model.mqsCreatedTimestamp))
-                : "",
+                : model.mqsEnterpriseCreatedTimestamp.isNotEmpty
+                    ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
+                        DateTime.parse(model.mqsEnterpriseCreatedTimestamp))
+                    : DateTime.now().toIso8601String(),
             "${model.mqsEnterpriseUserFlag}",
             model.mqsFirebaseUserID,
             model.mqsMONGODBUserID,

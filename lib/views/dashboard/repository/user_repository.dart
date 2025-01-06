@@ -117,12 +117,25 @@ class UserRepository {
                     ];
                     // }
                   } else {
-                    query = query
-                        .where(field,
-                            isEqualTo: type == StringConfig.dashboard.boolean
-                                ? value == 'true'
-                                : value.toString())
-                        .orderBy(field, descending: !isAsc);
+
+                 if(fieldKey =="mqsCreatedTimestamp"){
+                    allRes.addAll(userList.where((UserIAMModel e) {
+                                    String timeVal=e.mqsCreatedTimestamp.isNotEmpty? e.mqsCreatedTimestamp :e.mqsEnterpriseCreatedTimestamp.isNotEmpty ?e.mqsEnterpriseCreatedTimestamp:DateTime.now().toIso8601String();
+
+                                    return  timeVal.contains(value);
+                                  }).toList());
+
+
+
+                 }else{
+                   query = query
+                       .where(field,
+                       isEqualTo: type == StringConfig.dashboard.boolean
+                           ? value == 'true'
+                           : value.toString())
+                       .orderBy(field, descending: !isAsc);
+                 }
+
                   }
                   break;
                 case '!=': // Not equal to
@@ -166,12 +179,23 @@ class UserRepository {
                           .map((doc) => UserIAMModel.fromJson(doc.data() as Map)),
                     ];
                   } else {
+                   if(fieldKey =="mqsCreatedTimestamp"){
+                                      allRes.addAll(userList.where((UserIAMModel e) {
+                                                      String timeVal=e.mqsCreatedTimestamp.isNotEmpty? e.mqsCreatedTimestamp :e.mqsEnterpriseCreatedTimestamp.isNotEmpty ?e.mqsEnterpriseCreatedTimestamp:DateTime.now().toIso8601String();
+
+                                                      return  !timeVal.contains(value);
+                                                    }).toList());
+
+
+
+                                   }else{
                     query = query
                         .where(field,
                             isNotEqualTo: type == StringConfig.dashboard.boolean
                                 ? value == 'true'
                                 : value.toString())
                         .orderBy(field, descending: !isAsc);
+                        }
                   }
                   break;
                 case '>': // Greater than
@@ -402,20 +426,22 @@ class UserRepository {
               }
               }
      }
-     if (condition == "array-contains-any") {
+     if (condition == "array-contains-any" || (condition == "==" && fieldKey =="mqsCreatedTimestamp") ||(condition == "!=" && fieldKey =="mqsCreatedTimestamp")) {
        return allRes;
      } else {
-         if (field2Key.isNotEmpty) {
-               return matchedUsers;
-             } else {
-               // Get the filtered query results
-               QuerySnapshot querySnapshot = await query.get();
-       // Return the matching documents
 
-               return querySnapshot.docs
-                   .map((e) => UserIAMModel.fromJson(e.data() as Map))
-                   .toList();
-             }
-     }
+      if (field2Key.isNotEmpty) {
+                    return matchedUsers;
+                  } else {
+                    // Get the filtered query results
+                    QuerySnapshot querySnapshot = await query.get();
+            // Return the matching documents
+
+                    return querySnapshot.docs
+                        .map((e) => UserIAMModel.fromJson(e.data() as Map))
+                        .toList();
+                  }}
+
+
    }
 }

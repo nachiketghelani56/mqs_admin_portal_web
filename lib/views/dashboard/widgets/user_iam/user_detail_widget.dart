@@ -78,7 +78,7 @@ Widget userDetailWidget({required DashboardController dashboardController}) {
                   flex: SizeConfig.size4.toInt(),
                   child: Text(
                     dashboardController.dateConvert(
-                        dashboardController.userDetail.mqsCreatedTimestamp),
+                        dashboardController.userDetail.mqsCreatedTimestamp.isNotEmpty ?  dashboardController.userDetail.mqsCreatedTimestamp :dashboardController.userDetail.mqsEnterpriseCreatedTimestamp.isNotEmpty ?  dashboardController.userDetail.mqsEnterpriseCreatedTimestamp :DateTime.now().toIso8601String() ),
                     style: FontTextStyleConfig.tableContentTextStyle,
                     overflow: TextOverflow.ellipsis,
                   ),

@@ -67,7 +67,7 @@ class UserIAMModel {
             json['mqsFirebaseUserID'] ?? json['isFirebaseUserID'] ?? "",
         mqsRegistrationStatus =
             json['mqsRegistrationStatus'] ?? json['isRegister'] ?? "",
-        mqsCreatedTimestamp = json['mqsCreatedTimestamp'] ?? "",
+        mqsCreatedTimestamp = json['mqsCreatedTimestamp'] ??json['mqsEnterpriseCreatedTimestamp'] ?? DateTime.now().toIso8601String(),
         mqsAbout = json['mqsAbout'] ?? json['About'] ?? "",
         mqsAllowAbout = json['mqsPrivacySettingsDetails'] != null
             ? json['mqsPrivacySettingsDetails']['mqsAllowAbout']
