@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/database/controller/database_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 
 Widget databaseOptionsWidget({
   required DatabaseController databaseController,
-  required MqsDashboardController mqsDashboardController,
+  required MqsDashboardController mqsDashboardController,  required DashboardController dashboardController,
   required BuildContext context,
 }) {
   return Wrap(
@@ -18,6 +19,7 @@ Widget databaseOptionsWidget({
           onTap: () {
             mqsDashboardController.subMenuIndex.value = i;
             mqsDashboardController.setTrueAtIndex(1);
+            dashboardController.setTabIndex(index: i);
           },
           child: Stack(
             alignment: Alignment.topLeft,

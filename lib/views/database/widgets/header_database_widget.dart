@@ -8,7 +8,7 @@ import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboar
 Widget headerDatabaseWidget(
     {required String title,
     required MqsDashboardController mqsDashboardController,
-    required DashboardController dashboardController}) {
+    required DashboardController dashboardController,required int index}) {
   return Column(
     children: [
       Row(
@@ -24,6 +24,8 @@ Widget headerDatabaseWidget(
             () {
               mqsDashboardController.menuIndex.value = 1;
               mqsDashboardController.subMenuIndex.value = -1;
+              dashboardController.setTabIndex(index: index);
+
             },
           ),
           SizeConfig.size10.width,

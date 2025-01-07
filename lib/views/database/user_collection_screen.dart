@@ -35,7 +35,7 @@ class UserCollectionScreen extends StatelessWidget {
           child: headerDatabaseWidget(
             title: StringConfig.dashboard.users,
             mqsDashboardController: _mqsDashboardController,
-            dashboardController: _dashboardController,
+            dashboardController: _dashboardController,index: 1,
           ),
         ),
         SizeConfig.size25.height,

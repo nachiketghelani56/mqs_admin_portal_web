@@ -22,6 +22,9 @@ import 'package:mqs_admin_portal_web/views/circle/controller/circle_controller.d
 import 'package:mqs_admin_portal_web/views/circle/repository/circle_repository.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/repository/enterprise_repository.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/repository/user_repository.dart';
+import 'package:mqs_admin_portal_web/views/database/controller/circle_flagged_post_controller.dart';
+import 'package:mqs_admin_portal_web/views/database/controller/team_controller.dart';
+import 'package:mqs_admin_portal_web/views/database/controller/user_subscription_receipt_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/controller/reporting_controller.dart';
 import 'package:mqs_admin_portal_web/views/pathway/controller/pathway_controller.dart';
 import 'package:mqs_admin_portal_web/views/pathway/repository/pathway_repository.dart';
@@ -166,7 +169,7 @@ class DashboardController extends GetxController {
   StreamSubscription<List<UserIAMModel>>? userStream;
   StreamSubscription<List<UserSubscriptionReceiptModel>>?
       userSubscriptionReceiptStream;
-  RxBool enterpriseLoader = false.obs, userLoader = false.obs,userSubscriptionReceipt= false.obs;
+  RxBool enterpriseLoader = false.obs, userLoader = false.obs,userSubscriptionReceiptLoader= false.obs;
   List<DropdownMenuItem> get boolOptions => [
         DropdownMenuItem(
           value: true,
@@ -449,7 +452,7 @@ class DashboardController extends GetxController {
   }
 
   getUserSubscriptionRecipts() async {
-    try {userSubscriptionReceipt.value = true;
+    try {userSubscriptionReceiptLoader.value = true;
       userSubscriptionReceipts.value =
           await UserRepository.i.getUserSubscriptionReceipt();
       userSubscriptionReceiptStream =
@@ -460,7 +463,7 @@ class DashboardController extends GetxController {
     } catch (e) {
       errorDialogWidget(msg: e.toString());
     } finally {
-      userSubscriptionReceipt.value = false;
+      userSubscriptionReceiptLoader.value = false;
     }
   }
 
@@ -930,6 +933,9 @@ class DashboardController extends GetxController {
 
   setTabIndex({required int index}) {
     final CircleController circleController = Get.put(CircleController());
+    final TeamController teamController = Get.put(TeamController());
+    final CircleFlaggedPostController circleFlaggedPostController = Get.put(CircleFlaggedPostController());
+    final UserSubscriptionReceiptController userSubscriptionReceiptController = Get.put(UserSubscriptionReceiptController());
     if (FirebaseAuthService.i.isMarketingUser) {
       selectedTabIndex.value = 1;
     } else {
@@ -943,6 +949,9 @@ class DashboardController extends GetxController {
     circleController.isAdd.value = false;
     circleController.isEdit.value = false;
     reset();
+    userSubscriptionReceiptController.reset();
+    teamController.reset();
+    circleFlaggedPostController.reset();
     setFilterFields();
     if (Get.isRegistered<ReportingController>()) {
       Get.find<ReportingController>().reportType.value = '';

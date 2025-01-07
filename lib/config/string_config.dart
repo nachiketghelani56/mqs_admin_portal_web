@@ -630,6 +630,17 @@ class Database {
   final String addACollection = "Add a Collection";
   final String collectionID = "Collection ID";
   final String documentID = "Document ID";
-
+  final String teamMemberDetails = "Team Member Details";
+  final String teamMemberID = "Team Member ID";
+  final String teamMemberName = "Team Member Name";
+  final String teamMemberEmail = "Team Member Email";
+  final String username = "UserName";
+  final String flagUserID = "Flag User ID";
+  final String posterUserID = "Poster User ID";
+  final String circleData = "Circle Data";
+  final String mainPost = "Main Post";
+  final String flag = "Flag";
+  final String postReply = "Post Reply";
+  final String id = "ID";
 
 }

@@ -37,7 +37,7 @@ class PathwayCollectionScreen extends StatelessWidget {
           child: headerDatabaseWidget(
             title: StringConfig.mqsDashboard.pathway,
             mqsDashboardController: _mqsDashboardController,
-            dashboardController: _dashboardController,
+            dashboardController: _dashboardController,index: 3,
           ),
         ),
         Expanded(

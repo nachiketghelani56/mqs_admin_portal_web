@@ -3,6 +3,9 @@ import 'package:mqs_admin_portal_web/views/add_circle/add_circle_screen.dart';
 import 'package:mqs_admin_portal_web/views/add_enterprise/add_enterprise_screen.dart';
 import 'package:mqs_admin_portal_web/views/add_pathway/add_pathway_screen.dart';
 import 'package:mqs_admin_portal_web/views/circle_detail/circle_detail_screen.dart';
+import 'package:mqs_admin_portal_web/views/database_detail/circle_flagged_post_detail_screen.dart';
+import 'package:mqs_admin_portal_web/views/database_detail/team_detail_screen.dart';
+import 'package:mqs_admin_portal_web/views/database_detail/user_subscription_receipt_detail_screen.dart';
 import 'package:mqs_admin_portal_web/views/enterprise_detail/enterprise_detail_screen.dart';
 import 'package:mqs_admin_portal_web/views/login/login_screen.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/mqs_dashboard_screen.dart';
@@ -15,6 +18,12 @@ class AppRoutes {
   static const String enterpriseDetail = "/enterprise_detail";
   static const String addEnterprise = "/add_enterprise";
   static const String userIAMDetail = "/user_iam_detail";
+  static const String userSubscriptionReceiptDetail =
+      "/user_subscription_receipt_detail";
+  static const String teamDetail =
+      "/team_detail";
+  static const String circleFlaggedPostDetail =
+      "/circle_flagged_post_detail";
   static const String mqsDashboard = "/mqs_dashboard";
   static const String circleDetail = "/circle_detail";
   static const String addCircle = "/add_circle";
@@ -31,11 +40,15 @@ class AppRoutes {
             name: AppRoutes.addEnterprise, page: () => AddEnterpriseScreen()),
         GetPage(
             name: AppRoutes.userIAMDetail, page: () => UserIAMDetailScreen()),
+        GetPage(
+            name: AppRoutes.userSubscriptionReceiptDetail, page: () => UserSubscriptionReceiptDetailScreen()),
         GetPage(name: AppRoutes.mqsDashboard, page: () => MqsDashboardScreen()),
         GetPage(name: AppRoutes.circleDetail, page: () => CircleDetailScreen()),
         GetPage(name: AppRoutes.addCircle, page: () => AddCircleScreen()),
         GetPage(
             name: AppRoutes.pathwayDetail, page: () => PathwayDetailScreen()),
         GetPage(name: AppRoutes.addPathway, page: () => AddPathwayScreen()),
+        GetPage(name: AppRoutes.teamDetail, page: () => TeamDetailScreen()),
+        GetPage(name: AppRoutes.circleFlaggedPostDetail, page: () => CircleFlaggedPostDetailScreen()),
       ];
 }

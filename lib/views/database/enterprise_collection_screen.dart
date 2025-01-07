@@ -36,6 +36,7 @@ class EnterpriseCollectionScreen extends StatelessWidget {
             title: StringConfig.dashboard.enterprise,
             mqsDashboardController: _mqsDashboardController,
             dashboardController: _dashboardController,
+            index: 0,
           ),
         ),
         SizeConfig.size25.height,

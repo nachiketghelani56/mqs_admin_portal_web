@@ -13,7 +13,8 @@ class FirebaseStorageService {
   CollectionReference get circle => _instance.collection(Env.fbCircle);
   CollectionReference get userSubscriptionReceipt =>
       _instance.collection(Env.fbUserSubscriptionReceipt);
-
+  CollectionReference get team => _instance.collection(Env.fbTeam);
+  CollectionReference get circleFlaggedPost => _instance.collection(Env.fbCircleFlaggedPost);
   // FirebaseFirestore get contentPortalInstance => FirebaseFirestore.instanceFor(
   //     app: _instance.app, databaseId: Env.fbDatabseId);
   CollectionReference get pathway => _instance.collection(Env.fbPathway);

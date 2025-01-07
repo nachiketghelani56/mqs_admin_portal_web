@@ -2,25 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
-import 'package:mqs_admin_portal_web/views/circle/controller/circle_controller.dart';
-import 'package:mqs_admin_portal_web/views/circle/widgets/circle_widget.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
+import 'package:mqs_admin_portal_web/views/database/controller/user_subscription_receipt_controller.dart';
 import 'package:mqs_admin_portal_web/views/database/widgets/header_database_widget.dart';
+import 'package:mqs_admin_portal_web/views/database/widgets/user_subscription_receipt/user_subscription_receipt_widget.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/controller/home_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/widgets/home_header_widget.dart';
 
-class CircleCollectionScreen extends StatelessWidget {
-  CircleCollectionScreen({super.key, required this.scaffoldKey});
+class UserSubscriptionReceiptCollectionScreen extends StatelessWidget {
+  UserSubscriptionReceiptCollectionScreen(
+      {super.key, required this.scaffoldKey});
 
   final HomeController _homeController = Get.put(HomeController());
   final GlobalKey<ScaffoldState> scaffoldKey;
 
   final DashboardController _dashboardController =
-  Get.put(DashboardController());
+      Get.put(DashboardController());
   final MqsDashboardController _mqsDashboardController =
-  Get.put(MqsDashboardController());
-  final CircleController _circleController = Get.put(CircleController());
+      Get.put(MqsDashboardController());
+  final UserSubscriptionReceiptController userSubscriptionReceiptController =
+      Get.put(UserSubscriptionReceiptController());
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -34,20 +37,20 @@ class CircleCollectionScreen extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size40),
           child: headerDatabaseWidget(
-            title: StringConfig.dashboard.circle,
+            title: StringConfig.database.subscriptionReceipt,
             mqsDashboardController: _mqsDashboardController,
             dashboardController: _dashboardController,
-            index: 2,
+            index: 6,
           ),
         ),
         Expanded(
-          child:
-               circleWidget(
-                 context: context,
-                 circleController: _circleController,
-                 scaffoldKey: scaffoldKey,
-                 isStorage:true,
-               ),
+          child: userSubscriptionReceiptWidget(
+            dashboardController: _dashboardController,
+            context: context,
+            userSubscriptionReceiptController:
+                userSubscriptionReceiptController,
+            scaffoldKey: scaffoldKey,
+          ),
         )
       ],
     );

@@ -34,6 +34,12 @@ final class Env {
   @EnviedField(varName: 'FBPATHWAY', obfuscate: true)
   static String fbPathway = _Env.fbPathway;
 
+  @EnviedField(varName: 'FBTEAM', obfuscate: true)
+  static String fbTeam = _Env.fbTeam;
+
+  @EnviedField(varName: 'FBCIRCLEFLAGGEDPOST', obfuscate: true)
+  static String fbCircleFlaggedPost = _Env.fbCircleFlaggedPost;
+
   @EnviedField(varName: 'FBDATABASEID', obfuscate: true)
   static String fbDatabseId = _Env.fbDatabseId;
 }
