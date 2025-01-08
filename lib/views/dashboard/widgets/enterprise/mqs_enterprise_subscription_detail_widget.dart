@@ -44,7 +44,7 @@ Widget mqsEnterpriseSubscriptionDetailWidget(
         value: dashboardController.dateConvert(dashboardController
             .enterpriseDetail
             .mqsEnterpriseSubscriptionDetails
-            .mqsSubscriptionExpiryDate),
+            .mqsSubscriptionExpiryTimestamp),
         isLast: true,
       ),
     ],

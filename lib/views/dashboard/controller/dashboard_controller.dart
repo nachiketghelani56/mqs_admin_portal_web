@@ -642,7 +642,7 @@ class DashboardController extends GetxController {
             mqsSubscriptionActivePlan:
                 subscriptionActivePlanController.text.trim(),
             mqsSubscriptionActivationTimestamp: startDate.value.trim(),
-            mqsSubscriptionExpiryDate: expiryDate.value.trim(),
+            mqsSubscriptionExpiryTimestamp: expiryDate.value.trim(),
             mqsSubscriptionRenewalDate:
                 isEditEnterprise.value ? renewalDate.value.trim() : "",
           ),
@@ -693,7 +693,7 @@ class DashboardController extends GetxController {
     mqsSubscriptionStartDateController.text = dateConvert(enterpriseDetail
         .mqsEnterpriseSubscriptionDetails.mqsSubscriptionActivationTimestamp);
     mqsSubscriptionExpiryDateController.text = dateConvert(enterpriseDetail
-        .mqsEnterpriseSubscriptionDetails.mqsSubscriptionExpiryDate);
+        .mqsEnterpriseSubscriptionDetails.mqsSubscriptionExpiryTimestamp);
     mqsSubscriptionRenewalDateController.text = dateConvert(enterpriseDetail
         .mqsEnterpriseSubscriptionDetails.mqsSubscriptionRenewalDate);
     startDate.value = enterpriseDetail.mqsEnterpriseSubscriptionDetails
@@ -703,10 +703,10 @@ class DashboardController extends GetxController {
                 .mqsSubscriptionActivationTimestamp)
             .toIso8601String();
     expiryDate.value = enterpriseDetail
-            .mqsEnterpriseSubscriptionDetails.mqsSubscriptionExpiryDate.isEmpty
+            .mqsEnterpriseSubscriptionDetails.mqsSubscriptionExpiryTimestamp.isEmpty
         ? ""
         : DateTime.parse(enterpriseDetail
-                .mqsEnterpriseSubscriptionDetails.mqsSubscriptionExpiryDate)
+                .mqsEnterpriseSubscriptionDetails.mqsSubscriptionExpiryTimestamp)
             .toIso8601String();
     renewalDate.value = enterpriseDetail
             .mqsEnterpriseSubscriptionDetails.mqsSubscriptionRenewalDate.isEmpty
@@ -844,7 +844,7 @@ class DashboardController extends GetxController {
                       : DateFormat(StringConfig.dashboard.dateYYYYMMDD)
                           .parse(rowMap['Subscription Activation Date'])
                           .toIso8601String(),
-              mqsSubscriptionExpiryDate:
+              mqsSubscriptionExpiryTimestamp:
                   rowMap['Subscription Expiry Date'].toString().isEmpty
                       ? ""
                       : DateFormat(StringConfig.dashboard.dateYYYYMMDD)
@@ -912,7 +912,7 @@ class DashboardController extends GetxController {
             dateConvert(model
                 .mqsEnterpriseSubscriptionDetails.mqsSubscriptionRenewalDate),
             dateConvert(model
-                .mqsEnterpriseSubscriptionDetails.mqsSubscriptionExpiryDate),
+                .mqsEnterpriseSubscriptionDetails.mqsSubscriptionExpiryTimestamp),
             dateConvert(model.mqsCreatedTimestamp),
             dateConvert(model.mqsUpdatedTimestamp),
           ];
@@ -1091,7 +1091,7 @@ class DashboardController extends GetxController {
     if (enterpriseDetail.mqsEnterpriseSubscriptionDetails
             .mqsSubscriptionActivationTimestamp.isEmpty &&
         enterpriseDetail.mqsEnterpriseSubscriptionDetails
-            .mqsSubscriptionExpiryDate.isEmpty &&
+            .mqsSubscriptionExpiryTimestamp.isEmpty &&
         enterpriseDetail.mqsEnterpriseSubscriptionDetails
             .mqsSubscriptionActivePlan.isEmpty &&
         enterpriseDetail

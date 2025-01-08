@@ -189,14 +189,14 @@ class MqsEnterpriseSubscriptionDetails {
   final String mqsSubscriptionStatus;
   final String mqsSubscriptionActivePlan;
   final String mqsSubscriptionActivationTimestamp;
-  final String mqsSubscriptionExpiryDate;
+  final String mqsSubscriptionExpiryTimestamp;
   final String mqsSubscriptionRenewalDate;
 
   MqsEnterpriseSubscriptionDetails({
     required this.mqsSubscriptionStatus,
     required this.mqsSubscriptionActivePlan,
     required this.mqsSubscriptionActivationTimestamp,
-    required this.mqsSubscriptionExpiryDate,
+    required this.mqsSubscriptionExpiryTimestamp,
     required this.mqsSubscriptionRenewalDate,
   });
 
@@ -205,7 +205,7 @@ class MqsEnterpriseSubscriptionDetails {
       mqsSubscriptionStatus: json['mqsSubscriptionStatus'] ?? "",
       mqsSubscriptionActivePlan: json['mqsSubscriptionActivePlan'] ?? "",
       mqsSubscriptionActivationTimestamp: json['mqsSubscriptionActivationTimestamp'] ?? json['mqsSubscriptionStartDate'] ?? "" ,
-      mqsSubscriptionExpiryDate: json['mqsSubscriptionExpiryDate'] ?? "",
+      mqsSubscriptionExpiryTimestamp: json['mqsSubscriptionExpiryTimestamp'] ?? "",
       mqsSubscriptionRenewalDate: json['mqsSubscriptionRenewalDate'] ?? "",
     );
   }
@@ -215,7 +215,7 @@ class MqsEnterpriseSubscriptionDetails {
       'mqsSubscriptionStatus': mqsSubscriptionStatus,
       'mqsSubscriptionActivePlan': mqsSubscriptionActivePlan,
       'mqsSubscriptionActivationTimestamp': mqsSubscriptionActivationTimestamp,
-      'mqsSubscriptionExpiryDate': mqsSubscriptionExpiryDate,
+      'mqsSubscriptionExpiryTimestamp': mqsSubscriptionExpiryTimestamp,
       'mqsSubscriptionRenewalDate': mqsSubscriptionRenewalDate,
     };
   }

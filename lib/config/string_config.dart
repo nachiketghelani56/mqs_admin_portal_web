@@ -71,9 +71,9 @@ class Dashboard {
   final String enterActivationDate = "Enter Activation date";
   final String enterRenewalDate = "Enter renewal date";
   final String startDate = "Start date";
-  final String activationDate = "Activation date";
-  final String expiryDate = "Expiry date";
-  final String renewalDate = "Renewal date";
+  final String activationDate = "Activation Date";
+  final String expiryDate = "Expiry Date";
+  final String renewalDate = "Renewal Date";
   final String mqsEmployeeEmailList = "Employee List";
   final String mqsTeamList = "Team List";
   final String emailAddress = "Employee Email";

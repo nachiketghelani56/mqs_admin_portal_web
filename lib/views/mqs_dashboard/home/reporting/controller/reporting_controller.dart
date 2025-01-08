@@ -1375,9 +1375,9 @@ class ReportingController extends GetxController {
             model.mqsFirebaseUserID,
             model.mqsMONGODBUserID,
             model.mqsAppSpecificSharedSecret,
-            model.mqsSubscriptionExpiryDate.isNotEmpty
+            model.mqsSubscriptionExpiryTimestamp.isNotEmpty
                 ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
-                    .format(DateTime.parse(model.mqsSubscriptionExpiryDate))
+                    .format(DateTime.parse(model.mqsSubscriptionExpiryTimestamp))
                 : "",
             model.mqsLocalVerificationData,
             model.mqsPackageName,
@@ -1450,9 +1450,9 @@ class ReportingController extends GetxController {
                   .year)
               .toList()
             ..addAll(
-                (receipt.where((e) => e.mqsSubscriptionExpiryDate.isNotEmpty))
+                (receipt.where((e) => e.mqsSubscriptionExpiryTimestamp.isNotEmpty))
                     .map((data) =>
-                        (DateTime.parse(data.mqsSubscriptionExpiryDate)).year)))
+                        (DateTime.parse(data.mqsSubscriptionExpiryTimestamp)).year)))
           .toSet()
           .toList()
         ..sort();
@@ -1497,8 +1497,8 @@ class ReportingController extends GetxController {
             .toDouble();
         double y4 = receipt
             .where((e) =>
-                e.mqsSubscriptionExpiryDate.isNotEmpty &&
-                DateTime.parse(e.mqsSubscriptionExpiryDate).year == year)
+                e.mqsSubscriptionExpiryTimestamp.isNotEmpty &&
+                DateTime.parse(e.mqsSubscriptionExpiryTimestamp).year == year)
             .length
             .toDouble();
         double y6 = users
@@ -1564,10 +1564,10 @@ class ReportingController extends GetxController {
         uniqueMonths.add(monthYear);
       }
       for (var point
-          in (receipt.where((e) => e.mqsSubscriptionExpiryDate.isNotEmpty))) {
+          in (receipt.where((e) => e.mqsSubscriptionExpiryTimestamp.isNotEmpty))) {
         // Format month-year for uniqueness
         final monthYear =
-            "${DateTime.parse(point.mqsSubscriptionExpiryDate).year}-${DateTime.parse(point.mqsSubscriptionExpiryDate).month.toString().padLeft(2, '0')}";
+            "${DateTime.parse(point.mqsSubscriptionExpiryTimestamp).year}-${DateTime.parse(point.mqsSubscriptionExpiryTimestamp).month.toString().padLeft(2, '0')}";
         uniqueMonths.add(monthYear);
       }
       for (String x in uniqueMonths) {
@@ -1634,9 +1634,9 @@ class ReportingController extends GetxController {
             .toDouble();
         double y4 = receipt
             .where((e) =>
-                e.mqsSubscriptionExpiryDate.isNotEmpty &&
-                DateTime.parse(e.mqsSubscriptionExpiryDate).month == month &&
-                DateTime.parse(e.mqsSubscriptionExpiryDate).year == year)
+                e.mqsSubscriptionExpiryTimestamp.isNotEmpty &&
+                DateTime.parse(e.mqsSubscriptionExpiryTimestamp).month == month &&
+                DateTime.parse(e.mqsSubscriptionExpiryTimestamp).year == year)
             .length
             .toDouble();
         double y6 = users
@@ -1727,8 +1727,8 @@ class ReportingController extends GetxController {
       }
       final groupedReceiptData = <String, List<UserSubscriptionReceiptModel>>{};
       for (var dataPoint
-          in (receipt.where((e) => e.mqsSubscriptionExpiryDate.isNotEmpty))) {
-        DateTime date = DateTime.parse(dataPoint.mqsSubscriptionExpiryDate);
+          in (receipt.where((e) => e.mqsSubscriptionExpiryTimestamp.isNotEmpty))) {
+        DateTime date = DateTime.parse(dataPoint.mqsSubscriptionExpiryTimestamp);
         final weekNumber = getWeekNumber(date);
         groupedReceiptData
             .putIfAbsent('$weekNumber-${date.year}', () => [])
@@ -1824,8 +1824,8 @@ class ReportingController extends GetxController {
                       : DateTime.now().toIso8601String())
                       .day))
               .toList()
-            ..addAll((receipt.where((e) => e.mqsSubscriptionExpiryDate.isNotEmpty))
-                .map((data) => DateTime(DateTime.parse(data.mqsSubscriptionExpiryDate).year, DateTime.parse(data.mqsSubscriptionExpiryDate).month, DateTime.parse(data.mqsSubscriptionExpiryDate).day))))
+            ..addAll((receipt.where((e) => e.mqsSubscriptionExpiryTimestamp.isNotEmpty))
+                .map((data) => DateTime(DateTime.parse(data.mqsSubscriptionExpiryTimestamp).year, DateTime.parse(data.mqsSubscriptionExpiryTimestamp).month, DateTime.parse(data.mqsSubscriptionExpiryTimestamp).day))))
           .toSet()
           .toList();
       for (DateTime date in uniqueDays) {
@@ -1911,11 +1911,11 @@ class ReportingController extends GetxController {
             .toDouble();
         double y4 = receipt
             .where((e) =>
-                e.mqsSubscriptionExpiryDate.isNotEmpty &&
-                DateTime.parse(e.mqsSubscriptionExpiryDate).month ==
+                e.mqsSubscriptionExpiryTimestamp.isNotEmpty &&
+                DateTime.parse(e.mqsSubscriptionExpiryTimestamp).month ==
                     date.month &&
-                DateTime.parse(e.mqsSubscriptionExpiryDate).year == date.year &&
-                DateTime.parse(e.mqsSubscriptionExpiryDate).day == date.day)
+                DateTime.parse(e.mqsSubscriptionExpiryTimestamp).year == date.year &&
+                DateTime.parse(e.mqsSubscriptionExpiryTimestamp).day == date.day)
             .length
             .toDouble();
         double y6 = users
@@ -2005,7 +2005,7 @@ class ReportingController extends GetxController {
       } else if (reportType.value ==
           StringConfig.reporting.subscriptionExpired) {
         List<UserSubscriptionReceiptModel> activeRec =
-            receipt.where((e) => e.mqsSubscriptionExpiryDate.isNotEmpty).toList();
+            receipt.where((e) => e.mqsSubscriptionExpiryTimestamp.isNotEmpty).toList();
         dashboardController.searchedUsers.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
               firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);

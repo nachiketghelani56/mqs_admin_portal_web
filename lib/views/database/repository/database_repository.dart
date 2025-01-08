@@ -15,8 +15,7 @@ class DatabaseRepository {
   Future<List<MqsTeamModel>> getTeams() async {
     QuerySnapshot<Object?> list = await team.get();
     List<MqsTeamModel> teamList = list.docs
-        .map((e) => MqsTeamModel.fromJson((e.data() as Map<String, dynamic>)
-          ..addEntries([MapEntry("docId", e.id)])))
+        .map((e) => MqsTeamModel.fromJson((e.data() as Map<String, dynamic>)))
         .toList();
     return teamList;
   }
@@ -24,9 +23,8 @@ class DatabaseRepository {
   Stream<List<MqsTeamModel>> getTeamStream() {
     return team.snapshots().map((snapshot) {
       List<MqsTeamModel> list = snapshot.docs.map((doc) {
-        MqsTeamModel model = MqsTeamModel.fromJson(
-            (doc.data() as Map<String, dynamic>)
-              ..addEntries([MapEntry("docId", doc.id)]));
+        MqsTeamModel model =
+            MqsTeamModel.fromJson((doc.data() as Map<String, dynamic>));
         return model;
       }).toList();
       return list;

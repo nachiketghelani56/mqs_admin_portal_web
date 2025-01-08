@@ -90,12 +90,12 @@ Widget userSubscriptionReceiptDetailWidget(
             key: StringConfig.dashboard.mqsSubscriptionExpiryDate,
             value: (userSubscriptionReceiptController
                             .userSubscriptionReceiptDetail
-                            .mqsSubscriptionExpiryDate)
+                            .mqsSubscriptionExpiryTimestamp)
                     .isNotEmpty
                 ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
                     DateTime.parse(userSubscriptionReceiptController
                             .userSubscriptionReceiptDetail
-                            .mqsSubscriptionExpiryDate))
+                            .mqsSubscriptionExpiryTimestamp))
                 : "",
           ),
           keyValueWrapperWidget(
@@ -113,11 +113,11 @@ Widget userSubscriptionReceiptDetailWidget(
           keyValueWrapperWidget(
             key: StringConfig.csv.updatedTimestamp,
             value: (userSubscriptionReceiptController
-                            .userSubscriptionReceiptDetail.mqsUpdateTimestamp)
+                            .userSubscriptionReceiptDetail.mqsUpdatedTimestamp)
                     .isNotEmpty
                 ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
                     DateTime.parse(userSubscriptionReceiptController
-                            .userSubscriptionReceiptDetail.mqsUpdateTimestamp))
+                            .userSubscriptionReceiptDetail.mqsUpdatedTimestamp))
                 : "",
             isLast: true,
           ),

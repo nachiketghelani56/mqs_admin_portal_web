@@ -70,15 +70,15 @@ class UserIAMModel {
         mqsCreatedTimestamp = json['mqsCreatedTimestamp'] ??json['mqsEnterpriseCreatedTimestamp'] ?? DateTime.now().toIso8601String(),
         mqsAbout = json['mqsAbout'] ?? json['About'] ?? "",
         mqsAllowAbout = json['mqsPrivacySettingsDetails'] != null
-            ? json['mqsPrivacySettingsDetails']['mqsAllowAbout']
+            ? json['mqsPrivacySettingsDetails']['mqsAllowAbout'] ?? false
             : json['AboutValue'] ?? false,
         mqsCountry = json['mqsCountry'] ?? json['Country'] ?? "",
         mqsAllowCountry = json['mqsPrivacySettingsDetails'] != null
-            ? json['mqsPrivacySettingsDetails']['mqsAllowCountry']
+            ? json['mqsPrivacySettingsDetails']['mqsAllowCountry'] ?? false
             : json['CountryValue'] ?? false,
         mqsPronouns = json['mqsPronouns'] ?? json['Pronouns'] ?? "",
         mqsAllowPronouns = json['mqsPrivacySettingsDetails'] != null
-            ? json['mqsPrivacySettingsDetails']['mqsAllowPronouns']
+            ? json['mqsPrivacySettingsDetails']['mqsAllowPronouns'] ?? false
             : json['PronounsValue'] ?? false,
         mqsUserImage = json['mqsUserImage'] ?? json['UserImage'] ?? "",
         mqsEnterpriseID = json['mqsEnterpriseDetails'] != null

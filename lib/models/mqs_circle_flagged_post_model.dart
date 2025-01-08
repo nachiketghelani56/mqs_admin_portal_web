@@ -8,19 +8,19 @@ class MqsCircleFlaggedPostModel {
       {this.posterUserId, this.circleData, this.flagName, this.flagUserId});
 
   MqsCircleFlaggedPostModel.fromJson(Map<String, dynamic> json) {
-    posterUserId = json['poster_user_id'];
+    posterUserId = json['poster_user_id'] ?? "";
     circleData = json['circleData'] != null
         ? CircleData.fromJson(json['circleData'])
         : null;
-    flagName = json['flag_name'];
-    flagUserId = json['flag_user_id'];
+    flagName = json['flag_name'] ?? "";
+    flagUserId = json['flag_user_id'] ?? "";
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['poster_user_id'] = posterUserId;
     if (circleData != null) {
-      data['circleData'] = circleData!.toJson();
+      data['circleData'] = circleData?.toJson();
     }
     data['flag_name'] = flagName;
     data['flag_user_id'] = flagUserId;
@@ -57,20 +57,20 @@ class CircleData {
       this.postReply});
 
   CircleData.fromJson(Map<String, dynamic> json) {
-    postView = json['post_view'];
-    isFlag = json['isFlag'];
-    isMainPost = json['isMainPost'];
-    postContent = json['post_content'];
-    postTitle = json['post_title'];
-    userIsGuide = json['userIsGuide'];
-    flagName = json['flag_name'];
-    postTime = json['post_time'];
-    userId = json['user_id'];
-    userName = json['user_name'];
+    postView = json['post_view'] ?? 0;
+    isFlag = json['isFlag'] ?? false;
+    isMainPost = json['isMainPost'] ?? false;
+    postContent = json['post_content'] ?? "";
+    postTitle = json['post_title'] ?? "";
+    userIsGuide = json['userIsGuide'] ?? false;
+    flagName = json['flag_name'] ?? "";
+    postTime = json['post_time'] ?? "";
+    userId = json['user_id'] ?? "";
+    userName = json['user_name'] ?? "";
     if (json['hashtag'] != null) {
       hashtag = <Hashtag>[];
       json['hashtag'].forEach((v) {
-        hashtag!.add(Hashtag.fromJson(v));
+        hashtag?.add(Hashtag.fromJson(v));
       });
     }
     postReply =
@@ -90,7 +90,7 @@ class CircleData {
     data['user_id'] = userId;
     data['user_name'] = userName;
     if (hashtag != null) {
-      data['hashtag'] = hashtag!.map((v) => v.toJson()).toList();
+      data['hashtag'] = hashtag?.map((v) => v.toJson()).toList();
     }
     data['post_reply'] = postReply;
     return data;
@@ -104,8 +104,8 @@ class Hashtag {
   Hashtag({this.id, this.name});
 
   Hashtag.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
+    id = json['id'] ?? "";
+    name = json['name'] ?? "";
   }
 
   Map<String, dynamic> toJson() {

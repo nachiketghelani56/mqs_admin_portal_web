@@ -29,7 +29,7 @@ class MqsTeamModel {
     if (json['mqsTeamMemberDetails'] != null) {
       mqsTeamMemberDetails = <MqsTeamMemberDetails>[];
       json['mqsTeamMemberDetails'].forEach((v) {
-        mqsTeamMemberDetails!.add(MqsTeamMemberDetails.fromJson(v));
+        mqsTeamMemberDetails?.add(MqsTeamMemberDetails.fromJson(v));
       });
     }
   }
