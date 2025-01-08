@@ -3,14 +3,15 @@ import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
-import 'package:mqs_admin_portal_web/views/dashboard/widgets/enterprise_widget.dart';
+import 'package:mqs_admin_portal_web/views/database/enterprise_data/controller/enterprise_data_controller.dart';
+import 'package:mqs_admin_portal_web/views/database/enterprise_data/widgets/enterprise_data_widget.dart';
 import 'package:mqs_admin_portal_web/views/database/widgets/header_database_widget.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/controller/home_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/widgets/home_header_widget.dart';
 
-class EnterpriseCollectionScreen extends StatelessWidget {
-  EnterpriseCollectionScreen({super.key, required this.scaffoldKey});
+class EnterpriseDataScreen extends StatelessWidget {
+  EnterpriseDataScreen({super.key, required this.scaffoldKey});
 
   final HomeController _homeController = Get.put(HomeController());
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -19,6 +20,8 @@ class EnterpriseCollectionScreen extends StatelessWidget {
       Get.put(DashboardController());
   final MqsDashboardController _mqsDashboardController =
       Get.put(MqsDashboardController());
+  final EnterpriseDataController _enterpriseDataController =
+      Get.put(EnterpriseDataController());
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +52,10 @@ class EnterpriseCollectionScreen extends StatelessWidget {
                     right: SizeConfig.size40,
                     bottom: SizeConfig.size25),
                 child:
-                enterpriseWidget(
-                  dashboardController: _dashboardController,
+                enterpriseDataWidget(
+                  enterpriseDataController:_enterpriseDataController,
                   mqsDashboardController: _mqsDashboardController,
                   context: context,
-                    isStorage:true,
                 ),
               );
             },

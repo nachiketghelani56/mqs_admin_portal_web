@@ -8,12 +8,14 @@ import 'package:mqs_admin_portal_web/views/dashboard/dashboard_screen.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/filter_sheet_widget.dart';
 import 'package:mqs_admin_portal_web/views/database/circle_collection_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/circle_flagged_post_collection_screen.dart';
-import 'package:mqs_admin_portal_web/views/database/enterprise_collection_screen.dart';
+import 'package:mqs_admin_portal_web/views/database/controller/database_controller.dart';
+import 'package:mqs_admin_portal_web/views/database/enterprise_data/enterprise_data_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/database_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/pathway_collection_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/team_collection_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/user_collection_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/user_subscription_receipt_collection_screen.dart';
+import 'package:mqs_admin_portal_web/views/database/widgets/data_filter_sheet_widget.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/home_screen.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/reporting_screen.dart';
@@ -28,6 +30,9 @@ class MqsDashboardScreen extends StatelessWidget {
       Get.put(MqsDashboardController());
   final DashboardController _dashboardController =
       Get.put(DashboardController());
+  final DatabaseController _databaseController =
+  Get.put(DatabaseController());
+
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +44,7 @@ class MqsDashboardScreen extends StatelessWidget {
               dashboardController: _dashboardController,
             )
           : null,
-      endDrawer: filterSheetWidget(dashboardController: _dashboardController),
+      endDrawer:Obx(()=> _mqsDashboardController.menuIndex.value == 0? filterSheetWidget(dashboardController: _dashboardController):  dataFilterSheetWidget(databaseController: _databaseController)),
       backgroundColor: ColorConfig.backgroundColor,
       body: Stack(
         children: [
@@ -93,7 +98,7 @@ class MqsDashboardScreen extends StatelessWidget {
                       }
                     } else if (_mqsDashboardController.menuIndex.value == 1) {
                       if (_mqsDashboardController.subMenuIndex.value == 0) {
-                        return EnterpriseCollectionScreen(
+                        return EnterpriseDataScreen(
                             scaffoldKey: _mqsDashboardController.scaffoldKey);
                       } else if (_mqsDashboardController.subMenuIndex.value ==
                           1) {

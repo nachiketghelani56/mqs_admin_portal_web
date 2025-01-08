@@ -23,11 +23,11 @@ class HomeController extends GetxController {
             title: StringConfig.dashboard.users,
           ),
           MenuModel(
-            icon: ImageConfig.userIAM,
+            icon: ImageConfig.circle,
             title: StringConfig.dashboard.circle,
           ),
           MenuModel(
-            icon: ImageConfig.userIAM,
+            icon: ImageConfig.pathway,
             title: StringConfig.mqsDashboard.pathway,
           ),
           MenuModel(

@@ -48,4 +48,6 @@ class ImageConfig {
   static const String subscribeDatabase = "assets/icons/subscribe_database.png";
   static const String teamDatabase = "assets/icons/team_database.png";
   static const String userDatabase = "assets/icons/user_database.png";
+  static const String circle = "assets/icons/circle.png";
+  static const String pathway = "assets/icons/pathway.png";
 }

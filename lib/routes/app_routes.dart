@@ -3,7 +3,9 @@ import 'package:mqs_admin_portal_web/views/add_circle/add_circle_screen.dart';
 import 'package:mqs_admin_portal_web/views/add_enterprise/add_enterprise_screen.dart';
 import 'package:mqs_admin_portal_web/views/add_pathway/add_pathway_screen.dart';
 import 'package:mqs_admin_portal_web/views/circle_detail/circle_detail_screen.dart';
+import 'package:mqs_admin_portal_web/views/database/enterprise_data/add_enterprise_data_screen.dart';
 import 'package:mqs_admin_portal_web/views/database_detail/circle_flagged_post_detail_screen.dart';
+import 'package:mqs_admin_portal_web/views/database_detail/enterprise_data_detail/enterprise_data_detail_screen.dart';
 import 'package:mqs_admin_portal_web/views/database_detail/team_detail_screen.dart';
 import 'package:mqs_admin_portal_web/views/database_detail/user_subscription_receipt_detail_screen.dart';
 import 'package:mqs_admin_portal_web/views/enterprise_detail/enterprise_detail_screen.dart';
@@ -16,7 +18,9 @@ class AppRoutes {
   static const String login = "/login";
   static const String dashboard = "/dashboard";
   static const String enterpriseDetail = "/enterprise_detail";
+  static const String enterpriseDataDetail = "/enterprise_data_detail";
   static const String addEnterprise = "/add_enterprise";
+  static const String addEnterpriseData = "/add_enterprise_data";
   static const String userIAMDetail = "/user_iam_detail";
   static const String userSubscriptionReceiptDetail =
       "/user_subscription_receipt_detail";
@@ -36,8 +40,13 @@ class AppRoutes {
         GetPage(
             name: AppRoutes.enterpriseDetail,
             page: () => EnterpriseDetailScreen()),
+    GetPage(
+            name: AppRoutes.enterpriseDataDetail,
+            page: () => EnterpriseDataDetailScreen()),
         GetPage(
             name: AppRoutes.addEnterprise, page: () => AddEnterpriseScreen()),
+    GetPage(
+            name: AppRoutes.addEnterpriseData, page: () => AddEnterpriseDataScreen()),
         GetPage(
             name: AppRoutes.userIAMDetail, page: () => UserIAMDetailScreen()),
         GetPage(

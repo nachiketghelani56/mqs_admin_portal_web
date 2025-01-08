@@ -23,8 +23,11 @@ import 'package:mqs_admin_portal_web/views/circle/repository/circle_repository.d
 import 'package:mqs_admin_portal_web/views/dashboard/repository/enterprise_repository.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/repository/user_repository.dart';
 import 'package:mqs_admin_portal_web/views/database/controller/circle_flagged_post_controller.dart';
+import 'package:mqs_admin_portal_web/views/database/controller/database_controller.dart';
 import 'package:mqs_admin_portal_web/views/database/controller/team_controller.dart';
 import 'package:mqs_admin_portal_web/views/database/controller/user_subscription_receipt_controller.dart';
+import 'package:mqs_admin_portal_web/views/database/enterprise_data/controller/enterprise_data_controller.dart';
+import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/controller/reporting_controller.dart';
 import 'package:mqs_admin_portal_web/views/pathway/controller/pathway_controller.dart';
 import 'package:mqs_admin_portal_web/views/pathway/repository/pathway_repository.dart';
@@ -169,7 +172,9 @@ class DashboardController extends GetxController {
   StreamSubscription<List<UserIAMModel>>? userStream;
   StreamSubscription<List<UserSubscriptionReceiptModel>>?
       userSubscriptionReceiptStream;
-  RxBool enterpriseLoader = false.obs, userLoader = false.obs,userSubscriptionReceiptLoader= false.obs;
+  RxBool enterpriseLoader = false.obs,
+      userLoader = false.obs,
+      userSubscriptionReceiptLoader = false.obs;
   List<DropdownMenuItem> get boolOptions => [
         DropdownMenuItem(
           value: true,
@@ -452,7 +457,8 @@ class DashboardController extends GetxController {
   }
 
   getUserSubscriptionRecipts() async {
-    try {userSubscriptionReceiptLoader.value = true;
+    try {
+      userSubscriptionReceiptLoader.value = true;
       userSubscriptionReceipts.value =
           await UserRepository.i.getUserSubscriptionReceipt();
       userSubscriptionReceiptStream =
@@ -702,11 +708,11 @@ class DashboardController extends GetxController {
         : DateTime.parse(enterpriseDetail.mqsEnterpriseSubscriptionDetails
                 .mqsSubscriptionActivationTimestamp)
             .toIso8601String();
-    expiryDate.value = enterpriseDetail
-            .mqsEnterpriseSubscriptionDetails.mqsSubscriptionExpiryTimestamp.isEmpty
+    expiryDate.value = enterpriseDetail.mqsEnterpriseSubscriptionDetails
+            .mqsSubscriptionExpiryTimestamp.isEmpty
         ? ""
-        : DateTime.parse(enterpriseDetail
-                .mqsEnterpriseSubscriptionDetails.mqsSubscriptionExpiryTimestamp)
+        : DateTime.parse(enterpriseDetail.mqsEnterpriseSubscriptionDetails
+                .mqsSubscriptionExpiryTimestamp)
             .toIso8601String();
     renewalDate.value = enterpriseDetail
             .mqsEnterpriseSubscriptionDetails.mqsSubscriptionRenewalDate.isEmpty
@@ -911,8 +917,8 @@ class DashboardController extends GetxController {
                 .mqsSubscriptionActivationTimestamp),
             dateConvert(model
                 .mqsEnterpriseSubscriptionDetails.mqsSubscriptionRenewalDate),
-            dateConvert(model
-                .mqsEnterpriseSubscriptionDetails.mqsSubscriptionExpiryTimestamp),
+            dateConvert(model.mqsEnterpriseSubscriptionDetails
+                .mqsSubscriptionExpiryTimestamp),
             dateConvert(model.mqsCreatedTimestamp),
             dateConvert(model.mqsUpdatedTimestamp),
           ];
@@ -932,32 +938,58 @@ class DashboardController extends GetxController {
   }
 
   setTabIndex({required int index}) {
-    final CircleController circleController = Get.put(CircleController());
-    final TeamController teamController = Get.put(TeamController());
-    final CircleFlaggedPostController circleFlaggedPostController = Get.put(CircleFlaggedPostController());
-    final UserSubscriptionReceiptController userSubscriptionReceiptController = Get.put(UserSubscriptionReceiptController());
-    if (FirebaseAuthService.i.isMarketingUser) {
-      selectedTabIndex.value = 1;
-    } else {
-      selectedTabIndex.value = index;
-    }
-    searchController.clear();
-    searchedUsers.value = users;
-    searchedEnterprises.value = enterprises;
-    isAddEnterprise.value = false;
-    isEditEnterprise.value = false;
-    circleController.isAdd.value = false;
-    circleController.isEdit.value = false;
-    reset();
-    userSubscriptionReceiptController.reset();
-    teamController.reset();
-    circleFlaggedPostController.reset();
-    setFilterFields();
-    if (Get.isRegistered<ReportingController>()) {
-      Get.find<ReportingController>().reportType.value = '';
-    }
-    if (!FirebaseAuthService.i.isMarketingUser && index == 1) {
-      getUsers();
+    final MqsDashboardController mqsDashboardController =
+        Get.put(MqsDashboardController());
+
+    // if (mqsDashboardController.menuIndex.value == 0) {
+      final CircleController circleController = Get.put(CircleController());
+
+      if (FirebaseAuthService.i.isMarketingUser) {
+        selectedTabIndex.value = 1;
+      } else {
+        selectedTabIndex.value = index;
+      }
+      searchController.clear();
+      searchedUsers.value = users;
+      searchedEnterprises.value = enterprises;
+      isAddEnterprise.value = false;
+      isEditEnterprise.value = false;
+      circleController.isAdd.value = false;
+      circleController.isEdit.value = false;
+      reset();
+
+      setFilterFields();
+      if (Get.isRegistered<ReportingController>()) {
+        Get.find<ReportingController>().reportType.value = '';
+      }
+      if (!FirebaseAuthService.i.isMarketingUser && index == 1) {
+        getUsers();
+      }
+    // }
+    if (mqsDashboardController.menuIndex.value == 1)  {
+      final DatabaseController databaseController =
+          Get.put(DatabaseController());
+      final EnterpriseDataController enterpriseDataController =
+          Get.put(EnterpriseDataController());
+      final TeamController teamController = Get.put(TeamController());
+
+      final CircleFlaggedPostController circleFlaggedPostController =
+          Get.put(CircleFlaggedPostController());
+      final UserSubscriptionReceiptController
+          userSubscriptionReceiptController =
+          Get.put(UserSubscriptionReceiptController());
+      databaseController.selectedTabIndex.value = index;
+      enterpriseDataController.searchController.clear();
+      // searchedUsers.value = users;
+      enterpriseDataController.searchedEnterprises.value = enterprises;
+      enterpriseDataController.isAddEnterprise.value = false;
+      enterpriseDataController.isEditEnterprise.value = false;
+
+      userSubscriptionReceiptController.reset();
+      teamController.reset();
+      circleFlaggedPostController.reset();
+      enterpriseDataController.reset();
+      databaseController.setFilterFields();
     }
   }
 
