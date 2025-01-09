@@ -9,6 +9,7 @@ import 'package:mqs_admin_portal_web/views/dashboard/widgets/filter_sheet_widget
 import 'package:mqs_admin_portal_web/views/database/circle_collection_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/circle_flagged_post_collection_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/controller/database_controller.dart';
+import 'package:mqs_admin_portal_web/views/database/enterprise_data/add_enterprise_data_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/enterprise_data/enterprise_data_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/database_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/pathway_collection_screen.dart';
@@ -16,6 +17,7 @@ import 'package:mqs_admin_portal_web/views/database/team_collection_screen.dart'
 import 'package:mqs_admin_portal_web/views/database/user_collection_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/user_subscription_receipt_collection_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/widgets/data_filter_sheet_widget.dart';
+import 'package:mqs_admin_portal_web/views/database_detail/enterprise_data_detail/enterprise_data_detail_screen.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/home_screen.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/reporting_screen.dart';
@@ -98,8 +100,21 @@ class MqsDashboardScreen extends StatelessWidget {
                       }
                     } else if (_mqsDashboardController.menuIndex.value == 1) {
                       if (_mqsDashboardController.subMenuIndex.value == 0) {
-                        return EnterpriseDataScreen(
-                            scaffoldKey: _mqsDashboardController.scaffoldKey);
+
+                        if(_mqsDashboardController.enterpriseStatus.value =="add_enterprise")
+                          {
+                            return AddEnterpriseDataScreen(
+                                scaffoldKey: _mqsDashboardController.scaffoldKey);
+                          }
+                        else   if(_mqsDashboardController.enterpriseStatus.value =="view_enterprise")
+                        {
+                          return EnterpriseDataDetailScreen(
+                              scaffoldKey: _mqsDashboardController.scaffoldKey);
+                        }else{
+                          return EnterpriseDataScreen(
+                              scaffoldKey: _mqsDashboardController.scaffoldKey);
+                        }
+
                       } else if (_mqsDashboardController.subMenuIndex.value ==
                           1) {
                         return UserCollectionScreen(

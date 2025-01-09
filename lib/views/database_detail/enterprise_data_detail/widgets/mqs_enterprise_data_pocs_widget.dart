@@ -72,6 +72,8 @@ Widget mqsEnterpriseDataPOCsWidget(
                                     horizontal: SizeConfig.size5),
                                 child: Text(
                                   StringConfig.dashboard.name,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
                                   style:
                                       FontTextStyleConfig.tableBottomTextStyle,
                                 ),
@@ -85,6 +87,8 @@ Widget mqsEnterpriseDataPOCsWidget(
                                     horizontal: SizeConfig.size5),
                                 child: Text(
                                   StringConfig.dashboard.email,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
                                   style:
                                       FontTextStyleConfig.tableBottomTextStyle,
                                 ),
@@ -98,6 +102,8 @@ Widget mqsEnterpriseDataPOCsWidget(
                                     horizontal: SizeConfig.size5),
                                 child: Text(
                                   StringConfig.dashboard.address,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
                                   style:
                                       FontTextStyleConfig.tableBottomTextStyle,
                                 ),
@@ -111,6 +117,8 @@ Widget mqsEnterpriseDataPOCsWidget(
                                     horizontal: SizeConfig.size5),
                                 child: Text(
                                   StringConfig.dashboard.phoneNumber,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
                                   style:
                                       FontTextStyleConfig.tableBottomTextStyle,
                                 ),
@@ -124,6 +132,8 @@ Widget mqsEnterpriseDataPOCsWidget(
                                     horizontal: SizeConfig.size5),
                                 child: Text(
                                   StringConfig.dashboard.type,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
                                   style:
                                       FontTextStyleConfig.tableBottomTextStyle,
                                 ),
@@ -137,6 +147,8 @@ Widget mqsEnterpriseDataPOCsWidget(
                                     horizontal: SizeConfig.size5),
                                 child: Text(
                                   StringConfig.dashboard.website,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
                                   style:
                                       FontTextStyleConfig.tableBottomTextStyle,
                                 ),
@@ -150,6 +162,8 @@ Widget mqsEnterpriseDataPOCsWidget(
                                     horizontal: SizeConfig.size5),
                                 child: Text(
                                   StringConfig.dashboard.pinCodeText,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
                                   style:
                                       FontTextStyleConfig.tableBottomTextStyle,
                                 ),
@@ -163,6 +177,8 @@ Widget mqsEnterpriseDataPOCsWidget(
                                     horizontal: SizeConfig.size5),
                                 child: Text(
                                   StringConfig.dashboard.signedUp,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
                                   style:
                                       FontTextStyleConfig.tableBottomTextStyle,
                                 ),

@@ -642,5 +642,8 @@ class Database {
   final String flag = "Flag";
   final String postReply = "Post Reply";
   final String id = "ID";
-
+  final String addEnterpriseInformation = "Add Enterprise Information";
+  final String editEnterpriseInformation = "Edit Enterprise Information";
+  final String viewEnterprise = "View Enterprise";
+  final String enterpriseInformation = "Enterprise Information";
 }

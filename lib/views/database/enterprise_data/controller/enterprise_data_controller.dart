@@ -10,9 +10,9 @@ import 'package:intl/intl.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/models/enterprise_model.dart';
 import 'package:mqs_admin_portal_web/models/menu_option_model.dart';
-import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/services/firebase_storage_service.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/repository/enterprise_repository.dart';
+import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/loader_widget.dart';
 import 'package:uuid/uuid.dart';
@@ -119,7 +119,7 @@ class EnterpriseDataController extends GetxController {
       TextEditingController();
   RxString enterpriseId = "".obs;
   RxString startDate = "".obs, expiryDate = "".obs, renewalDate = "".obs;
-  RxBool isHovering = false.obs;
+  RxBool isHovering = false.obs, isSubscriptionHovering = false.obs;
 
   @override
   onInit() {
@@ -127,8 +127,16 @@ class EnterpriseDataController extends GetxController {
     super.onInit();
   }
 
+  @override
+  void onClose() async {
+    await entStream?.cancel();
+    super.onClose();
+  }
+
   addEnterprise() async {
     try {
+      final MqsDashboardController mqsDashboardController =
+          Get.put(MqsDashboardController());
       if (mqsEnterprisePOCsList.isNotEmpty && mqsTeamList.isNotEmpty) {
         enterprisePOCsError.value = false;
         teamError.value = false;
@@ -180,9 +188,10 @@ class EnterpriseDataController extends GetxController {
         clearAllFields();
         isAddEnterprise.value = false;
         isEditEnterprise.value = false;
-        if (Get.currentRoute == AppRoutes.addEnterpriseData) {
-          Get.back();
-        }
+
+
+        mqsDashboardController.enterpriseStatus.value = "";
+
       } else {
         if (mqsEnterprisePOCsList.isEmpty) {
           enterprisePOCsError.value = true;
@@ -361,7 +370,6 @@ class EnterpriseDataController extends GetxController {
         enterprises.value = enterpriseList; // Update full list
         viewIndex.value = -1;
       });
-      print("le--->${searchedEnterprises.length}");
     } catch (e) {
       errorDialogWidget(msg: e.toString());
     } finally {

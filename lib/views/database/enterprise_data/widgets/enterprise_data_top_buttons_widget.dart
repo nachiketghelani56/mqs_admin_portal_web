@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
-import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/views/database/enterprise_data/controller/enterprise_data_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_icon_button.dart';
@@ -69,9 +68,8 @@ Widget enterpriseDataTopButtonsWidget({
                 enterpriseDataController.mqsTeamList.clear();
                 enterpriseDataController.mqsEnterprisePOCsList.clear();
                 enterpriseDataController.clearAllFields();
-                if (context.width < SizeConfig.size1500) {
-                  Get.toNamed(AppRoutes.addEnterpriseData);
-                }
+                mqsDashboardController.enterpriseStatus.value =
+                    "add_enterprise";
               },
             ),
           ],
@@ -122,9 +120,8 @@ Widget enterpriseDataTopButtonsWidget({
                 enterpriseDataController.mqsTeamList.clear();
                 enterpriseDataController.mqsEnterprisePOCsList.clear();
                 enterpriseDataController.clearAllFields();
-                if (context.width < SizeConfig.size1500) {
-                  Get.toNamed(AppRoutes.addEnterpriseData);
-                }
+                mqsDashboardController.enterpriseStatus.value =
+                    "add_enterprise";
               },
             ),
           ],

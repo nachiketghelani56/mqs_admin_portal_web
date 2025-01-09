@@ -28,6 +28,8 @@ Widget mqsEnterpriseDataTeamListWidget({required EnterpriseDataController enterp
                 flex: SizeConfig.size3.toInt(),
                 child: Text(
                   StringConfig.dashboard.teamName,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
                   style: FontTextStyleConfig.tableBottomTextStyle,
                 ),
               ),
@@ -35,20 +37,26 @@ Widget mqsEnterpriseDataTeamListWidget({required EnterpriseDataController enterp
                 flex: SizeConfig.size3.toInt(),
                 child: Text(
                   StringConfig.dashboard.teamEmailAddress,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
                   style: FontTextStyleConfig.tableBottomTextStyle,
                 ),
               ),
               Expanded(
-                flex: SizeConfig.size2.toInt(),
+                flex: SizeConfig.size3.toInt(),
                 child: Text(
                   StringConfig.dashboard.teamMemberLimit,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
                   style: FontTextStyleConfig.tableBottomTextStyle,
                 ),
               ),
               Expanded(
-                flex: SizeConfig.size2.toInt(),
+                flex: SizeConfig.size3.toInt(),
                 child: Text(
                   StringConfig.dashboard.enable,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
                   style: FontTextStyleConfig.tableBottomTextStyle,
                 ),
               ),
@@ -88,14 +96,14 @@ Widget mqsEnterpriseDataTeamListWidget({required EnterpriseDataController enterp
                   ),
                 ),
                 Expanded(
-                  flex: SizeConfig.size2.toInt(),
+                  flex: SizeConfig.size3.toInt(),
                   child: Text(
                     "${enterpriseDataController.enterpriseDetail.mqsTeamList[i].mqsTeamMembersLimit}",
                     style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
                 Expanded(
-                  flex: SizeConfig.size2.toInt(),
+                  flex: SizeConfig.size3.toInt(),
                   child: Text(
                     "${enterpriseDataController.enterpriseDetail.mqsTeamList[i].mqsIsEnable.toString().capitalize}",
                     style: FontTextStyleConfig.tableContentTextStyle,

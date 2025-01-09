@@ -940,7 +940,7 @@ class DashboardController extends GetxController {
   setTabIndex({required int index}) {
     final MqsDashboardController mqsDashboardController =
         Get.put(MqsDashboardController());
-
+    mqsDashboardController.enterpriseStatus.value="";
     // if (mqsDashboardController.menuIndex.value == 0) {
       final CircleController circleController = Get.put(CircleController());
 

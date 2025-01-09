@@ -3,11 +3,12 @@ import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/views/database/enterprise_data/controller/enterprise_data_controller.dart';
+import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/widgets/custom_button.dart';
 
 enterpriseDataDeleteDialogWidget(
     {required BuildContext context,
-      required EnterpriseDataController enterpriseDataController,
+      required EnterpriseDataController enterpriseDataController, required MqsDashboardController mqsDashboardController,
       required String docId,
       required String mqsEnterpriseName}) {
   showDialog(
@@ -54,6 +55,7 @@ enterpriseDataDeleteDialogWidget(
                         btnText: StringConfig.dashboard.yesDelete,
                         onTap: () {
                           Get.back();
+                          mqsDashboardController.enterpriseStatus.value ="";
                           enterpriseDataController.deleteEnterprise(docId: docId);
                         },
                       ),

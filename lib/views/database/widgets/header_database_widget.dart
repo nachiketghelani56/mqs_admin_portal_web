@@ -7,8 +7,10 @@ import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboar
 
 Widget headerDatabaseWidget(
     {required String title,
+     String subTitle ="",
     required MqsDashboardController mqsDashboardController,
-    required DashboardController dashboardController,required int index}) {
+    required DashboardController dashboardController,
+    required int index}) {
   return Column(
     children: [
       Row(
@@ -25,11 +27,28 @@ Widget headerDatabaseWidget(
               mqsDashboardController.menuIndex.value = 1;
               mqsDashboardController.subMenuIndex.value = -1;
               dashboardController.setTabIndex(index: index);
-
             },
           ),
           SizeConfig.size10.width,
-
+          if (subTitle.isNotEmpty) ...[
+            const Icon(
+              Icons.arrow_forward_ios,
+              size: SizeConfig.size15,
+              color: ColorConfig.primaryColor,
+            ),
+            SizeConfig.size10.width,
+            Text(subTitle,
+              style: FontTextStyleConfig.tabTextStyle.copyWith(
+                fontSize: FontSizeConfig.fontSize18,
+                color: ColorConfig.primaryColor
+                    .withOpacity(SizeConfig.size0point7),
+              ),
+            ).hoverTap(() {
+              mqsDashboardController.subMenuIndex.value = index;
+              dashboardController.setTabIndex(index: index);
+            }),
+            SizeConfig.size10.width,
+          ],
           const Icon(
             Icons.arrow_forward_ios,
             size: SizeConfig.size15,

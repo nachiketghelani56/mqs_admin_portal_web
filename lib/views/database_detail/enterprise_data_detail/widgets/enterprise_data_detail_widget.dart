@@ -8,7 +8,7 @@ import 'package:mqs_admin_portal_web/views/database_detail/enterprise_data_detai
 import 'package:mqs_admin_portal_web/views/database_detail/enterprise_data_detail/widgets/mqs_enterprise_data_team_list_widget.dart';
 
 Widget enterpriseDataDetailWidget(
-    {required EnterpriseDataController enterpriseDataController }) {
+    {required EnterpriseDataController enterpriseDataController}) {
   return SingleChildScrollView(
     padding: const EdgeInsets.only(bottom: SizeConfig.size24),
     child: Container(
@@ -17,40 +17,22 @@ Widget enterpriseDataDetailWidget(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (enterpriseDataController.enterpriseDetail.mqsEnterprisePOCsList.isNotEmpty) ...[
-            SizeConfig.size34.height,
-            mqsEnterpriseDataPOCsWidget(enterpriseDataController: enterpriseDataController),
-          ],
-          SizeConfig.size34.height,
-          Container(
-            height: SizeConfig.size55,
-            padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size14),
-            decoration: FontTextStyleConfig.headerDecoration.copyWith( borderRadius: const BorderRadius.all(
-              Radius.circular(SizeConfig.size12),
-            ),),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: SizeConfig.size4.toInt(),
-                  child: Text(
-                    StringConfig.dashboard.mqsEnterPriseCode,
-                    style: FontTextStyleConfig.tableBottomTextStyle,
-                  ),
-                ),
-                Expanded(
-                  flex: SizeConfig.size4.toInt(),
-                  child: Text(
-                    enterpriseDataController.enterpriseDetail.mqsEnterpriseCode,
-                    style: FontTextStyleConfig.tableContentTextStyle,
-                  ),
-                ),
-
-              ],
-            ),
+          Text(
+            StringConfig.database.enterpriseInformation,
+            style: FontTextStyleConfig.textFieldTextStyle
+                .copyWith(fontWeight: FontWeight.w600),
           ),
-          if (enterpriseDataController.enterpriseDetail.mqsTeamList.isNotEmpty) ...[
+          if (enterpriseDataController
+              .enterpriseDetail.mqsEnterprisePOCsList.isNotEmpty) ...[
+            SizeConfig.size24.height,
+            mqsEnterpriseDataPOCsWidget(
+                enterpriseDataController: enterpriseDataController),
+          ],
+          if (enterpriseDataController
+              .enterpriseDetail.mqsTeamList.isNotEmpty) ...[
             SizeConfig.size34.height,
-            mqsEnterpriseDataTeamListWidget(enterpriseDataController: enterpriseDataController),
+            mqsEnterpriseDataTeamListWidget(
+                enterpriseDataController: enterpriseDataController),
           ],
           if (enterpriseDataController
               .enterpriseDetail.mqsEmployeeList.isNotEmpty) ...[
@@ -58,7 +40,8 @@ Widget enterpriseDataDetailWidget(
             mqsEnterpriseDataEmployeeEmailListWidget(
                 enterpriseDataController: enterpriseDataController),
           ],
-          if (enterpriseDataController.checkEnterprisePOCsSubscriptionDetail()) ...[
+          if (enterpriseDataController
+              .checkEnterprisePOCsSubscriptionDetail()) ...[
             SizeConfig.size34.height,
             mqsEnterpriseDataSubscriptionDetailWidget(
                 enterpriseDataController: enterpriseDataController),
@@ -71,14 +54,18 @@ Widget enterpriseDataDetailWidget(
             child: Row(
               children: [
                 Expanded(
-                  flex: SizeConfig.size4.toInt(),
+                  child: Text(
+                    StringConfig.dashboard.mqsEnterPriseCode,
+                    style: FontTextStyleConfig.tableBottomTextStyle,
+                  ),
+                ),
+                Expanded(
                   child: Text(
                     StringConfig.csv.createdTimestamp,
                     style: FontTextStyleConfig.tableBottomTextStyle,
                   ),
                 ),
                 Expanded(
-                  flex: SizeConfig.size3.toInt(),
                   child: Text(
                     StringConfig.csv.updatedTimestamp,
                     style: FontTextStyleConfig.tableBottomTextStyle,
@@ -98,21 +85,25 @@ Widget enterpriseDataDetailWidget(
             child: Row(
               children: [
                 Expanded(
-                  flex: SizeConfig.size4.toInt(),
                   child: Text(
-                    enterpriseDataController.dateConvert(enterpriseDataController
-                        .enterpriseDetail.mqsCreatedTimestamp),
+                    enterpriseDataController.enterpriseDetail.mqsEnterpriseCode,
                     style: FontTextStyleConfig.tableContentTextStyle,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Expanded(
-                  flex: SizeConfig.size3.toInt(),
                   child: Text(
-                    enterpriseDataController.dateConvert(enterpriseDataController
-                        .enterpriseDetail.mqsUpdatedTimestamp),
+                    enterpriseDataController.dateConvert(
+                        enterpriseDataController
+                            .enterpriseDetail.mqsCreatedTimestamp),
                     style: FontTextStyleConfig.tableContentTextStyle,
-                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    enterpriseDataController.dateConvert(
+                        enterpriseDataController
+                            .enterpriseDetail.mqsUpdatedTimestamp),
+                    style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
               ],

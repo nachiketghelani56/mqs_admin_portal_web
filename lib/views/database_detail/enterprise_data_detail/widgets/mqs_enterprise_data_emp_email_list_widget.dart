@@ -29,6 +29,8 @@ Widget mqsEnterpriseDataEmployeeEmailListWidget(
                 flex: SizeConfig.size3.toInt(),
                 child: Text(
                   StringConfig.dashboard.employeeName,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
                   style: FontTextStyleConfig.tableBottomTextStyle,
                 ),
               ),
@@ -36,20 +38,26 @@ Widget mqsEnterpriseDataEmployeeEmailListWidget(
                 flex: SizeConfig.size3.toInt(),
                 child: Text(
                   StringConfig.dashboard.emailAddress,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
                   style: FontTextStyleConfig.tableBottomTextStyle,
                 ),
               ),
               Expanded(
-                flex: SizeConfig.size2.toInt(),
+                flex: SizeConfig.size3.toInt(),
                 child: Text(
                   StringConfig.dashboard.mqsCommonLogin,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
                   style: FontTextStyleConfig.tableBottomTextStyle,
                 ),
               ),
               Expanded(
-                flex: SizeConfig.size2.toInt(),
+                flex: SizeConfig.size3.toInt(),
                 child: Text(
                   StringConfig.dashboard.signedUp,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
                   style: FontTextStyleConfig.tableBottomTextStyle,
                 ),
               ),
@@ -91,14 +99,14 @@ Widget mqsEnterpriseDataEmployeeEmailListWidget(
                   ),
                 ),
                 Expanded(
-                  flex: SizeConfig.size2.toInt(),
+                  flex: SizeConfig.size3.toInt(),
                   child: Text(
                     "${enterpriseDataController.enterpriseDetail.mqsEmployeeList[i].mqsCommonLogin.toString().capitalize}",
                     style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
                 Expanded(
-                  flex: SizeConfig.size2.toInt(),
+                  flex: SizeConfig.size3.toInt(),
                   child: Text(
                     "${enterpriseDataController.enterpriseDetail.mqsEmployeeList[i].mqsIsSignUp.toString().capitalize}",
                     style: FontTextStyleConfig.tableContentTextStyle,
