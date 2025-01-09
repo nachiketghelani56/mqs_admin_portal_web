@@ -60,13 +60,10 @@ Widget dataFilterSheetWidget({required DatabaseController databaseController}) {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              // databaseController.selectedTabIndex.value == 0
-                              //     ?
-                            databaseController.enterpriseKeyName(),
-                                  // : databaseController
-                                  //             .selectedTabIndex.value ==
-                                  //         1
-                                  //     ? databaseController.userKeyName()
+                              databaseController.selectedTabIndex.value == 0
+                                  ?
+                            databaseController.enterpriseKeyName()
+                                  : databaseController.circleKeyName(),
                                   //     : databaseController
                                   //                 .selectedTabIndex.value ==
                                   //             2

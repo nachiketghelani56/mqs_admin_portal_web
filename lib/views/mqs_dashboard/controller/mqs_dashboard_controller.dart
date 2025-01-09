@@ -7,6 +7,7 @@ import 'package:mqs_admin_portal_web/services/firebase_auth_service.dart';
 class MqsDashboardController extends GetxController {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   RxString enterpriseStatus="".obs;
+  RxString circleStatus="".obs;
   List<MenuModel> menuItems = [
     MenuModel(
       icon: ImageConfig.home,

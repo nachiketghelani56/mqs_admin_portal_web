@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/models/menu_model.dart';
 import 'package:mqs_admin_portal_web/models/row_input_model.dart';
+import 'package:mqs_admin_portal_web/views/circle/repository/circle_repository.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/repository/enterprise_repository.dart';
+import 'package:mqs_admin_portal_web/views/database/circle_data/controller/circle_data_controller.dart';
 import 'package:mqs_admin_portal_web/views/database/enterprise_data/controller/enterprise_data_controller.dart';
 import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
 
@@ -21,7 +23,9 @@ class DatabaseController extends GetxController {
     StringConfig.dashboard.falseText.toLowerCase()
   ].obs;
   final EnterpriseDataController _enterpriseDataController =
-  Get.put(EnterpriseDataController());
+      Get.put(EnterpriseDataController());
+  final CircleDataController _circleDataController =
+      Get.put(CircleDataController());
 
   RxList<MenuModel> options = [
     MenuModel(
@@ -66,9 +70,7 @@ class DatabaseController extends GetxController {
   RxInt selectedConditionIndex = RxInt(-1);
   RxInt selectedFilterFieldIndex = (-1).obs;
   RxBool showFilterByField = false.obs;
-  RxBool showAddCondition = false.obs,
-      showSortResults = false.obs;
-
+  RxBool showAddCondition = false.obs, showSortResults = false.obs;
 
   setFilterFields() {
     if (selectedTabIndex.value == 0) {
@@ -77,19 +79,19 @@ class DatabaseController extends GetxController {
           .toSet() // Ensure uniqueness
           .toList();
     }
-      // else if (selectedTabIndex.value == 1) {
+    // else if (selectedTabIndex.value == 1) {
     //   filterFields.value = users
     //       .expand((e) => e.toJson().keys) // Convert model to Map
     //       .toSet() // Ensure uniqueness
     //       .toList();
-    // } else if (selectedTabIndex.value == 2 &&
-    //     Get.isRegistered<CircleController>()) {
-    //   RxList<CircleModel> circle = Get.find<CircleController>().circle;
-    //   filterFields.value = circle
-    //       .expand((e) => e.toJson().keys) // Convert model to Map
-    //       .toSet() // Ensure uniqueness
-    //       .toList();
-    // } else if (selectedTabIndex.value == 3 &&
+    else if (selectedTabIndex.value == 2) {
+      filterFields.value = _circleDataController.circle
+          .expand((e) => e.toJson().keys) // Convert model to Map
+          .toSet() // Ensure uniqueness
+          .toList();
+    }
+
+    // else if (selectedTabIndex.value == 3 &&
     //     Get.isRegistered<PathwayController>()) {
     //   RxList<MQSMyQPathwayModel> pathway =
     //       Get.find<PathwayController>().pathway;
@@ -190,9 +192,9 @@ class DatabaseController extends GetxController {
         );
       }
       if (selectedTabIndex.value == 0) {
-        _enterpriseDataController.searchedEnterprises.value = await EnterpriseRepository.i
-            .fetchEnterpriseFilteredData(
-            field, filters, condition, isAsc.value);
+        _enterpriseDataController.searchedEnterprises.value =
+            await EnterpriseRepository.i.fetchEnterpriseFilteredData(
+                field, filters, condition, isAsc.value);
       }
       // else if (selectedTabIndex.value == 1) {
       //   String field2Key = "";
@@ -242,11 +244,11 @@ class DatabaseController extends GetxController {
       //
       //   searchedUsers.value = await UserRepository.i.fetchUserFilteredData(
       //       field, field2Key, filters, condition, isAsc.value);
-      // } else if (selectedTabIndex.value == 2) {
-      //   Get.find<CircleController>().searchedCircle.value =
-      //   await CircleRepository.i.fetchCircleFilteredData(
-      //       field, filters, condition, isAsc.value);
-      // } else if (selectedTabIndex.value == 3) {
+      else if (selectedTabIndex.value == 2) {
+        _circleDataController.searchedCircle.value = await CircleRepository.i
+            .fetchCircleFilteredData(field, filters, condition, isAsc.value);
+      }
+      // else if (selectedTabIndex.value == 3) {
       //   Get.find<PathwayController>().searchedPathway.value =
       //   await PathwayRepository.i.fetchPathwayFilteredData(
       //       field, filters, condition, isAsc.value);
@@ -263,8 +265,14 @@ class DatabaseController extends GetxController {
     //   PathwayController controller = Get.find<PathwayController>();
     //   controller.searchedPathway.value = controller.pathway;
     // } else {
-    _enterpriseDataController.searchedEnterprises.value = _enterpriseDataController.enterprises;
-      // searchedUsers.value = users;
+    if (selectedTabIndex.value == 0) {
+      _enterpriseDataController.searchedEnterprises.value =
+          _enterpriseDataController.enterprises;
+    } else if (selectedTabIndex.value == 2) {
+      _circleDataController.searchedCircle.value = _circleDataController.circle;
+    }
+
+    // searchedUsers.value = users;
     // }
     selectedFilterFieldIndex.value = -1;
     selectedConditionIndex.value = -1;
@@ -275,6 +283,7 @@ class DatabaseController extends GetxController {
     rows.clear();
     addRow();
     _enterpriseDataController.reset();
+    _circleDataController.reset();
   }
   // reset() {
   //   // if (selectedTabIndex.value == 1 &&

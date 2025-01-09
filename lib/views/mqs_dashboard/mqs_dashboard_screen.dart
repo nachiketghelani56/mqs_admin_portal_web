@@ -6,7 +6,7 @@ import 'package:mqs_admin_portal_web/views/circle/circle_screen.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/dashboard_screen.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/filter_sheet_widget.dart';
-import 'package:mqs_admin_portal_web/views/database/circle_collection_screen.dart';
+import 'package:mqs_admin_portal_web/views/database/circle_data/circle_data_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/circle_flagged_post_collection_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/controller/database_controller.dart';
 import 'package:mqs_admin_portal_web/views/database/enterprise_data/add_enterprise_data_screen.dart';
@@ -121,7 +121,7 @@ class MqsDashboardScreen extends StatelessWidget {
                             scaffoldKey: _mqsDashboardController.scaffoldKey);
                       } else if (_mqsDashboardController.subMenuIndex.value ==
                           2) {
-                        return CircleCollectionScreen(
+                        return CircleDataScreen(
                             scaffoldKey: _mqsDashboardController.scaffoldKey);
                       } else if (_mqsDashboardController.subMenuIndex.value ==
                           3) {

@@ -646,4 +646,5 @@ class Database {
   final String editEnterpriseInformation = "Edit Enterprise Information";
   final String viewEnterprise = "View Enterprise";
   final String enterpriseInformation = "Enterprise Information";
+  final String postView = "Post View";
 }

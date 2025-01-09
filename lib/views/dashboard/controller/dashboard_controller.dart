@@ -22,6 +22,7 @@ import 'package:mqs_admin_portal_web/views/circle/controller/circle_controller.d
 import 'package:mqs_admin_portal_web/views/circle/repository/circle_repository.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/repository/enterprise_repository.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/repository/user_repository.dart';
+import 'package:mqs_admin_portal_web/views/database/circle_data/controller/circle_data_controller.dart';
 import 'package:mqs_admin_portal_web/views/database/controller/circle_flagged_post_controller.dart';
 import 'package:mqs_admin_portal_web/views/database/controller/database_controller.dart';
 import 'package:mqs_admin_portal_web/views/database/controller/team_controller.dart';
@@ -938,9 +939,11 @@ class DashboardController extends GetxController {
   }
 
   setTabIndex({required int index}) {
+
     final MqsDashboardController mqsDashboardController =
         Get.put(MqsDashboardController());
     mqsDashboardController.enterpriseStatus.value="";
+    mqsDashboardController.circleStatus.value="";
     // if (mqsDashboardController.menuIndex.value == 0) {
       final CircleController circleController = Get.put(CircleController());
 
@@ -975,21 +978,41 @@ class DashboardController extends GetxController {
 
       final CircleFlaggedPostController circleFlaggedPostController =
           Get.put(CircleFlaggedPostController());
+      final CircleDataController circleDataController =
+          Get.put(CircleDataController());
       final UserSubscriptionReceiptController
           userSubscriptionReceiptController =
           Get.put(UserSubscriptionReceiptController());
       databaseController.selectedTabIndex.value = index;
-      enterpriseDataController.searchController.clear();
-      // searchedUsers.value = users;
-      enterpriseDataController.searchedEnterprises.value = enterprises;
-      enterpriseDataController.isAddEnterprise.value = false;
-      enterpriseDataController.isEditEnterprise.value = false;
 
-      userSubscriptionReceiptController.reset();
-      teamController.reset();
-      circleFlaggedPostController.reset();
-      enterpriseDataController.reset();
-      databaseController.setFilterFields();
+     if(index == 2)
+
+       {
+         circleDataController.searchController.clear();
+
+         circleDataController.isAdd.value = false;
+         circleDataController.isEdit.value = false;
+         circleDataController.reset();
+         circleDataController.getCircle();
+       }else{
+
+       enterpriseDataController.searchController.clear();
+       // searchedUsers.value = users;
+       enterpriseDataController.searchedEnterprises.value = enterprises;
+       enterpriseDataController.isAddEnterprise.value = false;
+       enterpriseDataController.isEditEnterprise.value = false;
+       userSubscriptionReceiptController.reset();
+       teamController.reset();
+       circleFlaggedPostController.reset();
+       enterpriseDataController.reset();
+
+       databaseController.setFilterFields();
+     }
+
+
+
+
+
     }
   }
 
