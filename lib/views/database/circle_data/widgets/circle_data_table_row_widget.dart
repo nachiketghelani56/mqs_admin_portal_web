@@ -3,9 +3,12 @@ import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
 import 'package:mqs_admin_portal_web/views/database/circle_data/controller/circle_data_controller.dart';
+import 'package:mqs_admin_portal_web/views/database/circle_data/widgets/circle_data_delete_dialog_widget.dart';
+import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 
 Widget circleDataTableRowWidget({
   required CircleDataController circleDataController,
+  required MqsDashboardController mqsDashboardController,
   required bool isSelected,
   required BuildContext context,
   required int index,
@@ -90,9 +93,7 @@ Widget circleDataTableRowWidget({
                       circleDataController.isAdd.value = false;
                       circleDataController.isEdit.value = false;
                       circleDataController.viewIndex.value = index;
-                      // if (context.width < SizeConfig.size1500) {
-                      //   Get.toNamed(AppRoutes.circleDetail);
-                      // }
+                      mqsDashboardController.circleStatus.value = "view_circle";
                     }),
                     Image.asset(
                       ImageConfig.edit,
@@ -103,6 +104,9 @@ Widget circleDataTableRowWidget({
                       circleDataController.isEdit.value = true;
                       circleDataController.showHashTag.value = false;
                       circleDataController.setCircleForm();
+
+                      mqsDashboardController.circleStatus.value = "add_circle";
+
                       // if (context.width < SizeConfig.size1500) {
                       //   Get.toNamed(AppRoutes.addCircle);
                       // }
@@ -111,12 +115,12 @@ Widget circleDataTableRowWidget({
                       ImageConfig.delete,
                       height: SizeConfig.size24,
                     ).tap(() {
-                      // circleDataDeleteDialogWidget(
-                      //   context: context,
-                      //   circleDataController: circleDataController,
-                      //   docId:
-                      //       circleDataController.searchedCircle[index].id ?? "",
-                      // );
+                      circleDataDeleteDialogWidget(
+                        context: context,
+                        circleDataController: circleDataController,
+                        docId:
+                            circleDataController.searchedCircle[index].id ?? "",
+                      );
                     }),
                   ],
                 ),
@@ -159,8 +163,6 @@ Widget circleDataTableRowWidget({
                   ),
                 ),
               ),
-
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -173,9 +175,7 @@ Widget circleDataTableRowWidget({
                       circleDataController.isAdd.value = false;
                       circleDataController.isEdit.value = false;
                       circleDataController.viewIndex.value = index;
-                      // if (context.width < SizeConfig.size1500) {
-                      //   Get.toNamed(AppRoutes.circleDetail);
-                      // }
+                      mqsDashboardController.circleStatus.value = "view_circle";
                     }),
                   ),
                   Padding(
@@ -189,9 +189,7 @@ Widget circleDataTableRowWidget({
                       circleDataController.isEdit.value = true;
                       circleDataController.showHashTag.value = false;
                       circleDataController.setCircleForm();
-                      // if (context.width < SizeConfig.size1500) {
-                      //   Get.toNamed(AppRoutes.addCircle);
-                      // }
+                      mqsDashboardController.circleStatus.value = "add_circle";
                     }),
                   ),
                   Padding(
@@ -200,12 +198,12 @@ Widget circleDataTableRowWidget({
                       ImageConfig.delete,
                       height: SizeConfig.size24,
                     ).tap(() {
-                      // circleDataDeleteDialogWidget(
-                      //   context: context,
-                      //   circleDataController: circleDataController,
-                      //   docId:
-                      //       circleDataController.searchedCircle[index].id ?? "",
-                      // );
+                      circleDataDeleteDialogWidget(
+                        context: context,
+                        circleDataController: circleDataController,
+                        docId:
+                            circleDataController.searchedCircle[index].id ?? "",
+                      );
                     }),
                   ),
                 ],

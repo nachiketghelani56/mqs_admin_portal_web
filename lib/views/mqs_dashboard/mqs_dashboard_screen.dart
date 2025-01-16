@@ -6,6 +6,7 @@ import 'package:mqs_admin_portal_web/views/circle/circle_screen.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/dashboard_screen.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/widgets/filter_sheet_widget.dart';
+import 'package:mqs_admin_portal_web/views/database/circle_data/add_circle_data_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/circle_data/circle_data_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/circle_flagged_post_collection_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/controller/database_controller.dart';
@@ -17,6 +18,7 @@ import 'package:mqs_admin_portal_web/views/database/team_collection_screen.dart'
 import 'package:mqs_admin_portal_web/views/database/user_collection_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/user_subscription_receipt_collection_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/widgets/data_filter_sheet_widget.dart';
+import 'package:mqs_admin_portal_web/views/database_detail/circle_data_detail/circle_data_detail_screen.dart';
 import 'package:mqs_admin_portal_web/views/database_detail/enterprise_data_detail/enterprise_data_detail_screen.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/home_screen.dart';
@@ -121,8 +123,20 @@ class MqsDashboardScreen extends StatelessWidget {
                             scaffoldKey: _mqsDashboardController.scaffoldKey);
                       } else if (_mqsDashboardController.subMenuIndex.value ==
                           2) {
-                        return CircleDataScreen(
-                            scaffoldKey: _mqsDashboardController.scaffoldKey);
+                        if(_mqsDashboardController.circleStatus.value =="add_circle")
+                        {
+                          return AddCircleDataScreen(
+                              scaffoldKey: _mqsDashboardController.scaffoldKey);
+                        } else   if(_mqsDashboardController.circleStatus.value =="view_circle")
+                        {
+                          return CircleDataDetailScreen(
+                              scaffoldKey: _mqsDashboardController.scaffoldKey);
+                        } else{
+                          return CircleDataScreen(
+                              scaffoldKey: _mqsDashboardController.scaffoldKey);
+                        }
+
+
                       } else if (_mqsDashboardController.subMenuIndex.value ==
                           3) {
                         return PathwayCollectionScreen(

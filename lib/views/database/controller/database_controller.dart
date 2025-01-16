@@ -394,9 +394,9 @@ class DatabaseController extends GetxController {
     if (keyName == StringConfig.firebase.flagName) {
       return StringConfig.reporting.flagName;
     } else if (keyName == StringConfig.firebase.isFlag) {
-      return StringConfig.reporting.isFlag;
+      return StringConfig.database.flag;
     } else if (keyName == StringConfig.firebase.isMainPost) {
-      return StringConfig.reporting.isMainPost;
+      return StringConfig.database.mainPost;
     } else if (keyName == StringConfig.firebase.postContent) {
       return StringConfig.reporting.postContent;
     } else if (keyName == StringConfig.firebase.postTime) {
@@ -406,15 +406,15 @@ class DatabaseController extends GetxController {
     } else if (keyName == StringConfig.firebase.postViews) {
       return StringConfig.reporting.postViews;
     } else if (keyName == StringConfig.firebase.userIsGuide) {
-      return StringConfig.reporting.userIsGuide;
+      return StringConfig.database.userGuide;
     } else if (keyName == StringConfig.firebase.userId) {
       return StringConfig.dashboard.userId;
     } else if (keyName == StringConfig.firebase.userName) {
-      return StringConfig.dashboard.name;
+      return StringConfig.database.userName;
     } else if (keyName == StringConfig.firebase.hashtag) {
       return StringConfig.circle.hashTag;
     } else if (keyName == StringConfig.firebase.postReply) {
-      return StringConfig.reporting.postReplies;
+      return StringConfig.database.postReply;
     }
     return "";
   }

@@ -10,11 +10,11 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/models/circle_model.dart';
-import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/services/firebase_auth_service.dart';
 import 'package:mqs_admin_portal_web/services/firebase_storage_service.dart';
 import 'package:mqs_admin_portal_web/views/circle/repository/circle_repository.dart';
 import 'package:mqs_admin_portal_web/views/database/controller/database_controller.dart';
+import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/loader_widget.dart';
 
@@ -40,8 +40,11 @@ class CircleDataController extends GetxController {
   RxBool isMainPost = true.obs,
       userIsGuide = false.obs,
       isFlag = false.obs,
-      showHashTag = false.obs;
+      showHashTag = false.obs,
+      showPostReply = false.obs;
   RxBool circleLoader = false.obs;
+  final MqsDashboardController mqsDashboardController =
+      Get.put(MqsDashboardController());
   List<DropdownMenuItem> get boolOptions => [
         DropdownMenuItem(
           value: true,
@@ -199,9 +202,7 @@ class CircleDataController extends GetxController {
       clearAllFields();
       isAdd.value = false;
       isEdit.value = false;
-      if (Get.currentRoute == AppRoutes.addCircle) {
-        Get.back();
-      }
+      mqsDashboardController.circleStatus.value = "";
     } catch (e) {
       hideLoader();
       errorDialogWidget(msg: e.toString());
@@ -316,17 +317,16 @@ class CircleDataController extends GetxController {
           CircleModel circle = CircleModel(
             id: docRef,
             userId: rowMap[StringConfig.dashboard.userId].toString(),
-            userName: rowMap[StringConfig.dashboard.fullName].toString(),
-            userIsGuide: rowMap[StringConfig.reporting.userIsGuide]
+            userName: rowMap[StringConfig.database.userName].toString(),
+            userIsGuide: rowMap[StringConfig.database.userGuide]
                     .toString()
                     .toLowerCase() ==
                 StringConfig.dashboard.trueText.toLowerCase(),
-            isFlag: rowMap[StringConfig.reporting.isFlag]
-                    .toString()
-                    .toLowerCase() ==
-                StringConfig.dashboard.trueText.toLowerCase(),
+            isFlag:
+                rowMap[StringConfig.database.flag].toString().toLowerCase() ==
+                    StringConfig.dashboard.trueText.toLowerCase(),
             flagName: rowMap[StringConfig.reporting.flagName].toString(),
-            isMainPost: rowMap[StringConfig.reporting.isMainPost]
+            isMainPost: rowMap[StringConfig.database.mainPost]
                     .toString()
                     .toLowerCase() ==
                 StringConfig.dashboard.trueText.toLowerCase(),
@@ -388,14 +388,14 @@ class CircleDataController extends GetxController {
         0,
         [
           StringConfig.dashboard.userId,
-          StringConfig.dashboard.fullName,
+          StringConfig.database.userName,
           StringConfig.reporting.postTitle,
           StringConfig.reporting.postContent,
           StringConfig.reporting.postTime,
           StringConfig.reporting.postViews,
-          StringConfig.reporting.userIsGuide,
-          StringConfig.reporting.isMainPost,
-          StringConfig.reporting.isFlag,
+          StringConfig.database.userGuide,
+          StringConfig.database.mainPost,
+          StringConfig.database.flag,
           StringConfig.reporting.flagName,
           StringConfig.reporting.postReplies,
           StringConfig.reporting.hashTags,

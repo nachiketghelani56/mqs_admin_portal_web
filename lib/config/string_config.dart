@@ -189,7 +189,8 @@ class Dashboard {
   final String apply = "Apply";
   final String reset = "Reset";
   final String enterValue = "Enter value";
-  final String mqsEnterpriseSubscriptionDetails = "mqsEnterpriseSubscriptionDetails";
+  final String mqsEnterpriseSubscriptionDetails =
+      "mqsEnterpriseSubscriptionDetails";
   final String userId = "User ID";
   final String fullName = "Full Name";
   final String about = "About";
@@ -706,8 +707,12 @@ class Database {
   final String addEnterpriseInformation = "Add Enterprise Information";
   final String editEnterpriseInformation = "Edit Enterprise Information";
   final String viewEnterprise = "View Enterprise";
+  final String viewCircle = "View Circle";
   final String enterpriseInformation = "Enterprise Information";
   final String postView = "Post View";
   final String addCircleInformation = "Add Circle Information";
   final String editCircleInformation = "Edit Circle Information";
+  final String userGuide = "User Guide";
+  final String circleInformation = "Circle Information";
+  final String userName = "User Name";
 }

@@ -83,7 +83,9 @@ class CircleRepository {
                 .where(field,
                     isEqualTo: type == StringConfig.dashboard.boolean
                         ? value == 'true'
-                        : value.toString())
+                        : field == 'post_view'
+                            ? int.parse(value)
+                            : value.toString())
                 .orderBy(field, descending: !isAsc);
             break;
           case '!=': // Not equal to
@@ -91,7 +93,9 @@ class CircleRepository {
                 .where(field,
                     isNotEqualTo: type == StringConfig.dashboard.boolean
                         ? value == 'true'
-                        : value.toString())
+                        : field == 'post_view'
+                            ? int.parse(value)
+                            : value.toString())
                 .orderBy(field, descending: !isAsc);
             break;
           case '>': // Greater than
@@ -99,7 +103,9 @@ class CircleRepository {
                 .where(field,
                     isGreaterThan: type == StringConfig.dashboard.boolean
                         ? value == 'true'
-                        : value.toString())
+                        : field == 'post_view'
+                            ? int.parse(value)
+                            : value.toString())
                 .orderBy(field, descending: !isAsc);
             break;
           case '>=': // Greater than or equal to
@@ -108,7 +114,9 @@ class CircleRepository {
                     isGreaterThanOrEqualTo:
                         type == StringConfig.dashboard.boolean
                             ? value == 'true'
-                            : value.toString())
+                            : field == 'post_view'
+                                ? int.parse(value)
+                                : value.toString())
                 .orderBy(field, descending: !isAsc);
             break;
           case '<': // Less than
@@ -116,7 +124,9 @@ class CircleRepository {
                 .where(field,
                     isLessThan: type == StringConfig.dashboard.boolean
                         ? value == 'true'
-                        : value.toString())
+                        : field == 'post_view'
+                            ? int.parse(value)
+                            : value.toString())
                 .orderBy(field, descending: !isAsc);
             break;
           case '<=': // Less than or equal to
@@ -124,7 +134,9 @@ class CircleRepository {
                 .where(field,
                     isLessThanOrEqualTo: type == StringConfig.dashboard.boolean
                         ? value == 'true'
-                        : value.toString())
+                        : field == 'post_view'
+                            ? int.parse(value)
+                            : value.toString())
                 .orderBy(field, descending: !isAsc);
             break;
 

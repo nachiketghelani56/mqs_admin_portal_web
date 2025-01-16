@@ -15,7 +15,7 @@ Widget circleDataWidget({
   required BuildContext context,
   required CircleDataController circleDataController,required MqsDashboardController mqsDashboardController,
   required GlobalKey<ScaffoldState> scaffoldKey,
- 
+
 }) {
   return Obx(
     () => circleDataController.circleLoader.value
@@ -59,6 +59,8 @@ Widget circleDataWidget({
                                             circleDataController.viewIndex.value ==
                                                 i,
                                         context: context,
+                                        mqsDashboardController:
+                                            mqsDashboardController,
                                         index: i,
 
                                       ),
@@ -72,20 +74,6 @@ Widget circleDataWidget({
                   ),
                 ),
               ),
-              // if (context.width > SizeConfig.size1500 &&
-              //     circleDataController.searchedCircle.isNotEmpty) ...[
-              //   SizeConfig.size20.width,
-              //   Expanded(
-              //     child: circleDataController.isAdd.value ||
-              //             circleDataController.isEdit.value
-              //         ? addCircleWidget(
-              //             circleDataController: circleDataController, context: context)
-              //         : circleDataController.viewIndex.value >= 0
-              //             ? circleDetailWidget(
-              //                 circleDataController: circleDataController)
-              //             : const SizedBox.shrink(),
-              //   ),
-              // ],
             ],
           ).paddingOnly(
             left: SizeConfig.size40,
