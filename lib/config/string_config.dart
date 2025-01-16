@@ -27,6 +27,57 @@ class Login {
 }
 
 class Dashboard {
+  final String appVersion = "App Version";
+  final String userJMSStatus = "User JMS Status";
+  final String userJMSStatusDetails = "User JMS Status Details";
+  final String userChallengesStatus = "User Challenges Status";
+  final String userChallengesStatusDetails = "User Challenges Status Details";
+  final String privacySettingsDetails = "Privacy Settings Details";
+  final String userGrowth = "User Growth";
+  final String userGrowthDetails = "User Growth Details";
+  final String mqsUserJMStatus = "mqsUserJMStatus";
+  final String mqsUserGrowth = "mqsUserGrowth";
+  final String mqsUserProfile = "mqsUserProfile";
+  final String mqsUserMilestones = "mqsUserMilestones";
+  final String mqsPrivacySettingsDetails = "mqsPrivacySettingsDetails";
+  final String mqsUserChallengesStatus = "mqsUserChallengesStatus";
+  final String userProfile = "User Profile";
+  final String userProfileDetails = "User Profile Details";
+  final String mqsUserInPathway = "User InPathway";
+  final String mqsUserPSActivityLogs = "User PS Activity Logs";
+  final String mqsUserPSSurveysAndStudies = "User PS Surveys And Studies";
+  final String mqsUserPSOutreach = "User PS Out reach";
+  final String mqsUserPSCirclePronouns = "User PS Circle Pronouns";
+  final String mqsAgeGroup = "Age Group";
+  final String mqsUserPSCircleProfilePicture = "User PS Circle Profile";
+  final String profession = "Profession";
+  final String mqsUserPSCircleName = "User PS Circle Name";
+  final String mqsUserPSCircleCountry = "User PS Circle Country";
+  final String mqsUserPSCircleAbout = "User PS Circle About";
+  final String mqsUserPathwayID = "User Pathway ID";
+  final String mqsUserChallengesTimestamp = "User Challenges Date";
+  final String mqsPathwayScreenList = "Pathway Screen List";
+  final String mqsCompletedPathwayList = "Completed Pathway List";
+  final String mqsCompletedChallengesList = "Completed Challenges List";
+  final String mqsUserPathwayLevel = "User Pathway Level";
+  final String timestamp = "Timestamp";
+  final String oBStart = "OB Start";
+  final String oBDemoGraphic = "OB DemoGraphic";
+  final String oBScenesScore = "OB Scenes Score";
+  final String oBCheckIn = "OB Check In";
+  final String oBCheckInScore = "OB Check In Score";
+  final String oBWheelOfLife = "OB WheelOfLife";
+  final String oBDiv1 = "OB Div 1";
+  final String oBDiv2 = "OB Div 2";
+  final String oBDiv3 = "OB Div 3";
+  final String oBDiv4 = "OB Div 4";
+  final String oBRegister = "OB Register";
+  final String oBStartTimestamp = "OB Start Date";
+  final String oBCompletedTimestamp = "OB Completed Date";
+  final String oBSkip = "OB Skip";
+  final String oBDone = "OB Done";
+
+  final String oBScenes = "OB Scenes";
   final String enterprise = "Enterprise";
   final String users = "Users";
   final String circle = "Circle";
@@ -75,6 +126,12 @@ class Dashboard {
   final String expiryDate = "Expiry Date";
   final String renewalDate = "Renewal Date";
   final String mqsEmployeeEmailList = "Employee List";
+  final String userMilestoneDetails = "User Milestone Details";
+  final String userMilestoneList = "User Milestone List";
+  final String mqsMilestoneName = "Milestone Name";
+  final String mqsMilestoneImage = "Milestone Image";
+  final String mqsMilestoneDescription = "Milestone Description";
+  final String mqsAboutMilestone = "About Milestone";
   final String mqsTeamList = "Team List";
   final String emailAddress = "Employee Email";
   final String teamEmailAddress = "Team Email";
@@ -196,6 +253,7 @@ class Dashboard {
   final String health = "health";
   final String mqsTimeStamp = "mqsTimeStamp";
   final String purpose = "purpose";
+  final String postal = "Postal";
   final String relationship = "relationship";
   final String social = "social";
   final String work = "work";
@@ -297,6 +355,7 @@ class Firebase {
   final String mqsFirebaseUserID = 'mqsFirebaseUserID';
   final String mqsEnterpriseUserFlag = "mqsEnterpriseUserFlag";
   final String mqsRegistrationStatus = "mqsRegistrationStatus";
+  final String pending = "Pending";
 
   final String firstName = "FirstName";
   final String lastName = "LastName";
@@ -379,6 +438,8 @@ class CSV {
   final String updatedTimestamp = "Updated Timestamp";
   final String createdAt = "Created At";
   final String updatedAt = "Updated At";
+  final String subscriptionRenewalTimestamp = "Renewal Timestamp";
+  final String subscriptionActivationTimestamp = "Activation Timestamp";
 }
 
 class MQSDashboard {
@@ -647,4 +708,6 @@ class Database {
   final String viewEnterprise = "View Enterprise";
   final String enterpriseInformation = "Enterprise Information";
   final String postView = "Post View";
+  final String addCircleInformation = "Add Circle Information";
+  final String editCircleInformation = "Edit Circle Information";
 }

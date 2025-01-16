@@ -28,7 +28,7 @@ Widget userSubscriptionReceiptTableRowWidget({
             padding: const EdgeInsets.only(right: SizeConfig.size15),
             child: Text(
               dashboardController
-                  .userSubscriptionReceipts[index].mqsFirebaseUserID,
+                  .userSubscriptionReceipts[index].mqsFirebaseUserID ??"",
               overflow: TextOverflow.ellipsis,
               style: FontTextStyleConfig.tableTextStyle,
             ),
@@ -40,7 +40,7 @@ Widget userSubscriptionReceiptTableRowWidget({
             padding: const EdgeInsets.only(right: SizeConfig.size15),
             child: Text(
               dashboardController
-                  .userSubscriptionReceipts[index].mqsSubscriptionPlatform,
+                  .userSubscriptionReceipts[index].mqsSubscriptionPlatform ??"",
               overflow: TextOverflow.ellipsis,
               style: FontTextStyleConfig.tableTextStyle,
             ),

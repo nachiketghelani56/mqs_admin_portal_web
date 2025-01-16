@@ -10,14 +10,14 @@ import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/models/circle_model.dart';
 import 'package:mqs_admin_portal_web/models/enterprise_model.dart';
 import 'package:mqs_admin_portal_web/models/line_chart_model.dart';
+import 'package:mqs_admin_portal_web/models/mqs_my_q_user_iam_model.dart';
+import 'package:mqs_admin_portal_web/models/mqs_my_q_user_subscription_receipt_model.dart';
 import 'package:mqs_admin_portal_web/models/reporting_chart_model.dart';
-import 'package:mqs_admin_portal_web/models/user_iam_model.dart';
-import 'package:mqs_admin_portal_web/models/user_subscription_receipt_model.dart';
 import 'package:mqs_admin_portal_web/views/circle/controller/circle_controller.dart';
 import 'package:mqs_admin_portal_web/views/circle/repository/circle_repository.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/repository/enterprise_repository.dart';
-import 'package:mqs_admin_portal_web/views/dashboard/repository/user_repository.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/repository/user_IAM_repository.dart';
 import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
 
 class ReportingController extends GetxController {
@@ -94,9 +94,9 @@ class ReportingController extends GetxController {
   RxDouble completedOB = 0.0.obs,
       partialCompletedOB = 0.0.obs,
       skippedOB = 0.0.obs;
-  StreamSubscription<List<UserIAMModel>>? userStream;
+  StreamSubscription<List<MQSMyQUserIamModel>>? userStream;
   StreamSubscription<List<CircleModel>>? circleStream;
-  StreamSubscription<List<UserSubscriptionReceiptModel>>?
+  StreamSubscription<List<MQSMyQUserSubscriptionReceiptModel>>?
       userSubscriptionReceiptStream;
   Map<String, Color> totalReport = {
     StringConfig.dashboard.enterprise: ColorConfig.secondaryColor,
@@ -141,21 +141,21 @@ class ReportingController extends GetxController {
 
   Future<List<ReportingChartModel>> getOverAllData() async {
     try {
-      List<UserIAMModel> users = await UserRepository.i.getUsers();
-      List<UserSubscriptionReceiptModel> receipt =
+      List<MQSMyQUserIamModel> users = await UserRepository.i.getUsers();
+      List<MQSMyQUserSubscriptionReceiptModel> receipt =
           await UserRepository.i.getUserSubscriptionReceipt();
 
       List<EnterpriseModel> enterpriseList =
           await EnterpriseRepository.i.getEnterprises();
       List<CircleModel> circleList = await CircleRepository.i.getCircles();
-      List<UserSubscriptionReceiptModel> activeRec = receipt
+      List<MQSMyQUserSubscriptionReceiptModel> activeRec = receipt
           .where((e) =>
               e.mqsSubscriptionStatus == StringConfig.reporting.active)
           .toList();
 
       List totalStatus = users.where((localItem) {
         return activeRec.any((firebaseItem) =>
-            firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+            firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
       }).toList();
       int totalSubscriptionActivePlan = totalStatus.length;
       int totalUsers = users.length;
@@ -186,72 +186,58 @@ class ReportingController extends GetxController {
       startDateController.clear();
       endDateController.clear();
       final DashboardController dashboardController = Get.find();
-      List<UserIAMModel> users = await UserRepository.i.getUsers();
+      List<MQSMyQUserIamModel> users = await UserRepository.i.getUsers();
       if (reportType.value == StringConfig.reporting.totalRegisteredUsers) {
         dashboardController.searchedUsers.value = users;
       } else if (reportType.value == StringConfig.reporting.activeUsers) {
         dashboardController.searchedUsers.value = users
             .where((e) =>
-                e.mqsUserActiveTimestamp.isNotEmpty &&
+                (e.mqsUserActiveTimestamp?.isNotEmpty ?? false) &&
                 DateTime.now()
-                        .difference(DateTime.parse(e.mqsUserActiveTimestamp))
+                        .difference(DateTime.parse(e?.mqsUserActiveTimestamp ?? ""))
                         .inDays <
                     SizeConfig.size7)
             .toList();
       } else if (reportType.value == StringConfig.reporting.inactiveUsers) {
         dashboardController.searchedUsers.value = users
             .where((e) =>
-                e.mqsUserActiveTimestamp.isEmpty ||
-                (e.mqsUserActiveTimestamp.isNotEmpty &&
+                e.mqsUserActiveTimestamp?.isEmpty ?? false ||
+                ((e.mqsUserActiveTimestamp?.isNotEmpty ?? false) &&
                     DateTime.now()
                             .difference(
-                                DateTime.parse(e.mqsUserActiveTimestamp))
+                                DateTime.parse(e.mqsUserActiveTimestamp ?? ""))
                             .inDays >
                         SizeConfig.size7))
             .toList();
       } else if (reportType.value == StringConfig.reporting.completed) {
         dashboardController.searchedUsers.value = users
-            .where((e) =>
-                e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
-                e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
-                e.onboardingModel.mqsScenesDetails.isNotEmpty)
+            .where((e) =>e.mqsOnboardingDetails?.mqsOBDone ==true)
             .toList();
       } else if (reportType.value == StringConfig.reporting.skipped) {
         dashboardController.searchedUsers.value =
-            users.where((e) => e.mqsSkipOnboarding).toList();
+            users.where((e) => e.mqsOnboardingDetails?.mqsOBSkip ==true).toList();
       } else if (reportType.value == StringConfig.reporting.partialCompletion) {
-        List<UserIAMModel> completed = users
-            .where((e) =>
-                e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
-                e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
-                e.onboardingModel.mqsScenesDetails.isNotEmpty)
-            .toList();
-        List<UserIAMModel> empty = users
-            .where((e) =>
-                e.onboardingModel.mqsCheckInDetails.isEmpty &&
-                e.onboardingModel.mqsDemoGraphicDetails.isEmpty &&
-                e.onboardingModel.mqsScenesDetails.isEmpty)
-            .toList();
+
         dashboardController.searchedUsers.value = users
-            .where((e) => !completed.contains(e) && !empty.contains(e))
+            .where((e) => e.mqsOnboardingDetails?.mqsOBStart == true && e.mqsOnboardingDetails?.mqsOBDone == false)
             .toList();
       }
       dashboardController.searchUserType.value = users;
       totalRegisteredUsers.value = users.length;
       activeUsers.value = users
           .where((e) =>
-              e.mqsUserActiveTimestamp.isNotEmpty &&
+             ( e.mqsUserActiveTimestamp?.isNotEmpty  ?? false)&&
               DateTime.now()
-                      .difference(DateTime.parse(e.mqsUserActiveTimestamp))
+                      .difference(DateTime.parse(e.mqsUserActiveTimestamp ?? ""))
                       .inDays <
                   SizeConfig.size7)
           .length;
       inactiveUsers.value = users
           .where((e) =>
-              e.mqsUserActiveTimestamp.isEmpty ||
-              (e.mqsUserActiveTimestamp.isNotEmpty &&
+              (e.mqsUserActiveTimestamp?.isEmpty  ?? false) ||
+              ((e.mqsUserActiveTimestamp?.isNotEmpty   ?? false)&&
                   DateTime.now()
-                          .difference(DateTime.parse(e.mqsUserActiveTimestamp))
+                          .difference(DateTime.parse(e.mqsUserActiveTimestamp??""))
                           .inDays >
                       SizeConfig.size7))
           .length;
@@ -263,19 +249,19 @@ class ReportingController extends GetxController {
         totalRegisteredUsers.value = data.length;
         activeUsers.value = data
             .where((e) =>
-                e.mqsUserActiveTimestamp.isNotEmpty &&
+                (e.mqsUserActiveTimestamp?.isNotEmpty  ?? false) &&
                 DateTime.now()
-                        .difference(DateTime.parse(e.mqsUserActiveTimestamp))
+                        .difference(DateTime.parse(e.mqsUserActiveTimestamp ?? ""))
                         .inDays <
                     SizeConfig.size7)
             .length;
         inactiveUsers.value = data
             .where((e) =>
-                e.mqsUserActiveTimestamp.isEmpty ||
-                (e.mqsUserActiveTimestamp.isNotEmpty &&
+                (e.mqsUserActiveTimestamp?.isEmpty   ?? false )||
+                ((e.mqsUserActiveTimestamp?.isNotEmpty  ?? false) &&
                     DateTime.now()
                             .difference(
-                                DateTime.parse(e.mqsUserActiveTimestamp))
+                                DateTime.parse(e.mqsUserActiveTimestamp ??""))
                             .inDays >
                         SizeConfig.size7))
             .length;
@@ -298,16 +284,16 @@ class ReportingController extends GetxController {
         authtype.value = type;
       }
       final DashboardController dashboardController = Get.find();
-      List<UserIAMModel> users = isDetailView
+      List<MQSMyQUserIamModel> users = isDetailView
           ? dashboardController.users
           : await UserRepository.i.getUsers();
       if (filterType == StringConfig.reporting.today) {
         DateTime today = DateTime.now();
         users = users.where((e) {
-          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-              ? e.mqsCreatedTimestamp
-              : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                  ? e.mqsEnterpriseCreatedTimestamp
+          DateTime createdTime = DateTime.parse((e.mqsCreatedTimestamp?.isNotEmpty   ?? false)
+              ? e.mqsCreatedTimestamp ??""
+              : (e.mqsEnterpriseCreatedTimestamp?.isNotEmpty  ?? false)
+                  ? e.mqsEnterpriseCreatedTimestamp ?? ""
                   : DateTime.now().toIso8601String());
           return createdTime.day == today.day &&
               createdTime.month == today.month &&
@@ -316,10 +302,10 @@ class ReportingController extends GetxController {
       } else if (filterType == StringConfig.reporting.lastDay) {
         DateTime lastDay = DateTime.now().subtract(const Duration(days: 1));
         users = users.where((e) {
-          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-              ? e.mqsCreatedTimestamp
-              : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-              ? e.mqsEnterpriseCreatedTimestamp
+          DateTime createdTime = DateTime.parse((e.mqsCreatedTimestamp?.isNotEmpty   ?? false)
+              ? e.mqsCreatedTimestamp ??""
+              :( e.mqsEnterpriseCreatedTimestamp?.isNotEmpty  ?? false)
+              ? e.mqsEnterpriseCreatedTimestamp ?? ""
               : DateTime.now().toIso8601String());
           return createdTime.day == lastDay.day &&
               createdTime.month == lastDay.month &&
@@ -334,10 +320,10 @@ class ReportingController extends GetxController {
             .add(Duration(days: DateTime.daysPerWeek - lastWeek.weekday));
         DateTime endDate = DateTime(end.year, end.month, end.day, 24);
         users = users.where((e) {
-          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-              ? e.mqsCreatedTimestamp
-              : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-              ? e.mqsEnterpriseCreatedTimestamp
+          DateTime createdTime = DateTime.parse((e.mqsCreatedTimestamp?.isNotEmpty  ?? false)
+              ? e.mqsCreatedTimestamp??""
+              : (e.mqsEnterpriseCreatedTimestamp?.isNotEmpty  ?? false)
+              ? e.mqsEnterpriseCreatedTimestamp??""
               : DateTime.now().toIso8601String());
           return createdTime.isAfter(startDate) &&
               createdTime.isBefore(endDate);
@@ -345,10 +331,10 @@ class ReportingController extends GetxController {
       } else if (filterType == StringConfig.reporting.lastMonth) {
         DateTime lastMonth = DateTime.now().subtract(const Duration(days: 30));
         users = users.where((e) {
-          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-              ? e.mqsCreatedTimestamp
-              : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-              ? e.mqsEnterpriseCreatedTimestamp
+          DateTime createdTime = DateTime.parse((e.mqsCreatedTimestamp?.isNotEmpty  ?? false)
+              ? e.mqsCreatedTimestamp ??""
+              : (e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false)
+              ? e.mqsEnterpriseCreatedTimestamp ??""
               : DateTime.now().toIso8601String());
           return createdTime.month == lastMonth.month &&
               createdTime.year == lastMonth.year;
@@ -362,10 +348,10 @@ class ReportingController extends GetxController {
             DateFormat('dd/MM/yyyy').parse(endDateController.text);
         DateTime end = DateTime(endDate.year, endDate.month, endDate.day, 24);
         users = users.where((e) {
-          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-              ? e.mqsCreatedTimestamp
-              : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-              ? e.mqsEnterpriseCreatedTimestamp
+          DateTime createdTime = DateTime.parse((e.mqsCreatedTimestamp?.isNotEmpty ?? false)
+              ? e.mqsCreatedTimestamp??""
+              : (e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false)
+              ? e.mqsEnterpriseCreatedTimestamp ?? ""
               : DateTime.now().toIso8601String());
           return createdTime.isAfter(start) && createdTime.isBefore(end);
         }).toList();
@@ -377,19 +363,19 @@ class ReportingController extends GetxController {
         totalRegisteredUsers.value = users.length;
         activeUsers.value = users
             .where((e) =>
-                e.mqsUserActiveTimestamp.isNotEmpty &&
+                (e.mqsUserActiveTimestamp?.isNotEmpty ?? false) &&
                 DateTime.now()
-                        .difference(DateTime.parse(e.mqsUserActiveTimestamp))
+                        .difference(DateTime.parse(e.mqsUserActiveTimestamp??""))
                         .inDays <
                     SizeConfig.size7)
             .length;
         inactiveUsers.value = users
             .where((e) =>
-                e.mqsUserActiveTimestamp.isEmpty ||
-                (e.mqsUserActiveTimestamp.isNotEmpty &&
+                (e.mqsUserActiveTimestamp?.isEmpty ?? false) ||
+                ((e.mqsUserActiveTimestamp?.isNotEmpty ?? false) &&
                     DateTime.now()
                             .difference(
-                                DateTime.parse(e.mqsUserActiveTimestamp))
+                                DateTime.parse(e.mqsUserActiveTimestamp??""))
                             .inDays >
                         SizeConfig.size7))
             .length;
@@ -397,56 +383,56 @@ class ReportingController extends GetxController {
         if (authtype.value == StringConfig.reporting.activeUsers) {
           dashboardController.searchedUsers.value = users
               .where((e) =>
-                  e.mqsUserActiveTimestamp.isNotEmpty &&
+                  (e.mqsUserActiveTimestamp?.isNotEmpty ?? false) &&
                   DateTime.now()
-                          .difference(DateTime.parse(e.mqsUserActiveTimestamp))
+                          .difference(DateTime.parse(e.mqsUserActiveTimestamp??""))
                           .inDays <
                       SizeConfig.size7)
               .toList();
           dashboardController.users.value = users
               .where((e) =>
-                  e.mqsUserActiveTimestamp.isNotEmpty &&
+                  (e.mqsUserActiveTimestamp?.isNotEmpty ?? false) &&
                   DateTime.now()
-                          .difference(DateTime.parse(e.mqsUserActiveTimestamp))
+                          .difference(DateTime.parse(e.mqsUserActiveTimestamp ??""))
                           .inDays <
                       SizeConfig.size7)
               .toList();
           dashboardController.searchUserType.value = users
               .where((e) =>
-                  e.mqsUserActiveTimestamp.isNotEmpty &&
+                  (e.mqsUserActiveTimestamp?.isNotEmpty  ?? false)&&
                   DateTime.now()
-                          .difference(DateTime.parse(e.mqsUserActiveTimestamp))
+                          .difference(DateTime.parse(e.mqsUserActiveTimestamp ??""))
                           .inDays <
                       SizeConfig.size7)
               .toList();
         } else if (authtype.value == StringConfig.reporting.inactiveUsers) {
           dashboardController.searchedUsers.value = users
               .where((e) =>
-                  e.mqsUserActiveTimestamp.isEmpty ||
-                  (e.mqsUserActiveTimestamp.isNotEmpty &&
+                  (e.mqsUserActiveTimestamp?.isEmpty  ?? false)||
+                  ((e.mqsUserActiveTimestamp?.isNotEmpty ?? false) &&
                       DateTime.now()
                               .difference(
-                                  DateTime.parse(e.mqsUserActiveTimestamp))
+                                  DateTime.parse(e.mqsUserActiveTimestamp ?? ""))
                               .inDays >
                           SizeConfig.size7))
               .toList();
           dashboardController.users.value = users
               .where((e) =>
-                  e.mqsUserActiveTimestamp.isEmpty ||
-                  (e.mqsUserActiveTimestamp.isNotEmpty &&
+                  (e.mqsUserActiveTimestamp?.isEmpty ?? false) ||
+                  ((e.mqsUserActiveTimestamp?.isNotEmpty ?? false) &&
                       DateTime.now()
                               .difference(
-                                  DateTime.parse(e.mqsUserActiveTimestamp))
+                                  DateTime.parse(e.mqsUserActiveTimestamp ??""))
                               .inDays >
                           SizeConfig.size7))
               .toList();
           dashboardController.searchUserType.value = users
               .where((e) =>
-                  e.mqsUserActiveTimestamp.isEmpty ||
-                  (e.mqsUserActiveTimestamp.isNotEmpty &&
+                  (e.mqsUserActiveTimestamp?.isEmpty ?? false) ||
+                  ((e.mqsUserActiveTimestamp?.isNotEmpty ?? false) &&
                       DateTime.now()
                               .difference(
-                                  DateTime.parse(e.mqsUserActiveTimestamp))
+                                  DateTime.parse(e.mqsUserActiveTimestamp??""))
                               .inDays >
                           SizeConfig.size7))
               .toList();
@@ -472,16 +458,16 @@ class ReportingController extends GetxController {
         obtype.value = type;
       }
       final DashboardController dashboardController = Get.find();
-      List<UserIAMModel> users = isDetailView
+      List<MQSMyQUserIamModel> users = isDetailView
           ? dashboardController.users
           : await UserRepository.i.getUsers();
       if (filterType == StringConfig.reporting.today) {
         DateTime today = DateTime.now();
         users = users.where((e) {
-          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-              ? e.mqsCreatedTimestamp
-              : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-              ? e.mqsEnterpriseCreatedTimestamp
+          DateTime createdTime = DateTime.parse((e.mqsCreatedTimestamp?.isNotEmpty ?? false)
+              ? e.mqsCreatedTimestamp ?? ""
+              : (e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false)
+              ? e.mqsEnterpriseCreatedTimestamp??""
               : DateTime.now().toIso8601String());
           return createdTime.day == today.day &&
               createdTime.month == today.month &&
@@ -490,10 +476,10 @@ class ReportingController extends GetxController {
       } else if (filterType == StringConfig.reporting.lastDay) {
         DateTime lastDay = DateTime.now().subtract(const Duration(days: 1));
         users = users.where((e) {
-          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-              ? e.mqsCreatedTimestamp
-              : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-              ? e.mqsEnterpriseCreatedTimestamp
+          DateTime createdTime = DateTime.parse((e.mqsCreatedTimestamp?.isNotEmpty ?? false)
+              ? e.mqsCreatedTimestamp??""
+              : (e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false)
+              ? e.mqsEnterpriseCreatedTimestamp??""
               : DateTime.now().toIso8601String());
           return createdTime.day == lastDay.day &&
               createdTime.month == lastDay.month &&
@@ -508,10 +494,10 @@ class ReportingController extends GetxController {
             .add(Duration(days: DateTime.daysPerWeek - lastWeek.weekday));
         DateTime endDate = DateTime(end.year, end.month, end.day, 24);
         users = users.where((e) {
-          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-              ? e.mqsCreatedTimestamp
-              : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-              ? e.mqsEnterpriseCreatedTimestamp
+          DateTime createdTime = DateTime.parse((e.mqsCreatedTimestamp?.isNotEmpty ?? false)
+              ? e.mqsCreatedTimestamp ??""
+              :( e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false)
+              ? e.mqsEnterpriseCreatedTimestamp ??""
               : DateTime.now().toIso8601String());
           return createdTime.isAfter(startDate) &&
               createdTime.isBefore(endDate);
@@ -519,10 +505,10 @@ class ReportingController extends GetxController {
       } else if (filterType == StringConfig.reporting.lastMonth) {
         DateTime lastMonth = DateTime.now().subtract(const Duration(days: 30));
         users = users.where((e) {
-          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-              ? e.mqsCreatedTimestamp
-              : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-              ? e.mqsEnterpriseCreatedTimestamp
+          DateTime createdTime = DateTime.parse((e.mqsCreatedTimestamp?.isNotEmpty ?? false)
+              ? e.mqsCreatedTimestamp??""
+              : (e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false)
+              ? e.mqsEnterpriseCreatedTimestamp??""
               : DateTime.now().toIso8601String());
           return createdTime.month == lastMonth.month &&
               createdTime.year == lastMonth.year;
@@ -536,10 +522,10 @@ class ReportingController extends GetxController {
             DateFormat('dd/MM/yyyy').parse(endDateController.text);
         DateTime end = DateTime(endDate.year, endDate.month, endDate.day, 24);
         users = users.where((e) {
-          DateTime createdTime = DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-              ? e.mqsCreatedTimestamp
-              : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-              ? e.mqsEnterpriseCreatedTimestamp
+          DateTime createdTime = DateTime.parse((e.mqsCreatedTimestamp?.isNotEmpty ?? false)
+              ? e.mqsCreatedTimestamp??""
+              : (e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false)
+              ? e.mqsEnterpriseCreatedTimestamp ??""
               : DateTime.now().toIso8601String());
           return createdTime.isAfter(start) && createdTime.isBefore(end);
         }).toList();
@@ -547,53 +533,34 @@ class ReportingController extends GetxController {
       dashboardController.reset();
       dashboardController.searchedUsers.value = users
           .where((e) =>
-              e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
-              e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
-              e.onboardingModel.mqsScenesDetails.isNotEmpty)
+              e.mqsOnboardingDetails?.mqsOBDone == true)
           .toList();
       dashboardController.searchUserType.value = users
-          .where((e) =>
-              e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
-              e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
-              e.onboardingModel.mqsScenesDetails.isNotEmpty)
+          .where((e) =>e.mqsOnboardingDetails?.mqsOBDone == true)
           .toList();
       if (!isDetailView) {
         getOBSummary(users: users);
         dashboardController.users.value = users
-            .where((e) =>
-                e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
-                e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
-                e.onboardingModel.mqsScenesDetails.isNotEmpty)
+            .where((e) =>e.mqsOnboardingDetails?.mqsOBDone == true)
             .toList();
 
         if (obtype.value == StringConfig.reporting.skipped) {
           dashboardController.searchedUsers.value =
-              users.where((e) => e.mqsSkipOnboarding).toList();
+              users.where((e) => e.mqsOnboardingDetails?.mqsOBSkip == true).toList();
           dashboardController.users.value =
-              users.where((e) => e.mqsSkipOnboarding).toList();
+              users.where((e) =>e.mqsOnboardingDetails?.mqsOBSkip == true).toList();
           dashboardController.searchUserType.value =
-              users.where((e) => e.mqsSkipOnboarding).toList();
+              users.where((e) => e.mqsOnboardingDetails?.mqsOBSkip == true).toList();
         } else if (obtype.value == StringConfig.reporting.partialCompletion) {
-          List<UserIAMModel> completed = users
-              .where((e) =>
-                  e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
-                  e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
-                  e.onboardingModel.mqsScenesDetails.isNotEmpty)
-              .toList();
-          List<UserIAMModel> empty = users
-              .where((e) =>
-                  e.onboardingModel.mqsCheckInDetails.isEmpty &&
-                  e.onboardingModel.mqsDemoGraphicDetails.isEmpty &&
-                  e.onboardingModel.mqsScenesDetails.isEmpty)
-              .toList();
+
           dashboardController.searchedUsers.value = users
-              .where((e) => !completed.contains(e) && !empty.contains(e))
+              .where((e) => e.mqsOnboardingDetails?.mqsOBStart == true && e.mqsOnboardingDetails?.mqsOBDone == false)
               .toList();
           dashboardController.users.value = users
-              .where((e) => !completed.contains(e) && !empty.contains(e))
+              .where((e) =>e.mqsOnboardingDetails?.mqsOBStart == true && e.mqsOnboardingDetails?.mqsOBDone == false)
               .toList();
           dashboardController.searchUserType.value = users
-              .where((e) => !completed.contains(e) && !empty.contains(e))
+              .where((e) => e.mqsOnboardingDetails?.mqsOBStart == true && e.mqsOnboardingDetails?.mqsOBDone == false)
               .toList();
         }
       }
@@ -610,22 +577,22 @@ class ReportingController extends GetxController {
 
   exportAuthSummary() async {
     try {
-      List<UserIAMModel> users = await UserRepository.i.getUsers();
+      List<MQSMyQUserIamModel> users = await UserRepository.i.getUsers();
       String currentDate =
           DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(DateTime(0));
       List<List<String>> rows = [
         ...users.map((model) {
           return [
-            model.mqsEmail,
-            model.mqsFirstName,
-            model.mqsLastName,
-            model.mqsCreatedTimestamp.isNotEmpty
+            model.mqsEmail ?? '',
+            model.mqsFirstName ?? '',
+            model.mqsLastName ?? '',
+            model.mqsCreatedTimestamp?.isNotEmpty ?? false
                 ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
-                    .format(DateTime.parse(model.mqsCreatedTimestamp))
+                    .format(DateTime.parse(model.mqsCreatedTimestamp ?? ""))
                 : "",
             "${model.mqsEnterpriseUserFlag}",
-            model.mqsFirebaseUserID,
-            model.mqsMONGODBUserID,
+            model.mqsUserID ?? '',
+            model.mqsMONGODBUserID ?? '',
             // model.mqsSubscriptionActivePlan,
             // model.mqsUserSubscriptionStatus,
             // model.mqsSubscriptionPlatform,
@@ -633,16 +600,8 @@ class ReportingController extends GetxController {
             //     ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
             //         .format(DateTime.parse(model.mqsSubscriptionExpiryDate))
             //     : "",
-            jsonEncode(model.onboardingModel.mqsCheckInDetails
-                .map((e) => e.toJson())
-                .toList()),
-            jsonEncode(model.onboardingModel.mqsDemoGraphicDetails
-                .map((e) => e.toJson())
-                .toList()),
-            jsonEncode(model.onboardingModel.mqsScenesDetails
-                .map((e) => e.toJson())
-                .toList()),
-            jsonEncode(model.onboardingModel.mqsWheelOfLifeDetails.toJson()),
+            jsonEncode(model.mqsOnboardingDetails?.toJson()),
+
           ];
         }),
       ];
@@ -658,16 +617,13 @@ class ReportingController extends GetxController {
           StringConfig.dashboard.lastName,
           StringConfig.reporting.creationDate,
           StringConfig.reporting.enterpriseUser,
-          StringConfig.reporting.firebaseUserId,
+          StringConfig.dashboard.userId,
           StringConfig.reporting.mongoDbUserId,
           // StringConfig.reporting.subscriptionActivePlan,
           // StringConfig.reporting.subscriptionStatus,
           // StringConfig.reporting.subscriptionPlatform,
           // StringConfig.reporting.subscriptionExpiryDate,
-          StringConfig.reporting.obCheckIn,
-          StringConfig.reporting.obDemographic,
-          StringConfig.reporting.obScenes,
-          StringConfig.reporting.obWOL,
+          StringConfig.dashboard.onboardingDetails,
         ],
       );
       String csvData = const ListToCsvConverter().convert(rows);
@@ -896,16 +852,16 @@ class ReportingController extends GetxController {
         subscriptionType.value = type;
       }
 
-      List<UserSubscriptionReceiptModel> receipt =
+      List<MQSMyQUserSubscriptionReceiptModel> receipt =
           await UserRepository.i.getUserSubscriptionReceipt();
-      List<UserIAMModel> users = await UserRepository.i.getUsers();
+      List<MQSMyQUserIamModel> users = await UserRepository.i.getUsers();
       if (subscriptionFilter.value == StringConfig.reporting.today) {
         DateTime today = DateTime.now();
         users = users.where((e) {
-          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-              ? e.mqsCreatedTimestamp
-              : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-              ? e.mqsEnterpriseCreatedTimestamp
+          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty ?? false
+              ? e.mqsCreatedTimestamp ??""
+              : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty?? false
+              ? e.mqsEnterpriseCreatedTimestamp ??""
               : DateTime.now().toIso8601String());
           return postTime.day == today.day &&
               postTime.month == today.month &&
@@ -915,10 +871,10 @@ class ReportingController extends GetxController {
         DateTime lastDay = DateTime.now().subtract(const Duration(days: 1));
 
         users = users.where((e) {
-          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-              ? e.mqsCreatedTimestamp
-              : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-              ? e.mqsEnterpriseCreatedTimestamp
+          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty?? false
+              ? e.mqsCreatedTimestamp?? ""
+              : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty?? false
+              ? e.mqsEnterpriseCreatedTimestamp ??""
               : DateTime.now().toIso8601String());
           return postTime.day == lastDay.day &&
               postTime.month == lastDay.month &&
@@ -933,20 +889,20 @@ class ReportingController extends GetxController {
             .add(Duration(days: DateTime.daysPerWeek - lastWeek.weekday));
         DateTime endDate = DateTime(end.year, end.month, end.day, 24);
         users = users.where((e) {
-          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-              ? e.mqsCreatedTimestamp
-              : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-              ? e.mqsEnterpriseCreatedTimestamp
+          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty?? false
+              ? e.mqsCreatedTimestamp??""
+              : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty?? false
+              ? e.mqsEnterpriseCreatedTimestamp ??""
               : DateTime.now().toIso8601String());
           return postTime.isAfter(startDate) && postTime.isBefore(endDate);
         }).toList();
       } else if (subscriptionFilter.value == StringConfig.reporting.lastMonth) {
         DateTime lastMonth = DateTime.now().subtract(const Duration(days: 30));
         users = users.where((e) {
-          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-              ? e.mqsCreatedTimestamp
-              : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-              ? e.mqsEnterpriseCreatedTimestamp
+          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty?? false
+              ? e.mqsCreatedTimestamp??""
+              : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty?? false
+              ? e.mqsEnterpriseCreatedTimestamp??""
               : DateTime.now().toIso8601String());
           return postTime.month == lastMonth.month &&
               postTime.year == lastMonth.year;
@@ -959,10 +915,10 @@ class ReportingController extends GetxController {
             DateFormat('dd/MM/yyyy').parse(endDateController.text);
         DateTime end = DateTime(endDate.year, endDate.month, endDate.day, 24);
         users = users.where((e) {
-          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-              ? e.mqsCreatedTimestamp
-              : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-              ? e.mqsEnterpriseCreatedTimestamp
+          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty?? false
+              ? e.mqsCreatedTimestamp??""
+              : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty?? false
+              ? e.mqsEnterpriseCreatedTimestamp??""
               : DateTime.now().toIso8601String());
           return postTime.isAfter(start) && postTime.isBefore(end);
         }).toList();
@@ -974,15 +930,15 @@ class ReportingController extends GetxController {
 
       activeSubscriptions.value = users.where((localItem) {
         return activeRec.any((firebaseItem) =>
-            firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+            firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
       }).length;
 
       List purchasedRec =
-          receipt.where((e) => e.mqsPurchaseID.isNotEmpty).toList();
+          receipt.where((e) => e.mqsPurchaseID?.isNotEmpty ?? false).toList();
 
       purchasedSubscription.value = users.where((localItem) {
         return purchasedRec.any((firebaseItem) =>
-            firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+            firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
       }).length;
 
       _dashboardController.reset();
@@ -997,32 +953,32 @@ class ReportingController extends GetxController {
 
         _dashboardController.searchedUsers.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
         _dashboardController.users.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
         _dashboardController.searchUserType.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
       } else if (subscriptionType.value ==
           StringConfig.reporting.purchasedSubscription) {
         List purchasedRec =
-            receipt.where((e) => e.mqsPurchaseID.isNotEmpty).toList();
+            receipt.where((e) => e.mqsPurchaseID?.isNotEmpty ?? false).toList();
 
         _dashboardController.searchedUsers.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
         _dashboardController.users.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
         _dashboardController.searchUserType.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
       }
       if (_dashboardController.searchedUsers.isEmpty &&
@@ -1038,15 +994,15 @@ class ReportingController extends GetxController {
 
   filterSubscriptionType({String? type}) async {
     try {
-      List<UserIAMModel> users = _dashboardController.users;
-      List<UserIAMModel> filterUsers = [];
+      List<MQSMyQUserIamModel> users = _dashboardController.users;
+      List<MQSMyQUserIamModel> filterUsers = [];
       if (subscriptionFilterType.value == StringConfig.reporting.lastDay) {
         DateTime lastDay = DateTime.now().subtract(const Duration(days: 1));
         filterUsers = users.where((e) {
-          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-              ? e.mqsCreatedTimestamp
-              : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-              ? e.mqsEnterpriseCreatedTimestamp
+          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty ??false
+              ? e.mqsCreatedTimestamp??""
+              : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty??false
+              ? e.mqsEnterpriseCreatedTimestamp ??""
               : DateTime.now().toIso8601String());
           return postTime.day == lastDay.day &&
               postTime.month == lastDay.month &&
@@ -1062,10 +1018,10 @@ class ReportingController extends GetxController {
             .add(Duration(days: DateTime.daysPerWeek - lastWeek.weekday));
         DateTime endDate = DateTime(end.year, end.month, end.day, 24);
         filterUsers = users.where((e) {
-          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-              ? e.mqsCreatedTimestamp
-              : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-              ? e.mqsEnterpriseCreatedTimestamp
+          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty??false
+              ? e.mqsCreatedTimestamp ??""
+              : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty??false
+              ? e.mqsEnterpriseCreatedTimestamp??""
               : DateTime.now().toIso8601String());
           return postTime.isAfter(startDate) && postTime.isBefore(endDate);
         }).toList();
@@ -1073,10 +1029,10 @@ class ReportingController extends GetxController {
           StringConfig.reporting.lastMonth) {
         DateTime lastMonth = DateTime.now().subtract(const Duration(days: 30));
         filterUsers = users.where((e) {
-          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-              ? e.mqsCreatedTimestamp
-              : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-              ? e.mqsEnterpriseCreatedTimestamp
+          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty??false
+              ? e.mqsCreatedTimestamp??""
+              : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty??false
+              ? e.mqsEnterpriseCreatedTimestamp??""
               : DateTime.now().toIso8601String());
           return postTime.month == lastMonth.month &&
               postTime.year == lastMonth.year;
@@ -1089,10 +1045,10 @@ class ReportingController extends GetxController {
             .parse(endSubscriptionTypeDateController.text);
         DateTime end = DateTime(endDate.year, endDate.month, endDate.day, 24);
         filterUsers = users.where((e) {
-          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-              ? e.mqsCreatedTimestamp
-              : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-              ? e.mqsEnterpriseCreatedTimestamp
+          DateTime postTime = DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty??false
+              ? e.mqsCreatedTimestamp??""
+              : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty??false
+              ? e.mqsEnterpriseCreatedTimestamp??""
               : DateTime.now().toIso8601String());
           return postTime.isAfter(start) && postTime.isBefore(end);
         }).toList();
@@ -1168,26 +1124,18 @@ class ReportingController extends GetxController {
     } finally {}
   }
 
-  getOBSummary({required List<UserIAMModel> users}) async {
+  getOBSummary({required List<MQSMyQUserIamModel> users}) async {
     try {
       completedOBUsers.value = users
           .where((e) =>
-              e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
-              e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
-              e.onboardingModel.mqsScenesDetails.isNotEmpty)
+              e.mqsOnboardingDetails?.mqsOBDone == true)
           .toList()
           .length;
       skippedOBUsers.value =
-          users.where((e) => e.mqsSkipOnboarding).toList().length;
-      int empty = users
-          .where((e) =>
-              e.onboardingModel.mqsCheckInDetails.isEmpty &&
-              e.onboardingModel.mqsDemoGraphicDetails.isEmpty &&
-              e.onboardingModel.mqsScenesDetails.isEmpty)
-          .toList()
-          .length;
+          users.where((e) =>  e.mqsOnboardingDetails?.mqsOBSkip == true).toList().length;
+
       partialCompletedOBUsers.value =
-          users.length - (completedOBUsers.value + empty);
+          users.where((e) =>  e.mqsOnboardingDetails?.mqsOBStart == true && e.mqsOnboardingDetails?.mqsOBDone == false).toList().length;
       completedOB.value = completedOBUsers.value / users.length;
       skippedOB.value = skippedOBUsers.value / users.length;
       partialCompletedOB.value = partialCompletedOBUsers.value / users.length;
@@ -1200,9 +1148,9 @@ class ReportingController extends GetxController {
     try {
       startDateController.clear();
       endDateController.clear();
-      List<UserSubscriptionReceiptModel> receipt =
+      List<MQSMyQUserSubscriptionReceiptModel> receipt =
           await UserRepository.i.getUserSubscriptionReceipt();
-      List<UserIAMModel> users = await UserRepository.i.getUsers();
+      List<MQSMyQUserIamModel> users = await UserRepository.i.getUsers();
 
       _dashboardController.searchedUsers.value = users;
       _dashboardController.searchUserType.value = users;
@@ -1213,32 +1161,32 @@ class ReportingController extends GetxController {
             .toList();
         _dashboardController.searchedUsers.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
         _dashboardController.searchUserType.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
 
         _dashboardController.users.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
       } else if (subscriptionType.value ==
           StringConfig.reporting.purchasedSubscription) {
         List purchasedRec =
-            receipt.where((e) => e.mqsPurchaseID.isNotEmpty).toList();
+            receipt.where((e) => e.mqsPurchaseID?.isNotEmpty ?? false).toList();
         _dashboardController.searchedUsers.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
         _dashboardController.searchUserType.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
         _dashboardController.users.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
       }
       List activeRec = receipt
@@ -1248,15 +1196,15 @@ class ReportingController extends GetxController {
 
       activeSubscriptions.value = users.where((localItem) {
         return activeRec.any((firebaseItem) =>
-            firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+            firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
       }).length;
 
       List purchasedRec =
-          receipt.where((e) => e.mqsPurchaseID.isNotEmpty).toList();
+          receipt.where((e) => e.mqsPurchaseID?.isNotEmpty?? false).toList();
 
       purchasedSubscription.value = users.where((localItem) {
         return purchasedRec.any((firebaseItem) =>
-            firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+            firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
       }).length;
 
       userSubscriptionReceiptStream =
@@ -1270,15 +1218,15 @@ class ReportingController extends GetxController {
 
         activeSubscriptions.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).length;
 
         List purchasedRec =
-            data.where((e) => e.mqsPurchaseID.isNotEmpty).toList();
+            data.where((e) => e.mqsPurchaseID?.isNotEmpty ?? false).toList();
 
         purchasedSubscription.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).length;
       });
     } catch (e) {
@@ -1288,9 +1236,9 @@ class ReportingController extends GetxController {
 
   getSubscriptionSummaryDetail(String status) async {
     try {
-      List<UserSubscriptionReceiptModel> receipt =
+      List<MQSMyQUserSubscriptionReceiptModel> receipt =
           await UserRepository.i.getUserSubscriptionReceipt();
-      List<UserIAMModel> users = await UserRepository.i.getUsers();
+      List<MQSMyQUserIamModel> users = await UserRepository.i.getUsers();
 
       if (status == "active") {
         List activeRec = receipt
@@ -1299,22 +1247,22 @@ class ReportingController extends GetxController {
             .toList();
         _dashboardController.searchedUsers.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
         _dashboardController.users.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
       } else if (status == "purchased") {
         List purchasedRec =
-            receipt.where((e) => e.mqsPurchaseID.isNotEmpty).toList();
+            receipt.where((e) => e.mqsPurchaseID?.isNotEmpty?? false).toList();
         _dashboardController.searchedUsers.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
         _dashboardController.users.value = users.where((localItem) {
           return purchasedRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
       } else {}
       userSubscriptionReceiptStream =
@@ -1326,22 +1274,22 @@ class ReportingController extends GetxController {
               .toList();
           _dashboardController.searchedUsers.value = users.where((localItem) {
             return activeRec.any((firebaseItem) =>
-                firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+                firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
           }).toList();
           _dashboardController.users.value = users.where((localItem) {
             return activeRec.any((firebaseItem) =>
-                firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+                firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
           }).toList();
         } else if (status == "purchased") {
           List purchasedRec =
-              data.where((e) => e.mqsPurchaseID.isNotEmpty).toList();
+              data.where((e) => e.mqsPurchaseID?.isNotEmpty?? false).toList();
           _dashboardController.searchedUsers.value = users.where((localItem) {
             return purchasedRec.any((firebaseItem) =>
-                firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+                firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
           }).toList();
           _dashboardController.users.value = users.where((localItem) {
             return purchasedRec.any((firebaseItem) =>
-                firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+                firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
           }).toList();
         } else {}
       });
@@ -1352,14 +1300,13 @@ class ReportingController extends GetxController {
 
   exportSubscriptionSummary() async {
     try {
-      List<UserSubscriptionReceiptModel> receipt =
+      List<MQSMyQUserSubscriptionReceiptModel> receipt =
           await UserRepository.i.getUserSubscriptionReceipt();
       List<List<String>> rows = [
         [
           StringConfig.reporting.firebaseUserId,
           StringConfig.reporting.mongoDbUserId,
           StringConfig.reporting.appSpecificSharedSecret,
-          StringConfig.reporting.expiryDate,
           StringConfig.reporting.localVerificationData,
           StringConfig.reporting.packageName,
           StringConfig.reporting.purchaseId,
@@ -1369,25 +1316,37 @@ class ReportingController extends GetxController {
           StringConfig.reporting.subscriptionPlatform,
           StringConfig.reporting.transactionId,
           StringConfig.reporting.subscriptionStatus,
+          StringConfig.dashboard.mqsSubscriptionActivationDate,
+          StringConfig.dashboard.mqsSubscriptionRenewalDate,
+          StringConfig.reporting.expiryDate,
         ],
         ...receipt.map((model) {
           return [
-            model.mqsFirebaseUserID,
-            model.mqsMONGODBUserID,
-            model.mqsAppSpecificSharedSecret,
-            model.mqsSubscriptionExpiryTimestamp.isNotEmpty
+            model.mqsFirebaseUserID ??"",
+            model.mqsMONGODBUserID??"",
+            model.mqsAppSpecificSharedSecret??"",
+            model.mqsLocalVerificationData??"",
+            model.mqsPackageName??"",
+            model.mqsPurchaseID??"",
+            model.mqsServerVerificationData??"",
+            model.mqsSource??"",
+            model.mqsSubscriptionActivePlan??"",
+            model.mqsSubscriptionPlatform??"",
+            model.mqsTransactionID??"",
+            model.mqsSubscriptionStatus??"",
+            model.mqsSubscriptionActivationTimestamp?.isNotEmpty ?? false
                 ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
-                    .format(DateTime.parse(model.mqsSubscriptionExpiryTimestamp))
+                .format(DateTime.parse(model.mqsSubscriptionActivationTimestamp ??""))
                 : "",
-            model.mqsLocalVerificationData,
-            model.mqsPackageName,
-            model.mqsPurchaseID,
-            model.mqsServerVerificationData,
-            model.mqsSource,
-            model.mqsSubscriptionActivePlan,
-            model.mqsSubscriptionPlatform,
-            model.mqsTransactionID,
-            model.mqsSubscriptionStatus,
+            model.mqsSubscriptionRenewalTimestamp?.isNotEmpty ?? false
+                ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
+                .format(DateTime.parse(model.mqsSubscriptionRenewalTimestamp ??""))
+                : "",
+            model.mqsSubscriptionExpiryTimestamp?.isNotEmpty ?? false
+                ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
+                .format(DateTime.parse(model.mqsSubscriptionExpiryTimestamp ??""))
+                : "",
+
           ];
         }),
       ];
@@ -1420,49 +1379,49 @@ class ReportingController extends GetxController {
   getYearWiseSignUpChart() async {
     try {
       signUpChartData.clear();
-      List<UserIAMModel> users = await UserRepository.i.getUsers();
-      List<UserSubscriptionReceiptModel> receipt =
+      List<MQSMyQUserIamModel> users = await UserRepository.i.getUsers();
+      List<MQSMyQUserSubscriptionReceiptModel> receipt =
           await UserRepository.i.getUserSubscriptionReceipt();
-      List<UserSubscriptionReceiptModel> activeRec = receipt
+      List<MQSMyQUserSubscriptionReceiptModel> activeRec = receipt
           .where((e) =>
               e.mqsSubscriptionStatus == StringConfig.reporting.active)
           .toList();
-      List<UserSubscriptionReceiptModel> inActiveRec = receipt
+      List<MQSMyQUserSubscriptionReceiptModel> inActiveRec = receipt
           .where((e) =>
               e.mqsSubscriptionStatus != StringConfig.reporting.active)
           .toList();
-      users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp.isNotEmpty
-          ? a.mqsCreatedTimestamp
-          : a.mqsEnterpriseCreatedTimestamp.isNotEmpty
-          ? a.mqsEnterpriseCreatedTimestamp
+      users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp?.isNotEmpty ?? false
+          ? a.mqsCreatedTimestamp??""
+          : a.mqsEnterpriseCreatedTimestamp?.isNotEmpty?? false
+          ? a.mqsEnterpriseCreatedTimestamp??""
           : DateTime.now().toIso8601String())
-          .compareTo(DateTime.parse(b.mqsCreatedTimestamp.isNotEmpty
-          ? b.mqsCreatedTimestamp
-          : b.mqsEnterpriseCreatedTimestamp.isNotEmpty
-          ? b.mqsEnterpriseCreatedTimestamp
+          .compareTo(DateTime.parse(b.mqsCreatedTimestamp?.isNotEmpty?? false
+          ? b.mqsCreatedTimestamp??""
+          : b.mqsEnterpriseCreatedTimestamp?.isNotEmpty?? false
+          ? b.mqsEnterpriseCreatedTimestamp??""
           : DateTime.now().toIso8601String())));
       List<int> uniqueYears = (users
-              .map((data) => (DateTime.parse(data.mqsCreatedTimestamp.isNotEmpty
-          ? data.mqsCreatedTimestamp
-          : data.mqsEnterpriseCreatedTimestamp.isNotEmpty
-          ? data.mqsEnterpriseCreatedTimestamp
+              .map((data) => (DateTime.parse(data.mqsCreatedTimestamp?.isNotEmpty?? false
+          ? data.mqsCreatedTimestamp??""
+          : data.mqsEnterpriseCreatedTimestamp?.isNotEmpty?? false
+          ? data.mqsEnterpriseCreatedTimestamp??""
           : DateTime.now().toIso8601String()))
                   .year)
               .toList()
             ..addAll(
-                (receipt.where((e) => e.mqsSubscriptionExpiryTimestamp.isNotEmpty))
+                (receipt.where((e) => e.mqsSubscriptionExpiryTimestamp?.isNotEmpty?? false))
                     .map((data) =>
-                        (DateTime.parse(data.mqsSubscriptionExpiryTimestamp)).year)))
+                        (DateTime.parse(data.mqsSubscriptionExpiryTimestamp??"")).year)))
           .toSet()
           .toList()
         ..sort();
       for (int year in uniqueYears) {
         double y1 = users
             .where((e) =>
-                (DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-                    ? e.mqsCreatedTimestamp
-                    : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                    ? e.mqsEnterpriseCreatedTimestamp
+                (DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty?? false
+                    ? e.mqsCreatedTimestamp??""
+                    : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty?? false
+                    ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String()))
                     .year ==
                 year)
@@ -1470,48 +1429,46 @@ class ReportingController extends GetxController {
             .toDouble();
         double y2 = users
             .where((e) =>
-                DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-                    ? e.mqsCreatedTimestamp
-                    : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                    ? e.mqsEnterpriseCreatedTimestamp
+                DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty?? false
+                    ? e.mqsCreatedTimestamp??""
+                    : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty?? false
+                    ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .year ==
                     year &&
-                e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
-                e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
-                e.onboardingModel.mqsScenesDetails.isNotEmpty)
+                e.mqsOnboardingDetails?.mqsOBDone == true)
             .length
             .toDouble();
         double y3 = users
             .where((e) =>
-                DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-                    ? e.mqsCreatedTimestamp
-                    : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                    ? e.mqsEnterpriseCreatedTimestamp
+                DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty?? false
+                    ? e.mqsCreatedTimestamp??""
+                    : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty?? false
+                    ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .year ==
                     year &&
                 activeRec.any(
-                    (test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
+                    (test) => test.mqsFirebaseUserID == e.mqsUserID))
             .length
             .toDouble();
         double y4 = receipt
             .where((e) =>
-                e.mqsSubscriptionExpiryTimestamp.isNotEmpty &&
-                DateTime.parse(e.mqsSubscriptionExpiryTimestamp).year == year)
+                (e.mqsSubscriptionExpiryTimestamp?.isNotEmpty?? false) &&
+                DateTime.parse(e.mqsSubscriptionExpiryTimestamp ?? "").year == year)
             .length
             .toDouble();
         double y6 = users
             .where((e) =>
-                DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-                    ? e.mqsCreatedTimestamp
-                    : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                    ? e.mqsEnterpriseCreatedTimestamp
+                DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty?? false
+                    ? e.mqsCreatedTimestamp??""
+                    : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty?? false
+                    ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .year ==
                     year &&
                 inActiveRec.any(
-                    (test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
+                    (test) => test.mqsFirebaseUserID == e.mqsUserID))
             .length
             .toDouble();
         signUpChartData.add(
@@ -1525,49 +1482,49 @@ class ReportingController extends GetxController {
   getMonthWiseSignUpChart() async {
     try {
       signUpChartData.clear();
-      List<UserIAMModel> users = await UserRepository.i.getUsers();
-      List<UserSubscriptionReceiptModel> receipt =
+      List<MQSMyQUserIamModel> users = await UserRepository.i.getUsers();
+      List<MQSMyQUserSubscriptionReceiptModel> receipt =
           await UserRepository.i.getUserSubscriptionReceipt();
-      List<UserSubscriptionReceiptModel> activeRec = receipt
+      List<MQSMyQUserSubscriptionReceiptModel> activeRec = receipt
           .where((e) =>
               e.mqsSubscriptionStatus == StringConfig.reporting.active)
           .toList();
-      List<UserSubscriptionReceiptModel> inActiveRec = receipt
+      List<MQSMyQUserSubscriptionReceiptModel> inActiveRec = receipt
           .where((e) =>
               e.mqsSubscriptionStatus != StringConfig.reporting.active)
           .toList();
 
-      users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp.isNotEmpty
-          ? a.mqsCreatedTimestamp
-          : a.mqsEnterpriseCreatedTimestamp.isNotEmpty
-          ? a.mqsEnterpriseCreatedTimestamp
+      users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp?.isNotEmpty ?? false
+          ? a.mqsCreatedTimestamp ??""
+          : a.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+          ? a.mqsEnterpriseCreatedTimestamp??""
           : DateTime.now().toIso8601String())
-          .compareTo(DateTime.parse(b.mqsCreatedTimestamp.isNotEmpty
-          ? b.mqsCreatedTimestamp
-          : b.mqsEnterpriseCreatedTimestamp.isNotEmpty
-          ? b.mqsEnterpriseCreatedTimestamp
+          .compareTo(DateTime.parse(b.mqsCreatedTimestamp?.isNotEmpty ?? false
+          ? b.mqsCreatedTimestamp??""
+          : b.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+          ? b.mqsEnterpriseCreatedTimestamp??""
           : DateTime.now().toIso8601String())));
       // Use a set to ensure uniqueness
       final uniqueMonths = <String>{};
       for (var point in users) {
         // Format month-year for uniqueness
         final monthYear =
-            "${DateTime.parse(point.mqsCreatedTimestamp.isNotEmpty
-            ? point.mqsCreatedTimestamp
-            : point.mqsEnterpriseCreatedTimestamp.isNotEmpty
-            ? point.mqsEnterpriseCreatedTimestamp
-            : DateTime.now().toIso8601String()).year}-${DateTime.parse(point.mqsCreatedTimestamp.isNotEmpty
-            ? point.mqsCreatedTimestamp
-            : point.mqsEnterpriseCreatedTimestamp.isNotEmpty
-            ? point.mqsEnterpriseCreatedTimestamp
+            "${DateTime.parse(point.mqsCreatedTimestamp?.isNotEmpty ?? false
+            ? point.mqsCreatedTimestamp??""
+            : point.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+            ? point.mqsEnterpriseCreatedTimestamp??""
+            : DateTime.now().toIso8601String()).year}-${DateTime.parse(point.mqsCreatedTimestamp?.isNotEmpty?? false
+            ? point.mqsCreatedTimestamp??""
+            : point.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+            ? point.mqsEnterpriseCreatedTimestamp??""
             : DateTime.now().toIso8601String()).month.toString().padLeft(2, '0')}";
         uniqueMonths.add(monthYear);
       }
       for (var point
-          in (receipt.where((e) => e.mqsSubscriptionExpiryTimestamp.isNotEmpty))) {
+          in (receipt.where((e) => e.mqsSubscriptionExpiryTimestamp?.isNotEmpty ?? false))) {
         // Format month-year for uniqueness
         final monthYear =
-            "${DateTime.parse(point.mqsSubscriptionExpiryTimestamp).year}-${DateTime.parse(point.mqsSubscriptionExpiryTimestamp).month.toString().padLeft(2, '0')}";
+            "${DateTime.parse(point.mqsSubscriptionExpiryTimestamp??"").year}-${DateTime.parse(point.mqsSubscriptionExpiryTimestamp??"").month.toString().padLeft(2, '0')}";
         uniqueMonths.add(monthYear);
       }
       for (String x in uniqueMonths) {
@@ -1575,17 +1532,17 @@ class ReportingController extends GetxController {
         int month = int.parse(x.split('-').last);
         double y1 = users
             .where((e) =>
-                DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-                    ? e.mqsCreatedTimestamp
-                    : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                    ? e.mqsEnterpriseCreatedTimestamp
+                DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsCreatedTimestamp??""
+                    : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .month ==
                     month &&
-                DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-                    ? e.mqsCreatedTimestamp
-                    : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                    ? e.mqsEnterpriseCreatedTimestamp
+                DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsCreatedTimestamp??""
+                    : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .year ==
                     year)
@@ -1593,70 +1550,68 @@ class ReportingController extends GetxController {
             .toDouble();
         double y2 = users
             .where((e) =>
-                DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-                    ? e.mqsCreatedTimestamp
-                    : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                    ? e.mqsEnterpriseCreatedTimestamp
+                DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsCreatedTimestamp??""
+                    : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .month ==
                     month &&
-                DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-                    ? e.mqsCreatedTimestamp
-                    : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                    ? e.mqsEnterpriseCreatedTimestamp
+                DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsCreatedTimestamp??""
+                    : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .year ==
                     year &&
-                e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
-                e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
-                e.onboardingModel.mqsScenesDetails.isNotEmpty)
+                e.mqsOnboardingDetails?.mqsOBDone == true)
             .length
             .toDouble();
         double y3 = users
             .where((e) =>
-                DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-                    ? e.mqsCreatedTimestamp
-                    : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                    ? e.mqsEnterpriseCreatedTimestamp
+                DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsCreatedTimestamp??""
+                    : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .month ==
                     month &&
-                DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-                    ? e.mqsCreatedTimestamp
-                    : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                    ? e.mqsEnterpriseCreatedTimestamp
+                DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsCreatedTimestamp??""
+                    : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .year ==
                     year &&
                 activeRec.any(
-                    (test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
+                    (test) => test.mqsFirebaseUserID == e.mqsUserID))
             .length
             .toDouble();
         double y4 = receipt
             .where((e) =>
-                e.mqsSubscriptionExpiryTimestamp.isNotEmpty &&
-                DateTime.parse(e.mqsSubscriptionExpiryTimestamp).month == month &&
-                DateTime.parse(e.mqsSubscriptionExpiryTimestamp).year == year)
+                (e.mqsSubscriptionExpiryTimestamp?.isNotEmpty ?? false)&&
+                DateTime.parse(e.mqsSubscriptionExpiryTimestamp??"").month == month &&
+                DateTime.parse(e.mqsSubscriptionExpiryTimestamp??"").year == year)
             .length
             .toDouble();
         double y6 = users
             .where((e) =>
-                DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-                    ? e.mqsCreatedTimestamp
-                    : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                    ? e.mqsEnterpriseCreatedTimestamp
+                DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsCreatedTimestamp??""
+                    : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .month ==
                     month &&
-                DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-                    ? e.mqsCreatedTimestamp
-                    : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                    ? e.mqsEnterpriseCreatedTimestamp
+                DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsCreatedTimestamp??""
+                    : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .year ==
                     year &&
                 inActiveRec.any(
-                    (test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
+                    (test) => test.mqsFirebaseUserID == e.mqsUserID))
             .length
             .toDouble();
         signUpChartData.add(LineChartModel(DateTime(year, month), y1,
@@ -1692,43 +1647,43 @@ class ReportingController extends GetxController {
   getWeekWiseSignUpChart() async {
     try {
       signUpChartData.clear();
-      List<UserIAMModel> users = await UserRepository.i.getUsers();
-      List<UserSubscriptionReceiptModel> receipt =
+      List<MQSMyQUserIamModel> users = await UserRepository.i.getUsers();
+      List<MQSMyQUserSubscriptionReceiptModel> receipt =
           await UserRepository.i.getUserSubscriptionReceipt();
-      List<UserSubscriptionReceiptModel> activeRec = receipt
+      List<MQSMyQUserSubscriptionReceiptModel> activeRec = receipt
           .where((e) =>
               e.mqsSubscriptionStatus == StringConfig.reporting.active)
           .toList();
-      List<UserSubscriptionReceiptModel> inActiveRec = receipt
+      List<MQSMyQUserSubscriptionReceiptModel> inActiveRec = receipt
           .where((e) =>
               e.mqsSubscriptionStatus != StringConfig.reporting.active)
           .toList();
-      users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp.isNotEmpty
-          ? a.mqsCreatedTimestamp
-          : a.mqsEnterpriseCreatedTimestamp.isNotEmpty
-          ? a.mqsEnterpriseCreatedTimestamp
+      users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp?.isNotEmpty?? false
+          ? a.mqsCreatedTimestamp ??""
+          : a.mqsEnterpriseCreatedTimestamp?.isNotEmpty?? false
+          ? a.mqsEnterpriseCreatedTimestamp??""
           : DateTime.now().toIso8601String())
-          .compareTo(DateTime.parse(b.mqsCreatedTimestamp.isNotEmpty
-          ? b.mqsCreatedTimestamp
-          : b.mqsEnterpriseCreatedTimestamp.isNotEmpty
-          ? b.mqsEnterpriseCreatedTimestamp
+          .compareTo(DateTime.parse(b.mqsCreatedTimestamp?.isNotEmpty?? false
+          ? b.mqsCreatedTimestamp??""
+          : b.mqsEnterpriseCreatedTimestamp?.isNotEmpty?? false
+          ? b.mqsEnterpriseCreatedTimestamp??""
           : DateTime.now().toIso8601String())));
-      final groupedData = <String, List<UserIAMModel>>{};
+      final groupedData = <String, List<MQSMyQUserIamModel>>{};
       for (var dataPoint in users) {
-        DateTime date = DateTime.parse(dataPoint.mqsCreatedTimestamp.isNotEmpty
-            ? dataPoint.mqsCreatedTimestamp
-            : dataPoint.mqsEnterpriseCreatedTimestamp.isNotEmpty
-            ? dataPoint.mqsEnterpriseCreatedTimestamp
+        DateTime date = DateTime.parse(dataPoint.mqsCreatedTimestamp?.isNotEmpty?? false
+            ? dataPoint.mqsCreatedTimestamp??""
+            : dataPoint.mqsEnterpriseCreatedTimestamp?.isNotEmpty?? false
+            ? dataPoint.mqsEnterpriseCreatedTimestamp??""
             : DateTime.now().toIso8601String());
         final weekNumber = getWeekNumber(date);
         groupedData
             .putIfAbsent('$weekNumber-${date.year}', () => [])
             .add(dataPoint);
       }
-      final groupedReceiptData = <String, List<UserSubscriptionReceiptModel>>{};
+      final groupedReceiptData = <String, List<MQSMyQUserSubscriptionReceiptModel>>{};
       for (var dataPoint
-          in (receipt.where((e) => e.mqsSubscriptionExpiryTimestamp.isNotEmpty))) {
-        DateTime date = DateTime.parse(dataPoint.mqsSubscriptionExpiryTimestamp);
+          in (receipt.where((e) => e.mqsSubscriptionExpiryTimestamp?.isNotEmpty?? false))) {
+        DateTime date = DateTime.parse(dataPoint.mqsSubscriptionExpiryTimestamp??"");
         final weekNumber = getWeekNumber(date);
         groupedReceiptData
             .putIfAbsent('$weekNumber-${date.year}', () => [])
@@ -1739,9 +1694,9 @@ class ReportingController extends GetxController {
           .toSet()
           .toList();
       for (var data in merged) {
-        List<MapEntry<String, List<UserIAMModel>>> userElement =
+        List<MapEntry<String, List<MQSMyQUserIamModel>>> userElement =
             groupedData.entries.where((e) => e.key == data).toList();
-        List<MapEntry<String, List<UserSubscriptionReceiptModel>>>
+        List<MapEntry<String, List<MQSMyQUserSubscriptionReceiptModel>>>
             receiptElement =
             groupedReceiptData.entries.where((e) => e.key == data).toList();
         int year = int.parse(data.split('-').last);
@@ -1752,19 +1707,17 @@ class ReportingController extends GetxController {
           y1 = userElement.first.value.length.toDouble();
           y2 = userElement.first.value
               .where((e) =>
-                  e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
-                  e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
-                  e.onboardingModel.mqsScenesDetails.isNotEmpty)
+                  e.mqsOnboardingDetails?.mqsOBDone == true)
               .length
               .toDouble();
           y3 = userElement.first.value
               .where((e) => activeRec
-                  .any((test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
+                  .any((test) => test.mqsFirebaseUserID == e.mqsUserID))
               .length
               .toDouble();
           y6 = userElement.first.value
               .where((e) => inActiveRec
-                  .any((test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
+                  .any((test) => test.mqsFirebaseUserID == e.mqsUserID))
               .length
               .toDouble();
         }
@@ -1782,73 +1735,73 @@ class ReportingController extends GetxController {
   getDayWiseSignUpChart() async {
     try {
       signUpChartData.clear();
-      List<UserIAMModel> users = await UserRepository.i.getUsers();
-      List<UserSubscriptionReceiptModel> receipt =
+      List<MQSMyQUserIamModel> users = await UserRepository.i.getUsers();
+      List<MQSMyQUserSubscriptionReceiptModel> receipt =
           await UserRepository.i.getUserSubscriptionReceipt();
-      List<UserSubscriptionReceiptModel> activeRec = receipt
+      List<MQSMyQUserSubscriptionReceiptModel> activeRec = receipt
           .where((e) =>
               e.mqsSubscriptionStatus == StringConfig.reporting.active)
           .toList();
-      List<UserSubscriptionReceiptModel> inActiveRec = receipt
+      List<MQSMyQUserSubscriptionReceiptModel> inActiveRec = receipt
           .where((e) =>
               e.mqsSubscriptionStatus != StringConfig.reporting.active)
           .toList();
-      users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp.isNotEmpty
-          ? a.mqsCreatedTimestamp
-          : a.mqsEnterpriseCreatedTimestamp.isNotEmpty
-          ? a.mqsEnterpriseCreatedTimestamp
+      users.sort((a, b) => DateTime.parse(a.mqsCreatedTimestamp?.isNotEmpty ?? false
+          ? a.mqsCreatedTimestamp ??""
+          : a.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+          ? a.mqsEnterpriseCreatedTimestamp??""
           : DateTime.now().toIso8601String())
-          .compareTo(DateTime.parse(b.mqsCreatedTimestamp.isNotEmpty
-          ? b.mqsCreatedTimestamp
-          : b.mqsEnterpriseCreatedTimestamp.isNotEmpty
-          ? b.mqsEnterpriseCreatedTimestamp
+          .compareTo(DateTime.parse(b.mqsCreatedTimestamp?.isNotEmpty ?? false
+          ? b.mqsCreatedTimestamp??""
+          : b.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+          ? b.mqsEnterpriseCreatedTimestamp??""
           : DateTime.now().toIso8601String())));
       List<DateTime> uniqueDays = (users
               .map((data) => DateTime(
-                  DateTime.parse(data.mqsCreatedTimestamp.isNotEmpty
-                      ? data.mqsCreatedTimestamp
-                      : data.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                      ? data.mqsEnterpriseCreatedTimestamp
+                  DateTime.parse(data.mqsCreatedTimestamp?.isNotEmpty ?? false
+                      ? data.mqsCreatedTimestamp??""
+                      : data.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+                      ? data.mqsEnterpriseCreatedTimestamp??""
                       : DateTime.now().toIso8601String())
                       .year,
-                  DateTime.parse(data.mqsCreatedTimestamp.isNotEmpty
-                      ? data.mqsCreatedTimestamp
-                      : data.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                      ? data.mqsEnterpriseCreatedTimestamp
+                  DateTime.parse(data.mqsCreatedTimestamp?.isNotEmpty ?? false
+                      ? data.mqsCreatedTimestamp??""
+                      : data.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+                      ? data.mqsEnterpriseCreatedTimestamp??""
                       : DateTime.now().toIso8601String())
                       .month,
-                  DateTime.parse(data.mqsCreatedTimestamp.isNotEmpty
-                      ? data.mqsCreatedTimestamp
-                      : data.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                      ? data.mqsEnterpriseCreatedTimestamp
+                  DateTime.parse(data.mqsCreatedTimestamp?.isNotEmpty ?? false
+                      ? data.mqsCreatedTimestamp??""
+                      : data.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+                      ? data.mqsEnterpriseCreatedTimestamp??""
                       : DateTime.now().toIso8601String())
                       .day))
               .toList()
-            ..addAll((receipt.where((e) => e.mqsSubscriptionExpiryTimestamp.isNotEmpty))
-                .map((data) => DateTime(DateTime.parse(data.mqsSubscriptionExpiryTimestamp).year, DateTime.parse(data.mqsSubscriptionExpiryTimestamp).month, DateTime.parse(data.mqsSubscriptionExpiryTimestamp).day))))
+            ..addAll((receipt.where((e) => e.mqsSubscriptionExpiryTimestamp?.isNotEmpty ?? false))
+                .map((data) => DateTime(DateTime.parse(data.mqsSubscriptionExpiryTimestamp??"").year, DateTime.parse(data.mqsSubscriptionExpiryTimestamp??"").month, DateTime.parse(data.mqsSubscriptionExpiryTimestamp??"").day))))
           .toSet()
           .toList();
       for (DateTime date in uniqueDays) {
         double y1 = users
             .where((e) =>
-                DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-                    ? e.mqsCreatedTimestamp
-                    : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                    ? e.mqsEnterpriseCreatedTimestamp
+                DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsCreatedTimestamp??""
+                    : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .month ==
                     date.month &&
-                DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-                    ? e.mqsCreatedTimestamp
-                    : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                    ? e.mqsEnterpriseCreatedTimestamp
+                DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsCreatedTimestamp??""
+                    : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .year ==
                     date.year &&
-                DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-                    ? e.mqsCreatedTimestamp
-                    : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                    ? e.mqsEnterpriseCreatedTimestamp
+                DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsCreatedTimestamp??""
+                    : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .day ==
                     date.day)
@@ -1856,93 +1809,91 @@ class ReportingController extends GetxController {
             .toDouble();
         double y2 = users
             .where((e) =>
-                DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-                    ? e.mqsCreatedTimestamp
-                    : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                    ? e.mqsEnterpriseCreatedTimestamp
+                DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsCreatedTimestamp??""
+                    : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .month ==
                     date.month &&
-                DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-                    ? e.mqsCreatedTimestamp
-                    : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                    ? e.mqsEnterpriseCreatedTimestamp
+                DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsCreatedTimestamp??""
+                    : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .year ==
                     date.year &&
-                DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-                    ? e.mqsCreatedTimestamp
-                    : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                    ? e.mqsEnterpriseCreatedTimestamp
+                DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsCreatedTimestamp??""
+                    : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .day ==
                     date.day &&
-                e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
-                e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
-                e.onboardingModel.mqsScenesDetails.isNotEmpty)
+                e.mqsOnboardingDetails?.mqsOBDone == true)
             .length
             .toDouble();
         double y3 = users
             .where((e) =>
-                DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-                    ? e.mqsCreatedTimestamp
-                    : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                    ? e.mqsEnterpriseCreatedTimestamp
+                DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsCreatedTimestamp??""
+                    : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .month ==
                     date.month &&
-                DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-                    ? e.mqsCreatedTimestamp
-                    : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                    ? e.mqsEnterpriseCreatedTimestamp
+                DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsCreatedTimestamp??""
+                    : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .year ==
                     date.year &&
-                DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-                    ? e.mqsCreatedTimestamp
-                    : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                    ? e.mqsEnterpriseCreatedTimestamp
+                DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsCreatedTimestamp??""
+                    : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .day ==
                     date.day &&
                 activeRec.any(
-                    (test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
+                    (test) => test.mqsFirebaseUserID == e.mqsUserID))
             .length
             .toDouble();
         double y4 = receipt
             .where((e) =>
-                e.mqsSubscriptionExpiryTimestamp.isNotEmpty &&
-                DateTime.parse(e.mqsSubscriptionExpiryTimestamp).month ==
+                (e.mqsSubscriptionExpiryTimestamp?.isNotEmpty ?? false )&&
+                DateTime.parse(e.mqsSubscriptionExpiryTimestamp??"").month ==
                     date.month &&
-                DateTime.parse(e.mqsSubscriptionExpiryTimestamp).year == date.year &&
-                DateTime.parse(e.mqsSubscriptionExpiryTimestamp).day == date.day)
+                DateTime.parse(e.mqsSubscriptionExpiryTimestamp??"").year == date.year &&
+                DateTime.parse(e.mqsSubscriptionExpiryTimestamp??"").day == date.day)
             .length
             .toDouble();
         double y6 = users
             .where((e) =>
-                DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-                    ? e.mqsCreatedTimestamp
-                    : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                    ? e.mqsEnterpriseCreatedTimestamp
+                DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsCreatedTimestamp??""
+                    : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .month ==
                     date.month &&
-                DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-                    ? e.mqsCreatedTimestamp
-                    : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                    ? e.mqsEnterpriseCreatedTimestamp
+                DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsCreatedTimestamp??""
+                    : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .year ==
                     date.year &&
-                DateTime.parse(e.mqsCreatedTimestamp.isNotEmpty
-                    ? e.mqsCreatedTimestamp
-                    : e.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                    ? e.mqsEnterpriseCreatedTimestamp
+                DateTime.parse(e.mqsCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsCreatedTimestamp??""
+                    : e.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+                    ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .day ==
                     date.day &&
                 inActiveRec.any(
-                    (test) => test.mqsFirebaseUserID == e.mqsFirebaseUserID))
+                    (test) => test.mqsFirebaseUserID == e.mqsUserID))
             .length
             .toDouble();
         signUpChartData.add(LineChartModel(
@@ -1957,8 +1908,8 @@ class ReportingController extends GetxController {
   filterSignUp() async {
     try {
       final DashboardController dashboardController = Get.find();
-      List<UserIAMModel> users = await UserRepository.i.getUsers();
-      List<UserSubscriptionReceiptModel> receipt =
+      List<MQSMyQUserIamModel> users = await UserRepository.i.getUsers();
+      List<MQSMyQUserSubscriptionReceiptModel> receipt =
           await UserRepository.i.getUserSubscriptionReceipt();
       dashboardController.reset();
       if (reportType.value == StringConfig.reporting.userRegistered) {
@@ -1969,71 +1920,65 @@ class ReportingController extends GetxController {
           StringConfig.reporting.onboradingCompleted) {
         dashboardController.searchedUsers.value = users
             .where((e) =>
-                e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
-                e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
-                e.onboardingModel.mqsScenesDetails.isNotEmpty)
+                e.mqsOnboardingDetails?.mqsOBDone== true)
             .toList();
         dashboardController.searchUserType.value = users
             .where((e) =>
-                e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
-                e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
-                e.onboardingModel.mqsScenesDetails.isNotEmpty)
+        e.mqsOnboardingDetails?.mqsOBDone== true)
             .toList();
         dashboardController.users.value = users
             .where((e) =>
-                e.onboardingModel.mqsCheckInDetails.isNotEmpty &&
-                e.onboardingModel.mqsDemoGraphicDetails.isNotEmpty &&
-                e.onboardingModel.mqsScenesDetails.isNotEmpty)
+        e.mqsOnboardingDetails?.mqsOBDone== true)
             .toList();
       } else if (reportType.value == StringConfig.reporting.subscribed) {
-        List<UserSubscriptionReceiptModel> activeRec = receipt
+        List<MQSMyQUserSubscriptionReceiptModel> activeRec = receipt
             .where((e) =>
                 e.mqsSubscriptionStatus == StringConfig.reporting.active)
             .toList();
         dashboardController.searchedUsers.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
         dashboardController.searchUserType.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
         dashboardController.users.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
       } else if (reportType.value ==
           StringConfig.reporting.subscriptionExpired) {
-        List<UserSubscriptionReceiptModel> activeRec =
-            receipt.where((e) => e.mqsSubscriptionExpiryTimestamp.isNotEmpty).toList();
+        List<MQSMyQUserSubscriptionReceiptModel> activeRec =
+            receipt.where((e) => e.mqsSubscriptionExpiryTimestamp?.isNotEmpty ?? false).toList();
         dashboardController.searchedUsers.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
         dashboardController.searchUserType.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
         dashboardController.users.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
       } else if (reportType.value == StringConfig.reporting.notSubscribed) {
-        List<UserSubscriptionReceiptModel> inActiveRec = receipt
+        List<MQSMyQUserSubscriptionReceiptModel> inActiveRec = receipt
             .where((e) =>
                 e.mqsSubscriptionStatus != StringConfig.reporting.active)
             .toList();
         dashboardController.searchedUsers.value = users.where((localItem) {
           return inActiveRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
         dashboardController.searchUserType.value = users.where((localItem) {
           return inActiveRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
         dashboardController.users.value = users.where((localItem) {
           return inActiveRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
       }
       if (dashboardController.searchedUsers.isEmpty &&
@@ -2052,8 +1997,8 @@ class ReportingController extends GetxController {
       final DashboardController dashboardController = Get.find();
       dashboardController.searchController.clear();
       _circleController.searchController.clear();
-      List<UserIAMModel> users = await UserRepository.i.getUsers();
-      List<UserSubscriptionReceiptModel> receipt =
+      List<MQSMyQUserIamModel> users = await UserRepository.i.getUsers();
+      List<MQSMyQUserSubscriptionReceiptModel> receipt =
           await UserRepository.i.getUserSubscriptionReceipt();
 
       List<EnterpriseModel> enterpriseList =
@@ -2094,21 +2039,21 @@ class ReportingController extends GetxController {
           _circleController.viewIndex.value = 0;
         }
       } else if (reportType.value == StringConfig.dashboard.userSubscription) {
-        List<UserSubscriptionReceiptModel> activeRec = receipt
+        List<MQSMyQUserSubscriptionReceiptModel> activeRec = receipt
             .where((e) =>
                 e.mqsSubscriptionStatus == StringConfig.reporting.active)
             .toList();
         dashboardController.searchedUsers.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
         dashboardController.searchUserType.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
         dashboardController.users.value = users.where((localItem) {
           return activeRec.any((firebaseItem) =>
-              firebaseItem.mqsFirebaseUserID == localItem.mqsFirebaseUserID);
+              firebaseItem.mqsFirebaseUserID == localItem.mqsUserID);
         }).toList();
         if (dashboardController.searchedUsers.isEmpty &&
             dashboardController.users.isNotEmpty) {

@@ -31,7 +31,7 @@ Widget userTableRowWidget({
         Expanded(
           flex: SizeConfig.size3.toInt(),
           child: Text(
-            dashboardController.searchedUsers[index].mqsEmail,
+            dashboardController.searchedUsers[index].mqsEmail ?? "",
             overflow: TextOverflow.ellipsis,
             style: FontTextStyleConfig.tableTextStyle,
           ),

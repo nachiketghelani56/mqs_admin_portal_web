@@ -12,16 +12,16 @@ import 'package:mqs_admin_portal_web/models/circle_model.dart';
 import 'package:mqs_admin_portal_web/models/enterprise_model.dart';
 import 'package:mqs_admin_portal_web/models/menu_option_model.dart';
 import 'package:mqs_admin_portal_web/models/mqs_my_q_pathway_model.dart';
+import 'package:mqs_admin_portal_web/models/mqs_my_q_user_iam_model.dart';
+import 'package:mqs_admin_portal_web/models/mqs_my_q_user_subscription_receipt_model.dart';
 import 'package:mqs_admin_portal_web/models/row_input_model.dart';
-import 'package:mqs_admin_portal_web/models/user_iam_model.dart';
-import 'package:mqs_admin_portal_web/models/user_subscription_receipt_model.dart';
 import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/services/firebase_auth_service.dart';
 import 'package:mqs_admin_portal_web/services/firebase_storage_service.dart';
 import 'package:mqs_admin_portal_web/views/circle/controller/circle_controller.dart';
 import 'package:mqs_admin_portal_web/views/circle/repository/circle_repository.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/repository/enterprise_repository.dart';
-import 'package:mqs_admin_portal_web/views/dashboard/repository/user_repository.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/repository/user_IAM_repository.dart';
 import 'package:mqs_admin_portal_web/views/database/circle_data/controller/circle_data_controller.dart';
 import 'package:mqs_admin_portal_web/views/database/controller/circle_flagged_post_controller.dart';
 import 'package:mqs_admin_portal_web/views/database/controller/database_controller.dart';
@@ -97,7 +97,8 @@ class DashboardController extends GetxController {
       showMqsEnterpriseLocationDetails = false.obs,
       showMqsEnterprisePOCs = false.obs,
       isAddEnterprise = false.obs,
-      isEditEnterprise = false.obs;
+      isEditEnterprise = false.obs,
+      showMqsUserMilestone = false.obs;
   RxList<MenuOptionModel> options = [
     MenuOptionModel(
       icon: ImageConfig.edit,
@@ -147,20 +148,20 @@ class DashboardController extends GetxController {
   RxInt editMqsEmpEmailIndex = RxInt(-1),
       editMqsEntPOCIndex = RxInt(-1),
       editMqsTeamIndex = RxInt(-1);
-  RxList<UserIAMModel> searchedUsers = <UserIAMModel>[].obs,
-      users = <UserIAMModel>[].obs,
-      searchUserType = <UserIAMModel>[].obs;
-  UserIAMModel get userDetail => searchedUsers[viewIndex.value];
+  RxList<MQSMyQUserIamModel> searchedUsers = <MQSMyQUserIamModel>[].obs,
+      users = <MQSMyQUserIamModel>[].obs,
+      searchUserType = <MQSMyQUserIamModel>[].obs;
+  MQSMyQUserIamModel get userDetail => searchedUsers[viewIndex.value];
   RxInt pageLimit = 10.obs;
   RxInt offset = 0.obs, currentPage = 1.obs;
   int get totalEnterprisePage =>
       (searchedEnterprises.length / pageLimit.value).ceil();
   int get totalUserPage => (searchedUsers.length / pageLimit.value).ceil();
-  RxList<UserSubscriptionReceiptModel> userSubscriptionReceipts =
-      <UserSubscriptionReceiptModel>[].obs;
-  UserSubscriptionReceiptModel? get userSubscriptionDetail =>
-      userSubscriptionReceipts.firstWhereOrNull(
-          (e) => e.mqsFirebaseUserID == userDetail.mqsFirebaseUserID);
+  RxList<MQSMyQUserSubscriptionReceiptModel> userSubscriptionReceipts =
+      <MQSMyQUserSubscriptionReceiptModel>[].obs;
+  MQSMyQUserSubscriptionReceiptModel? get userSubscriptionDetail =>
+      userSubscriptionReceipts
+          .firstWhereOrNull((e) => e.mqsFirebaseUserID == userDetail.mqsUserID);
   RxList<TextEditingController> inputControllers =
       <TextEditingController>[].obs;
   RxList<String> dataTypes = [
@@ -170,8 +171,8 @@ class DashboardController extends GetxController {
   ].obs;
   RxList<RowInputModel> rows = <RowInputModel>[].obs;
   StreamSubscription<List<EnterpriseModel>>? entStream;
-  StreamSubscription<List<UserIAMModel>>? userStream;
-  StreamSubscription<List<UserSubscriptionReceiptModel>>?
+  StreamSubscription<List<MQSMyQUserIamModel>>? userStream;
+  StreamSubscription<List<MQSMyQUserSubscriptionReceiptModel>>?
       userSubscriptionReceiptStream;
   RxBool enterpriseLoader = false.obs,
       userLoader = false.obs,
@@ -439,7 +440,7 @@ class DashboardController extends GetxController {
       if (!FirebaseAuthService.i.isMarketingUser) {
         userLoader.value = true;
 
-        List<UserIAMModel> userList = await UserRepository.i.getUsers();
+        List<MQSMyQUserIamModel> userList = await UserRepository.i.getUsers();
         searchedUsers.value = userList;
         users.value = userList;
         searchUserType.value = userList;
@@ -984,35 +985,26 @@ class DashboardController extends GetxController {
           userSubscriptionReceiptController =
           Get.put(UserSubscriptionReceiptController());
       databaseController.selectedTabIndex.value = index;
+      if(index == 2){
+        circleDataController.searchController.clear();
 
-     if(index == 2)
+        circleDataController.isAdd.value = false;
+        circleDataController.isEdit.value = false;
+        circleDataController.reset();
+        circleDataController.getCircle();
+      } else {
+        enterpriseDataController.searchController.clear();
+        // searchedUsers.value = users;
+        enterpriseDataController.searchedEnterprises.value = enterprises;
+        enterpriseDataController.isAddEnterprise.value = false;
+        enterpriseDataController.isEditEnterprise.value = false;
+        userSubscriptionReceiptController.reset();
+        teamController.reset();
+        circleFlaggedPostController.reset();
+        enterpriseDataController.reset();
 
-       {
-         circleDataController.searchController.clear();
-
-         circleDataController.isAdd.value = false;
-         circleDataController.isEdit.value = false;
-         circleDataController.reset();
-         circleDataController.getCircle();
-       }else{
-
-       enterpriseDataController.searchController.clear();
-       // searchedUsers.value = users;
-       enterpriseDataController.searchedEnterprises.value = enterprises;
-       enterpriseDataController.isAddEnterprise.value = false;
-       enterpriseDataController.isEditEnterprise.value = false;
-       userSubscriptionReceiptController.reset();
-       teamController.reset();
-       circleFlaggedPostController.reset();
-       enterpriseDataController.reset();
-
-       databaseController.setFilterFields();
-     }
-
-
-
-
-
+        databaseController.setFilterFields();
+      }
     }
   }
 
@@ -1304,7 +1296,7 @@ class DashboardController extends GetxController {
 
   exportUserIAM() async {
     try {
-      List<UserSubscriptionReceiptModel> receipt =
+      List<MQSMyQUserSubscriptionReceiptModel> receipt =
           await UserRepository.i.getUserSubscriptionReceipt();
 
       String currentDate =
@@ -1314,50 +1306,44 @@ class DashboardController extends GetxController {
       rows = [
         ...searchedUsers.map((model) {
           return [
-            model.mqsEmail,
-            model.mqsFirstName,
-            model.mqsLastName,
-            model.mqsCreatedTimestamp.isNotEmpty
+            model.mqsEmail ?? "",
+            model.mqsFirstName ?? "",
+            model.mqsLastName ?? "",
+            model.mqsCreatedTimestamp?.isNotEmpty ?? false
                 ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
-                    .format(DateTime.parse(model.mqsCreatedTimestamp))
-                : model.mqsEnterpriseCreatedTimestamp.isNotEmpty
+                    .format(DateTime.parse(model.mqsCreatedTimestamp ?? ""))
+                : model.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
                     ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
-                        DateTime.parse(model.mqsEnterpriseCreatedTimestamp))
+                        DateTime.parse(
+                            model.mqsEnterpriseCreatedTimestamp ?? ""))
                     : DateTime.now().toIso8601String(),
             "${model.mqsEnterpriseUserFlag}",
-            model.mqsFirebaseUserID,
-            model.mqsMONGODBUserID,
-            model.mqsUserLoginWith,
-            model.mqsAbout,
-            "${model.mqsAllowAbout}",
-            model.mqsCountry,
-            "${model.mqsAllowCountry}",
-            model.mqsPronouns,
-            "${model.mqsAllowPronouns}",
-            "${model.mqsSkipOnboarding}",
-            model.mqsUserActiveTimestamp.isNotEmpty
+            model.mqsUserID ?? "",
+            model.mqsMONGODBUserID ?? "",
+            model.mqsUserLoginWith ?? "",
+            model.mqsUserActiveTimestamp?.isNotEmpty ?? false
                 ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
-                    .format(DateTime.parse(model.mqsUserActiveTimestamp))
+                    .format(DateTime.parse(model.mqsUserActiveTimestamp ?? ""))
                 : "",
-            model.mqsEnterpriseCreatedTimestamp.isNotEmpty
-                ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
-                    .format(DateTime.parse(model.mqsEnterpriseCreatedTimestamp))
+            model.mqsEnterpriseCreatedTimestamp?.isNotEmpty ?? false
+                ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
+                    DateTime.parse(model.mqsEnterpriseCreatedTimestamp ?? ""))
                 : "",
-            model.mqsRegistrationStatus,
-            jsonEncode(model.mqsEnterpriseDetails.toJson()),
+            model.mqsRegistrationStatus ?? "",
             json.encode(receipt
-                .where((e) => e.mqsFirebaseUserID == model.mqsFirebaseUserID)
+                .where((e) => e.mqsFirebaseUserID == model.mqsUserID)
                 .toList()),
-            jsonEncode(model.onboardingModel.mqsCheckInDetails
-                .map((e) => e.toJson())
-                .toList()),
-            jsonEncode(model.onboardingModel.mqsDemoGraphicDetails
-                .map((e) => e.toJson())
-                .toList()),
-            jsonEncode(model.onboardingModel.mqsScenesDetails
-                .map((e) => e.toJson())
-                .toList()),
-            jsonEncode(model.onboardingModel.mqsWheelOfLifeDetails.toJson()),
+            jsonEncode(model.mqsEnterpriseDetails?.toJson()),
+            jsonEncode(model.mqsOnboardingDetails?.toJson()),
+            jsonEncode(model.mqsEnterpriseDetails?.toJson()),
+            jsonEncode(model.mqsUserJMStatus?.toJson()),
+            jsonEncode(model.mqsUserChallengesStatus?.toJson()),
+            jsonEncode(model.mqsPrivacySettingsDetails?.toJson()),
+            jsonEncode(model.mqsUserGrowth?.toJson()),
+            jsonEncode(model.mqsUserProfile?.toJson()),
+            jsonEncode(model.mqsUserMilestones?.isNotEmpty ?? false
+                ? model.mqsUserMilestones?.toList()
+                : []),
           ];
         }),
       ];
@@ -1374,25 +1360,22 @@ class DashboardController extends GetxController {
           StringConfig.dashboard.lastName,
           StringConfig.reporting.creationDate,
           StringConfig.reporting.enterpriseUser,
-          StringConfig.reporting.firebaseUserId,
+          StringConfig.dashboard.userId,
           StringConfig.reporting.mongoDbUserId,
           StringConfig.dashboard.loginWith,
-          StringConfig.dashboard.about,
-          StringConfig.dashboard.aboutValue,
-          StringConfig.dashboard.country,
-          StringConfig.dashboard.countryValue,
-          StringConfig.dashboard.pronouns,
-          StringConfig.dashboard.pronounsValue,
-          StringConfig.dashboard.skipOnboarding,
           StringConfig.dashboard.userActiveTimestamp,
           StringConfig.dashboard.enterpriseCreatedTimestamp,
           StringConfig.dashboard.registrationStatus,
-          StringConfig.dashboard.enterpriseDetail,
           StringConfig.dashboard.userSubscriptionReceipt,
-          StringConfig.reporting.obCheckIn,
-          StringConfig.reporting.obDemographic,
-          StringConfig.reporting.obScenes,
-          StringConfig.reporting.obWOL,
+          StringConfig.dashboard.enterpriseDetail,
+          StringConfig.dashboard.onboardingDetails,
+          StringConfig.dashboard.enterpriseDetail,
+          StringConfig.dashboard.userJMSStatus,
+          StringConfig.dashboard.userChallengesStatus,
+          StringConfig.dashboard.privacySettingsDetails,
+          StringConfig.dashboard.userGrowth,
+          StringConfig.dashboard.userProfile,
+          StringConfig.dashboard.userMilestoneList,
         ],
       );
       String csvData = const ListToCsvConverter().convert(rows);
@@ -1417,17 +1400,17 @@ class DashboardController extends GetxController {
       } else {
         if (status == "type") {
           searchedUsers.value = searchUserType.where((e) {
-            return e.mqsEmail.toLowerCase().contains(query) ||
-                e.mqsFirstName.toLowerCase().contains(query) ||
-                e.mqsLastName.toLowerCase().contains(query) ||
-                e.mqsUserLoginWith.toLowerCase().contains(query);
+            return (e.mqsEmail?.toLowerCase().contains(query) ?? false) ||
+                (e.mqsFirstName?.toLowerCase().contains(query) ?? false) ||
+                (e.mqsLastName?.toLowerCase().contains(query) ?? false) ||
+                (e.mqsUserLoginWith?.toLowerCase().contains(query) ?? false);
           }).toList();
         } else {
           searchedUsers.value = users.where((e) {
-            return e.mqsEmail.toLowerCase().contains(query) ||
-                e.mqsFirstName.toLowerCase().contains(query) ||
-                e.mqsLastName.toLowerCase().contains(query) ||
-                e.mqsUserLoginWith.toLowerCase().contains(query);
+            return (e.mqsEmail?.toLowerCase().contains(query) ?? false) ||
+                (e.mqsFirstName?.toLowerCase().contains(query) ?? false) ||
+                (e.mqsLastName?.toLowerCase().contains(query) ?? false) ||
+                (e.mqsUserLoginWith?.toLowerCase().contains(query) ?? false);
           }).toList();
         }
       }
@@ -1461,16 +1444,21 @@ class DashboardController extends GetxController {
 
   String userKeyName({int? index}) {
     String keyName = filterFields[index ?? selectedFilterFieldIndex.value];
-    if (keyName == StringConfig.dashboard.email || keyName == StringConfig.firebase.mqsEmail) {
+    if (keyName == StringConfig.dashboard.email ||
+        keyName == StringConfig.firebase.mqsEmail) {
       return StringConfig.dashboard.email;
-    } else if (keyName == StringConfig.firebase.firstName || keyName == StringConfig.firebase.mqsFirstName) {
+    } else if (keyName == StringConfig.firebase.firstName ||
+        keyName == StringConfig.firebase.mqsFirstName) {
       return StringConfig.dashboard.firstName;
-    } else if (keyName == StringConfig.firebase.lastName || keyName == StringConfig.firebase.mqsLastName) {
+    } else if (keyName == StringConfig.firebase.lastName ||
+        keyName == StringConfig.firebase.mqsLastName) {
       return StringConfig.dashboard.lastName;
-    } else if (keyName == StringConfig.firebase.isEnterPriseUser || keyName == StringConfig.firebase.mqsEnterpriseUserFlag) {
+    } else if (keyName == StringConfig.firebase.isEnterPriseUser ||
+        keyName == StringConfig.firebase.mqsEnterpriseUserFlag) {
       return StringConfig.reporting.enterpriseUser;
-    } else if (keyName == StringConfig.firebase.isFirebaseUserID || keyName == StringConfig.firebase.mqsFirebaseUserID) {
-      return StringConfig.reporting.firebaseUserId;
+    } else if (keyName == StringConfig.firebase.isFirebaseUserID ||
+        keyName == StringConfig.firebase.mqsFirebaseUserID) {
+      return StringConfig.dashboard.userId;
     } else if (keyName == StringConfig.firebase.isRegister ||
         keyName == StringConfig.firebase.mqsRegistrationStatus) {
       return StringConfig.dashboard.registrationStatus;
@@ -1478,25 +1466,8 @@ class DashboardController extends GetxController {
       return StringConfig.dashboard.userActive;
     } else if (keyName == StringConfig.firebase.mqsCreatedTimestamp) {
       return StringConfig.csv.createdTimestamp;
-    } else if (keyName == StringConfig.dashboard.about ||
-        keyName == StringConfig.dashboard.mqsAbout) {
-      return StringConfig.dashboard.about;
-    } else if (keyName == StringConfig.dashboard.aboutValue ||
-        keyName == StringConfig.dashboard.mqsAllowAbout) {
-      return StringConfig.dashboard.allowAboutVisibility;
-    } else if (keyName == StringConfig.dashboard.country ||
-        keyName == StringConfig.dashboard.mqsCountry) {
-      return StringConfig.dashboard.country;
-    } else if (keyName == StringConfig.dashboard.countryValue ||
-        keyName == StringConfig.dashboard.mqsAllowCountry) {
-      return StringConfig.dashboard.allowCountryVisibility;
-    } else if (keyName == StringConfig.dashboard.pronouns ||
-        keyName == StringConfig.dashboard.mqsPronouns) {
-      return StringConfig.dashboard.pronouns;
-    } else if (keyName == StringConfig.dashboard.pronounsValue ||
-        keyName == StringConfig.dashboard.mqsAllowPronouns) {
-      return StringConfig.dashboard.allowPronounsVisibility;
-    } else if (keyName == StringConfig.dashboard.userImage ||
+    }
+    else if (keyName == StringConfig.dashboard.userImage ||
         keyName == StringConfig.dashboard.mqsUserImage) {
       return StringConfig.dashboard.userImageText;
     } else if (keyName == StringConfig.dashboard.isMongoDBUserIdText ||
@@ -1511,16 +1482,28 @@ class DashboardController extends GetxController {
       return StringConfig.dashboard.subscriptionActivePlan;
     } else if (keyName == StringConfig.dashboard.mqsSubscriptionPlatform) {
       return StringConfig.reporting.subscriptionPlatform;
-    } else if (keyName == StringConfig.dashboard.mqsUpdatedTimestamp) {
+    } else if (keyName == StringConfig.dashboard.mqsUpdatedTimestamp ||
+        keyName == StringConfig.dashboard.mqsUpdateTimestamp) {
       return StringConfig.csv.updatedTimestamp;
-    } else if (keyName == StringConfig.dashboard.mqsUserSubscriptionStatus) {
-      return StringConfig.dashboard.userSubscriptionStatus;
-    } else if (keyName == StringConfig.dashboard.onboardingDataKey ||
+    }
+    else if (keyName == StringConfig.dashboard.onboardingDataKey ||
         keyName == StringConfig.dashboard.mqsOnboardingDetails) {
       return StringConfig.dashboard.onboardingDetails;
-    } else if (keyName == StringConfig.dashboard.mqsSkipOnboarding) {
-      return StringConfig.dashboard.skipOnboarding;
-    } else if (keyName == StringConfig.dashboard.mqsUserActiveTimestamp) {
+    }
+    else if (keyName == StringConfig.dashboard.mqsUserChallengesStatus) {
+      return StringConfig.dashboard.userChallengesStatusDetails;
+    } else if (keyName == StringConfig.dashboard.mqsUserJMStatus) {
+      return StringConfig.dashboard.userJMSStatusDetails;
+    } else if (keyName == StringConfig.dashboard.mqsPrivacySettingsDetails) {
+      return StringConfig.dashboard.privacySettingsDetails;
+    } else if (keyName == StringConfig.dashboard.mqsUserGrowth) {
+      return StringConfig.dashboard.userGrowthDetails;
+    } else if (keyName == StringConfig.dashboard.mqsUserProfile) {
+      return StringConfig.dashboard.userProfileDetails;
+    } else if (keyName == StringConfig.dashboard.mqsUserMilestones) {
+      return StringConfig.dashboard.userMilestoneDetails;
+    }
+    else if (keyName == StringConfig.dashboard.mqsUserActiveTimestamp) {
       return StringConfig.dashboard.userActiveTimestamp;
     } else if (keyName == StringConfig.dashboard.mqsEnterpriseDetails) {
       return StringConfig.dashboard.enterpriseDetail;

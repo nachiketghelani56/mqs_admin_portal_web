@@ -45,9 +45,9 @@ Widget userSubscriptionDetailWidget(
       ),
       keyValueWrapperWidget(
         key: StringConfig.reporting.subscriptionStatus,
-          value: dashboardController
-                .userSubscriptionDetail?.mqsSubscriptionStatus ??
-            "",
+        value:
+            dashboardController.userSubscriptionDetail?.mqsSubscriptionStatus ??
+                "",
       ),
       keyValueWrapperWidget(
         key: StringConfig.reporting.subscriptionActivePlan,
@@ -71,35 +71,63 @@ Widget userSubscriptionDetailWidget(
       ),
       keyValueWrapperWidget(
         key: StringConfig.dashboard.mqsSubscriptionExpiryDate,
-        value: (dashboardController.userSubscriptionDetail?.mqsSubscriptionExpiryTimestamp ?? "")
+        value: (dashboardController.userSubscriptionDetail
+                        ?.mqsSubscriptionExpiryTimestamp ??
+                    "")
                 .isNotEmpty
             ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
-                DateTime.parse(
-                    dashboardController.userSubscriptionDetail?.mqsSubscriptionExpiryTimestamp ??
-                        ""))
+                DateTime.parse(dashboardController.userSubscriptionDetail
+                        ?.mqsSubscriptionExpiryTimestamp ??
+                    ""))
             : "",
-
+      ),
+      keyValueWrapperWidget(
+        key: StringConfig.csv.subscriptionActivationTimestamp,
+        value: (dashboardController.userSubscriptionDetail
+                        ?.mqsSubscriptionActivationTimestamp ??
+                    "")
+                .isNotEmpty
+            ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
+                DateTime.parse(dashboardController.userSubscriptionDetail
+                        ?.mqsSubscriptionActivationTimestamp ??
+                    ""))
+            : "",
+      ),
+      keyValueWrapperWidget(
+        key: StringConfig.csv.subscriptionRenewalTimestamp,
+        value: (dashboardController.userSubscriptionDetail
+                        ?.mqsSubscriptionRenewalTimestamp ??
+                    "")
+                .isNotEmpty
+            ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
+                DateTime.parse(dashboardController.userSubscriptionDetail
+                        ?.mqsSubscriptionRenewalTimestamp ??
+                    ""))
+            : "",
       ),
       keyValueWrapperWidget(
         key: StringConfig.csv.createdTimestamp,
-        value: (dashboardController.userSubscriptionDetail?.mqsCreatedTimestamp ?? "")
-            .isNotEmpty
-            ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
-            DateTime.parse(
-                dashboardController.userSubscriptionDetail?.mqsCreatedTimestamp ??
-                    ""))
-            : "",
-
+        value:
+            (dashboardController.userSubscriptionDetail?.mqsCreatedTimestamp ??
+                        "")
+                    .isNotEmpty
+                ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
+                    DateTime.parse(dashboardController
+                            .userSubscriptionDetail?.mqsCreatedTimestamp ??
+                        ""))
+                : "",
       ),
       keyValueWrapperWidget(
         key: StringConfig.csv.updatedTimestamp,
-        value: (dashboardController.userSubscriptionDetail?.mqsUpdatedTimestamp ?? "")
-            .isNotEmpty
-            ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
-            DateTime.parse(
-                dashboardController.userSubscriptionDetail?.mqsUpdatedTimestamp ??
-                    ""))
-            : "",
+        value:
+            (dashboardController.userSubscriptionDetail?.mqsUpdatedTimestamp ??
+                        "")
+                    .isNotEmpty
+                ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
+                    DateTime.parse(dashboardController
+                            .userSubscriptionDetail?.mqsUpdatedTimestamp ??
+                        ""))
+                : "",
         isLast: true,
       ),
     ],

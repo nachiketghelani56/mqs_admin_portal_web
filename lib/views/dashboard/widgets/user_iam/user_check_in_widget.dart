@@ -53,15 +53,15 @@ Widget userCheckInWidget({required DashboardController dashboardController}) {
         ),
         for (int i = 0;
             i <
-                dashboardController
-                    .userDetail.onboardingModel.mqsCheckInDetails.length;
+                (dashboardController
+                    .userDetail.mqsOnboardingDetails?.mqsCheckInDetails?.length ?? 0);
             i++)
           Container(
             padding: const EdgeInsets.symmetric(
                 horizontal: SizeConfig.size14, vertical: SizeConfig.size14),
             decoration: i ==
-                    dashboardController
-                            .userDetail.onboardingModel.mqsCheckInDetails.length -
+                    (dashboardController
+                            .userDetail.mqsOnboardingDetails?.mqsCheckInDetails?.length ?? 0) -
                         1
                 ? FontTextStyleConfig.contentDecoration.copyWith(
                     borderRadius: const BorderRadius.vertical(
@@ -73,28 +73,29 @@ Widget userCheckInWidget({required DashboardController dashboardController}) {
               children: [
                 Expanded(
                   child: Text(
-                    "${dashboardController.userDetail.onboardingModel.mqsCheckInDetails[i].checkInScore}",
+                    "${dashboardController.userDetail.mqsOnboardingDetails?.mqsCheckInDetails?[i].checkInScore}",
                     style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
                 Expanded(
                   child: Text(
                     dashboardController
-                        .userDetail.onboardingModel.mqsCheckInDetails[i].id,
+                        .userDetail.mqsOnboardingDetails?.mqsCheckInDetails?[i].id??"",
                     style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
                 Expanded(
                   child: Text(
-                    "${dashboardController.userDetail.onboardingModel.mqsCheckInDetails[i].mqsCINValue}",
+                    "${dashboardController.userDetail.mqsOnboardingDetails?.mqsCheckInDetails?[i].mqsCINValue}",
                     style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),
                 Expanded(
-                  child: Text(
+                  child: Text(dashboardController.userDetail.mqsOnboardingDetails
+                      ?.mqsCheckInDetails?[i].mqsTimestamp?.isNotEmpty ?? false  ?
                     DateFormat('dd-MM-yyyy').format(DateTime.parse(
-                        dashboardController.userDetail.onboardingModel
-                            .mqsCheckInDetails[i].mqsTimestamp)),
+                        dashboardController.userDetail.mqsOnboardingDetails
+                            ?.mqsCheckInDetails?[i].mqsTimestamp ?? "")) : "",
                     style: FontTextStyleConfig.tableContentTextStyle,
                   ),
                 ),

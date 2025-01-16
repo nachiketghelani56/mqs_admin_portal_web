@@ -25,99 +25,142 @@ Widget userSubscriptionReceiptDetailWidget(
           keyValueWrapperWidget(
             key: StringConfig.reporting.firebaseUserId,
             value: userSubscriptionReceiptController
-                .userSubscriptionReceiptDetail.mqsFirebaseUserID,
+                    .userSubscriptionReceiptDetail.mqsFirebaseUserID ??
+                "",
             isFirst: true,
           ),
           keyValueWrapperWidget(
             key: StringConfig.reporting.mongoDbUserId,
             value: userSubscriptionReceiptController
-                .userSubscriptionReceiptDetail.mqsMONGODBUserID,
-
+                    .userSubscriptionReceiptDetail.mqsMONGODBUserID ??
+                "",
           ),
           keyValueWrapperWidget(
             key: StringConfig.reporting.appSpecificSharedSecret,
             value: userSubscriptionReceiptController
-                .userSubscriptionReceiptDetail.mqsAppSpecificSharedSecret,
-
+                    .userSubscriptionReceiptDetail.mqsAppSpecificSharedSecret ??
+                "",
           ),
           keyValueWrapperWidget(
             key: StringConfig.reporting.localVerificationData,
             value: userSubscriptionReceiptController
-                    .userSubscriptionReceiptDetail.mqsLocalVerificationData,
+                    .userSubscriptionReceiptDetail.mqsLocalVerificationData ??
+                "",
           ),
-
           keyValueWrapperWidget(
             key: StringConfig.reporting.serverVerificationData,
             value: userSubscriptionReceiptController
-                    .userSubscriptionReceiptDetail.mqsServerVerificationData,
+                    .userSubscriptionReceiptDetail.mqsServerVerificationData ??
+                "",
           ),
           keyValueWrapperWidget(
             key: StringConfig.reporting.purchaseId,
             value: userSubscriptionReceiptController
-                .userSubscriptionReceiptDetail.mqsPurchaseID,
+                    .userSubscriptionReceiptDetail.mqsPurchaseID ??
+                "",
           ),
           keyValueWrapperWidget(
             key: StringConfig.reporting.transactionId,
             value: userSubscriptionReceiptController
-                    .userSubscriptionReceiptDetail.mqsTransactionID,
+                    .userSubscriptionReceiptDetail.mqsTransactionID ??
+                "",
           ),
           keyValueWrapperWidget(
             key: StringConfig.reporting.subscriptionStatus,
             value: userSubscriptionReceiptController
-                    .userSubscriptionReceiptDetail.mqsSubscriptionStatus,
+                    .userSubscriptionReceiptDetail.mqsSubscriptionStatus ??
+                "",
           ),
           keyValueWrapperWidget(
             key: StringConfig.reporting.subscriptionActivePlan,
             value: userSubscriptionReceiptController
-                    .userSubscriptionReceiptDetail.mqsSubscriptionActivePlan,
+                    .userSubscriptionReceiptDetail.mqsSubscriptionActivePlan ??
+                "",
           ),
           keyValueWrapperWidget(
             key: StringConfig.reporting.subscriptionPlatform,
             value: userSubscriptionReceiptController
-                    .userSubscriptionReceiptDetail.mqsSubscriptionPlatform,
+                    .userSubscriptionReceiptDetail.mqsSubscriptionPlatform ??
+                "",
           ),
           keyValueWrapperWidget(
             key: StringConfig.reporting.source,
             value: userSubscriptionReceiptController
-                    .userSubscriptionReceiptDetail.mqsSource,
+                    .userSubscriptionReceiptDetail.mqsSource ??
+                "",
           ),
           keyValueWrapperWidget(
             key: StringConfig.reporting.packageName,
             value: userSubscriptionReceiptController
-                    .userSubscriptionReceiptDetail.mqsPackageName,
+                    .userSubscriptionReceiptDetail.mqsPackageName ??
+                "",
+          ),
+          keyValueWrapperWidget(
+            key: StringConfig.dashboard.mqsSubscriptionActivationDate,
+            value: (userSubscriptionReceiptController
+                            .userSubscriptionReceiptDetail
+                            .mqsSubscriptionActivationTimestamp)
+                        ?.isNotEmpty ??
+                    false
+                ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
+                    DateTime.parse(userSubscriptionReceiptController
+                            .userSubscriptionReceiptDetail
+                            .mqsSubscriptionActivationTimestamp ??
+                        ""))
+                : "",
+          ),
+          keyValueWrapperWidget(
+            key: StringConfig.dashboard.mqsSubscriptionRenewalDate,
+            value: (userSubscriptionReceiptController
+                            .userSubscriptionReceiptDetail
+                            .mqsSubscriptionRenewalTimestamp)
+                        ?.isNotEmpty ??
+                    false
+                ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
+                    DateTime.parse(userSubscriptionReceiptController
+                            .userSubscriptionReceiptDetail
+                            .mqsSubscriptionRenewalTimestamp ??
+                        ""))
+                : "",
           ),
           keyValueWrapperWidget(
             key: StringConfig.dashboard.mqsSubscriptionExpiryDate,
             value: (userSubscriptionReceiptController
                             .userSubscriptionReceiptDetail
                             .mqsSubscriptionExpiryTimestamp)
-                    .isNotEmpty
+                        ?.isNotEmpty ??
+                    false
                 ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
                     DateTime.parse(userSubscriptionReceiptController
                             .userSubscriptionReceiptDetail
-                            .mqsSubscriptionExpiryTimestamp))
+                            .mqsSubscriptionExpiryTimestamp ??
+                        ""))
                 : "",
           ),
           keyValueWrapperWidget(
             key: StringConfig.csv.createdTimestamp,
             value: (userSubscriptionReceiptController
-                            .userSubscriptionReceiptDetail
-                            .mqsCreatedTimestamp)
-                    .isNotEmpty
+                            .userSubscriptionReceiptDetail.mqsCreatedTimestamp)
+                        ?.isNotEmpty ??
+                    false
                 ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
                     DateTime.parse(userSubscriptionReceiptController
                             .userSubscriptionReceiptDetail
-                            .mqsCreatedTimestamp))
+                            .mqsCreatedTimestamp ??
+                        ""))
                 : "",
           ),
           keyValueWrapperWidget(
             key: StringConfig.csv.updatedTimestamp,
             value: (userSubscriptionReceiptController
                             .userSubscriptionReceiptDetail.mqsUpdatedTimestamp)
-                    .isNotEmpty
+                        ?.isNotEmpty ??
+                    false
                 ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
                     DateTime.parse(userSubscriptionReceiptController
-                            .userSubscriptionReceiptDetail.mqsUpdatedTimestamp))
+                            .userSubscriptionReceiptDetail
+                            .mqsUpdatedTimestamp ??
+                        ""))
                 : "",
             isLast: true,
           ),

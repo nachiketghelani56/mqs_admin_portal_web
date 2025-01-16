@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:mqs_admin_portal_web/models/user_subscription_receipt_model.dart';
+import 'package:mqs_admin_portal_web/models/mqs_my_q_user_subscription_receipt_model.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
 
@@ -8,7 +8,7 @@ class UserSubscriptionReceiptController extends GetxController {
       Get.put(DashboardController());
   RxInt offset = 0.obs, currentPage = 1.obs;
   RxInt viewIndex = (-1).obs;
-  UserSubscriptionReceiptModel get userSubscriptionReceiptDetail =>
+  MQSMyQUserSubscriptionReceiptModel get userSubscriptionReceiptDetail =>
       _dashboardController.userSubscriptionReceipts[viewIndex.value];
 
   RxInt pageLimit = 10.obs;

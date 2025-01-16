@@ -8,13 +8,13 @@ import 'package:just_audio/just_audio.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/models/menu_option_model.dart';
 import 'package:mqs_admin_portal_web/models/mqs_my_q_pathway_model.dart';
-import 'package:mqs_admin_portal_web/models/user_iam_model.dart';
+import 'package:mqs_admin_portal_web/models/mqs_my_q_user_iam_model.dart';
 import 'package:mqs_admin_portal_web/routes/app_routes.dart';
 import 'package:mqs_admin_portal_web/services/firebase_model_export_service.dart';
 import 'package:mqs_admin_portal_web/services/firebase_model_import_service.dart';
 import 'package:mqs_admin_portal_web/services/firebase_storage_service.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
-import 'package:mqs_admin_portal_web/views/dashboard/repository/user_repository.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/repository/user_IAM_repository.dart';
 import 'package:mqs_admin_portal_web/views/pathway/repository/pathway_repository.dart';
 import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/loader_widget.dart';
@@ -140,7 +140,7 @@ class PathwayController extends GetxController {
         StringConfig.pathway.humanQualities,
         StringConfig.pathway.situations
       ];
-  RxList<UserIAMModel> users = <UserIAMModel>[].obs;
+  RxList<MQSMyQUserIamModel> users = <MQSMyQUserIamModel>[].obs;
   RxList<String> pathwayDep = <String>[].obs,
       learnActSkills = <String>[].obs,
       pracActSkills = <String>[].obs,
@@ -190,7 +190,7 @@ class PathwayController extends GetxController {
     ),
   ].obs;
   RxBool pathwayLoader = false.obs;
-  StreamSubscription<List<UserIAMModel>>? userStream;
+  StreamSubscription<List<MQSMyQUserIamModel>>? userStream;
 
   final AudioPlayer audioPlayer = AudioPlayer();
   RxString currentUrl = ''.obs;
@@ -911,7 +911,7 @@ class PathwayController extends GetxController {
         pathwayDetail.mqsPathwayCompletionDate;
     selectedPathwayType.value = pathwayDetail.mqsPathwayType;
     selectedUserID.value =
-        users.any((e) => e.mqsFirebaseUserID == pathwayDetail.mqsUserID)
+        users.any((e) => e.mqsUserID == pathwayDetail.mqsUserID)
             ? pathwayDetail.mqsUserID
             : "";
     pathwayStatus.value = pathwayDetail.mqsPathwayStatus;

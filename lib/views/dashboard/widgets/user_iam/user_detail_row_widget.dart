@@ -9,92 +9,67 @@ Widget userDetailRowWidget({required DashboardController dashboardController}) {
   return Column(
     children: [
       keyValueWrapperWidget(
-        key: StringConfig.dashboard.email,
-        value: dashboardController.userDetail.mqsEmail,
+        key: StringConfig.dashboard.userId,
+        value: dashboardController.userDetail.mqsUserID ?? "",
         isFirst: true,
       ),
       keyValueWrapperWidget(
+        key: StringConfig.dashboard.email,
+        value: dashboardController.userDetail.mqsEmail ?? "",
+
+      ),
+      keyValueWrapperWidget(
         key: StringConfig.dashboard.firstName,
-        value: dashboardController.userDetail.mqsFirstName,
+        value: dashboardController.userDetail.mqsFirstName ?? "",
       ),
       keyValueWrapperWidget(
         key: StringConfig.dashboard.lastName,
-        value: dashboardController.userDetail.mqsLastName,
+        value: dashboardController.userDetail.mqsLastName ?? "",
       ),
       keyValueWrapperWidget(
-        key: StringConfig.dashboard.loginWith,
-        value: dashboardController.userDetail.mqsUserLoginWith,
-      ),
-      keyValueWrapperWidget(
-        key: StringConfig.dashboard.userImage,
-        value: dashboardController.userDetail.mqsUserImage,
-        isImage: true,
+        key: StringConfig.dashboard.appVersion,
+        value: dashboardController.userDetail.mqsAppVersion ?? "",
       ),
       keyValueWrapperWidget(
         key: StringConfig.reporting.enterpriseUser,
         value:
             "${dashboardController.userDetail.mqsEnterpriseUserFlag.toString().capitalize}",
       ),
+
       keyValueWrapperWidget(
-        key: StringConfig.reporting.firebaseUserId,
-        value: dashboardController.userDetail.mqsFirebaseUserID,
+        key: StringConfig.dashboard.registrationStatus,
+        value: dashboardController.userDetail.mqsRegistrationStatus ?? "",
       ),
+
       keyValueWrapperWidget(
         key: StringConfig.reporting.mongoDbUserId,
-        value: dashboardController.userDetail.mqsMONGODBUserID,
+        value: dashboardController.userDetail.mqsMONGODBUserID ?? "",
       ),
       keyValueWrapperWidget(
-        key: StringConfig.dashboard.about,
-        value: dashboardController.userDetail.mqsAbout,
-      ),
-      keyValueWrapperWidget(
-        key: StringConfig.dashboard.aboutValue,
-        value:
-            "${dashboardController.userDetail.mqsAllowAbout.toString().capitalize}",
-      ),
-      keyValueWrapperWidget(
-        key: StringConfig.dashboard.country,
-        value: dashboardController.userDetail.mqsCountry,
-      ),
-      keyValueWrapperWidget(
-        key: StringConfig.dashboard.countryValue,
-        value:
-            "${dashboardController.userDetail.mqsAllowCountry.toString().capitalize}",
-      ),
-      keyValueWrapperWidget(
-        key: StringConfig.dashboard.pronouns,
-        value: dashboardController.userDetail.mqsPronouns,
-      ),
-      keyValueWrapperWidget(
-        key: StringConfig.dashboard.pronounsValue,
-        value:
-            "${dashboardController.userDetail.mqsAllowPronouns.toString().capitalize}",
-      ),
-      keyValueWrapperWidget(
-        key: StringConfig.dashboard.skipOnboarding,
-        value:
-            "${dashboardController.userDetail.mqsSkipOnboarding.toString().capitalize}",
+        key: StringConfig.dashboard.loginWith,
+        value: dashboardController.userDetail.mqsUserLoginWith ?? "",
       ),
       keyValueWrapperWidget(
         key: StringConfig.dashboard.userActiveTimestamp,
-        value: dashboardController.userDetail.mqsUserActiveTimestamp.isNotEmpty
-            ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
-                DateTime.parse(
-                    dashboardController.userDetail.mqsUserActiveTimestamp))
-            : "",
-      ),
-      keyValueWrapperWidget(
-        key: StringConfig.dashboard.registrationStatus,
-        value: dashboardController.userDetail.mqsRegistrationStatus,
-
+        value:
+            dashboardController.userDetail.mqsUserActiveTimestamp?.isNotEmpty ??
+                    false
+                ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
+                    DateTime.parse(
+                        dashboardController.userDetail.mqsUserActiveTimestamp ??
+                            ""))
+                : "",
       ),
       keyValueWrapperWidget(
         key: StringConfig.dashboard.enterpriseCreatedTimestamp,
-        value:   dashboardController.userDetail.mqsEnterpriseCreatedTimestamp.isNotEmpty
-  ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
-  DateTime.parse(
-  dashboardController.userDetail.mqsEnterpriseCreatedTimestamp))
-      : "",
+        value: dashboardController
+                    .userDetail.mqsEnterpriseCreatedTimestamp?.isNotEmpty ??
+                false
+            ? DateFormat(StringConfig.dashboard.dateYYYYMMDD).format(
+                DateTime.parse(dashboardController
+                        .userDetail.mqsEnterpriseCreatedTimestamp ??
+                    ""))
+            : "",
         isLast: true,
       ),
     ],
