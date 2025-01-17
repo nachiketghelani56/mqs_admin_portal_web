@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
-import 'package:mqs_admin_portal_web/views/database/circle_data/controller/circle_data_controller.dart';
-import 'package:mqs_admin_portal_web/views/database/circle_data/widgets/circle_data_delete_dialog_widget.dart';
+import 'package:mqs_admin_portal_web/views/database/user_subscription_receipt_data/controller/user_subscription_receipt_controller.dart';
+import 'package:mqs_admin_portal_web/views/database/user_subscription_receipt_data/widgets/user_subscription_receipt_delete_dialog_widget.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 
-Widget circleDataTableRowWidget({
-  required CircleDataController circleDataController,
+Widget userSubscriptionReceiptTableRowWidget({
   required MqsDashboardController mqsDashboardController,
+  required UserSubscriptionReceiptController userSubscriptionReceiptController,
   required bool isSelected,
   required BuildContext context,
   required int index,
@@ -28,29 +28,8 @@ Widget circleDataTableRowWidget({
                 child: Padding(
                   padding: const EdgeInsets.only(right: SizeConfig.size10),
                   child: Text(
-                    circleDataController.searchedCircle[index].userName ?? "",
-                    overflow: TextOverflow.ellipsis,
-                    style: FontTextStyleConfig.tableTextStyle,
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: SizeConfig.size3.toInt(),
-                child: Padding(
-                  padding: const EdgeInsets.only(right: SizeConfig.size10),
-                  child: Text(
-                    circleDataController.searchedCircle[index].postTitle ?? "",
-                    overflow: TextOverflow.ellipsis,
-                    style: FontTextStyleConfig.tableTextStyle,
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: SizeConfig.size3.toInt(),
-                child: Padding(
-                  padding: const EdgeInsets.only(right: SizeConfig.size10),
-                  child: Text(
-                    circleDataController.searchedCircle[index].postContent ??
+                    userSubscriptionReceiptController
+                            .searchedUserSubRec[index].mqsFirebaseUserID ??
                         "",
                     overflow: TextOverflow.ellipsis,
                     style: FontTextStyleConfig.tableTextStyle,
@@ -62,8 +41,8 @@ Widget circleDataTableRowWidget({
                 child: Padding(
                   padding: const EdgeInsets.only(right: SizeConfig.size10),
                   child: Text(
-                    circleDataController.searchedCircle[index].postView
-                            .toString() ??
+                    userSubscriptionReceiptController
+                            .searchedUserSubRec[index].mqsMONGODBUserID ??
                         "",
                     overflow: TextOverflow.ellipsis,
                     style: FontTextStyleConfig.tableTextStyle,
@@ -75,7 +54,35 @@ Widget circleDataTableRowWidget({
                 child: Padding(
                   padding: const EdgeInsets.only(right: SizeConfig.size10),
                   child: Text(
-                    circleDataController.searchedCircle[index].postTime ?? "",
+                    userSubscriptionReceiptController.searchedUserSubRec[index]
+                            .mqsSubscriptionActivePlan ??
+                        "",
+                    overflow: TextOverflow.ellipsis,
+                    style: FontTextStyleConfig.tableTextStyle,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: SizeConfig.size3.toInt(),
+                child: Padding(
+                  padding: const EdgeInsets.only(right: SizeConfig.size10),
+                  child: Text(
+                    userSubscriptionReceiptController
+                            .searchedUserSubRec[index].mqsSubscriptionStatus ??
+                        "",
+                    overflow: TextOverflow.ellipsis,
+                    style: FontTextStyleConfig.tableTextStyle,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: SizeConfig.size3.toInt(),
+                child: Padding(
+                  padding: const EdgeInsets.only(right: SizeConfig.size10),
+                  child: Text(
+                    userSubscriptionReceiptController.searchedUserSubRec[index]
+                            .mqsSubscriptionPlatform ??
+                        "",
                     overflow: TextOverflow.ellipsis,
                     style: FontTextStyleConfig.tableTextStyle,
                   ),
@@ -90,36 +97,35 @@ Widget circleDataTableRowWidget({
                       ImageConfig.eyeOpened,
                       height: SizeConfig.size24,
                     ).tap(() {
-                      circleDataController.isAdd.value = false;
-                      circleDataController.isEdit.value = false;
-                      circleDataController.viewIndex.value = index;
-                      mqsDashboardController.circleStatus.value = "view_circle";
+                      userSubscriptionReceiptController.isAdd.value = false;
+                      userSubscriptionReceiptController.isEdit.value = false;
+                      userSubscriptionReceiptController.viewIndex.value = index;
+                      mqsDashboardController.userSubRecStatus.value =
+                          "view_user_sub_rec";
                     }),
                     Image.asset(
                       ImageConfig.edit,
                       height: SizeConfig.size24,
                     ).tap(() {
-                      circleDataController.viewIndex.value = index;
-                      circleDataController.isAdd.value = false;
-                      circleDataController.isEdit.value = true;
-                      circleDataController.showHashTag.value = false;
-                      circleDataController.setCircleForm();
+                      userSubscriptionReceiptController.viewIndex.value = index;
+                      userSubscriptionReceiptController.isAdd.value = false;
+                      userSubscriptionReceiptController.isEdit.value = true;
+                      userSubscriptionReceiptController.setUserSubRecForm();
 
-                      mqsDashboardController.circleStatus.value = "add_circle";
-
-                      // if (context.width < SizeConfig.size1500) {
-                      //   Get.toNamed(AppRoutes.addCircle);
-                      // }
+                      mqsDashboardController.userSubRecStatus.value =
+                          "add_user_sub_rec";
                     }),
                     Image.asset(
                       ImageConfig.delete,
                       height: SizeConfig.size24,
                     ).tap(() {
-                      circleDataDeleteDialogWidget(
+                      userSubscriptionReceiptDataDeleteDialogWidget(
                         context: context,
-                        circleDataController: circleDataController,
-                        docId:
-                            circleDataController.searchedCircle[index].id ?? "",
+                        userSubscriptionReceiptController:
+                            userSubscriptionReceiptController,
+                        docId: userSubscriptionReceiptController
+                                .searchedUserSubRec[index].id ??
+                            "",
                       );
                     }),
                   ],
@@ -134,7 +140,9 @@ Widget circleDataTableRowWidget({
                 child: Padding(
                   padding: const EdgeInsets.only(right: SizeConfig.size10),
                   child: Text(
-                    circleDataController.searchedCircle[index].userName ?? "",
+                    userSubscriptionReceiptController
+                            .searchedUserSubRec[index].mqsFirebaseUserID ??
+                        "",
                     overflow: TextOverflow.ellipsis,
                     style: FontTextStyleConfig.tableTextStyle,
                   ),
@@ -145,7 +153,9 @@ Widget circleDataTableRowWidget({
                 child: Padding(
                   padding: const EdgeInsets.only(right: SizeConfig.size10),
                   child: Text(
-                    circleDataController.searchedCircle[index].postTitle ?? "",
+                    userSubscriptionReceiptController.searchedUserSubRec[index]
+                            .mqsSubscriptionActivePlan ??
+                        "",
                     overflow: TextOverflow.ellipsis,
                     style: FontTextStyleConfig.tableTextStyle,
                   ),
@@ -156,7 +166,8 @@ Widget circleDataTableRowWidget({
                 child: Padding(
                   padding: const EdgeInsets.only(right: SizeConfig.size10),
                   child: Text(
-                    circleDataController.searchedCircle[index].postContent ??
+                    userSubscriptionReceiptController.searchedUserSubRec[index]
+                            .mqsSubscriptionPlatform ??
                         "",
                     overflow: TextOverflow.ellipsis,
                     style: FontTextStyleConfig.tableTextStyle,
@@ -172,10 +183,11 @@ Widget circleDataTableRowWidget({
                       ImageConfig.eyeOpened,
                       height: SizeConfig.size24,
                     ).tap(() {
-                      circleDataController.isAdd.value = false;
-                      circleDataController.isEdit.value = false;
-                      circleDataController.viewIndex.value = index;
-                      mqsDashboardController.circleStatus.value = "view_circle";
+                      userSubscriptionReceiptController.isAdd.value = false;
+                      userSubscriptionReceiptController.isEdit.value = false;
+                      userSubscriptionReceiptController.viewIndex.value = index;
+                      mqsDashboardController.userSubRecStatus.value =
+                          "view_user_sub_rec";
                     }),
                   ),
                   Padding(
@@ -184,12 +196,13 @@ Widget circleDataTableRowWidget({
                       ImageConfig.edit,
                       height: SizeConfig.size24,
                     ).tap(() {
-                      circleDataController.viewIndex.value = index;
-                      circleDataController.isAdd.value = false;
-                      circleDataController.isEdit.value = true;
-                      circleDataController.showHashTag.value = false;
-                      circleDataController.setCircleForm();
-                      mqsDashboardController.circleStatus.value = "add_circle";
+                      userSubscriptionReceiptController.viewIndex.value = index;
+                      userSubscriptionReceiptController.isAdd.value = false;
+                      userSubscriptionReceiptController.isEdit.value = true;
+                      userSubscriptionReceiptController.setUserSubRecForm();
+
+                      mqsDashboardController.userSubRecStatus.value =
+                          "add_user_sub_rec";
                     }),
                   ),
                   Padding(
@@ -198,11 +211,13 @@ Widget circleDataTableRowWidget({
                       ImageConfig.delete,
                       height: SizeConfig.size24,
                     ).tap(() {
-                      circleDataDeleteDialogWidget(
+                      userSubscriptionReceiptDataDeleteDialogWidget(
                         context: context,
-                        circleDataController: circleDataController,
-                        docId:
-                            circleDataController.searchedCircle[index].id ?? "",
+                        userSubscriptionReceiptController:
+                            userSubscriptionReceiptController,
+                        docId: userSubscriptionReceiptController
+                                .searchedUserSubRec[index].id ??
+                            "",
                       );
                     }),
                   ),

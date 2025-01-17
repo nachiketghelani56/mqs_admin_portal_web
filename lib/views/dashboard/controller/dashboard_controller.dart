@@ -26,7 +26,7 @@ import 'package:mqs_admin_portal_web/views/database/circle_data/controller/circl
 import 'package:mqs_admin_portal_web/views/database/controller/circle_flagged_post_controller.dart';
 import 'package:mqs_admin_portal_web/views/database/controller/database_controller.dart';
 import 'package:mqs_admin_portal_web/views/database/controller/team_controller.dart';
-import 'package:mqs_admin_portal_web/views/database/controller/user_subscription_receipt_controller.dart';
+import 'package:mqs_admin_portal_web/views/database/user_subscription_receipt_data/controller/user_subscription_receipt_controller.dart';
 import 'package:mqs_admin_portal_web/views/database/enterprise_data/controller/enterprise_data_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/controller/reporting_controller.dart';
@@ -945,6 +945,7 @@ class DashboardController extends GetxController {
         Get.put(MqsDashboardController());
     mqsDashboardController.enterpriseStatus.value="";
     mqsDashboardController.circleStatus.value="";
+    mqsDashboardController.userSubRecStatus.value = "";
     // if (mqsDashboardController.menuIndex.value == 0) {
       final CircleController circleController = Get.put(CircleController());
 
@@ -970,7 +971,16 @@ class DashboardController extends GetxController {
         getUsers();
       }
     // }
-    if (mqsDashboardController.menuIndex.value == 1)  {
+    Get.find<DatabaseController>().filterConditions=[
+      StringConfig.dashboard.equalTo,
+      StringConfig.dashboard.notEqualTo,
+      StringConfig.dashboard.greaterThan,
+      StringConfig.dashboard.greaterThanEqualTo,
+      StringConfig.dashboard.lessThan,
+      StringConfig.dashboard.lessThanEqualTo,
+      StringConfig.dashboard.arrayContainingAny,
+    ].obs;
+    if (mqsDashboardController.menuIndex.value == 1) {
       final DatabaseController databaseController =
           Get.put(DatabaseController());
       final EnterpriseDataController enterpriseDataController =
@@ -992,13 +1002,28 @@ class DashboardController extends GetxController {
         circleDataController.isEdit.value = false;
         circleDataController.reset();
         circleDataController.getCircle();
+      } else if (index == 6) {
+        userSubscriptionReceiptController.searchController.clear();
+
+        userSubscriptionReceiptController.isAdd.value = false;
+        userSubscriptionReceiptController.isEdit.value = false;
+        userSubscriptionReceiptController.reset();
+        userSubscriptionReceiptController.getUserSubscriptionRecipts();
+        Get.find<DatabaseController>().filterConditions=[
+          StringConfig.dashboard.equalTo,
+          StringConfig.dashboard.notEqualTo,
+          StringConfig.dashboard.greaterThan,
+          StringConfig.dashboard.greaterThanEqualTo,
+          StringConfig.dashboard.lessThan,
+          StringConfig.dashboard.lessThanEqualTo,
+        ].obs;
+
       } else {
         enterpriseDataController.searchController.clear();
         // searchedUsers.value = users;
         enterpriseDataController.searchedEnterprises.value = enterprises;
         enterpriseDataController.isAddEnterprise.value = false;
         enterpriseDataController.isEditEnterprise.value = false;
-        userSubscriptionReceiptController.reset();
         teamController.reset();
         circleFlaggedPostController.reset();
         enterpriseDataController.reset();

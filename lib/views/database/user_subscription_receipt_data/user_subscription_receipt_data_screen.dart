@@ -3,16 +3,15 @@ import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
-import 'package:mqs_admin_portal_web/views/database/controller/user_subscription_receipt_controller.dart';
+import 'package:mqs_admin_portal_web/views/database/user_subscription_receipt_data/controller/user_subscription_receipt_controller.dart';
 import 'package:mqs_admin_portal_web/views/database/widgets/header_database_widget.dart';
-import 'package:mqs_admin_portal_web/views/database/widgets/user_subscription_receipt/user_subscription_receipt_widget.dart';
+import 'package:mqs_admin_portal_web/views/database/user_subscription_receipt_data/widgets/user_subscription_receipt_widget.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/controller/home_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/widgets/home_header_widget.dart';
 
-class UserSubscriptionReceiptCollectionScreen extends StatelessWidget {
-  UserSubscriptionReceiptCollectionScreen(
-      {super.key, required this.scaffoldKey});
+class UserSubscriptionReceiptDataScreen extends StatelessWidget {
+  UserSubscriptionReceiptDataScreen({super.key, required this.scaffoldKey});
 
   final HomeController _homeController = Get.put(HomeController());
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -45,10 +44,10 @@ class UserSubscriptionReceiptCollectionScreen extends StatelessWidget {
         ),
         Expanded(
           child: userSubscriptionReceiptWidget(
-            dashboardController: _dashboardController,
-            context: context,
             userSubscriptionReceiptController:
                 userSubscriptionReceiptController,
+            context: context,
+            mqsDashboardController: _mqsDashboardController,
             scaffoldKey: scaffoldKey,
           ),
         )

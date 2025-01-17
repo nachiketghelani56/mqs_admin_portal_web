@@ -94,6 +94,7 @@ class Dashboard {
   final String editEnterprise = "Edit Enterprise";
   final String searchByNameEmail = "Search by name or email.";
   final String searchByNameTitle = "Search by name or title.";
+  final String searchByUserIdStatus = "Search by user ID or status.";
   final String id = "id";
   final String mqsEnterPriseCode = "Enterprise Code";
   final String rowsPerPage = "Rows per page:";
@@ -521,7 +522,7 @@ class Reporting {
   final String firebaseUserId = "Firebase User ID";
   final String mongoDbUserId = "Mongo DB User ID";
   final String subscriptionActivePlan = "Subscription Active Plan";
-  final String subscriptionStatus = "Subscripion Status";
+  final String subscriptionStatus = "Subscription Status";
   final String subscriptionPlatform = "Subscription Platform";
   final String subscriptionExpiryDate = "Subscription Expiry Date";
   final String obCheckIn = "OB Check In";
@@ -707,6 +708,7 @@ class Database {
   final String addEnterpriseInformation = "Add Enterprise Information";
   final String editEnterpriseInformation = "Edit Enterprise Information";
   final String viewEnterprise = "View Enterprise";
+  final String viewSubscriptionReceipt = "View Subscription Receipt";
   final String viewCircle = "View Circle";
   final String enterpriseInformation = "Enterprise Information";
   final String postView = "Post View";
@@ -715,4 +717,38 @@ class Database {
   final String userGuide = "User Guide";
   final String circleInformation = "Circle Information";
   final String userName = "User Name";
+  final String subscriptionReceiptInformation = "Subscription Receipt Information";
+  final String addSubscriptionReceipt = "Add Subscription Receipt";
+  final String editSubscriptionReceipt= "Edit Subscription Receipt";
+  final String addSubscriptionReceiptInformation = "Add Subscription Receipt Information";
+  final String editSubscriptionReceiptInformation = "Edit Subscription Receipt Information";
+  final String enterFirebaseUserId = "Enter Firebase User ID";
+  final String enterMongoDbUserId = "Enter Mongo DB User ID";
+  final String enterAppSpecificSharedSecret = "Enter App Specific Shared Secret";
+  final String enterLocalVerificationData = "Enter Local Verification Data";
+  final String enterPackageName = "Enter Package Name";
+  final String enterPurchaseId = "Enter Purchase ID";
+  final String enterServerVerificationData = "Enter Server Verification Data";
+  final String enterSource = "Enter Source";
+  final String enterSubscriptionActivePlan = "Enter Subscription Active Plan";
+  final String enterSubscriptionPlatform = "Enter Subscription Platform";
+  final String enterTransactionId = "Enter Transaction ID";
+  final String enterSubscriptionStatus = "Enter Subscription Status";
+  final String addReceipt= "Add Receipt";
+  final String enterExpiryDate = "Enter Expiry Date";
+  final String enterActivationDate = "Enter Activation Date";
+  final String enterRenewalDate = "Enter Renewal Date";
+  final String mqsAppSpecificSharedSecret = "mqsAppSpecificSharedSecret";
+  final String mqsSubscriptionExpiryTimestamp = "mqsSubscriptionExpiryTimestamp";
+  final String mqsLocalVerificationData = "mqsLocalVerificationData";
+  final String mqsPackageName = "mqsPackageName";
+  final String mqsPurchaseID = "mqsPurchaseID";
+  final String mqsServerVerificationData = "mqsServerVerificationData";
+  final String mqsSource = "mqsSource";
+  final String mqsTransactionID = "mqsTransactionID";
+  final String mqsSubscriptionActivationTimestamp = "mqsSubscriptionActivationTimestamp";
+  final String mqsSubscriptionRenewalTimestamp = "mqsSubscriptionRenewalTimestamp";
+  final String areYouSureYouWantToDeleteThisSubscriptionReceipt =
+      "Are you sure you want to delete this subscription receipt ?";
+
 }

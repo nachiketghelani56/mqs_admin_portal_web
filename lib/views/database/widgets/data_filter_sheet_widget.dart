@@ -61,15 +61,18 @@ Widget dataFilterSheetWidget({required DatabaseController databaseController}) {
                           children: [
                             Text(
                               databaseController.selectedTabIndex.value == 0
-                                  ?
-                            databaseController.enterpriseKeyName()
-                                  : databaseController.circleKeyName(),
-                                  //     : databaseController
-                                  //                 .selectedTabIndex.value ==
-                                  //             2
-                                  //         ? databaseController.circleKeyName()
-                                  //         : databaseController
-                                  //             .pathwayKeyName(),
+                                  ? databaseController.enterpriseKeyName()
+                                  : databaseController.selectedTabIndex.value ==
+                                          2
+                                      ? databaseController.circleKeyName()
+                                      : databaseController
+                                          .userSubscriptionReceiptKeyName(),
+                              //     : databaseController
+                              //                 .selectedTabIndex.value ==
+                              //             2
+                              //         ? databaseController.circleKeyName()
+                              //         : databaseController
+                              //             .pathwayKeyName(),
                               style: FontTextStyleConfig.labelTextStyle
                                   .copyWith(color: ColorConfig.whiteColor),
                             ),
@@ -138,7 +141,10 @@ Widget dataFilterSheetWidget({required DatabaseController databaseController}) {
                         child: Text(
                           databaseController.selectedTabIndex.value == 0
                               ? databaseController.enterpriseKeyName(index: i)
-                              : databaseController.circleKeyName(index: i),
+                              : databaseController.selectedTabIndex.value == 2
+                                  ? databaseController.circleKeyName(index: i)
+                                  : databaseController
+                                      .userSubscriptionReceiptKeyName(index: i),
                           style: FontTextStyleConfig.tableContentTextStyle,
                         ),
                       ).tap(() {

@@ -37,16 +37,20 @@ Widget headerDatabaseWidget(
               color: ColorConfig.primaryColor,
             ),
             SizeConfig.size10.width,
-            Text(subTitle,
-              style: FontTextStyleConfig.tabTextStyle.copyWith(
-                fontSize: FontSizeConfig.fontSize18,
-                color: ColorConfig.primaryColor
-                    .withOpacity(SizeConfig.size0point7),
-              ),
-            ).hoverTap(() {
-              mqsDashboardController.subMenuIndex.value = index;
-              dashboardController.setTabIndex(index: index);
-            }),
+            Flexible(
+              child: Text(
+                subTitle,
+                overflow: TextOverflow.ellipsis,
+                style: FontTextStyleConfig.tabTextStyle.copyWith(
+                  fontSize: FontSizeConfig.fontSize18,
+                  color: ColorConfig.primaryColor
+                      .withOpacity(SizeConfig.size0point7),
+                ),
+              ).hoverTap(() {
+                mqsDashboardController.subMenuIndex.value = index;
+                dashboardController.setTabIndex(index: index);
+              }),
+            ),
             SizeConfig.size10.width,
           ],
           const Icon(

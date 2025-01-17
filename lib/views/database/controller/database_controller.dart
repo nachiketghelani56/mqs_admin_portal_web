@@ -5,8 +5,10 @@ import 'package:mqs_admin_portal_web/models/menu_model.dart';
 import 'package:mqs_admin_portal_web/models/row_input_model.dart';
 import 'package:mqs_admin_portal_web/views/circle/repository/circle_repository.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/repository/enterprise_repository.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/repository/user_IAM_repository.dart';
 import 'package:mqs_admin_portal_web/views/database/circle_data/controller/circle_data_controller.dart';
 import 'package:mqs_admin_portal_web/views/database/enterprise_data/controller/enterprise_data_controller.dart';
+import 'package:mqs_admin_portal_web/views/database/user_subscription_receipt_data/controller/user_subscription_receipt_controller.dart';
 import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
 
 class DatabaseController extends GetxController {
@@ -26,6 +28,8 @@ class DatabaseController extends GetxController {
       Get.put(EnterpriseDataController());
   final CircleDataController _circleDataController =
       Get.put(CircleDataController());
+  final UserSubscriptionReceiptController _userSubscriptionReceiptController =
+      Get.put(UserSubscriptionReceiptController());
 
   RxList<MenuModel> options = [
     MenuModel(
@@ -90,7 +94,12 @@ class DatabaseController extends GetxController {
           .toSet() // Ensure uniqueness
           .toList();
     }
-
+    else if (selectedTabIndex.value == 6) {
+      filterFields.value = _userSubscriptionReceiptController.userSubscriptionReceipts
+          .expand((e) => e.toJson().keys) // Convert model to Map
+          .toSet() // Ensure uniqueness
+          .toList();
+    }
     // else if (selectedTabIndex.value == 3 &&
     //     Get.isRegistered<PathwayController>()) {
     //   RxList<MQSMyQPathwayModel> pathway =
@@ -247,6 +256,9 @@ class DatabaseController extends GetxController {
       else if (selectedTabIndex.value == 2) {
         _circleDataController.searchedCircle.value = await CircleRepository.i
             .fetchCircleFilteredData(field, filters, condition, isAsc.value);
+      } else if (selectedTabIndex.value == 6) {
+        _userSubscriptionReceiptController.searchedUserSubRec.value = await UserRepository.i
+            .fetchUserSubscriptionFilteredData(field, filters, condition, isAsc.value);
       }
       // else if (selectedTabIndex.value == 3) {
       //   Get.find<PathwayController>().searchedPathway.value =
@@ -270,6 +282,9 @@ class DatabaseController extends GetxController {
           _enterpriseDataController.enterprises;
     } else if (selectedTabIndex.value == 2) {
       _circleDataController.searchedCircle.value = _circleDataController.circle;
+    } else if (selectedTabIndex.value == 6) {
+      _userSubscriptionReceiptController.searchedUserSubRec.value =
+          _userSubscriptionReceiptController.userSubscriptionReceipts;
     }
 
     // searchedUsers.value = users;
@@ -284,6 +299,7 @@ class DatabaseController extends GetxController {
     addRow();
     _enterpriseDataController.reset();
     _circleDataController.reset();
+    _userSubscriptionReceiptController.reset();
   }
   // reset() {
   //   // if (selectedTabIndex.value == 1 &&
@@ -457,6 +473,50 @@ class DatabaseController extends GetxController {
       return StringConfig.pathway.pathwayCompletionDate;
     } else if (keyName == StringConfig.firebase.mqsUserID) {
       return StringConfig.pathway.userId;
+    }
+    return "";
+  }
+
+  String userSubscriptionReceiptKeyName({int? index}) {
+
+    String keyName = filterFields[index ?? selectedFilterFieldIndex.value];
+    if (keyName == StringConfig.firebase.mqsFirebaseUserID) {
+      return StringConfig.reporting.firebaseUserId;
+    } else if (keyName == StringConfig.dashboard.mqsMONGODBUserID) {
+      return StringConfig.reporting.mongoDbUserId;
+    } else if (keyName == StringConfig.database.mqsAppSpecificSharedSecret) {
+      return StringConfig.reporting.appSpecificSharedSecret;
+    } else if (keyName ==
+        StringConfig.database.mqsSubscriptionExpiryTimestamp) {
+      return StringConfig.reporting.subscriptionExpiryDate;
+    } else if (keyName == StringConfig.database.mqsLocalVerificationData) {
+      return StringConfig.reporting.localVerificationData;
+    } else if (keyName == StringConfig.database.mqsPackageName) {
+      return StringConfig.reporting.packageName;
+    } else if (keyName == StringConfig.database.mqsPurchaseID) {
+      return StringConfig.reporting.purchaseId;
+    } else if (keyName == StringConfig.database.mqsServerVerificationData) {
+      return StringConfig.reporting.serverVerificationData;
+    } else if (keyName == StringConfig.database.mqsSource) {
+      return StringConfig.reporting.source;
+    } else if (keyName == StringConfig.dashboard.mqsSubscriptionActivePlan) {
+      return StringConfig.reporting.subscriptionActivePlan;
+    } else if (keyName == StringConfig.dashboard.mqsSubscriptionPlatform) {
+      return StringConfig.reporting.subscriptionPlatform;
+    } else if (keyName == StringConfig.database.mqsTransactionID) {
+      return StringConfig.reporting.transactionId;
+    } else if (keyName == StringConfig.dashboard.mqsSubscriptionStatus) {
+      return StringConfig.reporting.subscriptionStatus;
+    } else if (keyName == StringConfig.firebase.mqsCreatedTimestamp) {
+      return StringConfig.csv.createdTimestamp;
+    } else if (keyName == StringConfig.dashboard.mqsUpdatedTimestamp) {
+      return StringConfig.csv.updatedTimestamp;
+    } else if (keyName ==
+        StringConfig.database.mqsSubscriptionActivationTimestamp) {
+      return StringConfig.csv.subscriptionActivationTimestamp;
+    } else if (keyName ==
+        StringConfig.database.mqsSubscriptionRenewalTimestamp) {
+      return StringConfig.csv.subscriptionRenewalTimestamp;
     }
     return "";
   }

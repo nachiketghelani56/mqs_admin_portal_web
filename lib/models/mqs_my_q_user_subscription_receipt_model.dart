@@ -1,4 +1,5 @@
 class MQSMyQUserSubscriptionReceiptModel {
+  String? id;
   String? mqsFirebaseUserID;
   String? mqsMONGODBUserID;
   String? mqsAppSpecificSharedSecret;
@@ -18,7 +19,8 @@ class MQSMyQUserSubscriptionReceiptModel {
   String? mqsSubscriptionRenewalTimestamp;
 
   MQSMyQUserSubscriptionReceiptModel(
-      {this.mqsFirebaseUserID,
+      {
+        this.id,this.mqsFirebaseUserID,
         this.mqsMONGODBUserID,
         this.mqsAppSpecificSharedSecret,
         this.mqsSubscriptionExpiryTimestamp,
@@ -37,8 +39,9 @@ class MQSMyQUserSubscriptionReceiptModel {
         this.mqsSubscriptionRenewalTimestamp,
       });
 
-  MQSMyQUserSubscriptionReceiptModel.fromJson(Map json)
+  MQSMyQUserSubscriptionReceiptModel.fromJson(Map json, String docId)
       :
+        id =docId,
         mqsFirebaseUserID = json['mqsFirebaseUserID'] ?? json['isFirebaseUserID'] ?? "",
         mqsMONGODBUserID = json['mqsMONGODBUserID'] ?? json['isMONGODBUserID'] ?? "",
         mqsAppSpecificSharedSecret = json['mqsAppSpecificSharedSecret'] ?? "",

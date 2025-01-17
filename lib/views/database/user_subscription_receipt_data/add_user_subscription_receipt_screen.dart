@@ -4,23 +4,23 @@ import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/database/user_subscription_receipt_data/controller/user_subscription_receipt_controller.dart';
-import 'package:mqs_admin_portal_web/views/database/user_subscription_receipt_data/widgets/user_subscription_receipt_detail_widget.dart';
+import 'package:mqs_admin_portal_web/views/database/user_subscription_receipt_data/widgets/add_user_subscription_receipt_widget.dart';
 import 'package:mqs_admin_portal_web/views/database/widgets/header_database_widget.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/controller/home_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/widgets/home_header_widget.dart';
 
-class UserSubscriptionReceiptDetailScreen extends StatelessWidget {
-  final GlobalKey<ScaffoldState>? scaffoldKey;
-  UserSubscriptionReceiptDetailScreen({super.key, this.scaffoldKey});
+class AddUserSubscriptionReceiptScreen extends StatelessWidget {
+  AddUserSubscriptionReceiptScreen({super.key, this.scaffoldKey});
 
-  final UserSubscriptionReceiptController _userSubscriptionReceiptController =
-      Get.find();
-  final HomeController _homeController = Get.put(HomeController());
-  final MqsDashboardController _mqsDashboardController =
-      Get.put(MqsDashboardController());
   final DashboardController _dashboardController =
       Get.put(DashboardController());
+  final MqsDashboardController _mqsDashboardController =
+      Get.put(MqsDashboardController());
+  final HomeController _homeController = Get.put(HomeController());
+  final UserSubscriptionReceiptController _userSubscriptionReceiptController =
+      Get.put(UserSubscriptionReceiptController());
+  final GlobalKey<ScaffoldState>? scaffoldKey;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,9 @@ class UserSubscriptionReceiptDetailScreen extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: SizeConfig.size40),
           child: headerDatabaseWidget(
-            title: StringConfig.database.viewSubscriptionReceipt,
+            title: _userSubscriptionReceiptController.isEdit.value
+                ? StringConfig.database.editSubscriptionReceipt
+                : StringConfig.database.addSubscriptionReceipt,
             mqsDashboardController: _mqsDashboardController,
             dashboardController: _dashboardController,
             index: 6,
@@ -51,9 +53,11 @@ class UserSubscriptionReceiptDetailScreen extends StatelessWidget {
                     left: SizeConfig.size40,
                     right: SizeConfig.size40,
                     bottom: SizeConfig.size25),
-                child: userSubscriptionReceiptDetailWidget(
+                child: addUserSubscriptionReceiptWidget(
                     userSubscriptionReceiptController:
-                        _userSubscriptionReceiptController),
+                        _userSubscriptionReceiptController,
+                    mqsDashboardController: _mqsDashboardController,
+                    context: context),
               );
             },
           ),

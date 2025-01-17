@@ -16,10 +16,12 @@ import 'package:mqs_admin_portal_web/views/database/database_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/pathway_collection_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/team_collection_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/user_collection_screen.dart';
-import 'package:mqs_admin_portal_web/views/database/user_subscription_receipt_collection_screen.dart';
+import 'package:mqs_admin_portal_web/views/database/user_subscription_receipt_data/add_user_subscription_receipt_screen.dart';
+import 'package:mqs_admin_portal_web/views/database/user_subscription_receipt_data/user_subscription_receipt_data_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/widgets/data_filter_sheet_widget.dart';
 import 'package:mqs_admin_portal_web/views/database_detail/circle_data_detail/circle_data_detail_screen.dart';
 import 'package:mqs_admin_portal_web/views/database_detail/enterprise_data_detail/enterprise_data_detail_screen.dart';
+import 'package:mqs_admin_portal_web/views/database_detail/user_subscription_receipt_detail_screen.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/home_screen.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/home/reporting/reporting_screen.dart';
@@ -152,8 +154,20 @@ class MqsDashboardScreen extends StatelessWidget {
                       }
                       else if (_mqsDashboardController.subMenuIndex.value ==
                           6) {
-                        return UserSubscriptionReceiptCollectionScreen(
-                            scaffoldKey: _mqsDashboardController.scaffoldKey);
+                        if(_mqsDashboardController.userSubRecStatus.value =="add_user_sub_rec")
+                        {
+                          return AddUserSubscriptionReceiptScreen(
+                              scaffoldKey: _mqsDashboardController.scaffoldKey);
+                        } else   if(_mqsDashboardController.userSubRecStatus.value =="view_user_sub_rec")
+                        {
+                          return UserSubscriptionReceiptDetailScreen(
+                              scaffoldKey: _mqsDashboardController.scaffoldKey);
+                        }else{
+                          return UserSubscriptionReceiptDataScreen(
+                              scaffoldKey: _mqsDashboardController.scaffoldKey);
+                        }
+
+
                       }  else {
                         return DatabaseScreen(
                             scaffoldKey: _mqsDashboardController.scaffoldKey);

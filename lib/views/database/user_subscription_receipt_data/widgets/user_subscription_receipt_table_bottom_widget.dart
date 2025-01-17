@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
-import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
-import 'package:mqs_admin_portal_web/views/database/controller/user_subscription_receipt_controller.dart';
+import 'package:mqs_admin_portal_web/views/database/user_subscription_receipt_data/controller/user_subscription_receipt_controller.dart';
 
-Widget userSubscriptionReceiptTableBottomWidget(
-    {required UserSubscriptionReceiptController
-        userSubscriptionReceiptController, required DashboardController dashboardController,}) {
+Widget userSubscriptionReceiptTableBottomWidget({
+  required UserSubscriptionReceiptController userSubscriptionReceiptController,
+}) {
   return Container(
     height: SizeConfig.size76,
     decoration: FontTextStyleConfig.tableBottomDecoration.copyWith(
@@ -28,7 +27,7 @@ Widget userSubscriptionReceiptTableBottomWidget(
         SizeConfig.size5.width,
         const Spacer(),
         Text(
-          '${userSubscriptionReceiptController.offset.value + 1}-${userSubscriptionReceiptController.getMaxOffset()} ${StringConfig.dashboard.of} ${dashboardController.userSubscriptionReceipts.length}',
+          '${userSubscriptionReceiptController.offset.value + 1}-${userSubscriptionReceiptController.getMaxOffset()} ${StringConfig.dashboard.of} ${userSubscriptionReceiptController.userSubscriptionReceipts.length}',
           style: FontTextStyleConfig.tableBottomTextStyle,
         ),
         SizeConfig.size20.width,

@@ -8,6 +8,7 @@ class MqsDashboardController extends GetxController {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   RxString enterpriseStatus="".obs;
   RxString circleStatus="".obs;
+  RxString userSubRecStatus="".obs;
   List<MenuModel> menuItems = [
     MenuModel(
       icon: ImageConfig.home,
