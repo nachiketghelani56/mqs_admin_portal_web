@@ -28,7 +28,6 @@ Widget enterpriseDataWidget(
                       : null,
                   padding: const EdgeInsets.all(SizeConfig.size16),
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
                     children: [
                       enterpriseDataTopButtonsWidget(
                         enterpriseDataController: enterpriseDataController,

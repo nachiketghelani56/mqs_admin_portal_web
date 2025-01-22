@@ -26,6 +26,7 @@ import 'package:mqs_admin_portal_web/views/database/circle_data/controller/circl
 import 'package:mqs_admin_portal_web/views/database/controller/circle_flagged_post_controller.dart';
 import 'package:mqs_admin_portal_web/views/database/controller/database_controller.dart';
 import 'package:mqs_admin_portal_web/views/database/controller/team_controller.dart';
+import 'package:mqs_admin_portal_web/views/database/user_data/controller/user_data_controller.dart';
 import 'package:mqs_admin_portal_web/views/database/user_subscription_receipt_data/controller/user_subscription_receipt_controller.dart';
 import 'package:mqs_admin_portal_web/views/database/enterprise_data/controller/enterprise_data_controller.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
@@ -944,6 +945,7 @@ class DashboardController extends GetxController {
     final MqsDashboardController mqsDashboardController =
         Get.put(MqsDashboardController());
     mqsDashboardController.enterpriseStatus.value="";
+    mqsDashboardController.userStatus.value="";
     mqsDashboardController.circleStatus.value="";
     mqsDashboardController.userSubRecStatus.value = "";
     // if (mqsDashboardController.menuIndex.value == 0) {
@@ -991,10 +993,20 @@ class DashboardController extends GetxController {
           Get.put(CircleFlaggedPostController());
       final CircleDataController circleDataController =
           Get.put(CircleDataController());
+      final UserDataController userDataController =
+      Get.put(UserDataController());
       final UserSubscriptionReceiptController
           userSubscriptionReceiptController =
           Get.put(UserSubscriptionReceiptController());
       databaseController.selectedTabIndex.value = index;
+      if(index == 1){
+        userDataController.searchController.clear();
+
+        userDataController.isAdd.value = false;
+        userDataController.isEdit.value = false;
+        userDataController.reset();
+        userDataController.getUsers();
+      }else
       if(index == 2){
         circleDataController.searchController.clear();
 

@@ -308,6 +308,7 @@ class Dashboard {
   final String userImageText = "User Image";
   final String enterPriseID = "EnterPrise ID";
   final String mongoDBUserId = "MONGODB User Id";
+  final String mongoDBUserID = "MONGODB User ID";
   final String loginWithText = "Login With";
   final String userSubscriptionStatus = "User Subscription Status";
   final String mqsIsUserActive = "mqsIsUserActive";
@@ -328,6 +329,7 @@ class Dashboard {
   final String mqsEnterprisePOCsSubscriptionDetails =
       "mqsEnterprisePOCsSubscriptionDetails";
   final String skipOnboarding = "Skip Onboarding";
+  final String userLoginWith = "User Login With";
 }
 
 class RefExp {
@@ -708,6 +710,7 @@ class Database {
   final String addEnterpriseInformation = "Add Enterprise Information";
   final String editEnterpriseInformation = "Edit Enterprise Information";
   final String viewEnterprise = "View Enterprise";
+  final String viewUser = "View User";
   final String viewSubscriptionReceipt = "View Subscription Receipt";
   final String viewCircle = "View Circle";
   final String enterpriseInformation = "Enterprise Information";
@@ -750,5 +753,6 @@ class Database {
   final String mqsSubscriptionRenewalTimestamp = "mqsSubscriptionRenewalTimestamp";
   final String areYouSureYouWantToDeleteThisSubscriptionReceipt =
       "Are you sure you want to delete this subscription receipt ?";
+  final String addUser = "Add User";
 
 }
