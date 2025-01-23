@@ -1,6 +1,7 @@
 import 'package:mqs_admin_portal_web/config/config.dart';
 
 class MQSMyQUserIamModel {
+  String? id;
   String? mqsUserID;
   String? mqsEmail;
   String? mqsFirstName;
@@ -24,7 +25,7 @@ class MQSMyQUserIamModel {
   List<MqsUserMilestones>? mqsUserMilestones;
 
   MQSMyQUserIamModel(
-      {this.mqsOnboardingDetails,
+      {this.id,this.mqsOnboardingDetails,
       this.mqsEnterpriseDetails,
       this.mqsEmail,
       this.mqsFirstName,
@@ -46,7 +47,8 @@ class MQSMyQUserIamModel {
       this.mqsUserMilestones,
       this.mqsUserChallengesStatus});
 
-  MQSMyQUserIamModel.fromJson(Map<String, dynamic> json) {
+  MQSMyQUserIamModel.fromJson(Map<String, dynamic> json, String docId) {
+    id= docId;
     mqsEmail = json['mqsEmail'] ?? json['Email'] ?? "";
     mqsFirstName = json['mqsFirstName'] ?? json['FirstName'] ?? "";
     mqsLastName = json['mqsLastName'] ?? json['LastName'] ?? "";

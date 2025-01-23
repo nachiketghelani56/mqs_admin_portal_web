@@ -754,5 +754,22 @@ class Database {
   final String areYouSureYouWantToDeleteThisSubscriptionReceipt =
       "Are you sure you want to delete this subscription receipt ?";
   final String addUser = "Add User";
+  final String editUser = "Edit User";
+  final String addUserInformation = "Add User Information";
+  final String editUserInformation = "Edit User Information";
+  final String enterUserId = "Enter User ID";
+  final String enterMongoDBUserID = "Enter MONGODB User ID";
+  final String enterFirstName = "Enter First Name";
+  final String enterLastName = "Enter Last Name";
+  final String enterEmail = "Enter Email";
+  final String enterAppVersion = "Enter App Version";
+  final String enterRegistrationStatus = "Enter Registration Status";
+  final String enterUserLoginWith = "Enter User Login With";
+  final String enterUserActiveTimestamp = "Enter User Active Date";
+  final String enterEnterpriseCreatedTimestamp = "Enter Enterprise Created Date";
+  final String enterpriseCreatedTimestamp = "Enterprise Created Date";
+  final String userActiveTimestamp = "User Active Date";
+  final String enterpriseUserFlag = "Enterprise User Flag";
+  final String user = "User";
 
 }

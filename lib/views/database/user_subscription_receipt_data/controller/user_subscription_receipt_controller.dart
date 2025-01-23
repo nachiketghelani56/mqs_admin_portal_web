@@ -305,7 +305,7 @@ class UserSubscriptionReceiptController extends GetxController {
 
   addUserSubRec() async {
     try {
-      final docRef = FirebaseStorageService.i.enterprise.doc().id;
+      final docRef = FirebaseStorageService.i.userSubscriptionReceipt.doc().id;
       final userSubRecModel = MQSMyQUserSubscriptionReceiptModel(
         mqsFirebaseUserID: firebaseIdController.text.trim(),
         mqsMONGODBUserID: mONGODBUserIDController.text.trim(),

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_widget.dart';
 import 'package:mqs_admin_portal_web/views/database/user_data/controller/user_data_controller.dart';
+import 'package:mqs_admin_portal_web/views/database/user_data/widgets/user_data_delete_dialog_widget.dart';
 import 'package:mqs_admin_portal_web/views/mqs_dashboard/controller/mqs_dashboard_controller.dart';
 
 Widget userDataTableRowWidget({
@@ -93,8 +94,8 @@ Widget userDataTableRowWidget({
                       ImageConfig.eyeOpened,
                       height: SizeConfig.size24,
                     ).tap(() {
-                      // enterpriseDataController.isAddEnterprise.value = false;
-                      // enterpriseDataController.isEditEnterprise.value = false;
+                      userDataController.isAdd.value = false;
+                      userDataController.isEdit.value = false;
                       userDataController.viewIndex.value = index;
 
                       mqsDashboardController.userStatus.value = "view_user";
@@ -103,59 +104,26 @@ Widget userDataTableRowWidget({
                       ImageConfig.edit,
                       height: SizeConfig.size24,
                     ).tap(() {
-                      // enterpriseDataController.showMqsTeamList.value = false;
-                      // enterpriseDataController.showMqsEmpEmailList.value =
-                      // false;
-                      // enterpriseDataController.showMqsEnterprisePocsList.value =
-                      // false;
-                      // enterpriseDataController.isAddEnterprise.value = false;
-                      // enterpriseDataController.isEditEnterprise.value = true;
-                      // enterpriseDataController.viewIndex.value = index;
-                      // enterpriseDataController.setEnterpriseForm(index: index);
+                      userDataController.isAdd.value = false;
+                      userDataController.isEdit.value = true;
+                      userDataController.viewIndex.value = index;
+                      userDataController.setUserForm();
 
-                      mqsDashboardController.enterpriseStatus.value =
-                          "add_enterprise";
+                      mqsDashboardController.userStatus.value = "add_user";
                     }),
                     Image.asset(
                       ImageConfig.delete,
                       height: SizeConfig.size24,
                     ).tap(() {
-                      // enterpriseDataDeleteDialogWidget(
-                      //   context: context,
-                      //   enterpriseDataController: enterpriseDataController,
-                      //   docId: enterpriseDataController
-                      //       .searchedEnterprises[index]
-                      //       .mqsEnterprisePOCsList
-                      //       .isNotEmpty
-                      //       ? enterpriseDataController
-                      //       .searchedEnterprises[index]
-                      //       .mqsEnterprisePOCsList
-                      //       .first
-                      //       .mqsEnterpriseID
-                      //       : enterpriseDataController
-                      //       .searchedEnterprises[index].docId,
-                      //   mqsDashboardController: mqsDashboardController,
-                      //   mqsEnterpriseName: "",
-                      // );
+                      userDataDeleteDialogWidget(
+                        context: context,
+                        userDataController: userDataController,
+                        docId: userDataController.searchedUsers[index].id ?? "",
+                        mqsDashboardController: mqsDashboardController,
+                      );
                     }),
                   ],
                 ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     Image.asset(
-                //       ImageConfig.eyeOpened,
-                //       height: SizeConfig.size24,
-                //     ).tap(() {
-                //       userDataController.viewIndex.value = index;
-                //       mqsDashboardController.userStatus.value =
-                //       "view_user";
-                //       // if (context.width < SizeConfig.size1500) {
-                //       //   Get.toNamed(AppRoutes.userIAMDetail);
-                //       // }
-                //     }),
-                //   ],
-                // ),
               ),
             ],
           )
@@ -185,7 +153,6 @@ Widget userDataTableRowWidget({
                   ),
                 ),
               ),
-
               Expanded(
                 flex: SizeConfig.size3.toInt(),
                 child: Padding(
@@ -198,7 +165,6 @@ Widget userDataTableRowWidget({
                   ),
                 ),
               ),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -209,11 +175,10 @@ Widget userDataTableRowWidget({
                       ImageConfig.eyeOpened,
                       height: SizeConfig.size24,
                     ).tap(() {
-                      // enterpriseDataController.isAddEnterprise.value = false;
-                      // enterpriseDataController.isEditEnterprise.value = false;
+                      userDataController.isAdd.value = false;
+                      userDataController.isEdit.value = false;
                       userDataController.viewIndex.value = index;
-                      mqsDashboardController.userStatus.value =
-                      "view_user";
+                      mqsDashboardController.userStatus.value = "view_user";
                     }),
                   ),
                   Padding(
@@ -222,18 +187,12 @@ Widget userDataTableRowWidget({
                       ImageConfig.edit,
                       height: SizeConfig.size24,
                     ).tap(() {
-                      // enterpriseDataController.showMqsTeamList.value = false;
-                      // enterpriseDataController.showMqsEmpEmailList.value =
-                      // false;
-                      // enterpriseDataController.showMqsEnterprisePocsList.value =
-                      // false;
-                      // enterpriseDataController.isAddEnterprise.value = false;
-                      // enterpriseDataController.isEditEnterprise.value = true;
+                      userDataController.isAdd.value = false;
+                      userDataController.isEdit.value = true;
                       userDataController.viewIndex.value = index;
-                      // enterpriseDataController.setEnterpriseForm(index: index);
+                      userDataController.setUserForm();
 
-                      mqsDashboardController.userStatus.value =
-                      "add_user";
+                      mqsDashboardController.userStatus.value = "add_user";
                     }),
                   ),
                   Padding(
@@ -242,23 +201,12 @@ Widget userDataTableRowWidget({
                       ImageConfig.delete,
                       height: SizeConfig.size24,
                     ).tap(() {
-                      // enterpriseDataDeleteDialogWidget(
-                      //   context: context,
-                      //   enterpriseDataController: enterpriseDataController,
-                      //   docId: enterpriseDataController
-                      //       .searchedEnterprises[index]
-                      //       .mqsEnterprisePOCsList
-                      //       .isNotEmpty
-                      //       ? enterpriseDataController
-                      //       .searchedEnterprises[index]
-                      //       .mqsEnterprisePOCsList
-                      //       .first
-                      //       .mqsEnterpriseID
-                      //       : enterpriseDataController
-                      //       .searchedEnterprises[index].docId,
-                      //   mqsDashboardController: mqsDashboardController,
-                      //   mqsEnterpriseName: "",
-                      // );
+                      userDataDeleteDialogWidget(
+                        context: context,
+                        userDataController: userDataController,
+                        docId: userDataController.searchedUsers[index].id ?? "",
+                        mqsDashboardController: mqsDashboardController,
+                      );
                     }),
                   ),
                 ],

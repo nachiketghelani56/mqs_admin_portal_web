@@ -40,7 +40,7 @@ Widget userDataTopButtonsWidget({
             CustomIconButton(
               icon: ImageConfig.import,
               onTap: () {
-                // enterpriseDataController.importEnterprise();
+                // userDataController.importUserIAM();
               },
             ),
             SizeConfig.size12.width,
@@ -58,18 +58,10 @@ Widget userDataTopButtonsWidget({
               padding: SizeConfig.size15,
               btnText: StringConfig.database.addUser,
               onTap: () {
-                // enterpriseDataController.isEditEnterprise.value = false;
-                // enterpriseDataController.isAddEnterprise.value = true;
-                // enterpriseDataController.showMqsEmpEmailList.value = false;
-                // enterpriseDataController.showMqsTeamList.value = false;
-                // enterpriseDataController.showMqsEnterprisePocsList.value =
-                // false;
-                // enterpriseDataController.mqsEmployeeEmailList.clear();
-                // enterpriseDataController.mqsTeamList.clear();
-                // enterpriseDataController.mqsEnterprisePOCsList.clear();
-                // enterpriseDataController.clearAllFields();
-                mqsDashboardController.userStatus.value =
-                "add_user";
+                userDataController.isEdit.value = false;
+                userDataController.isAdd.value = true;
+                userDataController.clearAllFields();
+                mqsDashboardController.userStatus.value = "add_user";
               },
             ),
           ],
@@ -84,7 +76,7 @@ Widget userDataTopButtonsWidget({
               },
             ),
             SizeConfig.size12.width,
-            // if (userDataController.users.isNotEmpty)
+            if (userDataController.users.isNotEmpty)
               SearchTextField(
                 controller: userDataController.searchController,
                 hintText: StringConfig.dashboard.searchByNameEmail,
@@ -96,11 +88,11 @@ Widget userDataTopButtonsWidget({
             CustomIconButton(
               icon: ImageConfig.import,
               onTap: () {
-                // enterpriseDataController.importEnterprise();
+                // userDataController.importUserIAM();
               },
             ),
             SizeConfig.size12.width,
-            // if (userDataController.users.isNotEmpty)
+            if (userDataController.users.isNotEmpty)
               CustomIconButton(
                 icon: ImageConfig.export,
                 onTap: () {
@@ -112,18 +104,10 @@ Widget userDataTopButtonsWidget({
             CustomIconButton(
               icon: ImageConfig.add,
               onTap: () {
-                // enterpriseDataController.isEditEnterprise.value = false;
-                // enterpriseDataController.isAddEnterprise.value = true;
-                // enterpriseDataController.showMqsEmpEmailList.value = false;
-                // enterpriseDataController.showMqsEnterprisePocsList.value =
-                // false;
-                // enterpriseDataController.showMqsTeamList.value = false;
-                // enterpriseDataController.mqsEmployeeEmailList.clear();
-                // enterpriseDataController.mqsTeamList.clear();
-                // enterpriseDataController.mqsEnterprisePOCsList.clear();
-                // enterpriseDataController.clearAllFields();
-                mqsDashboardController.userStatus.value =
-                "add_user";
+                userDataController.isEdit.value = false;
+                userDataController.isAdd.value = true;
+                userDataController.clearAllFields();
+                mqsDashboardController.userStatus.value = "add_user";
               },
             ),
           ],

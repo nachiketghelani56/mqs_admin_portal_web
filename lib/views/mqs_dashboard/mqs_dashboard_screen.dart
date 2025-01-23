@@ -15,6 +15,7 @@ import 'package:mqs_admin_portal_web/views/database/enterprise_data/enterprise_d
 import 'package:mqs_admin_portal_web/views/database/database_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/pathway_collection_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/team_collection_screen.dart';
+import 'package:mqs_admin_portal_web/views/database/user_data/add_user_data_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/user_data/user_data_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/user_subscription_receipt_data/add_user_subscription_receipt_screen.dart';
 import 'package:mqs_admin_portal_web/views/database/user_subscription_receipt_data/user_subscription_receipt_data_screen.dart';
@@ -124,8 +125,8 @@ class MqsDashboardScreen extends StatelessWidget {
                           1) {
                         if(_mqsDashboardController.userStatus.value =="add_user")
                         {
-                          // return AddUserDataScreen(
-                          //     scaffoldKey: _mqsDashboardController.scaffoldKey);
+                          return AddUserDataScreen(
+                              scaffoldKey: _mqsDashboardController.scaffoldKey);
                         }
                         else   if(_mqsDashboardController.userStatus.value =="view_user")
                         {

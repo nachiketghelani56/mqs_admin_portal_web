@@ -16,7 +16,7 @@ class UserRepository {
     QuerySnapshot<Object?> users = await user.get();
     List<MQSMyQUserIamModel> userList = users.docs
         .map((e) =>
-            MQSMyQUserIamModel.fromJson(e.data() as Map<String, dynamic>))
+            MQSMyQUserIamModel.fromJson(e.data() as Map<String, dynamic>,e.id))
         .toList();
     userList.sort((a, b) => DateTime.parse(
             b.mqsCreatedTimestamp?.isEmpty ?? false
@@ -32,7 +32,7 @@ class UserRepository {
     return user.snapshots().map((snapshot) {
       List<MQSMyQUserIamModel> userList = snapshot.docs
           .map((doc) =>
-              MQSMyQUserIamModel.fromJson(doc.data() as Map<String, dynamic>))
+              MQSMyQUserIamModel.fromJson(doc.data() as Map<String, dynamic>,doc.id))
           .toList();
       userList.sort((a, b) => DateTime.parse(
               b.mqsCreatedTimestamp?.isEmpty ?? false
@@ -44,6 +44,29 @@ class UserRepository {
 
       return userList;
     });
+  }
+
+  Future<void> editUser(
+      {required String docId, required MQSMyQUserIamModel userModel}) async {
+    try {
+      await user
+          .doc(docId)
+          .set(userModel.toJson(), SetOptions(merge: true));
+    } catch (e) {
+      errorDialogWidget(msg: e.toString());
+    }
+  }
+
+  Future<void> addUser(
+      {required MQSMyQUserIamModel userModel,
+        required String customId}) async {
+    await user.doc(customId).set({
+      ...userModel.toJson(),
+    });
+  }
+
+  Future deleteUser({required String docId}) async {
+    await user.doc(docId).delete();
   }
 
   Future<List<MQSMyQUserSubscriptionReceiptModel>>
@@ -109,9 +132,9 @@ class UserRepository {
 
               matchedUsers = [
                 ...snapshot1.docs.map((doc) => MQSMyQUserIamModel.fromJson(
-                    doc.data() as Map<String, dynamic>)),
+                    doc.data() as Map<String, dynamic>,doc.id)),
                 ...snapshot2.docs.map((doc) => MQSMyQUserIamModel.fromJson(
-                    doc.data() as Map<String, dynamic>)),
+                    doc.data() as Map<String, dynamic>,doc.id)),
               ];
               // }
             } else {
@@ -156,9 +179,9 @@ class UserRepository {
 
               matchedUsers = [
                 ...snapshot1.docs.map((doc) => MQSMyQUserIamModel.fromJson(
-                    doc.data() as Map<String, dynamic>)),
+                    doc.data() as Map<String, dynamic>,doc.id)),
                 ...snapshot2.docs.map((doc) => MQSMyQUserIamModel.fromJson(
-                    doc.data() as Map<String, dynamic>)),
+                    doc.data() as Map<String, dynamic>,doc.id)),
               ];
             } else {
               if (fieldKey == "mqsCreatedTimestamp") {
@@ -202,9 +225,9 @@ class UserRepository {
 
               matchedUsers = [
                 ...snapshot1.docs.map((doc) => MQSMyQUserIamModel.fromJson(
-                    doc.data() as Map<String, dynamic>)),
+                    doc.data() as Map<String, dynamic>,doc.id)),
                 ...snapshot2.docs.map((doc) => MQSMyQUserIamModel.fromJson(
-                    doc.data() as Map<String, dynamic>)),
+                    doc.data() as Map<String, dynamic>,doc.id)),
               ];
             } else {
               query = query
@@ -238,9 +261,9 @@ class UserRepository {
 
               matchedUsers = [
                 ...snapshot1.docs.map((doc) => MQSMyQUserIamModel.fromJson(
-                    doc.data() as Map<String, dynamic>)),
+                    doc.data() as Map<String, dynamic>,doc.id)),
                 ...snapshot2.docs.map((doc) => MQSMyQUserIamModel.fromJson(
-                    doc.data() as Map<String, dynamic>)),
+                    doc.data() as Map<String, dynamic>,doc.id)),
               ];
             } else {
               query = query
@@ -273,9 +296,9 @@ class UserRepository {
 
               matchedUsers = [
                 ...snapshot1.docs.map((doc) => MQSMyQUserIamModel.fromJson(
-                    doc.data() as Map<String, dynamic>)),
+                    doc.data() as Map<String, dynamic>,doc.id)),
                 ...snapshot2.docs.map((doc) => MQSMyQUserIamModel.fromJson(
-                    doc.data() as Map<String, dynamic>)),
+                    doc.data() as Map<String, dynamic>,doc.id)),
               ];
             } else {
               query = query
@@ -309,9 +332,9 @@ class UserRepository {
 
               matchedUsers = [
                 ...snapshot1.docs.map((doc) => MQSMyQUserIamModel.fromJson(
-                    doc.data() as Map<String, dynamic>)),
+                    doc.data() as Map<String, dynamic>,doc.id)),
                 ...snapshot2.docs.map((doc) => MQSMyQUserIamModel.fromJson(
-                    doc.data() as Map<String, dynamic>)),
+                    doc.data() as Map<String, dynamic>,doc.id)),
               ];
             } else {
               query = query
@@ -416,7 +439,7 @@ class UserRepository {
 
         return querySnapshot.docs
             .map((e) =>
-                MQSMyQUserIamModel.fromJson(e.data() as Map<String, dynamic>))
+                MQSMyQUserIamModel.fromJson(e.data() as Map<String, dynamic>,e.id))
             .toList();
       }
     }
