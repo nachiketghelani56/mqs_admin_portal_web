@@ -63,10 +63,14 @@ Widget dataFilterSheetWidget({required DatabaseController databaseController}) {
                               databaseController.selectedTabIndex.value == 0
                                   ? databaseController.enterpriseKeyName()
                                   : databaseController.selectedTabIndex.value ==
-                                          2
-                                      ? databaseController.circleKeyName()
+                                          1
+                                      ? databaseController.userKeyName()
                                       : databaseController
-                                          .userSubscriptionReceiptKeyName(),
+                                                  .selectedTabIndex.value ==
+                                              2
+                                          ? databaseController.circleKeyName()
+                                          : databaseController
+                                              .userSubscriptionReceiptKeyName(),
                               //     : databaseController
                               //                 .selectedTabIndex.value ==
                               //             2
@@ -112,8 +116,7 @@ Widget dataFilterSheetWidget({required DatabaseController databaseController}) {
                             style: FontTextStyleConfig.tableContentTextStyle,
                           ),
                         ).tap(() {
-                          databaseController.selectedFilterFieldIndex.value =
-                              i;
+                          databaseController.selectedFilterFieldIndex.value = i;
                         })
                     ] else if (databaseController.selectedTabIndex.value ==
                         3) ...[
@@ -129,8 +132,7 @@ Widget dataFilterSheetWidget({required DatabaseController databaseController}) {
                             style: FontTextStyleConfig.tableContentTextStyle,
                           ),
                         ).tap(() {
-                          databaseController.selectedFilterFieldIndex.value =
-                              i;
+                          databaseController.selectedFilterFieldIndex.value = i;
                         })
                     ] else
                       Container(
@@ -210,8 +212,7 @@ Widget dataFilterSheetWidget({required DatabaseController databaseController}) {
                           child: CustomDropDown(
                             label: "",
                             value: row.dataType,
-                            items:
-                                databaseController.dataTypes.map((dataType) {
+                            items: databaseController.dataTypes.map((dataType) {
                               return DropdownMenuItem(
                                 value: dataType,
                                 child: Text(
@@ -332,12 +333,8 @@ Widget dataFilterSheetWidget({required DatabaseController databaseController}) {
               ],
             ],
             SizeConfig.size30.height,
-            if (![
-              6,
-              7,
-              8,
-              9
-            ].contains(databaseController.selectedConditionIndex.value)) ...[
+            if (![6, 7, 8, 9]
+                .contains(databaseController.selectedConditionIndex.value)) ...[
               titleWidget(
                 title: StringConfig.dashboard.sortResults,
                 isShowContent: databaseController.showSortResults.value,
@@ -357,8 +354,7 @@ Widget dataFilterSheetWidget({required DatabaseController databaseController}) {
                       },
                       isAddCondition: databaseController
                               .showAddCondition.value &&
-                          databaseController.selectedConditionIndex.value !=
-                              -1,
+                          databaseController.selectedConditionIndex.value != -1,
                     ),
                     SizeConfig.size42.width,
                     CustomRadioWidget(
@@ -369,8 +365,7 @@ Widget dataFilterSheetWidget({required DatabaseController databaseController}) {
                       },
                       isAddCondition: databaseController
                               .showAddCondition.value &&
-                          databaseController.selectedConditionIndex.value !=
-                              -1,
+                          databaseController.selectedConditionIndex.value != -1,
                     ),
                   ],
                 ),

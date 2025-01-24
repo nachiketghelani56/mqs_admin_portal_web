@@ -30,11 +30,14 @@ class UserDataController extends GetxController {
   RxInt viewIndex = (-1).obs;
   final TextEditingController searchController = TextEditingController();
   RxInt selectedTabIndex = 0.obs;
+
   int get totalUserPage => (searchedUsers.length / pageLimit.value).ceil();
+
   MQSMyQUserIamModel get userDetail => searchedUsers[viewIndex.value];
   RxList<MQSMyQUserSubscriptionReceiptModel> userSubscriptionReceipts =
       <MQSMyQUserSubscriptionReceiptModel>[].obs;
   StreamSubscription<List<MQSMyQUserIamModel>>? userStream;
+
   MQSMyQUserSubscriptionReceiptModel? get userSubscriptionDetail =>
       userSubscriptionReceipts
           .firstWhereOrNull((e) => e.mqsFirebaseUserID == userDetail.mqsUserID);
@@ -61,6 +64,7 @@ class UserDataController extends GetxController {
       TextEditingController();
   RxBool enterpriseUserFlag = false.obs;
   RxString userId = "".obs;
+
   List<DropdownMenuItem> get boolOptions => [
         DropdownMenuItem(
           value: true,
@@ -310,9 +314,10 @@ class UserDataController extends GetxController {
         searchedUsers.value = users;
       } else {
         searchedUsers.value = users.where((e) {
+          final firstAndLastName =
+              '${e.mqsFirstName?.toLowerCase()} ${e.mqsLastName?.toLowerCase()}';
           return (e.mqsEmail?.toLowerCase().contains(query) ?? false) ||
-              (e.mqsFirstName?.toLowerCase().contains(query) ?? false) ||
-              (e.mqsLastName?.toLowerCase().contains(query) ?? false) ||
+              firstAndLastName.contains(query) ||
               (e.mqsUserLoginWith?.toLowerCase().contains(query) ?? false);
         }).toList();
       }
@@ -442,9 +447,35 @@ class UserDataController extends GetxController {
             mqsRegistrationStatus:
                 rowMap[StringConfig.dashboard.registrationStatus].toString(),
             mqsUserMilestones: mileStonesList,
-            mqsAppVersion: rowMap[StringConfig.dashboard.appVersion].toString(),
+            mqsAppVersion:
+                rowMap[StringConfig.dashboard.appVersion]?.toString() ?? "",
             mqsUserGrowth:
-                rowMap[StringConfig.dashboard.mqsUserGrowth].toJson(),
+                parseJsonToModel(rowMap[StringConfig.dashboard.mqsUserGrowth]),
+            mqsEnterpriseDetails: MQSEnterpriseDetails.fromJson(
+                parseJsonToModel(
+                    rowMap[StringConfig.dashboard.enterpriseDetail])),
+            mqsOnboardingDetails: MQSOnboardingDetails.fromJson(
+                parseJsonToModel(
+                    rowMap[StringConfig.dashboard.onboardingDetails])),
+            mqsUserJMStatus: MQSUserJMStatus.fromJson(
+                parseJsonToModel(rowMap[StringConfig.dashboard.userJMSStatus])),
+            mqsUserChallengesStatus: MQSUserChallengesStatus.fromJson(
+                parseJsonToModel(
+                    rowMap[StringConfig.dashboard.userChallengesStatus])),
+            mqsPrivacySettingsDetails: MQSPrivacySettingsDetails.fromJson(
+                parseJsonToModel(
+                    rowMap[StringConfig.dashboard.privacySettingsDetails])),
+            mqsUserProfile: MQSUserProfile.fromJson(
+                parseJsonToModel(rowMap[StringConfig.dashboard.userProfile])),
+            mqsUpdatedTimestamp: rowMap[StringConfig.reporting.creationDate]
+                        ?.toString()
+                        .isEmpty ??
+                    true
+                ? ""
+                : DateFormat(StringConfig.dashboard.dateYYYYMMDD)
+                    .parse(
+                        rowMap[StringConfig.reporting.creationDate].toString())
+                    .toIso8601String(),
           );
           await UserRepository.i.addUser(userModel: user, customId: docRef);
         }
@@ -550,5 +581,14 @@ class UserDataController extends GetxController {
     } catch (e) {
       errorDialogWidget(msg: e.toString());
     } finally {}
+  }
+
+  parseJsonToModel(String? jsonString) {
+    if (jsonString == null || jsonString.isEmpty) return null;
+    try {
+      return json.decode(jsonString);
+    } catch (e) {
+      return null;
+    }
   }
 }

@@ -14,7 +14,7 @@ Widget userDataTopButtonsWidget({
   required MqsDashboardController mqsDashboardController,
   required BuildContext context,
 }) {
-  return context.width > SizeConfig.size1885
+  return context.width > SizeConfig.size1100
       ? Row(
           children: [
             CustomPrefixButton(
@@ -40,7 +40,7 @@ Widget userDataTopButtonsWidget({
             CustomIconButton(
               icon: ImageConfig.import,
               onTap: () {
-                // userDataController.importUserIAM();
+                userDataController.importUserIAM();
               },
             ),
             SizeConfig.size12.width,
@@ -88,7 +88,7 @@ Widget userDataTopButtonsWidget({
             CustomIconButton(
               icon: ImageConfig.import,
               onTap: () {
-                // userDataController.importUserIAM();
+                userDataController.importUserIAM();
               },
             ),
             SizeConfig.size12.width,

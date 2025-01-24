@@ -145,6 +145,7 @@ class DashboardController extends GetxController {
   RxList<MqsTeam> mqsTeamList = <MqsTeam>[].obs;
   RxList<MqsEnterprisePOCs> mqsEnterprisePOCs = <MqsEnterprisePOCs>[].obs;
   RxInt viewIndex = (-1).obs;
+
   EnterpriseModel get enterpriseDetail => searchedEnterprises[viewIndex.value];
   RxInt editMqsEmpEmailIndex = RxInt(-1),
       editMqsEntPOCIndex = RxInt(-1),
@@ -1437,16 +1438,18 @@ class DashboardController extends GetxController {
       } else {
         if (status == "type") {
           searchedUsers.value = searchUserType.where((e) {
+            final firstAndLastName =
+                '${e.mqsFirstName?.toLowerCase()} ${e.mqsLastName?.toLowerCase()}';
             return (e.mqsEmail?.toLowerCase().contains(query) ?? false) ||
-                (e.mqsFirstName?.toLowerCase().contains(query) ?? false) ||
-                (e.mqsLastName?.toLowerCase().contains(query) ?? false) ||
+                firstAndLastName.contains(query) ||
                 (e.mqsUserLoginWith?.toLowerCase().contains(query) ?? false);
           }).toList();
         } else {
           searchedUsers.value = users.where((e) {
+            final firstAndLastName =
+                '${e.mqsFirstName?.toLowerCase()} ${e.mqsLastName?.toLowerCase()}';
             return (e.mqsEmail?.toLowerCase().contains(query) ?? false) ||
-                (e.mqsFirstName?.toLowerCase().contains(query) ?? false) ||
-                (e.mqsLastName?.toLowerCase().contains(query) ?? false) ||
+                firstAndLastName.contains(query) ||
                 (e.mqsUserLoginWith?.toLowerCase().contains(query) ?? false);
           }).toList();
         }
@@ -1503,8 +1506,7 @@ class DashboardController extends GetxController {
       return StringConfig.dashboard.userActive;
     } else if (keyName == StringConfig.firebase.mqsCreatedTimestamp) {
       return StringConfig.csv.createdTimestamp;
-    }
-    else if (keyName == StringConfig.dashboard.userImage ||
+    } else if (keyName == StringConfig.dashboard.userImage ||
         keyName == StringConfig.dashboard.mqsUserImage) {
       return StringConfig.dashboard.userImageText;
     } else if (keyName == StringConfig.dashboard.isMongoDBUserIdText ||

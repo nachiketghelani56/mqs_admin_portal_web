@@ -8,6 +8,7 @@ import 'package:mqs_admin_portal_web/views/dashboard/repository/enterprise_repos
 import 'package:mqs_admin_portal_web/views/dashboard/repository/user_IAM_repository.dart';
 import 'package:mqs_admin_portal_web/views/database/circle_data/controller/circle_data_controller.dart';
 import 'package:mqs_admin_portal_web/views/database/enterprise_data/controller/enterprise_data_controller.dart';
+import 'package:mqs_admin_portal_web/views/database/user_data/controller/user_data_controller.dart';
 import 'package:mqs_admin_portal_web/views/database/user_subscription_receipt_data/controller/user_subscription_receipt_controller.dart';
 import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
 
@@ -30,6 +31,7 @@ class DatabaseController extends GetxController {
       Get.put(CircleDataController());
   final UserSubscriptionReceiptController _userSubscriptionReceiptController =
       Get.put(UserSubscriptionReceiptController());
+  final UserDataController _userDataController = Get.put(UserDataController());
 
   RxList<MenuModel> options = [
     MenuModel(
@@ -82,23 +84,22 @@ class DatabaseController extends GetxController {
           .expand((e) => e.toJson().keys) // Convert model to Map
           .toSet() // Ensure uniqueness
           .toList();
-    }
-    // else if (selectedTabIndex.value == 1) {
-    //   filterFields.value = users
-    //       .expand((e) => e.toJson().keys) // Convert model to Map
-    //       .toSet() // Ensure uniqueness
-    //       .toList();
-    else if (selectedTabIndex.value == 2) {
+    } else if (selectedTabIndex.value == 1) {
+      filterFields.value = _userDataController.users
+          .expand((e) => e.toJson().keys) // Convert model to Map
+          .toSet() // Ensure uniqueness
+          .toList();
+    } else if (selectedTabIndex.value == 2) {
       filterFields.value = _circleDataController.circle
           .expand((e) => e.toJson().keys) // Convert model to Map
           .toSet() // Ensure uniqueness
           .toList();
-    }
-    else if (selectedTabIndex.value == 6) {
-      filterFields.value = _userSubscriptionReceiptController.userSubscriptionReceipts
-          .expand((e) => e.toJson().keys) // Convert model to Map
-          .toSet() // Ensure uniqueness
-          .toList();
+    } else if (selectedTabIndex.value == 6) {
+      filterFields.value =
+          _userSubscriptionReceiptController.userSubscriptionReceipts
+              .expand((e) => e.toJson().keys) // Convert model to Map
+              .toSet() // Ensure uniqueness
+              .toList();
     }
     // else if (selectedTabIndex.value == 3 &&
     //     Get.isRegistered<PathwayController>()) {
@@ -110,7 +111,6 @@ class DatabaseController extends GetxController {
     //       .toList();
     // }
   }
-
 
   String enterpriseKeyName({int? index}) {
     String keyName = filterFields[index ?? selectedFilterFieldIndex.value];
@@ -163,9 +163,9 @@ class DatabaseController extends GetxController {
         return null;
     }
   }
+
   Future<void> applyFilter() async {
     try {
-
       String field = filterFields[selectedFilterFieldIndex.value];
       int matchKey = selectedConditionIndex.value;
       _enterpriseDataController.reset();
@@ -204,61 +204,62 @@ class DatabaseController extends GetxController {
         _enterpriseDataController.searchedEnterprises.value =
             await EnterpriseRepository.i.fetchEnterpriseFilteredData(
                 field, filters, condition, isAsc.value);
-      }
-      // else if (selectedTabIndex.value == 1) {
-      //   String field2Key = "";
-      //   if (field == StringConfig.dashboard.mqsEnterpriseUserFlag) {
-      //     field2Key = StringConfig.firebase.isEnterPriseUser;
-      //   } else if (field == StringConfig.firebase.mqsEmail) {
-      //     field2Key = StringConfig.firebase.email;
-      //   } else if (field == StringConfig.firebase.mqsFirstName) {
-      //     field2Key = StringConfig.firebase.firstName;
-      //   } else if (field == StringConfig.firebase.mqsLastName) {
-      //     field2Key = StringConfig.firebase.lastName;
-      //   } else if (field == StringConfig.firebase.mqsFirebaseUserID) {
-      //     field2Key = StringConfig.firebase.isFirebaseUserID;
-      //   } else if (field == StringConfig.firebase.mqsRegistrationStatus) {
-      //     field2Key = StringConfig.firebase.isRegister;
-      //   } else if (field == StringConfig.dashboard.mqsAbout) {
-      //     field2Key = StringConfig.dashboard.about;
-      //   } else if (field == StringConfig.dashboard.mqsAllowAbout) {
-      //     field2Key = StringConfig.dashboard.aboutValue;
-      //   } else if (field == StringConfig.dashboard.mqsCountry) {
-      //     field2Key = StringConfig.dashboard.country;
-      //   } else if (field == StringConfig.dashboard.mqsAllowCountry) {
-      //     field2Key = StringConfig.dashboard.countryValue;
-      //   } else if (field == StringConfig.dashboard.mqsPronouns) {
-      //     field2Key = StringConfig.dashboard.pronouns;
-      //   } else if (field == StringConfig.dashboard.mqsAllowPronouns) {
-      //     field2Key = StringConfig.dashboard.pronounsValue;
-      //   } else if (field == StringConfig.dashboard.mqsCheckInDetailsKey) {
-      //     field2Key = StringConfig.dashboard.checkINValue;
-      //   } else if (field == StringConfig.dashboard.mqsDemoGraphicDetailsKey) {
-      //     field2Key = StringConfig.dashboard.demoGraphicValue;
-      //   } else if (field == StringConfig.dashboard.mqsScenesDetailsKey) {
-      //     field2Key = StringConfig.dashboard.scenesValue;
-      //   } else if (field == StringConfig.dashboard.mqsWheelOfLifeDetailsKey) {
-      //     field2Key = StringConfig.dashboard.wOLValue;
-      //   } else if (field == StringConfig.dashboard.mqsUserImage) {
-      //     field2Key = StringConfig.dashboard.userImage;
-      //   } else if (field == StringConfig.dashboard.mqsMONGODBUserID) {
-      //     field2Key = StringConfig.dashboard.isMongoDBUserIdText;
-      //   } else if (field == StringConfig.dashboard.mqsUserLoginWith) {
-      //     field2Key = StringConfig.dashboard.loginWithKey;
-      //   } else if (field == StringConfig.dashboard.mqsUpdatedTimestamp) {
-      //     field2Key = StringConfig.dashboard.mqsUpdateTimestamp;
-      //   } else {
-      //     field2Key = "";
-      //   }
-      //
-      //   searchedUsers.value = await UserRepository.i.fetchUserFilteredData(
-      //       field, field2Key, filters, condition, isAsc.value);
-      else if (selectedTabIndex.value == 2) {
+      } else if (selectedTabIndex.value == 1) {
+        String field2Key = "";
+        if (field == StringConfig.dashboard.mqsEnterpriseUserFlag) {
+          field2Key = StringConfig.firebase.isEnterPriseUser;
+        } else if (field == StringConfig.firebase.mqsEmail) {
+          field2Key = StringConfig.firebase.email;
+        } else if (field == StringConfig.firebase.mqsFirstName) {
+          field2Key = StringConfig.firebase.firstName;
+        } else if (field == StringConfig.firebase.mqsLastName) {
+          field2Key = StringConfig.firebase.lastName;
+        } else if (field == StringConfig.firebase.mqsFirebaseUserID) {
+          field2Key = StringConfig.firebase.isFirebaseUserID;
+        } else if (field == StringConfig.firebase.mqsRegistrationStatus) {
+          field2Key = StringConfig.firebase.isRegister;
+        } else if (field == StringConfig.dashboard.mqsAbout) {
+          field2Key = StringConfig.dashboard.about;
+        } else if (field == StringConfig.dashboard.mqsAllowAbout) {
+          field2Key = StringConfig.dashboard.aboutValue;
+        } else if (field == StringConfig.dashboard.mqsCountry) {
+          field2Key = StringConfig.dashboard.country;
+        } else if (field == StringConfig.dashboard.mqsAllowCountry) {
+          field2Key = StringConfig.dashboard.countryValue;
+        } else if (field == StringConfig.dashboard.mqsPronouns) {
+          field2Key = StringConfig.dashboard.pronouns;
+        } else if (field == StringConfig.dashboard.mqsAllowPronouns) {
+          field2Key = StringConfig.dashboard.pronounsValue;
+        } else if (field == StringConfig.dashboard.mqsCheckInDetailsKey) {
+          field2Key = StringConfig.dashboard.checkINValue;
+        } else if (field == StringConfig.dashboard.mqsDemoGraphicDetailsKey) {
+          field2Key = StringConfig.dashboard.demoGraphicValue;
+        } else if (field == StringConfig.dashboard.mqsScenesDetailsKey) {
+          field2Key = StringConfig.dashboard.scenesValue;
+        } else if (field == StringConfig.dashboard.mqsWheelOfLifeDetailsKey) {
+          field2Key = StringConfig.dashboard.wOLValue;
+        } else if (field == StringConfig.dashboard.mqsUserImage) {
+          field2Key = StringConfig.dashboard.userImage;
+        } else if (field == StringConfig.dashboard.mqsMONGODBUserID) {
+          field2Key = StringConfig.dashboard.isMongoDBUserIdText;
+        } else if (field == StringConfig.dashboard.mqsUserLoginWith) {
+          field2Key = StringConfig.dashboard.loginWithKey;
+        } else if (field == StringConfig.dashboard.mqsUpdatedTimestamp) {
+          field2Key = StringConfig.dashboard.mqsUpdateTimestamp;
+        } else {
+          field2Key = "";
+        }
+
+        _userDataController.searchedUsers.value = await UserRepository.i
+            .fetchUserFilteredData(
+                field, field2Key, filters, condition, isAsc.value);
+      } else if (selectedTabIndex.value == 2) {
         _circleDataController.searchedCircle.value = await CircleRepository.i
             .fetchCircleFilteredData(field, filters, condition, isAsc.value);
       } else if (selectedTabIndex.value == 6) {
-        _userSubscriptionReceiptController.searchedUserSubRec.value = await UserRepository.i
-            .fetchUserSubscriptionFilteredData(field, filters, condition, isAsc.value);
+        _userSubscriptionReceiptController.searchedUserSubRec.value =
+            await UserRepository.i.fetchUserSubscriptionFilteredData(
+                field, filters, condition, isAsc.value);
       }
       // else if (selectedTabIndex.value == 3) {
       //   Get.find<PathwayController>().searchedPathway.value =
@@ -269,6 +270,7 @@ class DatabaseController extends GetxController {
       errorDialogWidget(msg: e.toString());
     } finally {}
   }
+
   resetFilter() {
     // if (selectedTabIndex.value == 2) {
     //   CircleController controller = Get.find<CircleController>();
@@ -285,10 +287,9 @@ class DatabaseController extends GetxController {
     } else if (selectedTabIndex.value == 6) {
       _userSubscriptionReceiptController.searchedUserSubRec.value =
           _userSubscriptionReceiptController.userSubscriptionReceipts;
+    } else {
+      _userDataController.searchedUsers.value = _userDataController.users;
     }
-
-    // searchedUsers.value = users;
-    // }
     selectedFilterFieldIndex.value = -1;
     selectedConditionIndex.value = -1;
     isAsc.value = true;
@@ -301,6 +302,7 @@ class DatabaseController extends GetxController {
     _circleDataController.reset();
     _userSubscriptionReceiptController.reset();
   }
+
   // reset() {
   //   // if (selectedTabIndex.value == 1 &&
   //   //     Get.isRegistered<DashboardController>()) {
@@ -478,7 +480,6 @@ class DatabaseController extends GetxController {
   }
 
   String userSubscriptionReceiptKeyName({int? index}) {
-
     String keyName = filterFields[index ?? selectedFilterFieldIndex.value];
     if (keyName == StringConfig.firebase.mqsFirebaseUserID) {
       return StringConfig.reporting.firebaseUserId;
