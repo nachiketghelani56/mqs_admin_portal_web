@@ -160,7 +160,7 @@ class CircleDataController extends GetxController {
 
   addCircle() async {
     try {
-      final docRef = FirebaseStorageService.i.enterprise.doc().id;
+      final docRef = FirebaseStorageService.i.circle.doc().id;
       final circleModel = CircleModel(
         id: docRef,
         userId:

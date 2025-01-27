@@ -282,13 +282,13 @@ class DatabaseController extends GetxController {
     if (selectedTabIndex.value == 0) {
       _enterpriseDataController.searchedEnterprises.value =
           _enterpriseDataController.enterprises;
+    } else if (selectedTabIndex.value == 1) {
+      _userDataController.searchedUsers.value = _userDataController.users;
     } else if (selectedTabIndex.value == 2) {
       _circleDataController.searchedCircle.value = _circleDataController.circle;
     } else if (selectedTabIndex.value == 6) {
       _userSubscriptionReceiptController.searchedUserSubRec.value =
           _userSubscriptionReceiptController.userSubscriptionReceipts;
-    } else {
-      _userDataController.searchedUsers.value = _userDataController.users;
     }
     selectedFilterFieldIndex.value = -1;
     selectedConditionIndex.value = -1;
@@ -299,6 +299,7 @@ class DatabaseController extends GetxController {
     rows.clear();
     addRow();
     _enterpriseDataController.reset();
+    _userDataController.reset();
     _circleDataController.reset();
     _userSubscriptionReceiptController.reset();
   }
@@ -345,7 +346,7 @@ class DatabaseController extends GetxController {
       return StringConfig.reporting.enterpriseUser;
     } else if (keyName == StringConfig.firebase.isFirebaseUserID ||
         keyName == StringConfig.firebase.mqsFirebaseUserID) {
-      return StringConfig.reporting.firebaseUserId;
+      return StringConfig.dashboard.userId;
     } else if (keyName == StringConfig.firebase.isRegister ||
         keyName == StringConfig.firebase.mqsRegistrationStatus) {
       return StringConfig.dashboard.registrationStatus;
@@ -353,24 +354,6 @@ class DatabaseController extends GetxController {
       return StringConfig.dashboard.userActive;
     } else if (keyName == StringConfig.firebase.mqsCreatedTimestamp) {
       return StringConfig.csv.createdTimestamp;
-    } else if (keyName == StringConfig.dashboard.about ||
-        keyName == StringConfig.dashboard.mqsAbout) {
-      return StringConfig.dashboard.about;
-    } else if (keyName == StringConfig.dashboard.aboutValue ||
-        keyName == StringConfig.dashboard.mqsAllowAbout) {
-      return StringConfig.dashboard.allowAboutVisibility;
-    } else if (keyName == StringConfig.dashboard.country ||
-        keyName == StringConfig.dashboard.mqsCountry) {
-      return StringConfig.dashboard.country;
-    } else if (keyName == StringConfig.dashboard.countryValue ||
-        keyName == StringConfig.dashboard.mqsAllowCountry) {
-      return StringConfig.dashboard.allowCountryVisibility;
-    } else if (keyName == StringConfig.dashboard.pronouns ||
-        keyName == StringConfig.dashboard.mqsPronouns) {
-      return StringConfig.dashboard.pronouns;
-    } else if (keyName == StringConfig.dashboard.pronounsValue ||
-        keyName == StringConfig.dashboard.mqsAllowPronouns) {
-      return StringConfig.dashboard.allowPronounsVisibility;
     } else if (keyName == StringConfig.dashboard.userImage ||
         keyName == StringConfig.dashboard.mqsUserImage) {
       return StringConfig.dashboard.userImageText;
@@ -386,15 +369,24 @@ class DatabaseController extends GetxController {
       return StringConfig.dashboard.subscriptionActivePlan;
     } else if (keyName == StringConfig.dashboard.mqsSubscriptionPlatform) {
       return StringConfig.reporting.subscriptionPlatform;
-    } else if (keyName == StringConfig.dashboard.mqsUpdatedTimestamp) {
+    } else if (keyName == StringConfig.dashboard.mqsUpdatedTimestamp ||
+        keyName == StringConfig.dashboard.mqsUpdateTimestamp) {
       return StringConfig.csv.updatedTimestamp;
-    } else if (keyName == StringConfig.dashboard.mqsUserSubscriptionStatus) {
-      return StringConfig.dashboard.userSubscriptionStatus;
     } else if (keyName == StringConfig.dashboard.onboardingDataKey ||
         keyName == StringConfig.dashboard.mqsOnboardingDetails) {
       return StringConfig.dashboard.onboardingDetails;
-    } else if (keyName == StringConfig.dashboard.mqsSkipOnboarding) {
-      return StringConfig.dashboard.skipOnboarding;
+    } else if (keyName == StringConfig.dashboard.mqsUserChallengesStatus) {
+      return StringConfig.dashboard.userChallengesStatusDetails;
+    } else if (keyName == StringConfig.dashboard.mqsUserJMStatus) {
+      return StringConfig.dashboard.userJMSStatusDetails;
+    } else if (keyName == StringConfig.dashboard.mqsPrivacySettingsDetails) {
+      return StringConfig.dashboard.privacySettingsDetails;
+    } else if (keyName == StringConfig.dashboard.mqsUserGrowth) {
+      return StringConfig.dashboard.userGrowthDetails;
+    } else if (keyName == StringConfig.dashboard.mqsUserProfile) {
+      return StringConfig.dashboard.userProfileDetails;
+    } else if (keyName == StringConfig.dashboard.mqsUserMilestones) {
+      return StringConfig.dashboard.userMilestoneDetails;
     } else if (keyName == StringConfig.dashboard.mqsUserActiveTimestamp) {
       return StringConfig.dashboard.userActiveTimestamp;
     } else if (keyName == StringConfig.dashboard.mqsEnterpriseDetails) {
