@@ -603,6 +603,8 @@ class Circle {
   final String enterTag = "Enter tag";
   final String selectMainPostId = "Select Main Post ID";
   final String postId = "Post ID";
+  final String searchByName = "Search by “name” or “Email”...";
+  final String import = "Import";
 }
 
 class Pathway {
@@ -771,5 +773,8 @@ class Database {
   final String userActiveTimestamp = "User Active Date";
   final String enterpriseUserFlag = "Enterprise User Flag";
   final String user = "User";
+  final String postTitle = "POST TITLE";
+  final String actions = "ACTIONS";
+  final String replyPost = "Reply Post?";
 
 }

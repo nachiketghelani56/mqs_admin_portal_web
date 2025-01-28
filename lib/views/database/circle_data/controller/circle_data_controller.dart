@@ -19,6 +19,11 @@ import 'package:mqs_admin_portal_web/widgets/error_dialog_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/loader_widget.dart';
 
 class CircleDataController extends GetxController {
+  RxInt startIndex = 0.obs,
+      endIndex = 0.obs,
+      totalPages = 0.obs,
+      itemsPerPage = 10.obs;
+
   final TextEditingController searchController = TextEditingController();
   RxList<CircleModel> searchedCircle = <CircleModel>[].obs,
       circle = <CircleModel>[].obs,
@@ -64,13 +69,15 @@ class CircleDataController extends GetxController {
         )
       ];
 
+  RxList<CircleModel> circleDataList = <CircleModel>[].obs;
+
   @override
   onInit() {
     getCircle();
+    countPage();
+
     super.onInit();
   }
-
-
 
   @override
   void onClose() async {
@@ -78,20 +85,29 @@ class CircleDataController extends GetxController {
     super.onClose();
   }
 
+  void countPage() {
+    totalPages.value = (circleDataList.length / itemsPerPage.value).ceil();
+    startIndex.value = (currentPage.value - 1) * itemsPerPage.value;
+    endIndex.value =
+        (startIndex.value + itemsPerPage.value).clamp(0, circleDataList.length);
+  }
+
   getCircle() async {
     try {
       circleLoader.value = true;
+      countPage();
       List<CircleModel> circleList = await CircleRepository.i.getCircles();
       searchedCircle.value = circleList;
       circle.value = circleList;
+      circleDataList.value = circleList;
       searchCircleType.value = circleList;
       circleStream = CircleRepository.i.getCircleStream().listen((circleList) {
         searchedCircle.value = circleList;
         searchCircleType.value = circleList;
         circle.value = circleList;
+        circleDataList.value = circleList;
         viewIndex.value = -1;
       });
-
 
       if (Get.isRegistered<DatabaseController>()) {
         Get.find<DatabaseController>().setFilterFields();

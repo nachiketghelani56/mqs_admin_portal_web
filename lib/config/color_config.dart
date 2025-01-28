@@ -13,8 +13,10 @@ class ColorConfig {
   static const Color bg2Color = Color(0xFFF4F4F4);
   static const Color deleteColor = Color(0XFFFF3B30);
   static const Color secondaryColor = Color(0xFF1F9D98);
+  static const Color searchTextColor = Color(0xFF727B89);
   static const Color backgroundColor = Color(0xFFF5F5F5);
   static const Color cardTitleColor = Color(0xFF2F3535);
+  static const Color textFieldColor = Color(0xFFF9FAFB);
   static const Color card1Color = Color(0xFFF1FAFF);
   static const Color card2Color = Color(0xFFFFEFF3);
   static const Color card3Color = Color(0xFFFFF8DD);
@@ -33,4 +35,11 @@ class ColorConfig {
   static const Color transparentColor = Colors.transparent;
   static const Color hoverColor = Color(0xFF0E5A5B);
   static const Color validationErrorColor = Color(0xFFF15B27);
+  static const Color navigationTextColor = Color(0xFF161616);
+  static const Color checkBoxColor = Color(0xFFDEDEDE);
+  static const Color tableTitleColor = Color(0xFFA7AFBA);
+  static const Color replyTextColor = Color(0xFF005C58);
+  static const Color blueColor = Color(0xFF007AFF);
+  static const Color greenColor = Color(0xFF009951);
+  static const Color redColor = Color(0xFFFF3B30);
 }

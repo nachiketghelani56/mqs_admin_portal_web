@@ -50,4 +50,12 @@ class ImageConfig {
   static const String userDatabase = "assets/icons/user_database.png";
   static const String circle = "assets/icons/circle.png";
   static const String pathway = "assets/icons/pathway.png";
+  static const String searchIcon = "assets/icons/search_icon.png";
+  static const String exportIcon = "assets/icons/export_icon.png";
+  static const String importIcon = "assets/icons/import_icon.png";
+  static const String filterIcon = "assets/icons/filter_icon.png";
+  static const String arrowRightIcon = "assets/icons/arrow_right_icon.png";
+  static const String viewIcon = "assets/icons/view_icon.png";
+  static const String editIcon = "assets/icons/edit_icon.png";
+  static const String deleteIcon = "assets/icons/delete_icon.png";
 }

@@ -15,6 +15,12 @@ class FontTextStyleConfig {
     fontWeight: FontWeight.w400,
     fontSize: FontSizeConfig.fontSize20,
   );
+  static const TextStyle secondaryButtonTextStyle = TextStyle(
+    fontFamily: FontFamilyConfig.figtree,
+    color: ColorConfig.primaryColor,
+    fontWeight: FontWeight.w600,
+    fontSize: FontSizeConfig.fontSize16,
+  );
 
   static const TextStyle buttonTextStyle = TextStyle(
     fontFamily: FontFamilyConfig.figtree,
@@ -30,6 +36,12 @@ class FontTextStyleConfig {
     fontSize: FontSizeConfig.fontSize20,
   );
 
+  static const TextStyle navigationTextStyle = TextStyle(
+    fontFamily: FontFamilyConfig.figtree,
+    color: ColorConfig.navigationTextColor,
+    fontWeight: FontWeight.w700,
+    fontSize: FontSizeConfig.fontSize22,
+  );
   static const TextStyle labelTextStyle = TextStyle(
     fontFamily: FontFamilyConfig.figtree,
     color: ColorConfig.labelColor,
@@ -296,11 +308,18 @@ class FontTextStyleConfig {
     ],
   );
 
+
   static const BoxDecoration folderDecoration = BoxDecoration(
     color: ColorConfig.whiteColor,
     borderRadius: BorderRadius.only(
       topLeft: Radius.circular(SizeConfig.size12),
       topRight: Radius.circular(SizeConfig.size4),
     ),
+  );
+  static const TextStyle mainHeadingTextStyle = TextStyle(
+    fontFamily: FontFamilyConfig.figtree,
+    color: ColorConfig.tableTitleColor,
+    fontWeight: FontWeight.w700,
+    fontSize: FontSizeConfig.fontSize16,
   );
 }
