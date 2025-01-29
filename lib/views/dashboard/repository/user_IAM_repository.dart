@@ -359,15 +359,16 @@ class UserRepository {
                       (fieldValue.contains(value) ||
                           json["enterPriseID"] == value);
                 }).toList());
-              } else if (fieldKey == 'mqsOnboardingDetails') {
-                allRes.addAll(userList.where((MQSMyQUserIamModel e) {
-                  return e.mqsOnboardingDetails
-                          ?.toJson()
-                          .toString()
-                          .contains(value) ??
-                      false;
-                }).toList());
               }
+              // else if (fieldKey == 'mqsOnboardingDetails') {
+              //   allRes.addAll(userList.where((MQSMyQUserIamModel e) {
+              //     return e.mqsOnboardingDetails
+              //             ?.toJson()
+              //             .toString()
+              //             .contains(value) ??
+              //         false;
+              //   }).toList());
+              // }
               else if (fieldKey == 'mqsUserJMStatus') {
                 allRes.addAll(userList.where((MQSMyQUserIamModel e) {
                   return e.mqsUserJMStatus
@@ -411,11 +412,12 @@ class UserRepository {
                 }).toList());
               } else if (fieldKey == 'mqsUserMilestones') {
                 allRes.addAll(userList.where((MQSMyQUserIamModel e) {
-                  return e.mqsUserMilestones
-                          ?.toList()
-                          .toString()
-                          .contains(value) ??
-                      false;
+                  return e.mqsUserMilestones?.any((e)=>e.toJson().toString().contains(value)) ??false;
+                }).toList());
+              }
+              else if (fieldKey == 'mqsUserBadges') {
+                allRes.addAll(userList.where((MQSMyQUserIamModel e) {
+                  return e.mqsUserBadges?.any((e)=>e.toJson().toString().contains(value)) ??false;
                 }).toList());
               }
             }

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/views/dashboard/controller/dashboard_controller.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/widgets/user_iam/user_cognitive_widget.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/widgets/user_iam/user_mind_skills_widget.dart';
+import 'package:mqs_admin_portal_web/views/dashboard/widgets/user_iam/user_techniques_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/key_value_warpper_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/title_widget.dart';
 
@@ -15,7 +18,7 @@ Widget userGrowthWidget({required DashboardController dashboardController}) {
       ),
       SizeConfig.size10.height,
       keyValueWrapperWidget(
-        key: StringConfig.dashboard.mqsUserPSActivityLogs,
+        key: StringConfig.dashboard.mqsDayStreak,
         value: dashboardController.userDetail.mqsUserGrowth?.mqsDayStreak !=
                 null
             ? "${dashboardController.userDetail.mqsUserGrowth?.mqsDayStreak.toString()}"
@@ -23,7 +26,7 @@ Widget userGrowthWidget({required DashboardController dashboardController}) {
         isFirst: true,
       ),
       keyValueWrapperWidget(
-        key: StringConfig.dashboard.mqsUserPSCircleCountry,
+        key: StringConfig.dashboard.mqsPracticeWeekStreak,
         value: dashboardController
                     .userDetail.mqsUserGrowth?.mqsPracticeWeekStreak !=
                 null
@@ -31,7 +34,7 @@ Widget userGrowthWidget({required DashboardController dashboardController}) {
             : "0",
       ),
       keyValueWrapperWidget(
-        key: StringConfig.dashboard.mqsUserPSCircleAbout,
+        key: StringConfig.dashboard.mqsReflectWeekStreak,
         value: dashboardController
                     .userDetail.mqsUserGrowth?.mqsReflectWeekStreak !=
                 null
@@ -39,18 +42,29 @@ Widget userGrowthWidget({required DashboardController dashboardController}) {
             : "0",
       ),
       keyValueWrapperWidget(
-        key: StringConfig.dashboard.mqsUserPSCircleName,
+        key: StringConfig.dashboard.mqsDayStreakTimestamp,
         value: dashboardController.dateConvert(dashboardController
                 .userDetail.mqsUserGrowth?.mqsDayStreakTimestamp ??
             ""),
       ),
       keyValueWrapperWidget(
-        key: StringConfig.dashboard.mqsUserPSCircleProfilePicture,
+        key: StringConfig.dashboard.mqsWeeklyResetTimestamp,
         value: dashboardController.dateConvert(dashboardController
                 .userDetail.mqsUserGrowth?.mqsWeeklyResetTimestamp ??
             ""),
         isLast: true,
+
       ),
+
+        SizeConfig.size24.height,
+      userCognitiveWidget(dashboardController: dashboardController),
+
+        SizeConfig.size24.height,
+      userMindSkillWidget(dashboardController: dashboardController),
+
+        SizeConfig.size24.height,
+      userTechniquesWidget(dashboardController: dashboardController),
+
     ],
   );
 }

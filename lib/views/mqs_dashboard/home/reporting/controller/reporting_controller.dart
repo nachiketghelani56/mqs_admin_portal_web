@@ -209,19 +209,20 @@ class ReportingController extends GetxController {
                             .inDays >
                         SizeConfig.size7))
             .toList();
-      } else if (reportType.value == StringConfig.reporting.completed) {
-        dashboardController.searchedUsers.value = users
-            .where((e) =>e.mqsOnboardingDetails?.mqsOBDone ==true)
-            .toList();
-      } else if (reportType.value == StringConfig.reporting.skipped) {
-        dashboardController.searchedUsers.value =
-            users.where((e) => e.mqsOnboardingDetails?.mqsOBSkip ==true).toList();
-      } else if (reportType.value == StringConfig.reporting.partialCompletion) {
-
-        dashboardController.searchedUsers.value = users
-            .where((e) => e.mqsOnboardingDetails?.mqsOBStart == true && e.mqsOnboardingDetails?.mqsOBDone == false)
-            .toList();
       }
+      // else if (reportType.value == StringConfig.reporting.completed) {
+      //   dashboardController.searchedUsers.value = users
+      //       .where((e) =>e.mqsOnboardingDetails?.mqsOBDone ==true)
+      //       .toList();
+      // } else if (reportType.value == StringConfig.reporting.skipped) {
+      //   dashboardController.searchedUsers.value =
+      //       users.where((e) => e.mqsOnboardingDetails?.mqsOBSkip ==true).toList();
+      // } else if (reportType.value == StringConfig.reporting.partialCompletion) {
+      //
+      //   dashboardController.searchedUsers.value = users
+      //       .where((e) => e.mqsOnboardingDetails?.mqsOBStart == true && e.mqsOnboardingDetails?.mqsOBDone == false)
+      //       .toList();
+      // }
       dashboardController.searchUserType.value = users;
       totalRegisteredUsers.value = users.length;
       activeUsers.value = users
@@ -531,38 +532,38 @@ class ReportingController extends GetxController {
         }).toList();
       }
       dashboardController.reset();
-      dashboardController.searchedUsers.value = users
-          .where((e) =>
-              e.mqsOnboardingDetails?.mqsOBDone == true)
-          .toList();
-      dashboardController.searchUserType.value = users
-          .where((e) =>e.mqsOnboardingDetails?.mqsOBDone == true)
-          .toList();
+      // dashboardController.searchedUsers.value = users
+      //     .where((e) =>
+      //         e.mqsOnboardingDetails?.mqsOBDone == true)
+      //     .toList();
+      // dashboardController.searchUserType.value = users
+      //     .where((e) =>e.mqsOnboardingDetails?.mqsOBDone == true)
+      //     .toList();
       if (!isDetailView) {
         getOBSummary(users: users);
-        dashboardController.users.value = users
-            .where((e) =>e.mqsOnboardingDetails?.mqsOBDone == true)
-            .toList();
+        // dashboardController.users.value = users
+        //     .where((e) =>e.mqsOnboardingDetails?.mqsOBDone == true)
+        //     .toList();
 
-        if (obtype.value == StringConfig.reporting.skipped) {
-          dashboardController.searchedUsers.value =
-              users.where((e) => e.mqsOnboardingDetails?.mqsOBSkip == true).toList();
-          dashboardController.users.value =
-              users.where((e) =>e.mqsOnboardingDetails?.mqsOBSkip == true).toList();
-          dashboardController.searchUserType.value =
-              users.where((e) => e.mqsOnboardingDetails?.mqsOBSkip == true).toList();
-        } else if (obtype.value == StringConfig.reporting.partialCompletion) {
-
-          dashboardController.searchedUsers.value = users
-              .where((e) => e.mqsOnboardingDetails?.mqsOBStart == true && e.mqsOnboardingDetails?.mqsOBDone == false)
-              .toList();
-          dashboardController.users.value = users
-              .where((e) =>e.mqsOnboardingDetails?.mqsOBStart == true && e.mqsOnboardingDetails?.mqsOBDone == false)
-              .toList();
-          dashboardController.searchUserType.value = users
-              .where((e) => e.mqsOnboardingDetails?.mqsOBStart == true && e.mqsOnboardingDetails?.mqsOBDone == false)
-              .toList();
-        }
+        // if (obtype.value == StringConfig.reporting.skipped) {
+        //   dashboardController.searchedUsers.value =
+        //       users.where((e) => e.mqsOnboardingDetails?.mqsOBSkip == true).toList();
+        //   dashboardController.users.value =
+        //       users.where((e) =>e.mqsOnboardingDetails?.mqsOBSkip == true).toList();
+        //   dashboardController.searchUserType.value =
+        //       users.where((e) => e.mqsOnboardingDetails?.mqsOBSkip == true).toList();
+        // } else if (obtype.value == StringConfig.reporting.partialCompletion) {
+        //
+        //   dashboardController.searchedUsers.value = users
+        //       .where((e) => e.mqsOnboardingDetails?.mqsOBStart == true && e.mqsOnboardingDetails?.mqsOBDone == false)
+        //       .toList();
+        //   dashboardController.users.value = users
+        //       .where((e) =>e.mqsOnboardingDetails?.mqsOBStart == true && e.mqsOnboardingDetails?.mqsOBDone == false)
+        //       .toList();
+        //   dashboardController.searchUserType.value = users
+        //       .where((e) => e.mqsOnboardingDetails?.mqsOBStart == true && e.mqsOnboardingDetails?.mqsOBDone == false)
+        //       .toList();
+        // }
       }
       if (dashboardController.searchedUsers.isEmpty &&
           dashboardController.users.isNotEmpty) {
@@ -600,7 +601,7 @@ class ReportingController extends GetxController {
             //     ? DateFormat(StringConfig.dashboard.dateYYYYMMDD)
             //         .format(DateTime.parse(model.mqsSubscriptionExpiryDate))
             //     : "",
-            jsonEncode(model.mqsOnboardingDetails?.toJson()),
+            // jsonEncode(model.mqsOnboardingDetails?.toJson()),
 
           ];
         }),
@@ -1126,16 +1127,16 @@ class ReportingController extends GetxController {
 
   getOBSummary({required List<MQSMyQUserIamModel> users}) async {
     try {
-      completedOBUsers.value = users
-          .where((e) =>
-              e.mqsOnboardingDetails?.mqsOBDone == true)
-          .toList()
-          .length;
-      skippedOBUsers.value =
-          users.where((e) =>  e.mqsOnboardingDetails?.mqsOBSkip == true).toList().length;
-
-      partialCompletedOBUsers.value =
-          users.where((e) =>  e.mqsOnboardingDetails?.mqsOBStart == true && e.mqsOnboardingDetails?.mqsOBDone == false).toList().length;
+      // completedOBUsers.value = users
+      //     .where((e) =>
+      //         e.mqsOnboardingDetails?.mqsOBDone == true)
+      //     .toList()
+      //     .length;
+      // skippedOBUsers.value =
+      //     users.where((e) =>  e.mqsOnboardingDetails?.mqsOBSkip == true).toList().length;
+      //
+      // partialCompletedOBUsers.value =
+      //     users.where((e) =>  e.mqsOnboardingDetails?.mqsOBStart == true && e.mqsOnboardingDetails?.mqsOBDone == false).toList().length;
       completedOB.value = completedOBUsers.value / users.length;
       skippedOB.value = skippedOBUsers.value / users.length;
       partialCompletedOB.value = partialCompletedOBUsers.value / users.length;
@@ -1435,8 +1436,10 @@ class ReportingController extends GetxController {
                     ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .year ==
-                    year &&
-                e.mqsOnboardingDetails?.mqsOBDone == true)
+                    year
+                //     &&
+                // e.mqsOnboardingDetails?.mqsOBDone == true
+        )
             .length
             .toDouble();
         double y3 = users
@@ -1563,8 +1566,10 @@ class ReportingController extends GetxController {
                     ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .year ==
-                    year &&
-                e.mqsOnboardingDetails?.mqsOBDone == true)
+                    year
+                //     &&
+                // e.mqsOnboardingDetails?.mqsOBDone == true
+        )
             .length
             .toDouble();
         double y3 = users
@@ -1705,11 +1710,11 @@ class ReportingController extends GetxController {
         double y1 = 0, y2 = 0, y3 = 0, y4 = 0, y6 = 0;
         if (userElement.isNotEmpty) {
           y1 = userElement.first.value.length.toDouble();
-          y2 = userElement.first.value
-              .where((e) =>
-                  e.mqsOnboardingDetails?.mqsOBDone == true)
-              .length
-              .toDouble();
+          // y2 = userElement.first.value
+          //     .where((e) =>
+          //         e.mqsOnboardingDetails?.mqsOBDone == true)
+          //     .length
+          //     .toDouble();
           y3 = userElement.first.value
               .where((e) => activeRec
                   .any((test) => test.mqsFirebaseUserID == e.mqsUserID))
@@ -1829,8 +1834,10 @@ class ReportingController extends GetxController {
                     ? e.mqsEnterpriseCreatedTimestamp??""
                     : DateTime.now().toIso8601String())
                         .day ==
-                    date.day &&
-                e.mqsOnboardingDetails?.mqsOBDone == true)
+                    date.day
+                //     &&
+                // e.mqsOnboardingDetails?.mqsOBDone == true
+        )
             .length
             .toDouble();
         double y3 = users
@@ -1918,18 +1925,18 @@ class ReportingController extends GetxController {
         dashboardController.users.value = users;
       } else if (reportType.value ==
           StringConfig.reporting.onboradingCompleted) {
-        dashboardController.searchedUsers.value = users
-            .where((e) =>
-                e.mqsOnboardingDetails?.mqsOBDone== true)
-            .toList();
-        dashboardController.searchUserType.value = users
-            .where((e) =>
-        e.mqsOnboardingDetails?.mqsOBDone== true)
-            .toList();
-        dashboardController.users.value = users
-            .where((e) =>
-        e.mqsOnboardingDetails?.mqsOBDone== true)
-            .toList();
+        // dashboardController.searchedUsers.value = users
+        //     .where((e) =>
+        //         e.mqsOnboardingDetails?.mqsOBDone== true)
+        //     .toList();
+        // dashboardController.searchUserType.value = users
+        //     .where((e) =>
+        // e.mqsOnboardingDetails?.mqsOBDone== true)
+        //     .toList();
+        // dashboardController.users.value = users
+        //     .where((e) =>
+        // e.mqsOnboardingDetails?.mqsOBDone== true)
+        //     .toList();
       } else if (reportType.value == StringConfig.reporting.subscribed) {
         List<MQSMyQUserSubscriptionReceiptModel> activeRec = receipt
             .where((e) =>

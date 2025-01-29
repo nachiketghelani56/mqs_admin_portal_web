@@ -387,6 +387,8 @@ class DatabaseController extends GetxController {
       return StringConfig.dashboard.userProfileDetails;
     } else if (keyName == StringConfig.dashboard.mqsUserMilestones) {
       return StringConfig.dashboard.userMilestoneDetails;
+    } else if (keyName == StringConfig.dashboard.mqsUserBadges) {
+      return StringConfig.dashboard.userBadgesDetails;
     } else if (keyName == StringConfig.dashboard.mqsUserActiveTimestamp) {
       return StringConfig.dashboard.userActiveTimestamp;
     } else if (keyName == StringConfig.dashboard.mqsEnterpriseDetails) {

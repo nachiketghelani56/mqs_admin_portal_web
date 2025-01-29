@@ -99,7 +99,8 @@ class DashboardController extends GetxController {
       showMqsEnterprisePOCs = false.obs,
       isAddEnterprise = false.obs,
       isEditEnterprise = false.obs,
-      showMqsUserMilestone = false.obs;
+      showMqsUserMilestone = false.obs,
+      showMqsUserBadges = false.obs;
   RxList<MenuOptionModel> options = [
     MenuOptionModel(
       icon: ImageConfig.edit,
@@ -137,6 +138,10 @@ class DashboardController extends GetxController {
       showDemographic = false.obs,
       showScenes = false.obs,
       showWOL = false.obs;
+  RxBool showCognitive = false.obs,
+      showMindSkill = false.obs,
+      showTechnique = false.obs;
+
   RxList<int> sceneIndexes = <int>[].obs;
   RxList<EnterpriseModel> searchedEnterprises = <EnterpriseModel>[].obs,
       enterprises = <EnterpriseModel>[].obs;
@@ -912,7 +917,6 @@ class DashboardController extends GetxController {
             model.mqsEnterpriseCode,
             jsonEncode(
                 model.mqsEnterprisePOCsList.map((p) => p.toJson()).toList()),
-
             jsonEncode(model.mqsTeamList.map((p) => p.toJson()).toList()),
             jsonEncode(model.mqsEmployeeList.map((p) => p.toJson()).toList()),
             model.mqsEnterpriseSubscriptionDetails.mqsSubscriptionStatus,
@@ -1371,8 +1375,7 @@ class DashboardController extends GetxController {
             json.encode(receipt
                 .where((e) => e.mqsFirebaseUserID == model.mqsUserID)
                 .toList()),
-            jsonEncode(model.mqsEnterpriseDetails?.toJson()),
-            jsonEncode(model.mqsOnboardingDetails?.toJson()),
+            // jsonEncode(model.mqsOnboardingDetails?.toJson()),
             jsonEncode(model.mqsEnterpriseDetails?.toJson()),
             jsonEncode(model.mqsUserJMStatus?.toJson()),
             jsonEncode(model.mqsUserChallengesStatus?.toJson()),
@@ -1381,6 +1384,9 @@ class DashboardController extends GetxController {
             jsonEncode(model.mqsUserProfile?.toJson()),
             jsonEncode(model.mqsUserMilestones?.isNotEmpty ?? false
                 ? model.mqsUserMilestones?.toList()
+                : []),
+            jsonEncode(model.mqsUserBadges?.isNotEmpty ?? false
+                ? model.mqsUserBadges?.toList()
                 : []),
           ];
         }),
@@ -1405,8 +1411,7 @@ class DashboardController extends GetxController {
           StringConfig.dashboard.enterpriseCreatedTimestamp,
           StringConfig.dashboard.registrationStatus,
           StringConfig.dashboard.userSubscriptionReceipt,
-          StringConfig.dashboard.enterpriseDetail,
-          StringConfig.dashboard.onboardingDetails,
+          // StringConfig.dashboard.onboardingDetails,
           StringConfig.dashboard.enterpriseDetail,
           StringConfig.dashboard.userJMSStatus,
           StringConfig.dashboard.userChallengesStatus,
@@ -1414,6 +1419,7 @@ class DashboardController extends GetxController {
           StringConfig.dashboard.userGrowth,
           StringConfig.dashboard.userProfile,
           StringConfig.dashboard.userMilestoneList,
+          StringConfig.dashboard.userBadgesList,
         ],
       );
       String csvData = const ListToCsvConverter().convert(rows);
@@ -1541,8 +1547,9 @@ class DashboardController extends GetxController {
       return StringConfig.dashboard.userProfileDetails;
     } else if (keyName == StringConfig.dashboard.mqsUserMilestones) {
       return StringConfig.dashboard.userMilestoneDetails;
-    }
-    else if (keyName == StringConfig.dashboard.mqsUserActiveTimestamp) {
+    } else if (keyName == StringConfig.dashboard.mqsUserBadges) {
+      return StringConfig.dashboard.userBadgesDetails;
+    } else if (keyName == StringConfig.dashboard.mqsUserActiveTimestamp) {
       return StringConfig.dashboard.userActiveTimestamp;
     } else if (keyName == StringConfig.dashboard.mqsEnterpriseDetails) {
       return StringConfig.dashboard.enterpriseDetail;

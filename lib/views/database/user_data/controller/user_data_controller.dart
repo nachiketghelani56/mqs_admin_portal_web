@@ -30,7 +30,9 @@ class UserDataController extends GetxController {
   RxInt viewIndex = (-1).obs;
   final TextEditingController searchController = TextEditingController();
   RxInt selectedTabIndex = 0.obs;
-
+  RxBool showCognitive = false.obs,
+      showMindSkill = false.obs,
+      showTechnique = false.obs;
   int get totalUserPage => (searchedUsers.length / pageLimit.value).ceil();
 
   MQSMyQUserIamModel get userDetail => searchedUsers[viewIndex.value];
@@ -46,7 +48,7 @@ class UserDataController extends GetxController {
       showScenes = false.obs,
       showWOL = false.obs;
   RxList<int> sceneIndexes = <int>[].obs;
-  RxBool showMqsUserMilestone = false.obs;
+  RxBool showMqsUserMilestone = false.obs,showMqsUserBadges = false.obs;
   final TextEditingController userIdController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController firstNameController = TextEditingController();
@@ -382,7 +384,7 @@ class UserDataController extends GetxController {
             for (int j = 0; j < headers.length; j++) headers[j]: rows[i][j]
           };
 
-          List<MqsUserMilestones> mileStonesList = [];
+          List<MQSUserMilestones> mileStonesList = [];
           if (rowMap[StringConfig.dashboard.userMilestoneList] != null &&
               rowMap[StringConfig.dashboard.userMilestoneList]
                   .toString()
@@ -391,7 +393,7 @@ class UserDataController extends GetxController {
               List<dynamic> mileStones =
                   jsonDecode(rowMap[StringConfig.dashboard.userMilestoneList]);
               mileStonesList = mileStones.map((team) {
-                return MqsUserMilestones(
+                return MQSUserMilestones(
                   mqsMilestoneID: team['mqsMilestoneID'] ?? "",
                   mqsMilestoneName: team['mqsMilestoneName'] ?? "",
                   mqsMilestoneImage: team['mqsMilestoneImage'] ?? "",
@@ -404,6 +406,29 @@ class UserDataController extends GetxController {
               errorDialogWidget(msg: e.toString());
             }
           }
+          List<MQSUserBadges> userBadgeList = [];
+          if (rowMap[StringConfig.dashboard.userBadgesList] != null &&
+              rowMap[StringConfig.dashboard.userBadgesList]
+                  .toString()
+                  .isNotEmpty) {
+            try {
+              List<dynamic> userBadge =
+              jsonDecode(rowMap[StringConfig.dashboard.userBadgesList]);
+              userBadgeList = userBadge.map((team) {
+                return MQSUserBadges(
+                  mqsBadgeID: team['mqsBadgeID'] ?? "",
+                  mqsBadgeName: team['mqsBadgeName'] ?? "",
+                  mqsBadgeImage: team['mqsBadgeImage'] ?? "",
+                  mqsAwardTimestamp:
+                  team['mqsAwardTimestamp'] ?? "",
+                  mqsBadgeNotes: team['mqsBadgeNotes'] ?? "",
+                );
+              }).toList();
+            } catch (e) {
+              errorDialogWidget(msg: e.toString());
+            }
+          }
+
 
           final docRef = FirebaseStorageService.i.enterprise.doc().id;
           MQSMyQUserIamModel user = MQSMyQUserIamModel(
@@ -447,16 +472,18 @@ class UserDataController extends GetxController {
             mqsRegistrationStatus:
                 rowMap[StringConfig.dashboard.registrationStatus].toString(),
             mqsUserMilestones: mileStonesList,
+            mqsUserBadges: userBadgeList,
             mqsAppVersion:
                 rowMap[StringConfig.dashboard.appVersion]?.toString() ?? "",
-            mqsUserGrowth:
-                parseJsonToModel(rowMap[StringConfig.dashboard.mqsUserGrowth]),
+            mqsUserGrowth:MQSUserGrowth.fromJson(
+                parseJsonToModel(rowMap[StringConfig.dashboard.userGrowth])),
+
             mqsEnterpriseDetails: MQSEnterpriseDetails.fromJson(
                 parseJsonToModel(
                     rowMap[StringConfig.dashboard.enterpriseDetail])),
-            mqsOnboardingDetails: MQSOnboardingDetails.fromJson(
-                parseJsonToModel(
-                    rowMap[StringConfig.dashboard.onboardingDetails])),
+            // mqsOnboardingDetails: MQSOnboardingDetails.fromJson(
+            //     parseJsonToModel(
+            //         rowMap[StringConfig.dashboard.onboardingDetails])),
             mqsUserJMStatus: MQSUserJMStatus.fromJson(
                 parseJsonToModel(rowMap[StringConfig.dashboard.userJMSStatus])),
             mqsUserChallengesStatus: MQSUserChallengesStatus.fromJson(
@@ -525,8 +552,7 @@ class UserDataController extends GetxController {
             json.encode(receipt
                 .where((e) => e.mqsFirebaseUserID == model.mqsUserID)
                 .toList()),
-            jsonEncode(model.mqsEnterpriseDetails?.toJson()),
-            jsonEncode(model.mqsOnboardingDetails?.toJson()),
+            // jsonEncode(model.mqsOnboardingDetails?.toJson()),
             jsonEncode(model.mqsEnterpriseDetails?.toJson()),
             jsonEncode(model.mqsUserJMStatus?.toJson()),
             jsonEncode(model.mqsUserChallengesStatus?.toJson()),
@@ -535,6 +561,9 @@ class UserDataController extends GetxController {
             jsonEncode(model.mqsUserProfile?.toJson()),
             jsonEncode(model.mqsUserMilestones?.isNotEmpty ?? false
                 ? model.mqsUserMilestones?.toList()
+                : []),
+            jsonEncode(model.mqsUserBadges?.isNotEmpty ?? false
+                ? model.mqsUserBadges?.toList()
                 : []),
           ];
         }),
@@ -559,8 +588,7 @@ class UserDataController extends GetxController {
           StringConfig.dashboard.enterpriseCreatedTimestamp,
           StringConfig.dashboard.registrationStatus,
           StringConfig.dashboard.userSubscriptionReceipt,
-          StringConfig.dashboard.enterpriseDetail,
-          StringConfig.dashboard.onboardingDetails,
+          // StringConfig.dashboard.onboardingDetails,
           StringConfig.dashboard.enterpriseDetail,
           StringConfig.dashboard.userJMSStatus,
           StringConfig.dashboard.userChallengesStatus,
@@ -568,6 +596,7 @@ class UserDataController extends GetxController {
           StringConfig.dashboard.userGrowth,
           StringConfig.dashboard.userProfile,
           StringConfig.dashboard.userMilestoneList,
+          StringConfig.dashboard.userBadgesList,
         ],
       );
       String csvData = const ListToCsvConverter().convert(rows);

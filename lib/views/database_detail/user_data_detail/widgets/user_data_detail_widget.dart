@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mqs_admin_portal_web/config/config.dart';
 import 'package:mqs_admin_portal_web/extensions/ext_on_num.dart';
 import 'package:mqs_admin_portal_web/views/database/user_data/controller/user_data_controller.dart';
+import 'package:mqs_admin_portal_web/views/database_detail/user_data_detail/widgets/user_data_badges_widget.dart';
 import 'package:mqs_admin_portal_web/views/database_detail/user_data_detail/widgets/user_data_challenge_status_widget.dart';
 import 'package:mqs_admin_portal_web/views/database_detail/user_data_detail/widgets/user_data_detail_row_widget.dart';
 import 'package:mqs_admin_portal_web/views/database_detail/user_data_detail/widgets/user_data_enterprise_detail_widget.dart';
@@ -11,7 +12,6 @@ import 'package:mqs_admin_portal_web/views/database_detail/user_data_detail/widg
 import 'package:mqs_admin_portal_web/views/database_detail/user_data_detail/widgets/user_data_privacy_setting_detail_widget.dart';
 import 'package:mqs_admin_portal_web/views/database_detail/user_data_detail/widgets/user_data_profile_widget.dart';
 import 'package:mqs_admin_portal_web/views/database_detail/user_data_detail/widgets/user_data_subscription_detail_widget.dart';
-import 'package:mqs_admin_portal_web/views/database_detail/user_data_detail/widgets/user_onboarding_data_widget.dart';
 import 'package:mqs_admin_portal_web/widgets/title_widget.dart';
 
 Widget userDataDetailWidget({required UserDataController userDataController}) {
@@ -30,14 +30,15 @@ Widget userDataDetailWidget({required UserDataController userDataController}) {
           SizeConfig.size10.height,
           userDataDetailRowWidget(userDataController: userDataController),
           SizeConfig.size34.height,
-          userDataEnterpriseDetailWidget(userDataController: userDataController),
+          userDataEnterpriseDetailWidget(
+              userDataController: userDataController),
           SizeConfig.size34.height,
           userDataSubscriptionDetailWidget(
               userDataController: userDataController),
           SizeConfig.size34.height,
 
-          userDataOnboardingDataWidget(userDataController: userDataController),
-          SizeConfig.size34.height,
+          // userDataOnboardingDataWidget(userDataController: userDataController),
+          // SizeConfig.size34.height,
           userDataJMSStatusWidget(userDataController: userDataController),
           SizeConfig.size34.height,
           userDataChallengeStatusWidget(userDataController: userDataController),
@@ -47,8 +48,13 @@ Widget userDataDetailWidget({required UserDataController userDataController}) {
           SizeConfig.size34.height,
           userDataGrowthWidget(userDataController: userDataController),
           SizeConfig.size34.height,
-          userDataProfileWidget(userDataController: userDataController),
+          userDataBadgesWidget(userDataController: userDataController),
           SizeConfig.size34.height,
+          if (userDataController.userDetail.mqsUserProfile != null) ...[
+            userDataProfileWidget(userDataController: userDataController),
+            SizeConfig.size34.height,
+          ],
+
           if (userDataController.userDetail.mqsUserMilestones?.isNotEmpty ??
               false) ...[
             userDataMileStoneWidget(userDataController: userDataController),
